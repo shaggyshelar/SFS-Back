@@ -6,11 +6,15 @@ var multer  = require('multer');
 var upload = multer({dest: './Uploads/'});
 var fs = require('fs');
 var csv = require('fast-csv');
+var loopback = require('loopback');
+var rootlog = loopback.log;
 
 module.exports = function(app) {
   var User = app.models.user;
 
   app.get('/verified', function(req, res) {
+    rootlog.info('hi');
+    rootlog.warn({lang: 'fr'}, 'au revoir');
     res.render('verified');
   });
 
@@ -22,7 +26,7 @@ module.exports = function(app) {
         res.status(401);
         res.send({
           'Error': 'Unauthorized',
-          'Message': 'You need to be authenticated to access this endpoint'
+          'Message': 'You need to be authenticated to access this endpoint',
         });
       } else {
         var UserModel = app.models.user;
@@ -35,7 +39,7 @@ module.exports = function(app) {
             ignoreEmpty: true,
             trim: true,
           };
-      
+
           app.dataSources.db.transaction(models => {
             var counter = 0;
             var stream = fs.createReadStream(filepath);
