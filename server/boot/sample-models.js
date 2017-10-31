@@ -6,10 +6,10 @@ module.exports = function(app) {
   var RoleMapping = app.models.RoleMapping;
 
   User.create([
-      {username: 'John', email: 'john@doe.com', password: 'opensesame', 'emailVerified': true},
-      {username: 'Jane', email: 'jane@doe.com', password: 'opensesame', 'emailVerified': true},
-      {username: 'Bob', email: 'bob@projects.com', password: 'opensesame', 'emailVerified': true},
-      {username: 'Demo', email: 'demo@demo.com', password: 'demo', 'emailVerified': true},
+      {username: 'John', email: 'john@doe.com', password: 'opensesame', 'emailVerified': true, 'isPasswordChanged': false},
+      {username: 'Jane', email: 'jane@doe.com', password: 'opensesame', 'emailVerified': true, 'isPasswordChanged': false},
+      {username: 'Bob', email: 'bob@projects.com', password: 'opensesame', 'emailVerified': true, 'isPasswordChanged': false},
+      {username: 'Demo', email: 'demo@demo.com', password: 'demo', 'emailVerified': true, 'isPasswordChanged': true},
   ], function(err, users) {
     if (err) throw err;
 

@@ -21,7 +21,6 @@ module.exports = function(app) {
   app.post('/api/uploadcsv', upload.single('csvdata'), function(req, res) {
     var AccessToken = app.models.AccessToken;
     AccessToken.findForRequest(req, {}, function(aux, accesstoken) {
-      console.log('first=' + aux, accesstoken);
       if (accesstoken == undefined) {
         res.status(401);
         res.send({
@@ -71,6 +70,47 @@ module.exports = function(app) {
           });
         });
       }
+    });
+  });
+
+  app.post('/login', function(req, res) {
+    User.login({
+      email: req.body.email,
+      password: req.body.password,
+    }, 'user', function(err, token) {
+      if (err) {
+        res.status(401);
+        res.send({
+          'Error': 'Failed',
+          'Message': 'Login Failed',
+        });
+      }
+      res.status(200);
+      res.send(token);
+      // var isPasswordChanged = token.toJSON().user.isPasswordChanged;
+      // if (isPasswordChanged) {
+      //   res.status(200);
+      //   res.send({
+      //     'token': token.id,
+      //     'ttl': token.ttl,
+      //     'created': token.created,
+      //     'userId': token.userId,
+      //   });
+      // } else {
+      //   res.status(401);
+      //   res.send({
+      //     'Error': 'ChangeTemporaryPassword',
+      //     'Message': 'Please change password first.',
+      //   });
+      // }
+    });
+  });
+
+  app.get('/logout', function(req, res, next) {
+    if (!req.accessToken) return res.sendStatus(401); // return 401:unauthorized if accessToken is not present
+    User.logout(req.accessToken.id, function(err) {
+      if (err) return next(err);
+      res.redirect('/'); // on successful logout, redirect
     });
   });
 };
