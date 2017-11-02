@@ -7,6 +7,7 @@
 
 var config = require('../../server/config.json');
 var path = require('path');
+var permissionHelper = require('../shared/permissionsHelper');
 
 module.exports = function (User) {
   // send verification email after registration
@@ -89,15 +90,10 @@ module.exports = function (User) {
     var role = user.roles();
     if (role != undefined && role.length > 0) {
       var permissions = [];
-      User.app.models.Permission.find({ where: { principalId: role[0].name } }, function (err, p) {
-        if (p != undefined && p.length > 0)
-          user.permissions = p.map(function (data, index) { return data.permission; });
+      permissionHelper.setPermissions(user, role, function (updatedUser) {
+        user = updatedUser;
         next();
       });
-      // User.app.models.ACL.find({ where: { principalId: role[0].name } }, function (err, p) {
-      //   user.permissions = p;
-      //   next();
-      // });
     }
     else {
       next();
