@@ -25,7 +25,7 @@
         "nullable": "N"
       }
     },
-    "rolename": {
+    "roleName": {
       "type": "String",
       "required": true,
       "length": 50,
@@ -40,7 +40,7 @@
         "nullable": "N"
       }
     },
-    "roledescription": {
+    "roleDescription": {
       "type": "String",
       "required": false,
       "length": 500,
@@ -55,7 +55,7 @@
         "nullable": "Y"
       }
     },
-    "isdelete": {
+    "isDelete": {
       "type": "Number",
       "required": false,
       "length": null,
@@ -70,7 +70,7 @@
         "nullable": "Y"
       }
     },
-    "createdby": {
+    "createdBy": {
       "type": "String",
       "required": true,
       "length": 50,
@@ -85,7 +85,7 @@
         "nullable": "N"
       }
     },
-    "createdon": {
+    "createdOn": {
       "type": "Date",
       "required": true,
       "length": null,
@@ -100,7 +100,7 @@
         "nullable": "N"
       }
     },
-    "updatedby": {
+    "updatedBy": {
       "type": "String",
       "required": false,
       "length": 50,
@@ -115,7 +115,7 @@
         "nullable": "Y"
       }
     },
-    "updatedon": {
+    "updatedOn": {
       "type": "Date",
       "required": false,
       "length": null,

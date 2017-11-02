@@ -141,7 +141,7 @@
         "nullable": "Y"
       }
     },
-    "schoolcity": {
+    "schoolCity": {
       "type": "String",
       "required": false,
       "length": 50,
@@ -156,7 +156,7 @@
         "nullable": "Y"
       }
     },
-    "schoolstate": {
+    "schoolState": {
       "type": "String",
       "required": false,
       "length": 50,
@@ -171,7 +171,7 @@
         "nullable": "Y"
       }
     },
-    "schoollogo": {
+    "schoolLogo": {
       "type": "String",
       "required": true,
       "length": 50,
@@ -186,7 +186,7 @@
         "nullable": "N"
       }
     },
-    "schoolheader": {
+    "schoolHeader": {
       "type": "String",
       "required": true,
       "length": 50,
@@ -201,7 +201,7 @@
         "nullable": "N"
       }
     },
-    "isdelete": {
+    "isDelete": {
       "type": "Number",
       "required": false,
       "length": null,
@@ -216,7 +216,7 @@
         "nullable": "Y"
       }
     },
-    "createdby": {
+    "createdBy": {
       "type": "String",
       "required": true,
       "length": 50,
@@ -231,7 +231,7 @@
         "nullable": "N"
       }
     },
-    "createdon": {
+    "createdOn": {
       "type": "Date",
       "required": true,
       "length": null,
@@ -246,7 +246,7 @@
         "nullable": "N"
       }
     },
-    "updatedby": {
+    "updatedBy": {
       "type": "String",
       "required": false,
       "length": 50,
@@ -261,7 +261,7 @@
         "nullable": "Y"
       }
     },
-    "updatedon": {
+    "updatedOn": {
       "type": "Date",
       "required": false,
       "length": null,

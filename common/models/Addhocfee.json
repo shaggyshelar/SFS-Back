@@ -31,7 +31,7 @@
         "nullable": "N"
       }
     },
-    "schoolid": {
+    "schoolId": {
       "type": "Number",
       "required": true,
       "length": null,
@@ -46,7 +46,7 @@
         "nullable": "N"
       }
     },
-    "addhocfeename": {
+    "addhocFeeName": {
       "type": "String",
       "required": false,
       "length": 50,
@@ -61,7 +61,7 @@
         "nullable": "Y"
       }
     },
-    "addhocfeedescription": {
+    "addhocFeeDescription": {
       "type": "String",
       "required": false,
       "length": 100,
@@ -76,7 +76,7 @@
         "nullable": "Y"
       }
     },
-    "duedate": {
+    "dueDate": {
       "type": "Date",
       "required": false,
       "length": null,
@@ -91,7 +91,7 @@
         "nullable": "Y"
       }
     },
-    "isdelete": {
+    "isDelete": {
       "type": "Number",
       "required": false,
       "length": null,
@@ -106,7 +106,7 @@
         "nullable": "Y"
       }
     },
-    "createdby": {
+    "createdBy": {
       "type": "String",
       "required": true,
       "length": 50,
@@ -121,7 +121,7 @@
         "nullable": "N"
       }
     },
-    "createdon": {
+    "createdOn": {
       "type": "Date",
       "required": true,
       "length": null,
@@ -136,7 +136,7 @@
         "nullable": "N"
       }
     },
-    "updatedby": {
+    "updatedBy": {
       "type": "String",
       "required": false,
       "length": 50,
@@ -151,7 +151,7 @@
         "nullable": "Y"
       }
     },
-    "updatedon": {
+    "updatedOn": {
       "type": "Date",
       "required": false,
       "length": null,

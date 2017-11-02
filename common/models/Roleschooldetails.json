@@ -1,18 +1,18 @@
 {
-  "name": "Rolemenu",
+  "name": "Roleschooldetails",
   "options": {
     "idInjection": false,
     "mysql": {
       "schema": "schoolfeesystem",
-      "table": "rolemenu"
+      "table": "roleschooldetails"
     },
     "relations": {
-      "fkRolemenuactionMenurel": {
-        "model": "Menu",
+      "fkRolechooldetailsSchoolrel": {
+        "model": "School",
         "type": "belongsTo",
-        "foreignKey": "menuid"
+        "foreignKey": "schoolid"
       },
-      "fkRolemenuactionRolerel": {
+      "fkRolechooldetailsUserrel": {
         "model": "Systemrole",
         "type": "belongsTo",
         "foreignKey": "roleid"
@@ -36,7 +36,7 @@
         "nullable": "N"
       }
     },
-    "roleid": {
+    "roleId": {
       "type": "Number",
       "required": true,
       "length": null,
@@ -51,14 +51,14 @@
         "nullable": "N"
       }
     },
-    "menuid": {
+    "schoolId": {
       "type": "Number",
       "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
       "mysql": {
-        "columnName": "menuId",
+        "columnName": "schoolId",
         "dataType": "bigint",
         "dataLength": null,
         "dataPrecision": 19,
@@ -66,7 +66,7 @@
         "nullable": "N"
       }
     },
-    "createdby": {
+    "createdBy": {
       "type": "String",
       "required": true,
       "length": 50,
@@ -81,7 +81,7 @@
         "nullable": "N"
       }
     },
-    "createdon": {
+    "createdOn": {
       "type": "Date",
       "required": true,
       "length": null,
@@ -96,7 +96,7 @@
         "nullable": "N"
       }
     },
-    "updatedby": {
+    "updatedBy": {
       "type": "String",
       "required": false,
       "length": 50,
@@ -111,7 +111,7 @@
         "nullable": "Y"
       }
     },
-    "updatedon": {
+    "updatedOn": {
       "type": "Date",
       "required": false,
       "length": null,

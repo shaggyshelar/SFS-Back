@@ -46,7 +46,7 @@
         "nullable": "N"
       }
     },
-    "schoolid": {
+    "schoolId": {
       "type": "Number",
       "required": true,
       "length": null,
@@ -61,7 +61,7 @@
         "nullable": "N"
       }
     },
-    "categoryid": {
+    "categoryId": {
       "type": "Number",
       "required": true,
       "length": null,
@@ -76,7 +76,7 @@
         "nullable": "N"
       }
     },
-    "classid": {
+    "classId": {
       "type": "Number",
       "required": true,
       "length": null,
@@ -91,7 +91,7 @@
         "nullable": "N"
       }
     },
-    "divisionid": {
+    "divisionId": {
       "type": "Number",
       "required": false,
       "length": null,
@@ -106,7 +106,7 @@
         "nullable": "Y"
       }
     },
-    "grnumber": {
+    "gRNumber": {
       "type": "String",
       "required": false,
       "length": 50,
@@ -121,7 +121,7 @@
         "nullable": "Y"
       }
     },
-    "studentcode": {
+    "studentCode": {
       "type": "String",
       "required": true,
       "length": 50,
@@ -136,7 +136,7 @@
         "nullable": "N"
       }
     },
-    "studentfirstname": {
+    "studentFirstName": {
       "type": "String",
       "required": true,
       "length": 50,
@@ -151,7 +151,7 @@
         "nullable": "N"
       }
     },
-    "studentmiddlename": {
+    "studentMiddleName": {
       "type": "String",
       "required": true,
       "length": 50,
@@ -166,7 +166,7 @@
         "nullable": "N"
       }
     },
-    "studentlastname": {
+    "studentLastName": {
       "type": "String",
       "required": true,
       "length": 50,
@@ -181,7 +181,7 @@
         "nullable": "N"
       }
     },
-    "studentgender": {
+    "studentGender": {
       "type": "String",
       "required": true,
       "length": 10,
@@ -196,7 +196,7 @@
         "nullable": "N"
       }
     },
-    "fatherfirstname": {
+    "fatherFirstName": {
       "type": "String",
       "required": false,
       "length": 50,
@@ -211,7 +211,7 @@
         "nullable": "Y"
       }
     },
-    "fatherlastname": {
+    "fatherLastName": {
       "type": "String",
       "required": false,
       "length": 50,
@@ -226,7 +226,7 @@
         "nullable": "Y"
       }
     },
-    "fathermobile": {
+    "fatherMobile": {
       "type": "String",
       "required": false,
       "length": 20,
@@ -241,7 +241,7 @@
         "nullable": "Y"
       }
     },
-    "motherfirstname": {
+    "motherFirstName": {
       "type": "String",
       "required": false,
       "length": 50,
@@ -256,7 +256,7 @@
         "nullable": "Y"
       }
     },
-    "motherlastname": {
+    "motherLastName": {
       "type": "String",
       "required": false,
       "length": 50,
@@ -271,7 +271,7 @@
         "nullable": "Y"
       }
     },
-    "mothermobile": {
+    "motherMobile": {
       "type": "String",
       "required": false,
       "length": 20,
@@ -286,7 +286,7 @@
         "nullable": "Y"
       }
     },
-    "guardianfirstname": {
+    "guardianFirstName": {
       "type": "String",
       "required": false,
       "length": 50,
@@ -301,7 +301,7 @@
         "nullable": "Y"
       }
     },
-    "guardianlastname": {
+    "guardianLastName": {
       "type": "String",
       "required": false,
       "length": 50,
@@ -316,7 +316,7 @@
         "nullable": "Y"
       }
     },
-    "guardianmobile": {
+    "guardianMobile": {
       "type": "String",
       "required": false,
       "length": 20,
@@ -331,7 +331,7 @@
         "nullable": "Y"
       }
     },
-    "studentdateofbirth": {
+    "studentDateOfBirth": {
       "type": "Date",
       "required": false,
       "length": null,
@@ -346,7 +346,7 @@
         "nullable": "Y"
       }
     },
-    "dateofjoining": {
+    "dateOfJoining": {
       "type": "Date",
       "required": false,
       "length": null,
@@ -466,7 +466,7 @@
         "nullable": "Y"
       }
     },
-    "bloodgroup": {
+    "bloodGroup": {
       "type": "String",
       "required": false,
       "length": 20,
@@ -481,7 +481,7 @@
         "nullable": "Y"
       }
     },
-    "academicyear": {
+    "academicYear": {
       "type": "Number",
       "required": true,
       "length": null,
@@ -496,7 +496,7 @@
         "nullable": "N"
       }
     },
-    "isdelete": {
+    "isDelete": {
       "type": "Number",
       "required": false,
       "length": null,
@@ -511,7 +511,7 @@
         "nullable": "Y"
       }
     },
-    "createdby": {
+    "createdBy": {
       "type": "String",
       "required": true,
       "length": 50,
@@ -526,7 +526,7 @@
         "nullable": "N"
       }
     },
-    "createdon": {
+    "createdOn": {
       "type": "Date",
       "required": true,
       "length": null,
@@ -541,7 +541,7 @@
         "nullable": "N"
       }
     },
-    "updatedby": {
+    "updatedBy": {
       "type": "String",
       "required": false,
       "length": 50,
@@ -556,7 +556,7 @@
         "nullable": "Y"
       }
     },
-    "updatedon": {
+    "updatedOn": {
       "type": "Date",
       "required": false,
       "length": null,

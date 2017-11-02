@@ -36,7 +36,7 @@
         "nullable": "N"
       }
     },
-    "classid": {
+    "classID": {
       "type": "Number",
       "required": true,
       "length": null,
@@ -51,7 +51,7 @@
         "nullable": "N"
       }
     },
-    "schoolid": {
+    "schoolId": {
       "type": "Number",
       "required": true,
       "length": null,
@@ -66,7 +66,7 @@
         "nullable": "N"
       }
     },
-    "divisionname": {
+    "divisionName": {
       "type": "String",
       "required": true,
       "length": 50,
@@ -81,7 +81,7 @@
         "nullable": "N"
       }
     },
-    "divisioncode": {
+    "divisionCode": {
       "type": "String",
       "required": true,
       "length": 50,
@@ -96,7 +96,7 @@
         "nullable": "N"
       }
     },
-    "isdelete": {
+    "isDelete": {
       "type": "Number",
       "required": false,
       "length": null,
@@ -111,7 +111,7 @@
         "nullable": "Y"
       }
     },
-    "createdby": {
+    "createdBy": {
       "type": "String",
       "required": true,
       "length": 50,
@@ -126,7 +126,7 @@
         "nullable": "N"
       }
     },
-    "createdon": {
+    "createdOn": {
       "type": "Date",
       "required": true,
       "length": null,
@@ -141,7 +141,7 @@
         "nullable": "N"
       }
     },
-    "updatedby": {
+    "updatedBy": {
       "type": "String",
       "required": false,
       "length": 50,
@@ -156,7 +156,7 @@
         "nullable": "Y"
       }
     },
-    "updatedon": {
+    "updatedOn": {
       "type": "Date",
       "required": false,
       "length": null,

@@ -1,21 +1,21 @@
 {
-  "name": "Userschooldetails",
+  "name": "RolepermissionDetails",
   "options": {
     "idInjection": false,
     "mysql": {
       "schema": "schoolfeesystem",
-      "table": "userschooldetails"
+      "table": "rolepermissiondetails"
     },
     "relations": {
-      "fkUserschooldetailsSchoolrel": {
-        "model": "School",
+      "fkRolepermissionPermissionrel": {
+        "model": "Permission",
         "type": "belongsTo",
-        "foreignKey": "schoolid"
+        "foreignKey": "permissionid"
       },
-      "fkUserschooldetailsUserrel": {
-        "model": "Systemuser",
+      "fkRolepermissionRolerel": {
+        "model": "Systemrole",
         "type": "belongsTo",
-        "foreignKey": "userid"
+        "foreignKey": "roleid"
       }
     }
   },
@@ -36,14 +36,14 @@
         "nullable": "N"
       }
     },
-    "userid": {
+    "roleId": {
       "type": "Number",
       "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
       "mysql": {
-        "columnName": "userId",
+        "columnName": "roleId",
         "dataType": "bigint",
         "dataLength": null,
         "dataPrecision": 19,
@@ -51,14 +51,14 @@
         "nullable": "N"
       }
     },
-    "schoolid": {
+    "permissionId": {
       "type": "Number",
       "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
       "mysql": {
-        "columnName": "schoolId",
+        "columnName": "permissionId",
         "dataType": "bigint",
         "dataLength": null,
         "dataPrecision": 19,
@@ -66,7 +66,22 @@
         "nullable": "N"
       }
     },
-    "createdby": {
+    "permissionName": {
+      "type": "String",
+      "required": true,
+      "length": 50,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "permissionName",
+        "dataType": "varchar",
+        "dataLength": 50,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "createdBy": {
       "type": "String",
       "required": true,
       "length": 50,
@@ -81,7 +96,7 @@
         "nullable": "N"
       }
     },
-    "createdon": {
+    "createdOn": {
       "type": "Date",
       "required": true,
       "length": null,
@@ -96,7 +111,7 @@
         "nullable": "N"
       }
     },
-    "updatedby": {
+    "updatedBy": {
       "type": "String",
       "required": false,
       "length": 50,
@@ -111,7 +126,7 @@
         "nullable": "Y"
       }
     },
-    "updatedon": {
+    "updatedOn": {
       "type": "Date",
       "required": false,
       "length": null,

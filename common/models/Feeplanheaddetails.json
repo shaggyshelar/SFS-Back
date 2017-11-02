@@ -36,7 +36,7 @@
         "nullable": "N"
       }
     },
-    "feeplanid": {
+    "feePlanId": {
       "type": "Number",
       "required": true,
       "length": null,
@@ -51,7 +51,7 @@
         "nullable": "N"
       }
     },
-    "feeheadid": {
+    "feeHeadId": {
       "type": "Number",
       "required": true,
       "length": null,
@@ -66,7 +66,7 @@
         "nullable": "N"
       }
     },
-    "feecharges": {
+    "feeCharges": {
       "type": "Number",
       "required": true,
       "length": null,
@@ -81,7 +81,7 @@
         "nullable": "N"
       }
     },
-    "duedate": {
+    "dueDate": {
       "type": "Date",
       "required": true,
       "length": null,
@@ -96,7 +96,7 @@
         "nullable": "N"
       }
     },
-    "createdby": {
+    "createdBy": {
       "type": "String",
       "required": true,
       "length": 50,
@@ -111,7 +111,7 @@
         "nullable": "N"
       }
     },
-    "createdon": {
+    "createdOn": {
       "type": "Date",
       "required": true,
       "length": null,
@@ -126,7 +126,7 @@
         "nullable": "N"
       }
     },
-    "updatedby": {
+    "updatedBy": {
       "type": "String",
       "required": false,
       "length": 50,
@@ -141,7 +141,7 @@
         "nullable": "Y"
       }
     },
-    "updatedon": {
+    "updatedOn": {
       "type": "Date",
       "required": false,
       "length": null,
