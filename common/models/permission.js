@@ -7,10 +7,10 @@ module.exports = function (Permission) {
         if (modelPermissionArray != undefined && modelPermissionArray.length == 2) {
             var _model = modelPermissionArray[0];
             var _permission = modelPermissionArray[1];
-            var _principalId = permission.principalId;
+            var _principalName = permission.principalName;
             var options = {};
             options.model = _model;
-            options.principalId = _principalId;
+            options.principalId = _principalName;
             options.principalType = "ROLE";
             if (_permission == "Create") {
                 options.property = "create";

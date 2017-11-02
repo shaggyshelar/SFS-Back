@@ -6,7 +6,7 @@ var permissionsHelper = function () {
 }
 permissionsHelper.setPermissions = function (model,roles, callback) {
     var conditions = roles.map(function (r) {
-        return { principalId: r.name };
+        return { principalName: r.name };
       });
 
     app.models.Permission.find({ where: { or: conditions } }, function (err, p) {

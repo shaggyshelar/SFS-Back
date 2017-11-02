@@ -14,7 +14,7 @@
   "relations": {
     "roles": {
       "type": "hasMany",
-      "model": "Role",
+      "model": "role",
       "foreignKey": "principalId",
       "through": "RoleMapping"
     }

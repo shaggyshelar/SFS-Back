@@ -11,8 +11,12 @@
       "type": "string",
       "required": true
     },
-    "principalId": {
+    "principalName": {
       "type": "string",
+      "required": true
+    },
+    "principalId": {
+      "type": "number",
       "required": true
     }
   },

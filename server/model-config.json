@@ -34,7 +34,7 @@
   },
   "Role": {
     "dataSource": "db",
-    "public": true
+    "public": false
   },
   "Email": {
     "dataSource": "emailDs"
@@ -49,6 +49,10 @@
     "public": true
   },
   "TempModel": {
+    "dataSource": "db",
+    "public": true
+  },
+  "role": {
     "dataSource": "db",
     "public": true
   }
