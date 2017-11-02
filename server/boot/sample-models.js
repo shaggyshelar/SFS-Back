@@ -8,6 +8,7 @@ module.exports = function (app) {
   var Permission = app.models.Permission;
   var TempModel = app.models.TempModel;
   var Acl = app.models.ACL;
+  var FeatureList = app.models.FeatureList;
 
   User.create([
     { username: 'John', email: 'john@doe.com', password: 'opensesame', 'emailVerified': true, 'isPasswordChanged': false },
@@ -48,6 +49,28 @@ module.exports = function (app) {
     Acl.create(aclOptions, function () {
       TempModel.settings.acls.push(aclOptions);
       console.log("Acl added to deny TempModel access all");
+    });
+
+    var features = [{
+      "FeatureName": "User",
+      "ModelName": "user"
+    }, {
+      "FeatureName": "Role",
+      "ModelName": "role"
+    }, {
+      "FeatureName": "Fee",
+      "ModelName": "Fee"
+    }, {
+      "FeatureName": "Student",
+      "ModelName": "Student"
+    }, {
+      "FeatureName": "Test",
+      "ModelName": "TestModel"
+    }];
+    features.map(function (f, i) {
+      FeatureList.create(f, function () {
+        console.log("Added feature " + f.FeatureName);
+      });
     });
 
   });
