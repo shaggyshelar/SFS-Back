@@ -3,9 +3,8 @@ var app = require('../../server/server');
 
 module.exports = function (Permission) {
     Permission.afterRemote('create', function (context, permission, next) {
-        console.log(permission);
         var modelPermissionArray = permission.permission.split('.');
-        if (modelPermissionArray != undefined && modelPermissionArray.length > 0) {
+        if (modelPermissionArray != undefined && modelPermissionArray.length == 2) {
             var _model = modelPermissionArray[0];
             var _permission = modelPermissionArray[1];
             var _principalId = permission.principalId;
@@ -35,6 +34,8 @@ module.exports = function (Permission) {
                 }
                 next();
             });
+        } else {
+            next();
         }
     });
 
