@@ -2,23 +2,30 @@
   "name": "user",
   "base": "User",
   "idInjection": true,
+  "restrictResetPasswordTokenScope": true,
+  "emailVerificationRequired": true,
   "properties": {
     "isPasswordChanged": {
       "type": "boolean",
       "default": false
     }
   },
-  "restrictResetPasswordTokenScope": true,
-  "emailVerificationRequired": true,
   "validations": [],
-  "relations": {},
+  "relations": {
+    "roles": {
+      "type": "hasMany",
+      "model": "Role",
+      "foreignKey": "principalId",
+      "through": "RoleMapping"
+    }
+  },
   "acls": [
     {
+      "accessType": "READ",
       "principalType": "ROLE",
       "principalId": "$everyone",
-      "accessType": "READ",
       "permission": "ALLOW"
     }
   ],
-  "methods": []
+  "methods": {}
 }

@@ -23,18 +23,18 @@
   },
   "ACL": {
     "dataSource": "db",
-    "public": false
+    "public": true
   },
   "RoleMapping": {
     "dataSource": "db",
-    "public": false,
+    "public": true,
     "options": {
       "strictObjectIDCoercion": true
     }
   },
   "Role": {
     "dataSource": "db",
-    "public": false
+    "public": true
   },
   "Email": {
     "dataSource": "emailDs"
@@ -43,5 +43,13 @@
     "dataSource": "db",
     "public": true,
     "options": {}
+  },
+  "Permission": {
+    "dataSource": "db",
+    "public": true
+  },
+  "TempModel": {
+    "dataSource": "db",
+    "public": true
   }
 }

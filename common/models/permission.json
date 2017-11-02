@@ -1,0 +1,23 @@
+{
+  "name": "Permission",
+  "plural": "permissions",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "permission": {
+      "type": "string",
+      "required": true
+    },
+    "principalId": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}
