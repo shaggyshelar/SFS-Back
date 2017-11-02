@@ -1,22 +1,18 @@
 {
-  "name": "Permission",
-  "plural": "permissions",
+  "name": "FeatureList",
+  "plural": "featurelists",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
   "properties": {
-    "permission": {
+    "FeatureName": {
       "type": "string",
       "required": true
     },
-    "principalName": {
+    "ModelName": {
       "type": "string",
-      "required": true
-    },
-    "principalId": {
-      "type": "number",
       "required": true
     }
   },

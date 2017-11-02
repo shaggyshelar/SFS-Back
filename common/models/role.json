@@ -1,6 +1,5 @@
 {
   "name": "role",
-  
   "base": "Role",
   "idInjection": true,
   "options": {

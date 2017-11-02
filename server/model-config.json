@@ -55,5 +55,9 @@
   "role": {
     "dataSource": "db",
     "public": true
+  },
+  "FeatureList": {
+    "dataSource": "db",
+    "public": true
   }
 }
