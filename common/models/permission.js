@@ -39,6 +39,57 @@ module.exports = function (Permission) {
         }
     });
 
+    Permission.observe('before delete', function (ctx, next) {
+
+        Permission.findById(ctx.where.id, function (err, permissionModel) {
+            if (permissionModel) {
+                var permissionStr = permissionModel.permission;
+                var modelPermissionArray = permissionStr.split('.');
+                if (modelPermissionArray != undefined && modelPermissionArray.length == 2) {
+                    var _model = modelPermissionArray[0];
+                    var _permission = modelPermissionArray[1];
+                    var _principalName = permissionModel.principalName;
+                    var options = {};
+                    var conditions = [];
+
+                    conditions.push({ model: _model });
+                    conditions.push({ principalId: _principalName });
+                    conditions.push({ principalType: "ROLE" });
+                    if (_permission == "Create") {
+                        conditions.push({ property: "create" });
+                        conditions.push({ accessType: "WRITE" });
+                    }
+                    else if (_permission == "Update") {
+                        conditions.push({ property: "updateAttributes" });
+                        conditions.push({ accessType: "WRITE" });
+                    }
+                    else if (_permission == "Delete") {
+                        conditions.push({ property: "destroyById" });
+                        conditions.push({ accessType: "WRITE" });
+                    }
+                    else if (_permission == "Read") {
+                        conditions.push({ accessType: "READ" });
+                    }
+
+                    app.models.ACL.destroyAll({ and: conditions }, function (err, info) {
+                        if (err) throw err;
+                        // next();
+                    });
+                }
+                else {
+                    next();
+                }
+
+            }
+            else {
+                next();
+            }
+        });
 
 
+        console.log('Deleted %s matching %j',
+            ctx.Model.pluralModelName,
+            ctx.where);
+        next();
+    });
 };
