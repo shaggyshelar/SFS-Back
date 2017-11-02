@@ -43,5 +43,13 @@
     "dataSource": "db",
     "public": true,
     "options": {}
+  },
+  "Institute": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "School": {
+    "dataSource": "mysql",
+    "public": true
   }
 }
