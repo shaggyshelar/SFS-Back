@@ -90,7 +90,8 @@ module.exports = function (User) {
     if (role != undefined && role.length > 0) {
       var permissions = [];
       User.app.models.Permission.find({ where: { principalId: role[0].name } }, function (err, p) {
-        user.permissions = p;
+        if (p != undefined && p.length > 0)
+          user.permissions = p.map(function (data, index) { return data.permission; });
         next();
       });
       // User.app.models.ACL.find({ where: { principalId: role[0].name } }, function (err, p) {
