@@ -1,0 +1,41 @@
+{
+  "name": "Menu",
+  "plural": "menus",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "number",
+      "required": true
+    },
+    "menuName": {
+      "type": "string",
+      "required": true
+    },
+    "menuParentId": {
+      "type": "number",
+      "required": true
+    },
+    "logicalSequence": {
+      "type": "number",
+      "required": true
+    },
+    "isDelete": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "validations": [],
+  "relations": {
+    "permissions": {
+      "model": "PermissionList",
+      "type": "hasMany",
+      "foreignKey": "menuId"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

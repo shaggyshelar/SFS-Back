@@ -1,0 +1,31 @@
+{
+  "name": "PermissionList",
+  "plural": "permissionlists",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "id": {
+      "type": "number",
+      "required": true
+    },
+    "menuId": {
+      "type": "number",
+      "required": true
+    },
+    "permissionName": {
+      "type": "string",
+      "required": true
+    },
+    "isDelete": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

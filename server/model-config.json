@@ -59,5 +59,13 @@
   "FeatureList": {
     "dataSource": "db",
     "public": true
+  },
+  "Menu": {
+    "dataSource": "db",
+    "public": true
+  },
+  "PermissionList": {
+    "dataSource": "db",
+    "public": true
   }
 }
