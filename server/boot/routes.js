@@ -101,13 +101,14 @@ module.exports = function (app) {
         });
         Role.find({ where: { or: conditions } }, function (err, roles) {
           if (err) throw err;
+          token.roles = roles;
           permissionHelper.setPermissions(token, roles, function (token) {
             res.status(200);
             res.send(token);
           });
         });
       });
-      
+
       // var isPasswordChanged = token.toJSON().user.isPasswordChanged;
       // if (isPasswordChanged) {
       //   res.status(200);
