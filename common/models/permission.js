@@ -27,7 +27,7 @@ module.exports = function (Permission) {
             else if (_permission == "Read") {
                 options.accessType = "READ";
             }
-            app.models.ACL.create(options, function () {
+            app.models.ACL.create(options, function (err, info) {
                 var modelInstance = app.models[options.model];
                 if (modelInstance && modelInstance != undefined) {
                     modelInstance.settings.acls.push(options);
@@ -55,25 +55,59 @@ module.exports = function (Permission) {
                     conditions.push({ model: _model });
                     conditions.push({ principalId: _principalName });
                     conditions.push({ principalType: "ROLE" });
+
+                    options.model = _model;
+                    options.principalId = _principalName;
+                    options.principalType = "ROLE";
+
                     if (_permission == "Create") {
                         conditions.push({ property: "create" });
                         conditions.push({ accessType: "WRITE" });
+
+                        options.property = "create";
+                        options.accessType = "WRITE";
                     }
                     else if (_permission == "Update") {
                         conditions.push({ property: "updateAttributes" });
                         conditions.push({ accessType: "WRITE" });
+
+                        options.property = "updateAttributes";
+                        options.accessType = "WRITE";
                     }
                     else if (_permission == "Delete") {
                         conditions.push({ property: "destroyById" });
                         conditions.push({ accessType: "WRITE" });
+
+                        options.property = "destroyById";
+                        options.accessType = "WRITE";
                     }
                     else if (_permission == "Read") {
                         conditions.push({ accessType: "READ" });
+
+                        options.accessType = "READ";
                     }
 
                     app.models.ACL.destroyAll({ and: conditions }, function (err, info) {
                         if (err) throw err;
-                        // next();
+                        var modelInstance = app.models[_model];
+                        if (modelInstance && modelInstance != undefined) {
+                            // modelInstance.settings.acls.push(options);
+                            var aclIndex = modelInstance.settings.acls.findIndex(function (d) {
+                                return (d.model == options.model &&
+                                    d.principalId == options.principalId &&
+                                    d.principalType == options.principalType &&
+                                    d.property == options.property &&
+                                    d.accessType == options.accessType &&
+                                    d.property == options.property &&
+                                    d.accessType == options.accessType &&
+                                    d.property == options.property &&
+                                    d.accessType == options.accessType);
+                            });
+                            modelInstance.settings.acls.splice(aclIndex, 1);
+                        }
+                        else {
+                            next();
+                        }
                     });
                 }
                 else {
@@ -85,11 +119,6 @@ module.exports = function (Permission) {
                 next();
             }
         });
-
-
-        console.log('Deleted %s matching %j',
-            ctx.Model.pluralModelName,
-            ctx.where);
-        next();
+        // next();
     });
 };

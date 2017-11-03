@@ -15,6 +15,8 @@ module.exports = function (app) {
     { username: 'Jane', email: 'jane@doe.com', password: 'opensesame', 'emailVerified': true, 'isPasswordChanged': false },
     { username: 'Bob', email: 'bob@projects.com', password: 'opensesame', 'emailVerified': true, 'isPasswordChanged': false },
     { username: 'Demo', email: 'demo@demo.com', password: 'demo', 'emailVerified': true, 'isPasswordChanged': true },
+    { username: 'Tom', email: 'tom@projects.com', password: 'opensesame', 'emailVerified': true, 'isPasswordChanged': false },
+    { username: 'Steve', email: 'steve@projects.com', password: 'opensesame', 'emailVerified': true, 'isPasswordChanged': false },
   ], function (err, users) {
     if (err) throw err;
 
@@ -23,6 +25,7 @@ module.exports = function (app) {
     // create the admin role
     Role.create({
       name: 'admin',
+      schoolId: 1
     }, function (err, role) {
       if (err) throw err;
 

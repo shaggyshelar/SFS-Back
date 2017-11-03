@@ -5,7 +5,12 @@
   "options": {
     "validateUpsert": true
   },
-  "properties": {},
+  "properties": {
+    "schoolId": {
+      "type": "number",
+      "required": false
+    }
+  },
   "validations": [],
   "relations": {
     "permissions": {
