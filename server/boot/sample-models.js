@@ -25,7 +25,7 @@ module.exports = function (app) {
     // create the admin role
     Role.create({
       name: 'admin',
-      schoolId: 1
+      displayName: 'admin'
     }, function (err, role) {
       if (err) throw err;
 
@@ -42,6 +42,27 @@ module.exports = function (app) {
       });
     });
 
+    // create school admin role
+    Role.create({
+      name: 'SchoolAdmin',
+      displayName: 'SchoolAdmin'
+    }, function (err, role) {
+      if (err) throw err;
+
+      console.log('Created role:', role);
+
+      // make bob an admin
+      role.principals.create({
+        principalType: RoleMapping.USER,
+        principalId: users[4].id,
+      }, function (err, principal) {
+        if (err) throw err;
+
+        console.log('Created principal:', principal);
+      });
+    });
+
+    //Add default permissions
     var aclOptions = {
       "model": "TempModel",
       "accessType": "*",
@@ -67,8 +88,8 @@ module.exports = function (app) {
       "FeatureName": "Student",
       "ModelName": "Student"
     }, {
-      "FeatureName": "Test",
-      "ModelName": "TestModel"
+      "FeatureName": "Temp",
+      "ModelName": "TempModel"
     }];
     features.map(function (f, i) {
       FeatureList.create(f, function () {

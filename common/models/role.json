@@ -6,18 +6,14 @@
     "validateUpsert": true
   },
   "properties": {
-    "schoolId": {
-      "type": "number",
+    "displayName": {
+      "type": "string",
       "required": false
     }
   },
   "validations": [],
   "relations": {
-    "permissions": {
-      "type": "hasMany",
-      "model": "Permission",
-      "foreignKey": "principalId"
-    }
+    
   },
   "acls": [],
   "methods": {}
