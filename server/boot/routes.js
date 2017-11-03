@@ -89,42 +89,44 @@ module.exports = function (app) {
           'Message': 'Login Failed',
         });
       }
-      var RoleMapping = app.models.RoleMapping;
-      var Role = app.models.Role;
-      RoleMapping.find({ where: { principalId: token.userId } }, function (err, roleMappings) {
-        var roleIds = _.uniq(roleMappings
-          .map(function (roleMapping) {
-            return roleMapping.roleId;
-          }));
-        var conditions = roleIds.map(function (roleId) {
-          return { id: roleId };
-        });
-        Role.find({ where: { or: conditions } }, function (err, roles) {
-          if (err) throw err;
-          token.roles = roles;
-          permissionHelper.setPermissions(token, roles, function (token) {
-            res.status(200);
-            res.send(token);
+      if (token != undefined) {
+        var RoleMapping = app.models.RoleMapping;
+        var Role = app.models.Role;
+        RoleMapping.find({ where: { principalId: token.userId } }, function (err, roleMappings) {
+          var roleIds = _.uniq(roleMappings
+            .map(function (roleMapping) {
+              return roleMapping.roleId;
+            }));
+          var conditions = roleIds.map(function (roleId) {
+            return { id: roleId };
+          });
+          Role.find({ where: { or: conditions } }, function (err, roles) {
+            if (err) throw err;
+            token.roles = roles;
+            permissionHelper.setPermissions(token, roles, function (token) {
+              res.status(200);
+              res.send(token);
+            });
           });
         });
-      });
 
-      // var isPasswordChanged = token.toJSON().user.isPasswordChanged;
-      // if (isPasswordChanged) {
-      //   res.status(200);
-      //   res.send({
-      //     'token': token.id,
-      //     'ttl': token.ttl,
-      //     'created': token.created,
-      //     'userId': token.userId,
-      //   });
-      // } else {
-      //   res.status(401);
-      //   res.send({
-      //     'Error': 'ChangeTemporaryPassword',
-      //     'Message': 'Please change password first.',
-      //   });
-      // }
+        // var isPasswordChanged = token.toJSON().user.isPasswordChanged;
+        // if (isPasswordChanged) {
+        //   res.status(200);
+        //   res.send({
+        //     'token': token.id,
+        //     'ttl': token.ttl,
+        //     'created': token.created,
+        //     'userId': token.userId,
+        //   });
+        // } else {
+        //   res.status(401);
+        //   res.send({
+        //     'Error': 'ChangeTemporaryPassword',
+        //     'Message': 'Please change password first.',
+        //   });
+        // }
+      }
     });
   });
 
