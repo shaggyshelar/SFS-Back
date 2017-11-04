@@ -283,17 +283,102 @@ module.exports = function (app) {
         "menuParentId": 0,
         "logicalSequence": 3,
         "isDelete": false
-      }
+      },
+      {
+        "menuName": "Role And Permissions",
+        "menuParentId": 0,
+        "logicalSequence": 4,
+        "isDelete": false
+      },
+      {
+        "menuName": "User Management",
+        "menuParentId": 0,
+        "logicalSequence": 5,
+        "isDelete": false
+      },
+      {
+        "menuName": "Payment Frequey",
+        "menuParentId": 0,
+        "logicalSequence": 6,
+        "isDelete": false
+      },
+      {
+        "menuName": "Class",
+        "menuParentId": 0,
+        "logicalSequence": 7,
+        "isDelete": false
+      },
+      {
+        "menuName": "Division",
+        "menuParentId": 0,
+        "logicalSequence": 8,
+        "isDelete": false
+      },
+      {
+        "menuName": "Category",
+        "menuParentId": 0,
+        "logicalSequence": 9,
+        "isDelete": false
+      },
+      {
+        "menuName": "Fee Heads",
+        "menuParentId": 0,
+        "logicalSequence": 10,
+        "isDelete": false
+      },
+      {
+        "menuName": "Fee Plans",
+        "menuParentId": 0,
+        "logicalSequence": 11,
+        "isDelete": false
+      },
+      {
+        "menuName": "Transports",
+        "menuParentId": 0,
+        "logicalSequence": 12,
+        "isDelete": false
+      },
+      {
+        "menuName": "AddHoc Fee",
+        "menuParentId": 0,
+        "logicalSequence": 13,
+        "isDelete": false
+      },
+      {
+        "menuName": "Student Management",
+        "menuParentId": 0,
+        "logicalSequence": 14,
+        "isDelete": false
+      },
+      {
+        "menuName": "Process Fee",
+        "menuParentId": 0,
+        "logicalSequence": 15,
+        "isDelete": false
+      },
+      {
+        "menuName": "Reports",
+        "menuParentId": 0,
+        "logicalSequence": 16,
+        "isDelete": false
+      },
+      {
+        "menuName": "AcademicYear",
+        "menuParentId": 0,
+        "logicalSequence": 17,
+        "isDelete": false
+      },
+
     ];
     var menuPermissions = [
       {
         "menuId": 1,
-        "permissionName": "Institute.Create",
+        "permissionName": "Institute.Read",
         "isDelete": false
       },
       {
         "menuId": 1,
-        "permissionName": "Institute.Read",
+        "permissionName": "Institute.Create",
         "isDelete": false
       },
       {
@@ -345,8 +430,287 @@ module.exports = function (app) {
         "menuId": 3,
         "permissionName": "School.Delete",
         "isDelete": false
-      }
-    ];
+      },
+      {
+        "menuId": 4,
+        "permissionName": "Role.Create",
+        "isDelete": false
+      },
+      {
+        "menuId": 4,
+        "permissionName": "Role.Read",
+        "isDelete": false
+      },
+      {
+        "menuId": 4,
+        "permissionName": "Role.Update",
+        "isDelete": false
+      },
+      {
+        "menuId": 4,
+        "permissionName": "Role.Delete",
+        "isDelete": false
+      },
+      {
+        "menuId": 5,
+        "permissionName": "User.Create",
+        "isDelete": false
+      },
+      {
+        "menuId": 5,
+        "permissionName": "User.Read",
+        "isDelete": false
+      },
+      {
+        "menuId": 5,
+        "permissionName": "User.Update",
+        "isDelete": false
+      },
+      {
+        "menuId": 5,
+        "permissionName": "User.Delete",
+        "isDelete": false
+      },
+      {
+        "menuId": 6,
+        "permissionName": "Frequency.Create",
+        "isDelete": false
+      },
+      {
+        "menuId": 6,
+        "permissionName": "Frequency.Read",
+        "isDelete": false
+      },
+      {
+        "menuId": 6,
+        "permissionName": "Frequency.Update",
+        "isDelete": false
+      },
+      {
+        "menuId": 6,
+        "permissionName": "Frequency.Delete",
+        "isDelete": false
+      },
+      {
+        "menuId": 7,
+        "permissionName": "Class.Create",
+        "isDelete": false
+      },
+      {
+        "menuId": 7,
+        "permissionName": "Class.Read",
+        "isDelete": false
+      },
+      {
+        "menuId": 7,
+        "permissionName": "Class.Update",
+        "isDelete": false
+      },
+      {
+        "menuId": 7,
+        "permissionName": "Class.Delete",
+        "isDelete": false
+      },
+      {
+        "menuId": 8,
+        "permissionName": "Division.Create",
+        "isDelete": false
+      },
+      {
+        "menuId": 8,
+        "permissionName": "Division.Read",
+        "isDelete": false
+      },
+      {
+        "menuId": 8,
+        "permissionName": "Division.Update",
+        "isDelete": false
+      },
+      {
+        "menuId": 8,
+        "permissionName": "Division.Delete",
+        "isDelete": false
+      },
+      {
+        "menuId": 9,
+        "permissionName": "Category.Create",
+        "isDelete": false
+      },
+      {
+        "menuId": 9,
+        "permissionName": "Category.Read",
+        "isDelete": false
+      },
+      {
+        "menuId": 9,
+        "permissionName": "Category.Update",
+        "isDelete": false
+      },
+      {
+        "menuId": 9,
+        "permissionName": "Category.Delete",
+        "isDelete": false
+      },
+      {
+        "menuId": 10,
+        "permissionName": "Feehead.Create",
+        "isDelete": false
+      },
+      {
+        "menuId": 10,
+        "permissionName": "Feehead.Read",
+        "isDelete": false
+      },
+      {
+        "menuId": 10,
+        "permissionName": "Feehead.Update",
+        "isDelete": false
+      },
+      {
+        "menuId": 10,
+        "permissionName": "Feehead.Delete",
+        "isDelete": false
+      },
+      {
+        "menuId": 11,
+        "permissionName": "Feeplan.Create",
+        "isDelete": false
+      },
+      {
+        "menuId": 11,
+        "permissionName": "Feeplan.Read",
+        "isDelete": false
+      },
+      {
+        "menuId": 11,
+        "permissionName": "Feeplan.Update",
+        "isDelete": false
+      },
+      {
+        "menuId": 11,
+        "permissionName": "Feeplan.Delete",
+        "isDelete": false
+      },
+      {
+        "menuId": 12,
+        "permissionName": "Transport.Create",
+        "isDelete": false
+      },
+      {
+        "menuId": 12,
+        "permissionName": "Transport.Read",
+        "isDelete": false
+      },
+      {
+        "menuId": 12,
+        "permissionName": "Transport.Update",
+        "isDelete": false
+      },
+      {
+        "menuId": 12,
+        "permissionName": "Transport.Delete",
+        "isDelete": false
+      },
+      {
+        "menuId": 13,
+        "permissionName": "Addhocfee.Create",
+        "isDelete": false
+      },
+      {
+        "menuId": 13,
+        "permissionName": "Addhocfee.Read",
+        "isDelete": false
+      },
+      {
+        "menuId": 13,
+        "permissionName": "Addhocfee.Update",
+        "isDelete": false
+      },
+      {
+        "menuId": 13,
+        "permissionName": "Addhocfee.Delete",
+        "isDelete": false
+      },
+      {
+        "menuId": 14,
+        "permissionName": "Stutdent.Create",
+        "isDelete": false
+      },
+      {
+        "menuId": 14,
+        "permissionName": "Stutdent.Read",
+        "isDelete": false
+      },
+      {
+        "menuId": 14,
+        "permissionName": "Stutdent.Update",
+        "isDelete": false
+      },
+      {
+        "menuId": 14,
+        "permissionName": "Stutdent.Delete",
+        "isDelete": false
+      },
+      {
+        "menuId": 15,
+        "permissionName": "ProcessFee.Create",
+        "isDelete": false
+      },
+      {
+        "menuId": 15,
+        "permissionName": "ProcessFee.Read",
+        "isDelete": false
+      },
+      {
+        "menuId": 15,
+        "permissionName": "ProcessFee.Update",
+        "isDelete": false
+      },
+      {
+        "menuId": 15,
+        "permissionName": "ProcessFee.Delete",
+        "isDelete": false
+      },
+      {
+        "menuId": 16,
+        "permissionName": "Report.Create",
+        "isDelete": false
+      },
+      {
+        "menuId": 16,
+        "permissionName": "Report.Read",
+        "isDelete": false
+      },
+      {
+        "menuId": 16,
+        "permissionName": "Report.Update",
+        "isDelete": false
+      },
+      {
+        "menuId": 16,
+        "permissionName": "Report.Delete",
+        "isDelete": false
+      },
+      {
+        "menuId": 17,
+        "permissionName": "AcademicYear.Create",
+        "isDelete": false
+      },
+      {
+        "menuId": 17,
+        "permissionName": "AcademicYear.Read",
+        "isDelete": false
+      },
+      {
+        "menuId": 17,
+        "permissionName": "AcademicYear.Update",
+        "isDelete": false
+      },
+      {
+        "menuId": 17,
+        "permissionName": "AcademicYear.Delete",
+        "isDelete": false
+      }];
     Menu.create(menus, function (err, data) {
       if (err) throw err;
       PermissionList.create(menuPermissions, function (err, per) {
@@ -357,3 +721,7 @@ module.exports = function (app) {
 
   });
 };
+
+
+
+
