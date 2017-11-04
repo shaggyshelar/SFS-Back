@@ -31,8 +31,8 @@
   "validations": [],
   "relations": {
     "permissions": {
-      "model": "PermissionList",
       "type": "hasMany",
+      "model": "PermissionList",
       "foreignKey": "menuId"
     }
   },

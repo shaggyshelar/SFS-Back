@@ -34,3 +34,18 @@ boot(app, __dirname, function(err) {
   if (require.main === module)
     app.start();
 });
+
+/*
+{
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "DENY"
+    },
+    {
+      "accessType": "*",
+      "principalType": "ROLE",
+      "principalId": "admin",
+      "permission": "ALLOW"
+    }
+*/ 
