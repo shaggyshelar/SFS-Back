@@ -65,7 +65,7 @@ module.exports = function (app) {
         var permissionOptions = [
           {
             "permission": "Institute.Read",
-            "principalName": "admin", 
+            "principalName": "admin",
             "principalId": "1"
           },
           {
@@ -217,7 +217,7 @@ module.exports = function (app) {
             "permission": "Division.Update",
             "principalName": "admin",
             "principalId": "1"
-          }, 
+          },
           {
             "permission": "Division.Delete",
             "principalName": "admin",
@@ -315,7 +315,7 @@ module.exports = function (app) {
           },
           {
             "permission": "Addhocfee.Update",
-            "principalName": "admin", 
+            "principalName": "admin",
             "principalId": "1"
           },
           {
@@ -421,6 +421,305 @@ module.exports = function (app) {
             "permission": "TempModel.Delete",
             "principalName": "admin",
             "principalId": "1"
+          },
+          {
+            "permission": "Role.Create",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Role.Read",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Role.Update",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Role.Delete",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "user.Create",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "user.Read",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "user.Update",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "user.Delete",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Frequency.Create",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Frequency.Read",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Frequency.Update",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Frequency.Delete",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Class.Create",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Class.Read",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Class.Update",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Class.Delete",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Division.Create",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Division.Read",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Division.Update",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Division.Delete",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Category.Create",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Category.Read",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Category.Update",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Category.Delete",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Feehead.Create",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Feehead.Read",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Feehead.Update",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Feehead.Delete",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Feeplan.Create",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Feeplan.Read",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Feeplan.Update",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Feeplan.Delete",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Transport.Create",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Transport.Read",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Transport.Update",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Transport.Delete",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Addhocfee.Create",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Addhocfee.Read",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Addhocfee.Update",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Addhocfee.Delete",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Stutdent.Create",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Stutdent.Read",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Stutdent.Update",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Stutdent.Delete",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "ProcessFee.Create",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "ProcessFee.Read",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "ProcessFee.Update",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "ProcessFee.Delete",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Report.Create",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Report.Read",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Report.Update",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "Report.Delete",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "AcademicYear.Create",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "AcademicYear.Read",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "AcademicYear.Update",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "AcademicYear.Delete",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "TempModel.Read",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          }, {
+            "permission": "TempModel.Create",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "TempModel.Update",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
+          },
+          {
+            "permission": "TempModel.Delete",
+            "principalName": "SchoolAdmin",
+            "principalId": "2"
           }];
         Permission.create(permissionOptions, function (err, per) {
           if (err) throw err;
@@ -1003,6 +1302,469 @@ module.exports = function (app) {
         "accessType": "WRITE",
         "principalType": "ROLE",
         "principalId": "admin",
+
+      }, {
+        "model": "TempModel",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "TempModel",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "TempModel",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "TempModel",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      }, {
+        "model": "Role",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Role",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Role",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Role",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "User",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "User",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "User",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "User",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Frequency",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Frequency",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Frequency",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Frequency",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Class",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Class",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Class",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Class",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Division",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Division",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Division",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Division",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Category",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Category",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Category",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Category",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Feehead",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Feehead",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Feehead",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Feehead",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Feeplan",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Feeplan",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Feeplan",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Feeplan",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Transport",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Transport",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Transport",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Transport",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Addhocfee",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Addhocfee",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Addhocfee",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Addhocfee",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Stutdent",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Stutdent",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Stutdent",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Stutdent",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "ProcessFee",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "ProcessFee",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "ProcessFee",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "ProcessFee",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Report",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Report",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Report",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "Report",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "AcademicYear",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "AcademicYear",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "AcademicYear",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "AcademicYear",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
 
       },
 
