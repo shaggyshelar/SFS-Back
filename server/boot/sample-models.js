@@ -64,11 +64,52 @@ module.exports = function (app) {
         //assign permissions to bob
         var permissionOptions = [
           {
-            "permission": "School.Read",
+            "permission": "Institute.Read",
+            "principalName": "admin", 
+            "principalId": "1"
+          },
+          {
+            "permission": "Institute.Create",
             "principalName": "admin",
             "principalId": "1"
-          }, {
+          },
+          {
+            "permission": "Institute.Update",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Institute.Delete",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Board.Create",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Board.Read",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Board.Update",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Board.Delete",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
             "permission": "School.Create",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "School.Read",
             "principalName": "admin",
             "principalId": "1"
           },
@@ -81,12 +122,34 @@ module.exports = function (app) {
             "permission": "School.Delete",
             "principalName": "admin",
             "principalId": "1"
-          }, {
-            "permission": "user.Read",
+          },
+          {
+            "permission": "Role.Create",
             "principalName": "admin",
             "principalId": "1"
-          }, {
+          },
+          {
+            "permission": "Role.Read",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Role.Update",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Role.Delete",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
             "permission": "user.Create",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "user.Read",
             "principalName": "admin",
             "principalId": "1"
           },
@@ -99,7 +162,248 @@ module.exports = function (app) {
             "permission": "user.Delete",
             "principalName": "admin",
             "principalId": "1"
-          }, {
+          },
+          {
+            "permission": "Frequency.Create",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Frequency.Read",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Frequency.Update",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Frequency.Delete",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Class.Create",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Class.Read",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Class.Update",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Class.Delete",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Division.Create",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Division.Read",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Division.Update",
+            "principalName": "admin",
+            "principalId": "1"
+          }, 
+          {
+            "permission": "Division.Delete",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Category.Create",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Category.Read",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Category.Update",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Category.Delete",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Feehead.Create",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Feehead.Read",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Feehead.Update",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Feehead.Delete",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Feeplan.Create",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Feeplan.Read",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Feeplan.Update",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Feeplan.Delete",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Transport.Create",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Transport.Read",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Transport.Update",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Transport.Delete",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Addhocfee.Create",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Addhocfee.Read",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Addhocfee.Update",
+            "principalName": "admin", 
+            "principalId": "1"
+          },
+          {
+            "permission": "Addhocfee.Delete",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Stutdent.Create",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Stutdent.Read",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Stutdent.Update",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Stutdent.Delete",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "ProcessFee.Create",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "ProcessFee.Read",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "ProcessFee.Update",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "ProcessFee.Delete",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Report.Create",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Report.Read",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Report.Update",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "Report.Delete",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "AcademicYear.Create",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "AcademicYear.Read",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "AcademicYear.Update",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
+            "permission": "AcademicYear.Delete",
+            "principalName": "admin",
+            "principalId": "1"
+          },
+          {
             "permission": "TempModel.Read",
             "principalName": "admin",
             "principalId": "1"
@@ -133,6 +437,7 @@ module.exports = function (app) {
         "permission": "DENY",
         "principalType": "ROLE",
         "principalId": "$everyone",
+
       },
       {
         "model": "user",
@@ -140,12 +445,14 @@ module.exports = function (app) {
         "permission": "DENY",
         "principalType": "ROLE",
         "principalId": "$everyone",
+
       },
       {
         "model": "TempModel",
         "accessType": "READ",
         "principalType": "ROLE",
         "principalId": "admin",
+
       },
       {
         "model": "TempModel",
@@ -153,6 +460,7 @@ module.exports = function (app) {
         "accessType": "WRITE",
         "principalType": "ROLE",
         "principalId": "admin",
+
       },
       {
         "model": "TempModel",
@@ -160,6 +468,7 @@ module.exports = function (app) {
         "accessType": "WRITE",
         "principalType": "ROLE",
         "principalId": "admin",
+
       },
       {
         "model": "TempModel",
@@ -167,68 +476,536 @@ module.exports = function (app) {
         "accessType": "WRITE",
         "principalType": "ROLE",
         "principalId": "admin",
+
       },
       {
-        "model": "Student",
-        "property": "create",
-        "accessType": "WRITE",
-        "principalType": "ROLE",
-        "principalId": "admin",
-      },
-      {
-        "model": "Student",
+        "model": "Institute",
         "accessType": "READ",
         "principalType": "ROLE",
         "principalId": "admin",
+
       },
       {
-        "model": "Student",
-        "property": "create",
-        "accessType": "WRITE",
-        "principalType": "ROLE",
-        "principalId": "admin",
-      },
-      {
-        "model": "Student",
+        "model": "Institute",
         "property": "updateAttributes",
         "accessType": "WRITE",
         "principalType": "ROLE",
         "principalId": "admin",
+
       },
       {
-        "model": "Student",
+        "model": "Institute",
         "property": "destroyById",
         "accessType": "WRITE",
         "principalType": "ROLE",
         "principalId": "admin",
+
       },
       {
-        "model": "user",
+        "model": "Institute",
         "property": "create",
         "accessType": "WRITE",
         "principalType": "ROLE",
         "principalId": "admin",
+
       },
       {
-        "model": "user",
+        "model": "Board",
         "accessType": "READ",
         "principalType": "ROLE",
         "principalId": "admin",
+
       },
       {
-        "model": "user",
+        "model": "Board",
         "property": "updateAttributes",
         "accessType": "WRITE",
         "principalType": "ROLE",
         "principalId": "admin",
+
       },
       {
-        "model": "user",
+        "model": "Board",
         "property": "destroyById",
         "accessType": "WRITE",
         "principalType": "ROLE",
         "principalId": "admin",
-      }
+
+      },
+      {
+        "model": "Board",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "School",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "School",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "School",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "School",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Role",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Role",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Role",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Role",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "User",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "User",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "User",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "User",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Frequency",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Frequency",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Frequency",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Frequency",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Class",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Class",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Class",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Class",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Division",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Division",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Division",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Division",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Category",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Category",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Category",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Category",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Feehead",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Feehead",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Feehead",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Feehead",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Feeplan",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Feeplan",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Feeplan",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Feeplan",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Transport",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Transport",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Transport",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Transport",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Addhocfee",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Addhocfee",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Addhocfee",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Addhocfee",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Stutdent",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Stutdent",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Stutdent",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Stutdent",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "ProcessFee",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "ProcessFee",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "ProcessFee",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "ProcessFee",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Report",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Report",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Report",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "Report",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "AcademicYear",
+        "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "AcademicYear",
+        "property": "updateAttributes",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "AcademicYear",
+        "property": "destroyById",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "AcademicYear",
+        "property": "create",
+        "accessType": "WRITE",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+
     ];
 
 
@@ -721,7 +1498,3 @@ module.exports = function (app) {
 
   });
 };
-
-
-
-
