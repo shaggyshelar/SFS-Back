@@ -8,6 +8,7 @@
 var config = require('../../server/config.json');
 var path = require('path');
 var permissionHelper = require('../shared/permissionsHelper');
+var randomstring = require("randomstring");
 
 module.exports = function (User) {
   // send verification email after registration
@@ -107,5 +108,32 @@ module.exports = function (User) {
     else {
       next();
     }
+  });
+
+  User.createUser = function (user, cb) {
+    user.password = randomstring.generate(12);
+    User.create(user, function (err, cUser) {
+      if (err) cb(err, cUser);
+
+      cb(null, cUser);
+    });
+
+  }
+
+  User.remoteMethod('createUser', {
+    accepts: {
+      // arg: 'user', type: 'object',
+      // default: { "username": "string", "password": "string", "email": "string" },
+      // http: {
+      //   source: 'body'
+      // }
+      arg: 'user',
+      type: 'user',
+      http: {
+        source: 'body'
+      }
+    },
+    http: { path: '/createUser', verb: 'post' },
+    returns: { arg: 'user', type: 'user' }
   });
 };

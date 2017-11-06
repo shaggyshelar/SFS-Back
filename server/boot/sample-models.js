@@ -744,7 +744,6 @@ module.exports = function (app) {
         "permission": "DENY",
         "principalType": "ROLE",
         "principalId": "$everyone",
-
       },
       {
         "model": "TempModel",
@@ -904,6 +903,14 @@ module.exports = function (app) {
       {
         "model": "User",
         "accessType": "READ",
+        "principalType": "ROLE",
+        "principalId": "admin",
+
+      },
+      {
+        "model": "User",
+        "property": "createUser",
+        "accessType": "EXECUTE",
         "principalType": "ROLE",
         "principalId": "admin",
 
