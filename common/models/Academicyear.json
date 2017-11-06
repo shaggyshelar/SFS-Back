@@ -7,7 +7,7 @@
       "table": "academicyear"
     },
     "relations": {
-      "fkAcademicyearSchoolrel": {
+      "AcademicyearSchool": {
         "model": "School",
         "type": "belongsTo",
         "foreignKey": "schoolid"
@@ -165,6 +165,11 @@
         "dataScale": null,
         "nullable": "Y"
       }
+    }
+  },
+  "scope": {
+    "where": {
+      "isdelete": 0
     }
   }
 }

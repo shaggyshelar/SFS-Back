@@ -7,12 +7,12 @@
       "table": "school"
     },
     "relations": {
-      "fkSchoolBoardrel": {
+      "SchoolBoard": {
         "model": "Board",
         "type": "belongsTo",
         "foreignKey": "boardid"
       },
-      "fkSchoolInstituterel": {
+      "SchoolInstitute": {
         "model": "Institute",
         "type": "belongsTo",
         "foreignKey": "instituteid"
@@ -275,6 +275,11 @@
         "dataScale": null,
         "nullable": "Y"
       }
+    }
+  },
+  "scope": {
+    "where": {
+      "isDelete": 0
     }
   }
 }

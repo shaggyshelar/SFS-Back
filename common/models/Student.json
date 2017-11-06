@@ -7,22 +7,22 @@
       "table": "student"
     },
     "relations": {
-      "fkStudentCategoryrel": {
+      "StudentCategory": {
         "model": "Category",
         "type": "belongsTo",
         "foreignKey": "categoryid"
       },
-      "fkStudentClassrel": {
+      "StudentClass": {
         "model": "Class",
         "type": "belongsTo",
         "foreignKey": "classid"
       },
-      "fkStudentDivisionrel": {
+      "StudentDivision": {
         "model": "Division",
         "type": "belongsTo",
         "foreignKey": "divisionid"
       },
-      "fkStudentSchoolrel": {
+      "StudentSchool": {
         "model": "School",
         "type": "belongsTo",
         "foreignKey": "schoolid"
@@ -570,6 +570,11 @@
         "dataScale": null,
         "nullable": "Y"
       }
+    }
+  },
+  "scope": {
+    "where": {
+      "isDelete": 0
     }
   }
 }

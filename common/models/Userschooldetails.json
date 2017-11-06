@@ -7,12 +7,12 @@
       "table": "userschooldetails"
     },
     "relations": {
-      "fkUserschoolSchoolrel": {
+      "UserschoolSchool": {
         "model": "School",
         "type": "belongsTo",
         "foreignKey": "schoolid"
       },
-      "fkUserschoolUserrel": {
+      "UserschoolUser": {
         "model": "Systemuser",
         "type": "belongsTo",
         "foreignKey": "userid"
@@ -125,6 +125,11 @@
         "dataScale": null,
         "nullable": "Y"
       }
+    }
+  },
+  "scope": {
+    "where": {
+      "isDelete": 0
     }
   }
 }
