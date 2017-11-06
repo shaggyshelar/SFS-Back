@@ -111,8 +111,12 @@ module.exports = function (User) {
   });
 
   User.createUser = function (user, cb) {
-    user.password = randomstring.generate(12);
-    User.create(user, function (err, cUser) {
+    var password = randomstring.generate({
+      length: 12,
+      charset: 'alphanumeric'
+    });
+    user.password = password;
+    User.app.models.user.create(user, function (err, cUser) {
       if (err) cb(err, cUser);
 
       cb(null, cUser);

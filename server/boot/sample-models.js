@@ -1388,6 +1388,14 @@ module.exports = function (app) {
       },
       {
         "model": "User",
+        "property": "createUser",
+        "accessType": "EXECUTE",
+        "principalType": "ROLE",
+        "principalId": "SchoolAdmin",
+
+      },
+      {
+        "model": "User",
         "property": "destroyById",
         "accessType": "WRITE",
         "principalType": "ROLE",
