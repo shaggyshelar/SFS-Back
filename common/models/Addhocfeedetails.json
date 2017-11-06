@@ -6,7 +6,28 @@
       "schema": "schoolfeesystem",
       "table": "addhocfeedetails"
     },
-    "relations": {}
+    "relations": {
+      "fkAddhockfeedetailsAddhocfeerel": {
+        "model": "Addhocfee",
+        "type": "belongsTo",
+        "foreignKey": "addhocfeeid"
+      },
+      "fkAddhockfeedetailsCategoryrel": {
+        "model": "Category",
+        "type": "belongsTo",
+        "foreignKey": "categoryid"
+      },
+      "fkAddhockfeedetailsClassrel": {
+        "model": "Class",
+        "type": "belongsTo",
+        "foreignKey": "classid"
+      },
+      "fkAddhockfeedetailsDvisionrel": {
+        "model": "Division",
+        "type": "belongsTo",
+        "foreignKey": "divisionid"
+      }
+    }
   },
   "properties": {
     "id": {
@@ -42,7 +63,7 @@
     },
     "categoryId": {
       "type": "Number",
-      "required": false,
+      "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
@@ -52,12 +73,12 @@
         "dataLength": null,
         "dataPrecision": 19,
         "dataScale": 0,
-        "nullable": "Y"
+        "nullable": "N"
       }
     },
     "classId": {
       "type": "Number",
-      "required": false,
+      "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
@@ -67,7 +88,7 @@
         "dataLength": null,
         "dataPrecision": 19,
         "dataScale": 0,
-        "nullable": "Y"
+        "nullable": "N"
       }
     },
     "divisionId": {
@@ -83,6 +104,21 @@
         "dataPrecision": 19,
         "dataScale": 0,
         "nullable": "Y"
+      }
+    },
+    "addhocFeeCharges": {
+      "type": "Number",
+      "required": true,
+      "length": null,
+      "precision": 18,
+      "scale": 2,
+      "mysql": {
+        "columnName": "addhocFeeCharges",
+        "dataType": "decimal",
+        "dataLength": null,
+        "dataPrecision": 18,
+        "dataScale": 2,
+        "nullable": "N"
       }
     },
     "createdBy": {
