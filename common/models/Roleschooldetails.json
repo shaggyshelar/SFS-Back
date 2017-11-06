@@ -7,12 +7,12 @@
       "table": "roleschooldetails"
     },
     "relations": {
-      "fkRolechooldetailsSchoolrel": {
+      "RolechooldetailsSchool": {
         "model": "School",
         "type": "belongsTo",
         "foreignKey": "schoolid"
       },
-      "fkRolechooldetailsUserrel": {
+      "RolechooldetailsUser": {
         "model": "Systemrole",
         "type": "belongsTo",
         "foreignKey": "roleid"
@@ -125,6 +125,11 @@
         "dataScale": null,
         "nullable": "Y"
       }
+    }
+  },
+  "scope": {
+    "where": {
+      "isDelete": 0
     }
   }
 }

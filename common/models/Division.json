@@ -7,12 +7,12 @@
       "table": "division"
     },
     "relations": {
-      "fkDivisionClassrel": {
+      "DivisionClass": {
         "model": "Class",
         "type": "belongsTo",
         "foreignKey": "classid"
       },
-      "fkDivisionSchoolrel": {
+      "DivisionSchool": {
         "model": "School",
         "type": "belongsTo",
         "foreignKey": "schoolid"
@@ -170,6 +170,11 @@
         "dataScale": null,
         "nullable": "Y"
       }
+    }
+  },
+  "scope": {
+    "where": {
+      "isDelete": 0
     }
   }
 }

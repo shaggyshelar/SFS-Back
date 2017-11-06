@@ -130,5 +130,10 @@
         "nullable": "Y"
       }
     }
+  },
+  "scope": {
+    "where": {
+      "isDelete": 0
+    }
   }
 }

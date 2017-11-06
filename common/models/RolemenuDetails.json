@@ -7,12 +7,12 @@
       "table": "rolemenudetails"
     },
     "relations": {
-      "fkRolemenuactionMenurel": {
+      "RolemenuactionMenu": {
         "model": "Menu",
         "type": "belongsTo",
         "foreignKey": "menuid"
       },
-      "fkRolemenuactionRolerel": {
+      "RolemenuactionRole": {
         "model": "Systemrole",
         "type": "belongsTo",
         "foreignKey": "roleid"
@@ -125,6 +125,11 @@
         "dataScale": null,
         "nullable": "Y"
       }
+    }
+  },
+  "scope": {
+    "where": {
+      "isDelete": 0
     }
   }
 }

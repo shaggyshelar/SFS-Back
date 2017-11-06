@@ -7,7 +7,7 @@
       "table": "addhocfee"
     },
     "relations": {
-      "fkAddhocfeeSchoolrel": {
+      "AddhocfeeSchool": {
         "model": "School",
         "type": "belongsTo",
         "foreignKey": "schoolid"
@@ -165,6 +165,11 @@
         "dataScale": null,
         "nullable": "Y"
       }
+    }
+  },
+  "scope": {
+    "where": {
+      "isDelete": 0
     }
   }
 }
