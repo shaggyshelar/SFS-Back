@@ -8,6 +8,7 @@
 var config = require('../../server/config.json');
 var path = require('path');
 var permissionHelper = require('../shared/permissionsHelper');
+var authHelper = require('../shared/authHelper');
 var randomstring = require("randomstring");
 
 module.exports = function (User) {
@@ -116,10 +117,10 @@ module.exports = function (User) {
       charset: 'alphanumeric'
     });
     user.password = password;
-    User.app.models.user.create(user, function (err, cUser) {
+    User.create(user, function (err, cUser) {
       if (err) cb(err, cUser);
-
-      cb(null, cUser);
+      authHelper.sendVerificationEmail(cUser, cb);
+      // cb(null, cUser);
     });
 
   }
