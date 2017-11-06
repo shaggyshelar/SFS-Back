@@ -406,6 +406,21 @@
         "nullable": "Y"
       }
     },
+    "country": {
+      "type": "String",
+      "required": false,
+      "length": 50,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "country",
+        "dataType": "varchar",
+        "dataLength": 50,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
     "phone": {
       "type": "String",
       "required": false,

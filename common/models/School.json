@@ -171,6 +171,21 @@
         "nullable": "Y"
       }
     },
+    "schoolCountry": {
+      "type": "String",
+      "required": false,
+      "length": 50,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "schoolCountry",
+        "dataType": "varchar",
+        "dataLength": 50,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
     "schoolLogo": {
       "type": "String",
       "required": true,
