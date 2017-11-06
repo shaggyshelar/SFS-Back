@@ -55,5 +55,9 @@
   "RolepermissionDetails": {
     "dataSource": "mysql",
     "public": true
+  },
+  "Permission": {
+    "dataSource": "mysql",
+    "public": true
   }
 }

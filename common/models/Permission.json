@@ -60,6 +60,21 @@
         "nullable": "N"
       }
     },
+    "modelName": {
+      "type": "String",
+      "required": true,
+      "length": 50,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "modelName",
+        "dataType": "varchar",
+        "dataLength": 50,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
     "isDelete": {
       "type": "Number",
       "required": false,
