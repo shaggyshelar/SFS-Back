@@ -1,6 +1,6 @@
 {
   "name": "user",
-  "base": "User",  
+  "base": "User",
   "options": {
     "idInjection": false,
     "mysql": {
@@ -13,6 +13,11 @@
         "type": "belongsTo",
         "foreignKey": "roleid"
       }
+    }
+  },
+  "scope": {
+    "where": {
+      "isDelete": 0
     }
   },
   "properties": {
@@ -181,7 +186,6 @@
         "nullable": "Y"
       }
     },
-    
     "isDelete": {
       "type": "Number",
       "required": false,
@@ -258,9 +262,8 @@
       }
     }
   },
-  "scope": {
-    "where": {
-      "isDelete": 0
-    }
-  }
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
 }

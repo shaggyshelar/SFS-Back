@@ -19,14 +19,19 @@
       }
     }
   },
+  "scope": {
+    "where": {
+      "isDelete": 0
+    }
+  },
   "properties": {
     "id": {
       "type": "Number",
+      "id": 1,
       "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
-      "id": 1,
       "mysql": {
         "columnName": "id",
         "dataType": "bigint",
@@ -127,9 +132,8 @@
       }
     }
   },
-  "scope": {
-    "where": {
-      "isDelete": 0
-    }
-  }
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
 }

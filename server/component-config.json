@@ -12,6 +12,9 @@
     "useLogFile": true,
     "path": "./logs",
     "maxResponseTime": 30000,
-    "excludes": ["req","res"]
+    "excludes": [
+      "req",
+      "res"
+    ]
   }
 }

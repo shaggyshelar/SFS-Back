@@ -1,6 +1,6 @@
 {
   "name": "role",
-  "base": "Role",  
+  "base": "Role",
   "options": {
     "idInjection": false,
     "mysql": {
@@ -8,6 +8,11 @@
       "table": "role"
     },
     "relations": {}
+  },
+  "scope": {
+    "where": {
+      "isDelete": 0
+    }
   },
   "properties": {
     "name": {
@@ -131,9 +136,8 @@
       }
     }
   },
-  "scope": {
-    "where": {
-      "isDelete": 0
-    }
-  }
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
 }
