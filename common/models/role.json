@@ -1,10 +1,10 @@
 {
-  "name": "Systemuser",
+  "name": "role",
   "options": {
     "idInjection": false,
     "mysql": {
       "schema": "schoolfeesystem",
-      "table": "systemuser"
+      "table": "role"
     },
     "relations": {}
   },
@@ -25,29 +25,14 @@
         "nullable": "N"
       }
     },
-    "roleId": {
-      "type": "Number",
-      "required": true,
-      "length": null,
-      "precision": 19,
-      "scale": 0,
-      "mysql": {
-        "columnName": "roleId",
-        "dataType": "bigint",
-        "dataLength": null,
-        "dataPrecision": 19,
-        "dataScale": 0,
-        "nullable": "N"
-      }
-    },
-    "userName": {
+    "name": {
       "type": "String",
       "required": true,
       "length": 50,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "userName",
+        "columnName": "name",
         "dataType": "varchar",
         "dataLength": 50,
         "dataPrecision": null,
@@ -55,109 +40,34 @@
         "nullable": "N"
       }
     },
-    "password": {
+    "description": {
       "type": "String",
       "required": false,
-      "length": 150,
+      "length": 500,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "password",
+        "columnName": "description",
         "dataType": "varchar",
-        "dataLength": 150,
+        "dataLength": 500,
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "Y"
       }
     },
-    "phone": {
-      "type": "String",
-      "required": false,
-      "length": 20,
-      "precision": null,
-      "scale": null,
-      "mysql": {
-        "columnName": "phone",
-        "dataType": "varchar",
-        "dataLength": 20,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "Y"
-      }
-    },
-    "email": {
+    "displayName": {
       "type": "String",
       "required": true,
       "length": 50,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "email",
+        "columnName": "displayName",
         "dataType": "varchar",
         "dataLength": 50,
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "N"
-      }
-    },
-    "lastLogin": {
-      "type": "Date",
-      "required": false,
-      "length": null,
-      "precision": null,
-      "scale": null,
-      "mysql": {
-        "columnName": "lastLogin",
-        "dataType": "datetime",
-        "dataLength": null,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "Y"
-      }
-    },
-    "failedPasswordAttemptCount": {
-      "type": "Number",
-      "required": false,
-      "length": null,
-      "precision": 10,
-      "scale": 0,
-      "mysql": {
-        "columnName": "failedPasswordAttemptCount",
-        "dataType": "int",
-        "dataLength": null,
-        "dataPrecision": 10,
-        "dataScale": 0,
-        "nullable": "Y"
-      }
-    },
-    "isBolocked": {
-      "type": "Number",
-      "required": false,
-      "length": null,
-      "precision": 3,
-      "scale": 0,
-      "mysql": {
-        "columnName": "isBolocked",
-        "dataType": "tinyint",
-        "dataLength": null,
-        "dataPrecision": 3,
-        "dataScale": 0,
-        "nullable": "Y"
-      }
-    },
-    "isActivate": {
-      "type": "Number",
-      "required": false,
-      "length": null,
-      "precision": 3,
-      "scale": 0,
-      "mysql": {
-        "columnName": "isActivate",
-        "dataType": "tinyint",
-        "dataLength": null,
-        "dataPrecision": 3,
-        "dataScale": 0,
-        "nullable": "Y"
       }
     },
     "isDelete": {
@@ -190,14 +100,14 @@
         "nullable": "N"
       }
     },
-    "createdOn": {
+    "created": {
       "type": "Date",
       "required": true,
       "length": null,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "createdOn",
+        "columnName": "created",
         "dataType": "datetime",
         "dataLength": null,
         "dataPrecision": null,
@@ -220,14 +130,14 @@
         "nullable": "Y"
       }
     },
-    "updatedOn": {
+    "modified": {
       "type": "Date",
       "required": false,
       "length": null,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "updatedOn",
+        "columnName": "modified",
         "dataType": "datetime",
         "dataLength": null,
         "dataPrecision": null,
