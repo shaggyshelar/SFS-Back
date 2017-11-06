@@ -147,16 +147,16 @@
       }
     },
     "academicYear": {
-      "type": "Number",
+      "type": "string",
       "required": true,
-      "length": null,
-      "precision": 10,
+      "length": 50,
+      "precision": null,
       "scale": 0,
       "mysql": {
         "columnName": "academicYear",
-        "dataType": "int",
-        "dataLength": null,
-        "dataPrecision": 10,
+        "dataType": "varchar",
+        "dataLength": 50,
+        "dataPrecision": null,
         "dataScale": 0,
         "nullable": "N"
       }
