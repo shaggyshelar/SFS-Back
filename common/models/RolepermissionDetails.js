@@ -57,78 +57,83 @@ module.exports = function (RolepermissionDetails) {
 
     RolepermissionDetails.observe('before delete', function (ctx, next) {
 
-        RolepermissionDetails.findById(ctx.where.id, function (err, permissionModel) {
+        RolepermissionDetails.findById(ctx.where.and[0].id, function (err, permissionModel) {
             if (permissionModel) {
-                var permissionStr = permissionModel.permission;
-                var modelPermissionArray = permissionStr.split('.');
-                if (modelPermissionArray != undefined && modelPermissionArray.length == 2) {
-                    var _model = modelPermissionArray[0];
-                    var _permission = modelPermissionArray[1];
-                    var _principalName = permissionModel.principalName;
-                    var options = {};
-                    var conditions = [];
+                app.models.role.findById(permissionModel.roleId, function (err, srole) {
+                    if (err) throw err;
 
-                    conditions.push({ model: _model });
-                    conditions.push({ principalId: _principalName });
-                    conditions.push({ principalType: "ROLE" });
+                    var permissionStr = permissionModel.permissionName;
+                    var modelPermissionArray = permissionStr.split('.');
+                    if (modelPermissionArray != undefined && modelPermissionArray.length == 2) {
+                        var _model = modelPermissionArray[0];
+                        var _permission = modelPermissionArray[1];
+                        var _principalName = srole.name;
+                        var options = {};
+                        var conditions = [];
 
-                    options.model = _model;
-                    options.principalId = _principalName;
-                    options.principalType = "ROLE";
+                        conditions.push({ model: _model });
+                        conditions.push({ principalId: _principalName });
+                        conditions.push({ principalType: "ROLE" });
 
-                    if (_permission == "Create") {
-                        conditions.push({ property: "create" });
-                        conditions.push({ accessType: "WRITE" });
+                        options.model = _model;
+                        options.principalId = _principalName;
+                        options.principalType = "ROLE";
 
-                        options.property = "create";
-                        options.accessType = "WRITE";
-                    }
-                    else if (_permission == "Update") {
-                        conditions.push({ property: "updateAttributes" });
-                        conditions.push({ accessType: "WRITE" });
+                        if (_permission == "Create") {
+                            conditions.push({ property: "create" });
+                            conditions.push({ accessType: "WRITE" });
 
-                        options.property = "updateAttributes";
-                        options.accessType = "WRITE";
-                    }
-                    else if (_permission == "Delete") {
-                        conditions.push({ property: "destroyById" });
-                        conditions.push({ accessType: "WRITE" });
-
-                        options.property = "destroyById";
-                        options.accessType = "WRITE";
-                    }
-                    else if (_permission == "Read") {
-                        conditions.push({ accessType: "READ" });
-
-                        options.accessType = "READ";
-                    }
-
-                    app.models.ACL.destroyAll({ and: conditions }, function (err, info) {
-                        if (err) throw err;
-                        var modelInstance = app.models[_model];
-                        if (modelInstance && modelInstance != undefined) {
-                            // modelInstance.settings.acls.push(options);
-                            var aclIndex = modelInstance.settings.acls.findIndex(function (d) {
-                                return (d.model == options.model &&
-                                    d.principalId == options.principalId &&
-                                    d.principalType == options.principalType &&
-                                    d.property == options.property &&
-                                    d.accessType == options.accessType &&
-                                    d.property == options.property &&
-                                    d.accessType == options.accessType &&
-                                    d.property == options.property &&
-                                    d.accessType == options.accessType);
-                            });
-                            modelInstance.settings.acls.splice(aclIndex, 1);
+                            options.property = "create";
+                            options.accessType = "WRITE";
                         }
-                        else {
+                        else if (_permission == "Update") {
+                            conditions.push({ property: "updateAttributes" });
+                            conditions.push({ accessType: "WRITE" });
+
+                            options.property = "updateAttributes";
+                            options.accessType = "WRITE";
+                        }
+                        else if (_permission == "Delete") {
+                            conditions.push({ property: "destroyById" });
+                            conditions.push({ accessType: "WRITE" });
+
+                            options.property = "destroyById";
+                            options.accessType = "WRITE";
+                        }
+                        else if (_permission == "Read") {
+                            conditions.push({ accessType: "READ" });
+
+                            options.accessType = "READ";
+                        }
+
+                        app.models.ACL.destroyAll({ and: conditions }, function (err, info) {
+                            if (err) throw err;
+                            var modelInstance = app.models[_model];
+                            if (modelInstance && modelInstance != undefined) {
+                                // modelInstance.settings.acls.push(options);
+                                var aclIndex = modelInstance.settings.acls.findIndex(function (d) {
+                                    return (d.model == options.model &&
+                                        d.principalId == options.principalId &&
+                                        d.principalType == options.principalType &&
+                                        d.property == options.property &&
+                                        d.accessType == options.accessType &&
+                                        d.property == options.property &&
+                                        d.accessType == options.accessType &&
+                                        d.property == options.property &&
+                                        d.accessType == options.accessType);
+                                });
+                                modelInstance.settings.acls.splice(aclIndex, 1);
+                            }
                             next();
-                        }
-                    });
-                }
-                else {
-                    next();
-                }
+
+                        });
+                    }
+                    else {
+                        next();
+                    }
+                });
+
+
 
             }
             else {
