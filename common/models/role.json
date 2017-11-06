@@ -1,5 +1,6 @@
 {
   "name": "role",
+  "base": "Role",  
   "options": {
     "idInjection": false,
     "mysql": {
@@ -9,22 +10,6 @@
     "relations": {}
   },
   "properties": {
-    "id": {
-      "type": "Number",
-      "required": true,
-      "length": null,
-      "precision": 19,
-      "scale": 0,
-      "id": 1,
-      "mysql": {
-        "columnName": "id",
-        "dataType": "bigint",
-        "dataLength": null,
-        "dataPrecision": 19,
-        "dataScale": 0,
-        "nullable": "N"
-      }
-    },
     "name": {
       "type": "String",
       "required": true,

@@ -1,5 +1,6 @@
 {
   "name": "user",
+  "base": "User",  
   "options": {
     "idInjection": false,
     "mysql": {
@@ -15,22 +16,6 @@
     }
   },
   "properties": {
-    "id": {
-      "type": "Number",
-      "required": true,
-      "length": null,
-      "precision": 19,
-      "scale": 0,
-      "id": 1,
-      "mysql": {
-        "columnName": "id",
-        "dataType": "bigint",
-        "dataLength": null,
-        "dataPrecision": 19,
-        "dataScale": 0,
-        "nullable": "N"
-      }
-    },
     "roleId": {
       "type": "Number",
       "required": true,
@@ -196,36 +181,7 @@
         "nullable": "Y"
       }
     },
-    "verificationToken": {
-      "type": "String",
-      "required": true,
-      "length": 50,
-      "precision": null,
-      "scale": null,
-      "mysql": {
-        "columnName": "verificationToken",
-        "dataType": "varchar",
-        "dataLength": 50,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "N"
-      }
-    },
-    "realm": {
-      "type": "String",
-      "required": true,
-      "length": 50,
-      "precision": null,
-      "scale": null,
-      "mysql": {
-        "columnName": "realm",
-        "dataType": "varchar",
-        "dataLength": 50,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "N"
-      }
-    },
+    
     "isDelete": {
       "type": "Number",
       "required": false,
