@@ -23,11 +23,11 @@
     ]
   },
   "mysql": {
-    "host": "localhost",
+    "host": "192.168.101.22",
     "port": 3306,
     "url": "",
     "database": "schoolfeesystem",
-    "password": "espl@123",
+    "password": "root",
     "name": "mysql",
     "user": "root",
     "connector": "mysql"
