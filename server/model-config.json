@@ -44,11 +44,63 @@
     "public": true,
     "options": {}
   },
+  "Academicyear": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Addhocfee": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Addhocfeedetails": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Board": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Category": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Class": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Division": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Feehead": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Feeplan": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Feeplanheaddetails": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Frequency": {
+    "dataSource": "mysql",
+    "public": true
+  },  
   "Institute": {
     "dataSource": "mysql",
     "public": true
   },
-  "School": {
+  "Menu": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Permission": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "RolemenuDetails": {
     "dataSource": "mysql",
     "public": true
   },
@@ -56,7 +108,15 @@
     "dataSource": "mysql",
     "public": true
   },
-  "Permission": {
+  "School": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Transportzone": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Userschooldetails": {
     "dataSource": "mysql",
     "public": true
   }
