@@ -111,33 +111,35 @@ module.exports = function (User) {
     }
   });
 
-  User.createUser = function (user, cb) {
-    var password = randomstring.generate({
-      length: 12,
-      charset: 'alphanumeric'
-    });
-    user.password = password;
-    User.create(user, function (err, cUser) {
-      if (err) cb(err, cUser);
-      authHelper.sendVerificationEmail(cUser, cb);
-      // cb(null, cUser);
-    });
+  User.createUser = function (user, options, cb) {
+    if (options.accessToken) {
+      var userId = options.accessToken && options.accessToken.userId;
 
+      var password = randomstring.generate({
+        length: 12,
+        charset: 'alphanumeric'
+      });
+      user.password = password;
+      user.createdBy = userId;
+      user.createdOn = new Date();
+
+      User.create(user, function (err, cUser) {
+        if (err) cb(err, cUser);
+        authHelper.sendVerificationEmail(cUser, cb);
+        // cb(null, cUser);
+      });
+    }
   }
 
   User.remoteMethod('createUser', {
-    accepts: {
-      // arg: 'user', type: 'object',
-      // default: { "username": "string", "password": "string", "email": "string" },
-      // http: {
-      //   source: 'body'
-      // }
+    accepts: [{
       arg: 'user',
       type: 'user',
       http: {
         source: 'body'
       }
     },
+    { "arg": "options", "type": "object", "http": "optionsFromRequest" }],
     http: { path: '/createUser', verb: 'post' },
     returns: { arg: 'user', type: 'user' }
   });
