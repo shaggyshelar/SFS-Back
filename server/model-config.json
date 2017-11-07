@@ -14,7 +14,7 @@
     ]
   },
   "User": {
-    "dataSource": "db",
+    "dataSource": "mysql",
     "public": false
   },
   "AccessToken": {
@@ -22,25 +22,25 @@
     "public": false
   },
   "ACL": {
-    "dataSource": "db",
-    "public": false
+    "dataSource": "mysql",
+    "public": true
   },
   "RoleMapping": {
-    "dataSource": "db",
-    "public": false,
+    "dataSource": "mysql",
+    "public": true,
     "options": {
       "strictObjectIDCoercion": true
     }
   },
-  "Role": {
-    "dataSource": "db",
-    "public": false
+  "role": {
+    "dataSource": "mysql",
+    "public": true
   },
   "Email": {
     "dataSource": "emailDs"
   },
   "user": {
-    "dataSource": "db",
+    "dataSource": "mysql",
     "public": true,
     "options": {}
   },
@@ -49,6 +49,14 @@
     "public": true
   },
   "School": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "RolepermissionDetails": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Permission": {
     "dataSource": "mysql",
     "public": true
   }

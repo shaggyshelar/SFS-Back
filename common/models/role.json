@@ -1,5 +1,6 @@
 {
   "name": "role",
+  "base": "Role",
   "options": {
     "idInjection": false,
     "mysql": {
@@ -8,23 +9,12 @@
     },
     "relations": {}
   },
+  "scope": {
+    "where": {
+      "isDelete": 0
+    }
+  },
   "properties": {
-    "id": {
-      "type": "Number",
-      "required": true,
-      "length": null,
-      "precision": 19,
-      "scale": 0,
-      "id": 1,
-      "mysql": {
-        "columnName": "id",
-        "dataType": "bigint",
-        "dataLength": null,
-        "dataPrecision": 19,
-        "dataScale": 0,
-        "nullable": "N"
-      }
-    },
     "name": {
       "type": "String",
       "required": true,
@@ -146,9 +136,8 @@
       }
     }
   },
-  "scope": {
-    "where": {
-      "isDelete": 0
-    }
-  }
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
 }

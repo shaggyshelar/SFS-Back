@@ -27,9 +27,9 @@
     "port": 3306,
     "url": "",
     "database": "schoolfeesystem",
-    "password": "root",
+    "password": "password",
     "name": "mysql",
-    "user": "root",
+    "user": "schooladmin",
     "connector": "mysql"
   }
 }
