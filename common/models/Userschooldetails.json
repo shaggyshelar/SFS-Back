@@ -13,7 +13,7 @@
         "foreignKey": "schoolId"
       },
       "UserschoolUser": {
-        "model": "Systemuser",
+        "model": "user",
         "type": "belongsTo",
         "foreignKey": "userId"
       }
