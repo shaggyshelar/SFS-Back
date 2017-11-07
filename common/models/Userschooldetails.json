@@ -10,12 +10,12 @@
       "UserschoolSchool": {
         "model": "School",
         "type": "belongsTo",
-        "foreignKey": "schoolid"
+        "foreignKey": "schoolId"
       },
       "UserschoolUser": {
         "model": "Systemuser",
         "type": "belongsTo",
-        "foreignKey": "userid"
+        "foreignKey": "userId"
       }
     }
   },

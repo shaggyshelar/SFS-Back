@@ -10,12 +10,12 @@
       "FeeplandetailsFeehead": {
         "model": "Feehead",
         "type": "belongsTo",
-        "foreignKey": "feeheadid"
+        "foreignKey": "feeheadId"
       },
       "FeeplandetailsFeeplan": {
         "model": "Feeplan",
         "type": "belongsTo",
-        "foreignKey": "feeplanid"
+        "foreignKey": "feeplanId"
       }
     }
   },

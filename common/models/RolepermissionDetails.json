@@ -10,12 +10,12 @@
       "RolepermissionPermission": {
         "model": "Permission",
         "type": "belongsTo",
-        "foreignKey": "permissionid"
+        "foreignKey": "permissionId"
       },
       "RolepermissionRole": {
         "model": "Systemrole",
         "type": "belongsTo",
-        "foreignKey": "roleid"
+        "foreignKey": "roleId"
       }
     }
   },

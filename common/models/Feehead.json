@@ -10,12 +10,12 @@
       "FeeheadsFrequency": {
         "model": "Frequency",
         "type": "belongsTo",
-        "foreignKey": "frequencyid"
+        "foreignKey": "frequencyId"
       },
       "FeeheadsSchool": {
         "model": "School",
         "type": "belongsTo",
-        "foreignKey": "schoolid"
+        "foreignKey": "schoolId"
       }
     }
   },

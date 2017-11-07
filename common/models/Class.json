@@ -10,7 +10,7 @@
       "ClassSchool": {
         "model": "School",
         "type": "belongsTo",
-        "foreignKey": "schoolid"
+        "foreignKey": "schoolId"
       }
     }
   },
