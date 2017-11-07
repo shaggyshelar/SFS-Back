@@ -9,7 +9,7 @@ var config = require('../../server/config.json');
 var path = require('path');
 var permissionHelper = require('../shared/permissionsHelper');
 var authHelper = require('../shared/authHelper');
-var randomstring = require("randomstring");
+var randomstring = require('randomstring');
 
 module.exports = function (User) {
   // send verification email after registration
@@ -70,12 +70,10 @@ module.exports = function (User) {
 
   // render UI page after password change
   User.afterRemote('changePassword', function (context, user, next) {
-
     var userid = context.args.options.accessToken.userId;
     User.findById(userid, function (err, _user) {
       if (err) return next(err);
       _user.updateAttributes({ isPasswordChanged: true }, function (err, data) {
-
         context.res.render('response', {
           title: 'Password changed successfully',
           content: 'Please login again with new password',
@@ -83,7 +81,6 @@ module.exports = function (User) {
           redirectToLinkText: 'Log in',
         });
       });
-
     });
   });
 
@@ -105,8 +102,7 @@ module.exports = function (User) {
         user = updatedUser;
         next();
       });
-    }
-    else {
+    } else {
       next();
     }
   });
@@ -136,10 +132,14 @@ module.exports = function (User) {
       arg: 'user',
       type: 'user',
       http: {
-        source: 'body'
-      }
+        source: 'body',
+      },
     },
-    { "arg": "options", "type": "object", "http": "optionsFromRequest" }],
+    {
+      arg: "options",
+      type: "object",
+      http: "optionsFromRequest"
+    }],
     http: { path: '/createUser', verb: 'post' },
     returns: { arg: 'user', type: 'user' }
   });

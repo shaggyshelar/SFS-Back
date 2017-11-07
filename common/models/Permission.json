@@ -6,7 +6,13 @@
       "schema": "schoolfeesystem",
       "table": "permission"
     },
-    "relations": {}
+    "relations": {
+      "PermissionMenu": {
+        "model": "Menu",
+        "type": "belongsTo",
+        "foreignKey": "menuId"
+      }
+    }
   },
   "scope": {
     "where": {

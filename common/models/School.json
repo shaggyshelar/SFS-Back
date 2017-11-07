@@ -10,12 +10,12 @@
       "SchoolBoard": {
         "model": "Board",
         "type": "belongsTo",
-        "foreignKey": "boardid"
+        "foreignKey": "boardId"
       },
       "SchoolInstitute": {
         "model": "Institute",
         "type": "belongsTo",
-        "foreignKey": "instituteid"
+        "foreignKey": "instituteId"
       }
     }
   },

@@ -10,12 +10,12 @@
       "RolechooldetailsSchool": {
         "model": "School",
         "type": "belongsTo",
-        "foreignKey": "schoolid"
+        "foreignKey": "schoolId"
       },
       "RolechooldetailsUser": {
         "model": "Systemrole",
         "type": "belongsTo",
-        "foreignKey": "roleid"
+        "foreignKey": "roleId"
       }
     }
   },

@@ -31,14 +31,16 @@ function autoGenerateModelFiles() {
         if (schema.options.mysql.schema !== db) {
           console.log('options.mysql.schema !== db', schema);
         }
-        fs.writeFile(appDir + 'common/models/' + capitaliseFirstLetter(model.name) + '.json', JSON.stringify(schema, null, '  '), function(err) {
-          if (err) throw err;
-          //console.log(schema);
-        });
-        fs.writeFile(appDir + 'common/models/' + capitaliseFirstLetter(model.name) + '.js', jsFileString(model.name), function(err) {
-          if (err) throw err;
-          console.log('Created ' + model.name + '.json file');
-        });
+        if (model.name == 'role')
+        {
+          fs.writeFile(appDir + 'common/models/' + capitaliseFirstLetter(model.name) + '.json', JSON.stringify(schema, null, '  '), function(err) {
+            if (err) throw err;
+          });
+          fs.writeFile(appDir + 'common/models/' + capitaliseFirstLetter(model.name) + '.js', jsFileString(model.name), function(err) {
+            if (err) throw err;
+            console.log('Created ' + model.name + '.json file');
+          });
+        }
       });
     });
   });
