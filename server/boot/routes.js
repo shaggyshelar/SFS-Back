@@ -2,8 +2,8 @@
 
 var dsConfig = require('../datasources.json');
 var path = require('path');
-var multer  = require('multer');
-var upload = multer({dest: './Uploads/'});
+var multer = require('multer');
+var upload = multer({ dest: './Uploads/' });
 var fs = require('fs');
 var csv = require('fast-csv');
 var loopback = require('loopback');
@@ -11,18 +11,18 @@ var rootlog = loopback.log;
 var _ = require('underscore');
 var permissionHelper = require('../../common/shared/permissionsHelper');
 
-module.exports = function(app) {
+module.exports = function (app) {
   var User = app.models.user;
 
-  app.get('/verified', function(req, res) {
+  app.get('/verified', function (req, res) {
     rootlog.info('hi');
-    rootlog.warn({lang: 'fr'}, 'au revoir');
+    rootlog.warn({ lang: 'fr' }, 'au revoir');
     res.render('verified');
   });
 
-  app.post('/api/uploadcsv', upload.single('csvdata'), function(req, res) {
+  app.post('/api/uploadcsv', upload.single('csvdata'), function (req, res) {
     var AccessToken = app.models.AccessToken;
-    AccessToken.findForRequest(req, {}, function(aux, accesstoken) {
+    AccessToken.findForRequest(req, {}, function (aux, accesstoken) {
       if (accesstoken == undefined) {
         res.status(401);
         res.send({
@@ -31,7 +31,7 @@ module.exports = function(app) {
         });
       } else {
         var UserModel = app.models.user;
-        UserModel.findById(accesstoken.userId, function(err, user) {
+        UserModel.findById(accesstoken.userId, function (err, user) {
           console.time('dbsave');
           var filepath = req.file.path;
           var options = {
@@ -46,28 +46,28 @@ module.exports = function(app) {
             var stream = fs.createReadStream(filepath);
             var users = [];
             var csvStream = csv
-            .parse()
-            .on('data', function(data) {
-              users.push({username: 'Demo' + (++counter), email: 'demo' + (counter) + '@demo.com', password: 'demo', 'emailVerified': true});
-            })
-            .on('end', function() {
-              console.timeEnd('dbsave');
-              console.log('Users Length B4 = ' + users.length);
-              users.splice(100);
-              console.log('Users Length After = ' + users.length);
-              User.create(users, function(err, post) {
-                if (err) {
-                  console.error(err);
-                } else {
-                  console.log(counter);
-                }
-                User.count().then(count =>{
-                  console.log('UserCount = ' + count); // 1
+              .parse()
+              .on('data', function (data) {
+                users.push({ username: 'Demo' + (++counter), email: 'demo' + (counter) + '@demo.com', password: 'demo', 'emailVerified': true });
+              })
+              .on('end', function () {
+                console.timeEnd('dbsave');
+                console.log('Users Length B4 = ' + users.length);
+                users.splice(100);
+                console.log('Users Length After = ' + users.length);
+                User.create(users, function (err, post) {
+                  if (err) {
+                    console.error(err);
+                  } else {
+                    console.log(counter);
+                  }
+                  User.count().then(count => {
+                    console.log('UserCount = ' + count); // 1
+                  });
                 });
+                res.status(200);
+                res.send('Upload Successfull...');
               });
-              res.status(200);
-              res.send('Upload Successfull...');
-            });
             stream.pipe(csvStream);
           });
         });
@@ -91,21 +91,26 @@ module.exports = function(app) {
         var RoleMapping = app.models.RoleMapping;
         var Role = app.models.Role;
         RoleMapping.find({ where: { principalId: token.userId } }, function (err, roleMappings) {
-          var roleIds = _.uniq(roleMappings
-            .map(function (roleMapping) {
-              return roleMapping.roleId;
-            }));
-          var conditions = roleIds.map(function (roleId) {
-            return { id: roleId };
-          });
-          Role.find({ where: { or: conditions } }, function (err, roles) {
-            if (err) throw err;
-            token.roles = roles;
-            permissionHelper.setPermissions(token, roles, function (token) {
-              res.status(200);
-              res.send(token);
+          if (roleMappings && roleMappings.length > 0) {
+            var roleIds = _.uniq(roleMappings
+              .map(function (roleMapping) {
+                return roleMapping.roleId;
+              }));
+            var conditions = roleIds.map(function (roleId) {
+              return { id: roleId };
             });
-          });
+            Role.find({ where: { or: conditions } }, function (err, roles) {
+              if (err) throw err;
+              token.roles = roles;
+              permissionHelper.setPermissions(token, roles, function (token) {
+                res.status(200);
+                res.send(token);
+              });
+            });
+          } else {
+            res.status(200);
+            res.send(token);
+          }
         });
 
         // var isPasswordChanged = token.toJSON().user.isPasswordChanged;
@@ -128,9 +133,9 @@ module.exports = function(app) {
     });
   });
 
-  app.get('/logout', function(req, res, next) {
+  app.get('/logout', function (req, res, next) {
     if (!req.accessToken) return res.sendStatus(401); // return 401:unauthorized if accessToken is not present
-    User.logout(req.accessToken.id, function(err) {
+    User.logout(req.accessToken.id, function (err) {
       if (err) return next(err);
       res.redirect('/'); // on successful logout, redirect
     });

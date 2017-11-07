@@ -1,6 +1,8 @@
 {
   "name": "user",
   "base": "User",
+  "restrictResetPasswordTokenScope": true,
+  "emailVerificationRequired": true,
   "options": {
     "idInjection": false,
     "mysql": {
@@ -264,6 +266,21 @@
   },
   "validations": [],
   "relations": {},
-  "acls": [],
+  "acls": [
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "SuperAdmin",
+      "permission": "ALLOW",
+      "property": "createUser"
+    },
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "SchoolAdmin",
+      "permission": "ALLOW",
+      "property": "createUser"
+    }
+  ],
   "methods": {}
 }
