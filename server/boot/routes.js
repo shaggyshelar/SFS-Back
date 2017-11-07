@@ -20,9 +20,10 @@ module.exports = function (app) {
     res.render('verified');
   });
 
-  app.post('/api/uploadcsv', upload.single('csvdata'), function (req, res) {
+ 
+  app.post('/api/uploadcsv', upload.single('csvdata'), function(req, res) {
     var AccessToken = app.models.AccessToken;
-    AccessToken.findForRequest(req, {}, function (aux, accesstoken) {
+    AccessToken.findForRequest(req, {}, function(aux, accesstoken) {
       if (accesstoken == undefined) {
         res.status(401);
         res.send({
@@ -31,7 +32,7 @@ module.exports = function (app) {
         });
       } else {
         var UserModel = app.models.user;
-        UserModel.findById(accesstoken.userId, function (err, user) {
+        UserModel.findById(accesstoken.userId, function(err, user) {
           console.time('dbsave');
           var filepath = req.file.path;
           var options = {
@@ -46,28 +47,44 @@ module.exports = function (app) {
             var stream = fs.createReadStream(filepath);
             var users = [];
             var csvStream = csv
-              .parse()
-              .on('data', function (data) {
-                users.push({ username: 'Demo' + (++counter), email: 'demo' + (counter) + '@demo.com', password: 'demo', 'emailVerified': true });
-              })
-              .on('end', function () {
-                console.timeEnd('dbsave');
-                console.log('Users Length B4 = ' + users.length);
-                users.splice(100);
-                console.log('Users Length After = ' + users.length);
-                User.create(users, function (err, post) {
-                  if (err) {
-                    console.error(err);
-                  } else {
-                    console.log(counter);
-                  }
-                  User.count().then(count => {
-                    console.log('UserCount = ' + count); // 1
-                  });
+            .parse()
+            .on('data', function(data) {
+              counter++;
+              // users.push({ username: 'Demo' + (++counter), email: 'demo' + (counter) + '@demo.com', password: 'demo', 'emailVerified': true });
+              if (counter > 1) {
+                var newStuden = {srNo: data[0], firstName: data[1], middleName: data[2],
+                  lastName: data[3], gender: data[4], dob: data[5],
+                  doj: data[6], grNumber: data[7], address: data[8],
+                  phoneNumber: data[9], country: data[10], state: data[11],
+                  religion: data[12], cast: data[13], bloodGroup: data[14],
+                  fathersFirstName: data[15], fathersLastName: data[16],
+                  fathersMobileNumber: data[17], mothersFirstName: data[18],
+                  mothersLastName: data[19], mothersMobileNumber: data[20],
+                  guardian: data[21], guardianFirstName: data[22], guardianLastName: data[23],
+                  guardianMobileNumber: data[24], class: data[25], division: data[26],
+                  catergory: data[27], acadYear: data[28]
+                };
+                console.log('Student', newStuden);
+              }
+            })
+            .on('end', function() {
+              console.timeEnd('dbsave');
+              console.log('Users Length B4 = ' + users.length);
+              users.splice(100);
+              console.log('Users Length After = ' + users.length);
+              User.create(users, function(err, post) {
+                if (err) {
+                  console.error(err);
+                } else {
+                  console.log(counter);
+                }
+                User.count().then(count =>{
+                  console.log('UserCount = ' + count); // 1
                 });
-                res.status(200);
-                res.send('Upload Successfull...');
               });
+              res.status(200);
+              res.send('Upload Successfull...');
+            });
             stream.pipe(csvStream);
           });
         });
