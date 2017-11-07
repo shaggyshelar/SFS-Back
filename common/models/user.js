@@ -95,16 +95,16 @@ module.exports = function (User) {
   });
 
   User.afterRemote('findById', function (context, user, next) {
-    var role = user.roles();
-    if (role != undefined && role.length > 0) {
-      var permissions = [];
-      permissionHelper.setPermissions(user, role, function (updatedUser) {
-        user = updatedUser;
-        next();
-      });
-    } else {
+    // var role = user.roles();
+    //if (role != undefined && role.length > 0) {
+    var permissions = [];
+    permissionHelper.setPermissionByRoleId(user, user.roleId, function (updatedUser) {
+      user = updatedUser;
       next();
-    }
+    });
+    //} else {
+    //next();
+    //}
   });
 
   User.createUser = function (user, options, cb) {
