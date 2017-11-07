@@ -38,4 +38,21 @@ module.exports = function (role) {
             }
         });
     });
+
+    role.observe('before save', function updateTimestamp(ctx, next) {
+        if (ctx.instance) {
+            ctx.instance.name = ctx.instance.name + ctx.instance.schoolId
+            if (ctx.options.accessToken) {
+                if (ctx.isNewInstance) {
+                    ctx.instance.createdBy = ctx.options.accessToken.userId;
+                    ctx.instance.created = new Date();
+                }
+                else {
+                    ctx.instance.updatedBy = ctx.options.accessToken.userId;
+                    ctx.instance.modified = new Date();
+                }
+            }
+        }
+        next();
+    });
 };
