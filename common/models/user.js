@@ -10,6 +10,7 @@ var path = require('path');
 var permissionHelper = require('../shared/permissionsHelper');
 var authHelper = require('../shared/authHelper');
 var randomstring = require('randomstring');
+var app = require('../../server/server');
 
 module.exports = function (User) {
   // send verification email after registration
@@ -95,16 +96,19 @@ module.exports = function (User) {
   });
 
   User.afterRemote('findById', function (context, user, next) {
-    // var role = user.roles();
-    //if (role != undefined && role.length > 0) {
-    var permissions = [];
-    permissionHelper.setPermissionByRoleId(user, user.roleId, function (updatedUser) {
-      user = updatedUser;
-      next();
-    });
-    //} else {
-    //next();
-    //}
+    
+
+    // var permissions = [];
+    // permissionHelper.setPermissionByRoleId(user, user.roleId, function (updatedUser) {
+    //   user = updatedUser;
+
+
+
+       next();
+    // });
+
+
+   
   });
 
   User.createUser = function (user, options, cb) {
@@ -121,7 +125,26 @@ module.exports = function (User) {
 
       User.create(user, function (err, cUser) {
         if (err) cb(err, cUser);
-        authHelper.sendVerificationEmail(cUser, cb);
+        if (user.schoolIds && user.schoolIds.length > 0) {
+          var userSchoolMap = [];
+          user.schoolIds.map(function (id, index) {
+            userSchoolMap.push({
+              id: null,
+              userId: cUser.id,
+              schoolId: id,
+              createdBy: userId,
+              createdOn: new Date()
+            });
+          });
+          if (userSchoolMap.length > 0) {
+            app.models.Userschooldetails.create(userSchoolMap, function (err, details) {
+              if (err) throw err;
+              authHelper.sendVerificationEmail(cUser, cb);
+            });
+          }
+        }
+
+
         // cb(null, cUser);
       });
     }

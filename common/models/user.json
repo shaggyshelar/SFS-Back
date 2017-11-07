@@ -14,6 +14,17 @@
         "model": "User",
         "type": "belongsTo",
         "foreignKey": "roleId"
+      },
+      "RolepermissionDetail": {
+        "model": "RolepermissionDetails",
+        "type": "hasMany",
+        "foreignKey": "roleId"
+      },
+      "school":{
+          "model": "School",
+          "type": "hasMany",
+          "foreignKey": "userId",
+          "through": "Userschooldetails"
       }
     }
   },
