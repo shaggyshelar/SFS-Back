@@ -13,7 +13,7 @@
       "UserRole": {
         "model": "User",
         "type": "belongsTo",
-        "foreignKey": "roleid"
+        "foreignKey": "roleId"
       }
     }
   },

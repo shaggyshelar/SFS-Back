@@ -9,11 +9,11 @@ var config = require('../../server/config.json');
 var path = require('path');
 var permissionHelper = require('../shared/permissionsHelper');
 var authHelper = require('../shared/authHelper');
-var randomstring = require("randomstring");
+var randomstring = require('randomstring');
 
-module.exports = function (User) {
+module.exports = function(User) {
   // send verification email after registration
-  User.afterRemote('create', function (context, user, next) {
+  User.afterRemote('create', function(context, user, next) {
     var options = {
       type: 'email',
       to: user.email,
@@ -24,7 +24,7 @@ module.exports = function (User) {
       user: user,
     };
 
-    user.verify(options, function (err, response) {
+    user.verify(options, function(err, response) {
       if (err) {
         User.deleteById(user.id);
         return next(err);
@@ -40,7 +40,7 @@ module.exports = function (User) {
   });
 
   // Method to render
-  User.afterRemote('prototype.verify', function (context, user, next) {
+  User.afterRemote('prototype.verify', function(context, user, next) {
     context.res.render('response', {
       title: 'A Link to reverify your identity has been sent ' +
       'to your email successfully',
@@ -52,7 +52,7 @@ module.exports = function (User) {
   });
 
   // send password reset link when requested
-  User.on('resetPasswordRequest', function (info) {
+  User.on('resetPasswordRequest', function(info) {
     var url = 'http://' + config.host + ':' + config.port + '/reset-password';
     var html = 'Click <a href="' + url + '?access_token=' +
       info.accessToken.id + '">here</a> to reset your password';
@@ -62,20 +62,18 @@ module.exports = function (User) {
       from: info.email,
       subject: 'Password reset',
       html: html,
-    }, function (err) {
+    }, function(err) {
       if (err) return console.log('> error sending password reset email');
       console.log('> sending password reset email to:', info.email);
     });
   });
 
   // render UI page after password change
-  User.afterRemote('changePassword', function (context, user, next) {
-
+  User.afterRemote('changePassword', function(context, user, next) {
     var userid = context.args.options.accessToken.userId;
-    User.findById(userid, function (err, _user) {
+    User.findById(userid, function(err, _user) {
       if (err) return next(err);
-      _user.updateAttributes({ isPasswordChanged: true }, function (err, data) {
-
+      _user.updateAttributes({isPasswordChanged: true}, function(err, data) {
         context.res.render('response', {
           title: 'Password changed successfully',
           content: 'Please login again with new password',
@@ -83,12 +81,11 @@ module.exports = function (User) {
           redirectToLinkText: 'Log in',
         });
       });
-
     });
   });
 
   // render UI page after password reset
-  User.afterRemote('setPassword', function (context, user, next) {
+  User.afterRemote('setPassword', function(context, user, next) {
     context.res.render('response', {
       title: 'Password reset success',
       content: 'Your password has been reset successfully',
@@ -97,33 +94,31 @@ module.exports = function (User) {
     });
   });
 
-  User.afterRemote('findById', function (context, user, next) {
+  User.afterRemote('findById', function(context, user, next) {
     var role = user.roles();
     if (role != undefined && role.length > 0) {
       var permissions = [];
-      permissionHelper.setPermissions(user, role, function (updatedUser) {
+      permissionHelper.setPermissions(user, role, function(updatedUser) {
         user = updatedUser;
         next();
       });
-    }
-    else {
+    } else {
       next();
     }
   });
 
-  User.createUser = function (user, cb) {
+  User.createUser = function(user, cb) {
     var password = randomstring.generate({
       length: 12,
-      charset: 'alphanumeric'
+      charset: 'alphanumeric',
     });
     user.password = password;
-    User.create(user, function (err, cUser) {
+    User.create(user, function(err, cUser) {
       if (err) cb(err, cUser);
       authHelper.sendVerificationEmail(cUser, cb);
       // cb(null, cUser);
     });
-
-  }
+  };
 
   User.remoteMethod('createUser', {
     accepts: {
@@ -135,10 +130,10 @@ module.exports = function (User) {
       arg: 'user',
       type: 'user',
       http: {
-        source: 'body'
-      }
+        source: 'body',
+      },
     },
-    http: { path: '/createUser', verb: 'post' },
-    returns: { arg: 'user', type: 'user' }
+    http: {path: '/createUser', verb: 'post'},
+    returns: {arg: 'user', type: 'user'},
   });
 };

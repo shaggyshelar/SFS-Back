@@ -10,12 +10,12 @@
       "RolemenuactionMenu": {
         "model": "Menu",
         "type": "belongsTo",
-        "foreignKey": "menuid"
+        "foreignKey": "menuId"
       },
       "RolemenuactionRole": {
         "model": "Systemrole",
         "type": "belongsTo",
-        "foreignKey": "roleid"
+        "foreignKey": "roleId"
       }
     }
   },

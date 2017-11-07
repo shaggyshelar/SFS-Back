@@ -10,12 +10,12 @@
       "DivisionClass": {
         "model": "Class",
         "type": "belongsTo",
-        "foreignKey": "classid"
+        "foreignKey": "classId"
       },
       "DivisionSchool": {
         "model": "School",
         "type": "belongsTo",
-        "foreignKey": "schoolid"
+        "foreignKey": "schoolId"
       }
     }
   },
