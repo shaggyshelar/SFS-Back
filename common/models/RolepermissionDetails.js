@@ -18,8 +18,14 @@ module.exports = function (RolepermissionDetails) {
                 options.principalType = "ROLE";
                 var roptions = [];
                 if (_permission == "Create") {
-                    options.property = "create";
-                    options.accessType = "WRITE";
+                    if (_model.toLowerCase() == "user") {
+                        options.property = "createUser";
+                        options.accessType = "EXECUTE";
+                    }
+                    else {
+                        options.property = "create";
+                        options.accessType = "WRITE";
+                    }
                 }
                 else if (_permission == "Update") {
                     options.property = "updateAttributes";
@@ -80,11 +86,20 @@ module.exports = function (RolepermissionDetails) {
                         options.principalType = "ROLE";
 
                         if (_permission == "Create") {
-                            conditions.push({ property: "create" });
-                            conditions.push({ accessType: "WRITE" });
+                            if (_model.toLowerCase() == "user") {
+                                conditions.push({ property: "createUser" });
+                                conditions.push({ accessType: "EXECUTE" });
 
-                            options.property = "create";
-                            options.accessType = "WRITE";
+                                options.property = "createUser";
+                                options.accessType = "EXECUTE";
+                            }
+                            else {
+                                conditions.push({ property: "create" });
+                                conditions.push({ accessType: "WRITE" });
+
+                                options.property = "create";
+                                options.accessType = "WRITE";
+                            }
                         }
                         else if (_permission == "Update") {
                             conditions.push({ property: "updateAttributes" });
