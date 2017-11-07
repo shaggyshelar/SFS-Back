@@ -46,7 +46,23 @@ module.exports = function(app) {
             var csvStream = csv
             .parse()
             .on('data', function(data) {
-              users.push({username: 'Demo' + (++counter), email: 'demo' + (counter) + '@demo.com', password: 'demo', 'emailVerified': true});
+              counter++;
+              // users.push({ username: 'Demo' + (++counter), email: 'demo' + (counter) + '@demo.com', password: 'demo', 'emailVerified': true });
+              if (counter > 1) {
+                var newStuden = {srNo: data[0], firstName: data[1], middleName: data[2],
+                  lastName: data[3], gender: data[4], dob: data[5],
+                  doj: data[6], grNumber: data[7], address: data[8],
+                  phoneNumber: data[9], country: data[10], state: data[11],
+                  religion: data[12], cast: data[13], bloodGroup: data[14],
+                  fathersFirstName: data[15], fathersLastName: data[16],
+                  fathersMobileNumber: data[17], mothersFirstName: data[18],
+                  mothersLastName: data[19], mothersMobileNumber: data[20],
+                  guardian: data[21], guardianFirstName: data[22], guardianLastName: data[23],
+                  guardianMobileNumber: data[24], class: data[25], division: data[26],
+                  catergory: data[27], acadYear: data[28]
+                };
+                console.log('Student', newStuden);
+              }
             })
             .on('end', function() {
               console.timeEnd('dbsave');
