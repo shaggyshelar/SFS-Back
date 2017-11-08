@@ -23,7 +23,8 @@ module.exports = function (role) {
                                 return permArr[0] == f.modelName;
                             });
                             if (fo) {
-                                p.featureName = fo.permissionName;
+                                // p.featureName = fo.permissionName; Commented by Harnish on 8 nov 17
+                                p.featureName = permArr[0]
                             }
                         }
 
