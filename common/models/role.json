@@ -12,6 +12,11 @@
         "model": "School",
         "type": "belongsTo",
         "foreignKey": "schoolId"
+      },
+      "SuperAdmin":{
+        "model":"user",
+        "type":"hasMany",
+        "foreignKey":"roleId"
       }
     }
   },
