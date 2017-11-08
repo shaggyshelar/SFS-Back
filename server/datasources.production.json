@@ -3,7 +3,7 @@
         "host": "192.168.101.22",
         "port": 3306,
         "url": "",
-        "database": "schoolfeesystem",
+        "database": "schoolfeesystem_int",
         "password": "password",
         "name": "mysql",
         "user": "schooladmin",
