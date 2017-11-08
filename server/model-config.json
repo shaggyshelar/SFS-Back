@@ -14,25 +14,110 @@
     ]
   },
   "User": {
-    "dataSource": "db"
+    "dataSource": "mysql",
+    "public": false
   },
   "AccessToken": {
     "dataSource": "db",
     "public": false
   },
   "ACL": {
-    "dataSource": "db",
-    "public": false
+    "dataSource": "mysql",
+    "public": true
   },
   "RoleMapping": {
-    "dataSource": "db",
-    "public": false,
+    "dataSource": "mysql",
+    "public": true,
     "options": {
       "strictObjectIDCoercion": true
     }
   },
-  "Role": {
-    "dataSource": "db",
-    "public": false
+  "role": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Email": {
+    "dataSource": "emailDs"
+  },
+  "user": {
+    "dataSource": "mysql",
+    "public": true,
+    "options": {}
+  },
+  "Academicyear": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Addhocfee": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Addhocfeedetails": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Board": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Category": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Class": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Division": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Feehead": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Feeplan": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Feeplanheaddetails": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Frequency": {
+    "dataSource": "mysql",
+    "public": true
+  },  
+  "Institute": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Menu": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Permission": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "RolemenuDetails": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "RolepermissionDetails": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "School": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Transportzone": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Userschooldetails": {
+    "dataSource": "mysql",
+    "public": true
   }
 }

@@ -2,5 +2,34 @@
   "db": {
     "name": "db",
     "connector": "memory"
+  },
+  "emailDs": {
+    "name": "emailDs",
+    "connector": "mail",
+    "transports": [
+      {
+        "type": "smtp",
+        "host": "smtp.gmail.com",
+        "secure": true,
+        "port": 465,
+        "tls": {
+          "rejectUnauthorized": false
+        },
+        "auth": {
+          "user": "test@gmail.com",
+          "pass": "test@123"
+        }
+      }
+    ]
+  },
+  "mysql": {
+    "host": "192.168.101.22",
+    "port": 3306,
+    "url": "",
+    "database": "schoolfeesystem",
+    "password": "password",
+    "name": "mysql",
+    "user": "schooladmin",
+    "connector": "mysql"
   }
 }
