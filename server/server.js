@@ -11,6 +11,7 @@ var app = module.exports = loopback();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.json());
+process.env.NODE_ENV = 'production';
 
 app.start = function() {
   // start the web server
