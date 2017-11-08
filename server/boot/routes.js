@@ -42,7 +42,7 @@ module.exports = function (app) {
             trim: true,
           };
 
-          app.dataSources.db.transaction(models => {
+          app.dataSources.mysql.transaction(models => {
             var counter = 0;
             var stream = fs.createReadStream(filepath);
             var users = [];
