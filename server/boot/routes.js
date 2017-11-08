@@ -26,7 +26,7 @@ module.exports = function (app) {
     AccessToken.findForRequest(req, {}, function(aux, accesstoken) {
       if (accesstoken == undefined) {
         res.status(401);
-        res.send({
+        res.json({
           'Error': 'Unauthorized',
           'Message': 'You need to be authenticated to access this endpoint',
         });
@@ -46,44 +46,92 @@ module.exports = function (app) {
             var counter = 0;
             var stream = fs.createReadStream(filepath);
             var users = [];
+            var failedStudents = [];
+            var savedStudents = [];
             var csvStream = csv
             .parse()
             .on('data', function(data) {
               counter++;
               // users.push({ username: 'Demo' + (++counter), email: 'demo' + (counter) + '@demo.com', password: 'demo', 'emailVerified': true });
               if (counter > 1) {
-                var newStuden = {srNo: data[0], firstName: data[1], middleName: data[2],
-                  lastName: data[3], gender: data[4], dob: data[5],
-                  doj: data[6], grNumber: data[7], address: data[8],
-                  phoneNumber: data[9], country: data[10], state: data[11],
-                  religion: data[12], cast: data[13], bloodGroup: data[14],
-                  fathersFirstName: data[15], fathersLastName: data[16],
-                  fathersMobileNumber: data[17], mothersFirstName: data[18],
-                  mothersLastName: data[19], mothersMobileNumber: data[20],
-                  guardian: data[21], guardianFirstName: data[22], guardianLastName: data[23],
-                  guardianMobileNumber: data[24], class: data[25], division: data[26],
-                  catergory: data[27], acadYear: data[28]
+                var studentModel = app.models.Student;
+                var studentToAdd = {
+                  schoolId: 101,
+                  categoryId: 1,
+                  classId: 1,
+                  divisionId: 1,
+                  gRNumber: data[7],
+                  studentCode: '1111',
+                  studentFirstName: data[1],
+                  studentMiddleName: data[2],
+                  studentLastName: data[3],
+                  studentGender: data[4],
+                  fatherFirstName: data[15],
+                  fatherLastName: data[16],
+                  fatherMobile: data[17],
+                  motherFirstName: data[18],
+                  motherLastName: data[19],
+                  motherMobile: data[20],
+                  guardianFirstName: data[22],
+                  guardianLastName: data[23],
+                  guardianMobile: data[24],
+                  studentDateOfBirth: '10/10/1987',
+                  dateOfJoining: '10/10/2014',
+                  address: data[8],
+                  city: '111111',
+                  state: data[11],
+                  country: data[10],
+                  phone: data[9],
+                  email: 'test@test.com',
+                  religion: data[12],
+                  cast: data[13],
+                  bloodGroup: data[14],
+                  academicYear: 2011,
+                  isDelete: false,
+                  createdBy: 1,
+                  createdOn: '11/08/2017',
                 };
-                console.log('Student', newStuden);
+                studentModel.create(studentToAdd, function(err, post) {
+                  if (err) {
+                    console.error('Error while creating student', err);
+                    failedStudents.push({'Row': data, 'Error': err.message});
+                  } else {
+                    savedStudents.push({'Row': data});
+                  }
+                });
+                
+                // var newStuden = {srNo: data[0], firstName: data[1], middleName: data[2],
+                //   lastName: data[3], gender: data[4], dob: data[5],
+                //   doj: data[6], grNumber: data[7], address: data[8],
+                //   phoneNumber: data[9], country: data[10], state: data[11],
+                //   religion: data[12], cast: data[13], bloodGroup: data[14],
+                //   fathersFirstName: data[15], fathersLastName: data[16],
+                //   fathersMobileNumber: data[17], mothersFirstName: data[18],
+                //   mothersLastName: data[19], mothersMobileNumber: data[20],
+                //   guardian: data[21], guardianFirstName: data[22], guardianLastName: data[23],
+                //   guardianMobileNumber: data[24], class: data[25], division: data[26],
+                //   catergory: data[27], acadYear: data[28]
+                // };
+                // console.log('Student', newStuden);
               }
             })
             .on('end', function() {
-              console.timeEnd('dbsave');
-              console.log('Users Length B4 = ' + users.length);
-              users.splice(100);
-              console.log('Users Length After = ' + users.length);
-              User.create(users, function(err, post) {
-                if (err) {
-                  console.error(err);
-                } else {
-                  console.log(counter);
-                }
-                User.count().then(count =>{
-                  console.log('UserCount = ' + count); // 1
-                });
-              });
+              // console.timeEnd('dbsave');
+              // console.log('Users Length B4 = ' + users.length);
+              // users.splice(100);
+              // console.log('Users Length After = ' + users.length);
+              // User.create(users, function(err, post) {
+              //   if (err) {
+              //     console.error(err);
+              //   } else {
+              //     console.log(counter);
+              //   }
+              //   User.count().then(count =>{
+              //     console.log('UserCount = ' + count); // 1
+              //   });
+              // });
               res.status(200);
-              res.send('Upload Successfull...');
+              res.json({'SavedStudents': savedStudents.length, 'FailedStudents': failedStudents.length, 'Success': failedStudents.lastIndexOf == 0});
             });
             stream.pipe(csvStream);
           });
@@ -99,7 +147,7 @@ module.exports = function (app) {
     }, 'user', function (err, token) {
       if (err) {
         res.status(401);
-        res.send({
+        res.json({
           'Error': 'Failed',
           'Message': 'Login Failed',
         });
@@ -121,12 +169,12 @@ module.exports = function (app) {
               token.roles = roles;
               permissionHelper.setPermissions(token, roles, function (token) {
                 res.status(200);
-                res.send(token);
+                res.json(token);
               });
             });
           } else {
             res.status(200);
-            res.send(token);
+            res.json(token);
           }
         });
 
