@@ -16,6 +16,11 @@
         "model": "Institute",
         "type": "belongsTo",
         "foreignKey": "instituteId"
+      },
+      "Students": {
+        "model": "Student",
+        "type": "hasMany",
+        "foreignKey": "schoolId"
       }
     }
   },
@@ -23,6 +28,9 @@
     "where": {
       "isDelete": 0
     }
+  },
+  "mixins": {
+    "TimestampMixin": true
   },
   "properties": {
     "id": {

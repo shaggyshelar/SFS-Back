@@ -19,6 +19,9 @@
       "isdelete": 0
     }
   },
+  "mixins": {
+    "TimestampMixin": true
+  },
   "properties": {
     "id": {
       "type": "Number",
