@@ -96,19 +96,11 @@ module.exports = function (User) {
   });
 
   User.afterRemote('findById', function (context, user, next) {
-    
-
     // var permissions = [];
     // permissionHelper.setPermissionByRoleId(user, user.roleId, function (updatedUser) {
     //   user = updatedUser;
-
-
-
-       next();
+    next();
     // });
-
-
-   
   });
 
   User.createUser = function (user, options, cb) {
@@ -126,6 +118,16 @@ module.exports = function (User) {
       User.create(user, function (err, cUser) {
         if (err) cb(err, cUser);
         if (user.schoolIds && user.schoolIds.length > 0) {
+
+          var rolemapping = {
+            principalType: "USER",
+            principalId: cUser.id,
+            roleId: cUser.roleId
+          };
+          app.models.RoleMapping.create(rolemapping, function (err, rolemap) {
+            if (err) throw err;
+          });
+
           var userSchoolMap = [];
           user.schoolIds.map(function (id, index) {
             userSchoolMap.push({
