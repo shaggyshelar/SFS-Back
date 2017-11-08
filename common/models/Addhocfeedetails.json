@@ -34,6 +34,9 @@
       "isDelete": 0
     }
   },
+  "mixins": {
+    "TimestampMixin": true
+  },
   "properties": {
     "id": {
       "type": "Number",
