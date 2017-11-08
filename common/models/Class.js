@@ -1,3 +1,8 @@
 'use strict';
-module.exports = function(Class) {
+module.exports = function (Class) {
+  Class.validatesPresenceOf(
+    'schoolId',
+    'className',
+    'classCode'
+  );
 };
