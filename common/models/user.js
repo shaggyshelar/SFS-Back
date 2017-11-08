@@ -96,19 +96,11 @@ module.exports = function (User) {
   });
 
   User.afterRemote('findById', function (context, user, next) {
-
-
     // var permissions = [];
     // permissionHelper.setPermissionByRoleId(user, user.roleId, function (updatedUser) {
     //   user = updatedUser;
-
-
-
     next();
     // });
-
-
-
   });
 
   User.createUser = function (user, options, cb) {
