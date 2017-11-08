@@ -97,28 +97,28 @@
       }
     },
     "createdBy": {
-      "type": "String",
+      "type": "Number",
       "required": true,
-      "length": 50,
-      "precision": null,
-      "scale": null,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
       "mysql": {
         "columnName": "createdBy",
-        "dataType": "varchar",
-        "dataLength": 50,
-        "dataPrecision": null,
-        "dataScale": null,
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
         "nullable": "N"
       }
     },
-    "created": {
+    "createdOn": {
       "type": "Date",
       "required": true,
       "length": null,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "created",
+        "columnName": "createdOn",
         "dataType": "datetime",
         "dataLength": null,
         "dataPrecision": null,
@@ -127,28 +127,28 @@
       }
     },
     "updatedBy": {
-      "type": "String",
+      "type": "Number",
       "required": false,
-      "length": 50,
-      "precision": null,
-      "scale": null,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
       "mysql": {
         "columnName": "updatedBy",
-        "dataType": "varchar",
-        "dataLength": 50,
-        "dataPrecision": null,
-        "dataScale": null,
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
         "nullable": "Y"
       }
     },
-    "modified": {
+    "updatedOn": {
       "type": "Date",
       "required": false,
       "length": null,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "modified",
+        "columnName": "updatedOn",
         "dataType": "datetime",
         "dataLength": null,
         "dataPrecision": null,
