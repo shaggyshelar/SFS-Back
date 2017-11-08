@@ -12,7 +12,7 @@ module.exports = function (Student) {
     'studentLastName'
   );
   Student.validatesInclusionOf(
-    'studentGender', { in: ['male', 'female', 'other']
+    'studentGender', { in: ['Male', 'Female', 'Other']
     });
 
 };

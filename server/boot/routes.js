@@ -20,7 +20,6 @@ module.exports = function (app) {
     res.render('verified');
   });
 
- 
   app.post('/api/uploadcsv', upload.single('csvdata'), function(req, res) {
     var AccessToken = app.models.AccessToken;
     AccessToken.findForRequest(req, {}, function(aux, accesstoken) {
@@ -52,14 +51,13 @@ module.exports = function (app) {
             .parse()
             .on('data', function(data) {
               counter++;
-              // users.push({ username: 'Demo' + (++counter), email: 'demo' + (counter) + '@demo.com', password: 'demo', 'emailVerified': true });
               if (counter > 1) {
                 var studentModel = app.models.Student;
                 var studentToAdd = {
-                  schoolId: 101,
-                  categoryId: 1,
+                  schoolId: 22,
+                  categoryId: 3,
                   classId: 1,
-                  divisionId: 1,
+                  divisionId: 2,
                   gRNumber: data[7],
                   studentCode: '1111',
                   studentFirstName: data[1],
@@ -117,21 +115,8 @@ module.exports = function (app) {
             })
             .on('end', function() {
               // console.timeEnd('dbsave');
-              // console.log('Users Length B4 = ' + users.length);
-              // users.splice(100);
-              // console.log('Users Length After = ' + users.length);
-              // User.create(users, function(err, post) {
-              //   if (err) {
-              //     console.error(err);
-              //   } else {
-              //     console.log(counter);
-              //   }
-              //   User.count().then(count =>{
-              //     console.log('UserCount = ' + count); // 1
-              //   });
-              // });
               res.status(200);
-              res.json({'SavedStudents': savedStudents.length, 'FailedStudents': failedStudents.length, 'Success': failedStudents.lastIndexOf == 0});
+              res.json({'SavedStudents': savedStudents.length, 'FailedStudents': failedStudents.length, 'Success': failedStudents.length == 0});
             });
             stream.pipe(csvStream);
           });
