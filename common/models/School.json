@@ -21,6 +21,17 @@
         "model": "Student",
         "type": "hasMany",
         "foreignKey": "schoolId"
+      },
+      "Roles":{
+        "model":"role",
+        "type":"hasMany",
+        "foreignKey":"schoolId"
+      },
+      "SchoolUsers":{
+        "type":"hasMany",
+        "model":"user",
+        "foreignKey":"schoolId",
+        "through":"Userschooldetails"
       }
     }
   },
