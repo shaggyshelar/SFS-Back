@@ -16,6 +16,11 @@
         "model": "Institute",
         "type": "belongsTo",
         "foreignKey": "instituteId"
+      },
+      "Students": {
+        "model": "Student",
+        "type": "hasMany",
+        "foreignKey": "schoolId"
       }
     }
   },
