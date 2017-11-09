@@ -347,7 +347,7 @@
       "scale": null,
       "mysql": {
         "columnName": "studentDateOfBirth",
-        "dataType": "datetime",
+        "dataType": "date",
         "dataLength": null,
         "dataPrecision": null,
         "dataScale": null,
@@ -362,7 +362,7 @@
       "scale": null,
       "mysql": {
         "columnName": "dateOfJoining",
-        "dataType": "datetime",
+        "dataType": "date",
         "dataLength": null,
         "dataPrecision": null,
         "dataScale": null,
