@@ -7,20 +7,21 @@ module.exports = function (Model, options) {
         var ctx1 = LoopBackContext.getCurrentContext();
         // Get the current access token
         var accessToken = ctx1 && ctx1.get('accessToken');
+        if (accessToken) {
+            if (ctx.isNewInstance) {
+                if (ctx.instance.created)
+                    ctx.instance.created = new Date();
+                else
+                    ctx.instance.createdOn = new Date();
+                ctx.instance.createdBy = accessToken.userId;
+            } else {
 
-        if (ctx.instance) {
-            if (ctx.instance.created)
-                ctx.instance.created = new Date();
-            else
-                ctx.instance.createdOn = new Date();
-            ctx.instance.createdBy = accessToken.userId;
-        } else {
-
-            if (ctx.instance.updated)
-                ctx.instance.updated = new Date();
-            else
-                ctx.instance.updatedOn = new Date();
-            ctx.instance.updatedBy = accessToken.userId;
+                if (ctx.instance.updated)
+                    ctx.instance.updated = new Date();
+                else
+                    ctx.instance.updatedOn = new Date();
+                ctx.instance.updatedBy = accessToken.userId;
+            }
         }
         next();
     });
