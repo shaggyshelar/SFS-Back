@@ -15,12 +15,20 @@ module.exports = function (Model, options) {
                     ctx.instance.createdOn = new Date();
                 ctx.instance.createdBy = accessToken.userId;
             } else {
-
-                if (ctx.instance.updated)
-                    ctx.instance.updated = new Date();
-                else
-                    ctx.instance.updatedOn = new Date();
-                ctx.instance.updatedBy = accessToken.userId;
+                if (ctx.instance) {
+                    if (ctx.instance.updated)
+                        ctx.instance.updated = new Date();
+                    else
+                        ctx.instance.updatedOn = new Date();
+                    ctx.instance.updatedBy = accessToken.userId;
+                }
+                else if (ctx.data) {
+                    if (ctx.data.updated)
+                        ctx.data.updated = new Date();
+                    else
+                        ctx.data.updatedOn = new Date();
+                    ctx.data.updatedBy = accessToken.userId;
+                }
             }
         }
         next();

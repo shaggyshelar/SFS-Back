@@ -105,7 +105,6 @@ module.exports = function (User) {
 
   User.createUser = function (user, options, cb) {
     if (options.accessToken) {
-      var userId = options.accessToken && options.accessToken.userId;
 
       var password = randomstring.generate({
         length: 12,
@@ -135,14 +134,12 @@ module.exports = function (User) {
                 id: null,
                 userId: cUser.id,
                 schoolId: id,
-                createdBy: userId,
-                createdOn: new Date()
               });
             });
             if (userSchoolMap.length > 0) {
               app.models.Userschooldetails.create(userSchoolMap, function (err, details) {
                 if (err) throw err;
-                authHelper.sendVerificationEmail(cUser, cb);
+                authHelper.sendVerificationEmail(cUser, password, cb);
               });
             }
           }
