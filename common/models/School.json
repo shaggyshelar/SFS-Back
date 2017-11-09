@@ -32,6 +32,21 @@
         "model":"user",
         "foreignKey":"schoolId",
         "through":"Userschooldetails"
+      },
+      "SchoolClass":{
+        "type": "hasMany",
+        "model":"Class",
+        "foreignKey":"schoolId"
+      },
+      "SchoolDivision":{
+        "type": "hasMany",
+        "model":"Division",
+        "foreignKey":"schoolId"
+      },
+      "SchoolYear":{
+        "type": "hasMany",
+        "model":"Academicyear",
+        "foreignKey":"schoolId"
       }
     }
   },
