@@ -127,14 +127,15 @@ module.exports = function (app) {
 
   app.post('/login', function (req, res) {
     User.login({
-      email: req.body.email,
+      username: req.body.username,
       password: req.body.password,
     }, 'user', function (err, token) {
       if (err) {
         res.status(401);
         res.json({
           'Error': 'Failed',
-          'Message': 'Login Failed',
+          'Code': err.code,
+          'Message': err.message,
         });
       }
       if (token != undefined) {
