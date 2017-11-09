@@ -9,22 +9,22 @@ module.exports = function (Model, options) {
         var accessToken = ctx1 && ctx1.get('accessToken');
         if (accessToken) {
             if (ctx.isNewInstance) {
-                if (ctx.instance.created)
+                if ('created' in ctx.instance)
                     ctx.instance.created = new Date();
                 else
                     ctx.instance.createdOn = new Date();
                 ctx.instance.createdBy = accessToken.userId;
             } else {
                 if (ctx.instance) {
-                    if (ctx.instance.updated)
-                        ctx.instance.updated = new Date();
+                    if ('modified' in ctx.instance)
+                        ctx.instance.modified = new Date();
                     else
                         ctx.instance.updatedOn = new Date();
                     ctx.instance.updatedBy = accessToken.userId;
                 }
                 else if (ctx.data) {
-                    if (ctx.data.updated)
-                        ctx.data.updated = new Date();
+                    if ('modified' in ctx.data)
+                        ctx.data.modified = new Date();
                     else
                         ctx.data.updatedOn = new Date();
                     ctx.data.updatedBy = accessToken.userId;

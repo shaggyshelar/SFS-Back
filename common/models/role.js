@@ -37,7 +37,10 @@ module.exports = function (role) {
     role.observe('before save', function updateTimestamp(ctx, next) {
         if (ctx.instance) {
             ctx.instance.name = ctx.instance.name + ctx.instance.schoolId
-
+        }
+        else if (ctx.data) {
+            if (!('modified' in ctx.data))
+                ctx.data.modified = '';
         }
         next();
     });
