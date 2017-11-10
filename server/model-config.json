@@ -112,6 +112,10 @@
     "dataSource": "mysql",
     "public": true
   },
+  "Student": {
+    "dataSource": "mysql",
+    "public": true
+  },
   "Transportzone": {
     "dataSource": "mysql",
     "public": true

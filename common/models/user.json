@@ -3,6 +3,9 @@
   "base": "User",
   "restrictResetPasswordTokenScope": true,
   "emailVerificationRequired": true,
+  "mixins": {
+    "TimestampMixin": true
+  },
   "options": {
     "idInjection": false,
     "mysql": {
@@ -140,7 +143,7 @@
       }
     },
     "isBolocked": {
-      "type": "Number",
+      "type": "boolean",
       "required": false,
       "length": null,
       "precision": 3,
@@ -155,7 +158,7 @@
       }
     },
     "isActivate": {
-      "type": "Number",
+      "type": "boolean",
       "required": false,
       "length": null,
       "precision": 3,
@@ -170,7 +173,7 @@
       }
     },
     "isPasswordChanged": {
-      "type": "Number",
+      "type": "boolean",
       "required": false,
       "length": null,
       "precision": 3,
@@ -185,7 +188,7 @@
       }
     },
     "emailVerified": {
-      "type": "Number",
+      "type": "boolean",
       "required": false,
       "length": null,
       "precision": 3,
@@ -200,7 +203,7 @@
       }
     },
     "isDelete": {
-      "type": "Number",
+      "type": "boolean",
       "required": false,
       "length": null,
       "precision": 3,
@@ -216,7 +219,7 @@
     },
     "createdBy": {
       "type": "Number",
-      "required": true,
+      "required": false,
       "length": null,
       "precision": 19,
       "scale": 0,
@@ -231,7 +234,7 @@
     },
     "createdOn": {
       "type": "Date",
-      "required": true,
+      "required": false,
       "length": null,
       "precision": null,
       "scale": null,

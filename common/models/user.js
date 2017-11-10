@@ -105,47 +105,45 @@ module.exports = function (User) {
 
   User.createUser = function (user, options, cb) {
     if (options.accessToken) {
-      var userId = options.accessToken && options.accessToken.userId;
 
       var password = randomstring.generate({
         length: 12,
         charset: 'alphanumeric'
       });
       user.password = password;
-      user.createdBy = userId;
-      user.createdOn = new Date();
+      //user.createdBy = userId;
+      //user.createdOn = new Date();
 
       User.create(user, function (err, cUser) {
         if (err) cb(err, cUser);
-        if (user.schoolIds && user.schoolIds.length > 0) {
+        else {
+          if (user.schoolIds && user.schoolIds.length > 0) {
 
-          var rolemapping = {
-            principalType: "USER",
-            principalId: cUser.id,
-            roleId: cUser.roleId
-          };
-          app.models.RoleMapping.create(rolemapping, function (err, rolemap) {
-            if (err) throw err;
-          });
-
-          var userSchoolMap = [];
-          user.schoolIds.map(function (id, index) {
-            userSchoolMap.push({
-              id: null,
-              userId: cUser.id,
-              schoolId: id,
-              createdBy: userId,
-              createdOn: new Date()
-            });
-          });
-          if (userSchoolMap.length > 0) {
-            app.models.Userschooldetails.create(userSchoolMap, function (err, details) {
+            var rolemapping = {
+              principalType: "USER",
+              principalId: cUser.id,
+              roleId: cUser.roleId
+            };
+            app.models.RoleMapping.create(rolemapping, function (err, rolemap) {
               if (err) throw err;
-              authHelper.sendVerificationEmail(cUser, cb);
             });
+
+            var userSchoolMap = [];
+            user.schoolIds.map(function (id, index) {
+              userSchoolMap.push({
+                id: null,
+                userId: cUser.id,
+                schoolId: id,
+              });
+            });
+            if (userSchoolMap.length > 0) {
+              app.models.Userschooldetails.create(userSchoolMap, function (err, details) {
+                if (err) throw err;
+                authHelper.sendVerificationEmail(cUser, password, cb);
+              });
+            }
           }
         }
-
 
         // cb(null, cUser);
       });

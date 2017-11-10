@@ -19,11 +19,14 @@
       "isDelete": 0
     }
   },
+  "mixins": {
+    "TimestampMixin": true
+  },
   "properties": {
     "id": {
       "type": "Number",
       "id": 1,
-      "required": true,
+      "required": false,
       "length": null,
       "precision": 19,
       "scale": 0,
@@ -53,7 +56,7 @@
     },
     "addhocFeeName": {
       "type": "String",
-      "required": false,
+      "required": true,
       "length": 50,
       "precision": null,
       "scale": null,
@@ -63,7 +66,7 @@
         "dataLength": 50,
         "dataPrecision": null,
         "dataScale": null,
-        "nullable": "Y"
+        "nullable": "N"
       }
     },
     "addhocFeeDescription": {
@@ -83,7 +86,7 @@
     },
     "dueDate": {
       "type": "Date",
-      "required": false,
+      "required": true,
       "length": null,
       "precision": null,
       "scale": null,
@@ -93,7 +96,7 @@
         "dataLength": null,
         "dataPrecision": null,
         "dataScale": null,
-        "nullable": "Y"
+        "nullable": "N"
       }
     },
     "isDelete": {
@@ -113,7 +116,7 @@
     },
     "createdBy": {
       "type": "Number",
-      "required": true,
+      "required": false,
       "length": null,
       "precision": 19,
       "scale": 0,
@@ -128,7 +131,7 @@
     },
     "createdOn": {
       "type": "Date",
-      "required": true,
+      "required": false,
       "length": null,
       "precision": null,
       "scale": null,

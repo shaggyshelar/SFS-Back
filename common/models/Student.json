@@ -34,11 +34,14 @@
       "isDelete": 0
     }
   },
+  "mixins": {
+    "TimestampMixin": true
+  },
   "properties": {
     "id": {
       "type": "Number",
       "id": 1,
-      "required": true,
+      "required": false,
       "length": null,
       "precision": 19,
       "scale": 0,
@@ -344,7 +347,7 @@
       "scale": null,
       "mysql": {
         "columnName": "studentDateOfBirth",
-        "dataType": "datetime",
+        "dataType": "date",
         "dataLength": null,
         "dataPrecision": null,
         "dataScale": null,
@@ -359,7 +362,7 @@
       "scale": null,
       "mysql": {
         "columnName": "dateOfJoining",
-        "dataType": "datetime",
+        "dataType": "date",
         "dataLength": null,
         "dataPrecision": null,
         "dataScale": null,
@@ -533,7 +536,7 @@
     },
     "createdBy": {
       "type": "Number",
-      "required": true,
+      "required":false,
       "length": null,
       "precision": 19,
       "scale": 0,
@@ -548,7 +551,7 @@
     },
     "createdOn": {
       "type": "Date",
-      "required": true,
+      "required": false,
       "length": null,
       "precision": null,
       "scale": null,

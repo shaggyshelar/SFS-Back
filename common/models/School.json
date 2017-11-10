@@ -16,6 +16,37 @@
         "model": "Institute",
         "type": "belongsTo",
         "foreignKey": "instituteId"
+      },
+      "Students": {
+        "model": "Student",
+        "type": "hasMany",
+        "foreignKey": "schoolId"
+      },
+      "Roles":{
+        "model":"role",
+        "type":"hasMany",
+        "foreignKey":"schoolId"
+      },
+      "SchoolUsers":{
+        "type":"hasMany",
+        "model":"user",
+        "foreignKey":"schoolId",
+        "through":"Userschooldetails"
+      },
+      "SchoolClass":{
+        "type": "hasMany",
+        "model":"Class",
+        "foreignKey":"schoolId"
+      },
+      "SchoolDivision":{
+        "type": "hasMany",
+        "model":"Division",
+        "foreignKey":"schoolId"
+      },
+      "SchoolYear":{
+        "type": "hasMany",
+        "model":"Academicyear",
+        "foreignKey":"schoolId"
       }
     }
   },
@@ -24,11 +55,14 @@
       "isDelete": 0
     }
   },
+  "mixins": {
+    "TimestampMixin": true
+  },
   "properties": {
     "id": {
       "type": "Number",
       "id": 1,
-      "required": true,
+      "required": false,
       "length": null,
       "precision": 19,
       "scale": 0,
@@ -238,7 +272,7 @@
     },
     "createdBy": {
       "type": "Number",
-      "required": true,
+      "required": false,
       "length": null,
       "precision": 19,
       "scale": 0,
@@ -253,7 +287,7 @@
     },
     "createdOn": {
       "type": "Date",
-      "required": true,
+      "required": false,
       "length": null,
       "precision": null,
       "scale": null,

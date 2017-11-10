@@ -12,6 +12,11 @@
         "model": "School",
         "type": "belongsTo",
         "foreignKey": "schoolId"
+      },
+      "SuperAdmin":{
+        "model":"user",
+        "type":"hasMany",
+        "foreignKey":"roleId"
       }
     }
   },
@@ -19,6 +24,9 @@
     "where": {
       "isDelete": 0
     }
+  },
+  "mixins": {
+    "TimestampMixin": true
   },
   "properties": {
     "name": {
@@ -98,7 +106,7 @@
     },
     "createdBy": {
       "type": "Number",
-      "required": true,
+      "required": false,
       "length": null,
       "precision": 19,
       "scale": 0,
@@ -111,14 +119,14 @@
         "nullable": "N"
       }
     },
-    "createdOn": {
+    "created": {
       "type": "Date",
-      "required": true,
+      "required": false,
       "length": null,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "createdOn",
+        "columnName": "created",
         "dataType": "datetime",
         "dataLength": null,
         "dataPrecision": null,
@@ -141,14 +149,14 @@
         "nullable": "Y"
       }
     },
-    "updatedOn": {
+    "modified": {
       "type": "Date",
       "required": false,
       "length": null,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "updatedOn",
+        "columnName": "modified",
         "dataType": "datetime",
         "dataLength": null,
         "dataPrecision": null,
