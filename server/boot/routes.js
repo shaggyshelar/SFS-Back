@@ -150,7 +150,7 @@ module.exports = function (app) {
       password: req.body.password,
     }, 'user', function (err, token) {
       if (err) {
-        res.status(401);
+        res.status(err.statusCode);
         res.json({
           'Error': 'Failed',
           'Code': err.code,
