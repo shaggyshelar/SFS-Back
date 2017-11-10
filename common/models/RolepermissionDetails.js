@@ -49,6 +49,9 @@ module.exports = function (RolepermissionDetails) {
                     var option2 = JSON.parse(JSON.stringify(options))
                     option2.property = "findById";
                     roptions.push(option2);
+                    var option3 = JSON.parse(JSON.stringify(options))
+                    option3.property = "count";
+                    roptions.push(option3);
                     options = roptions;
                 }
                 app.models.ACL.create(options, function (err, info) {

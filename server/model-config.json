@@ -123,5 +123,9 @@
   "Userschooldetails": {
     "dataSource": "mysql",
     "public": true
+  },
+  "container": {
+    "dataSource": "storage",
+    "public": true
   }
 }

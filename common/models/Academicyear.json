@@ -62,7 +62,7 @@
       "scale": null,
       "mysql": {
         "columnName": "startDate",
-        "dataType": "datetime",
+        "dataType": "date",
         "dataLength": null,
         "dataPrecision": null,
         "dataScale": null,
@@ -77,7 +77,7 @@
       "scale": null,
       "mysql": {
         "columnName": "endDate",
-        "dataType": "datetime",
+        "dataType": "date",
         "dataLength": null,
         "dataPrecision": null,
         "dataScale": null,
