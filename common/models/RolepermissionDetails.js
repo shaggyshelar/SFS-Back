@@ -28,8 +28,14 @@ module.exports = function (RolepermissionDetails) {
                     }
                 }
                 else if (_permission == "Update") {
-                    options.property = "updateAttributes";
-                    options.accessType = "WRITE";
+                    if (_model.toLowerCase() == "user") {
+                        options.property = "updateUser";
+                        options.accessType = "EXECUTE";
+                    }
+                    else {
+                        options.property = "updateAttributes";
+                        options.accessType = "WRITE";
+                    }
                 }
                 else if (_permission == "Delete") {
                     options.property = "destroyById";

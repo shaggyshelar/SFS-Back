@@ -111,8 +111,6 @@ module.exports = function (User) {
         charset: 'alphanumeric'
       });
       user.password = password;
-      //user.createdBy = userId;
-      //user.createdOn = new Date();
 
       User.create(user, function (err, cUser) {
         if (err) cb(err, cUser);
@@ -144,10 +142,60 @@ module.exports = function (User) {
             }
           }
         }
-
-        // cb(null, cUser);
       });
     }
+  }
+
+  User.updateUser = function (id, user, options, cb) {
+    var updateUser = {
+      roleId: user.roleId,
+      username: user.username,
+      phone: user.phone,
+      email: user.email
+    };
+    User.updateAll({ id: id }, updateUser, function (err, updatedUser) {
+      if (err)
+        throw err;
+      else {
+        var rolemapping = {
+          principalType: "USER",
+          principalId: id
+        };
+        app.models.RoleMapping.find({ where: { and: [{ principalType: "USER" }, { principalId: id }] } }, function (err, rolemapArr) {
+          if (err) throw err;
+          else {
+            if (rolemapArr.length > 0) {
+              var rolemap = rolemapArr[0];
+              if (rolemap.roleId != user.roleId) {
+                rolemap.roleId = user.roleId;
+
+                app.models.RoleMapping.updateAll({ and: [{ principalType: "USER" }, { principalId: id }] }, { roleId: user.roleId }, function (err, updatedUser) {
+                  if (err)
+                    throw err;
+                });
+              }
+              app.models.Userschooldetails.destroyAll({ userId: id }, function (err, userSchoolInfo) {
+                if (err) throw err;
+                var userSchoolMap = [];
+                user.schoolIds.map(function (sid, index) {
+                  userSchoolMap.push({
+                    userId: id,
+                    schoolId: sid,
+                  });
+                });
+                if (userSchoolMap.length > 0) {
+                  app.models.Userschooldetails.create(userSchoolMap, function (err, details) {
+                    if (err) throw err;
+                    cb(null, user);
+                  });
+                }
+              });
+
+            }
+          }
+        });
+      }
+    });
   }
 
   User.remoteMethod('createUser', {
@@ -164,6 +212,27 @@ module.exports = function (User) {
       http: "optionsFromRequest"
     }],
     http: { path: '/createUser', verb: 'post' },
+    returns: { arg: 'user', type: 'user' }
+  });
+
+
+  User.remoteMethod('updateUser', {
+    accepts: [{
+      arg: 'id',
+      type: 'Number'
+    }, {
+      arg: 'user',
+      type: 'user',
+      http: {
+        source: 'body',
+      },
+    },
+    {
+      arg: "options",
+      type: "object",
+      http: "optionsFromRequest"
+    }],
+    http: { path: '/updateUser/:id', verb: 'put' },
     returns: { arg: 'user', type: 'user' }
   });
 };
