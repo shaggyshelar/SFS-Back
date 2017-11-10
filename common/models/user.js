@@ -95,12 +95,16 @@ module.exports = function (User) {
     });
   });
 
-  User.afterRemote('findById', function (context, user, next) {
-    // var permissions = [];
-    // permissionHelper.setPermissionByRoleId(user, user.roleId, function (updatedUser) {
-    //   user = updatedUser;
-    next();
-    // });
+  User.afterRemote('confirm', function (context, user, next) {
+    if (context.args) {
+      User.updateAll({ id: context.args.uid }, { isActivate: true }, function (err, updatedUser) {
+        if (err)
+          throw err;
+        else {
+          next();
+        }
+      });
+    }
   });
 
   User.createUser = function (user, options, cb) {
