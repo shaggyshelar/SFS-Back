@@ -14,6 +14,25 @@ var permissionHelper = require('../../common/shared/permissionsHelper');
 module.exports = function (app) {
   var User = app.models.user;
 
+  // Added by Harnish for validation starts
+  var Schools = app.models.School;
+  Schools.find({
+    where: {
+      id: 22 // Need to change it to school id as variable
+    },
+    include: ['SchoolClass', 'SchoolBoard', 'SchoolDivision', 'SchoolYear']
+  }, function (err, lists) {
+    var schoolData = lists;
+  });
+
+  var Categories = app.models.Category;
+  
+  Categories.find({
+  },function(err, catLists){
+    var categoryList = catLists;
+  });
+  // Added by Harnish for validation ends
+
   app.get('/verified', function (req, res) {
     rootlog.info('hi');
     rootlog.warn({ lang: 'fr' }, 'au revoir');
@@ -131,7 +150,7 @@ module.exports = function (app) {
       password: req.body.password,
     }, 'user', function (err, token) {
       if (err) {
-        res.status(401);
+        res.status(err.statusCode);
         res.json({
           'Error': 'Failed',
           'Code': err.code,
