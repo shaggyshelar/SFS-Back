@@ -33,7 +33,8 @@
   },
   "scope": {
     "where": {
-      "isDelete": 0
+      "isDelete": 0,
+      "emailVerified":1
     }
   },
   "properties": {
