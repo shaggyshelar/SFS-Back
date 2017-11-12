@@ -4,7 +4,8 @@
   "restrictResetPasswordTokenScope": true,
   "emailVerificationRequired": true,
   "mixins": {
-    "TimestampMixin": true
+    "TimestampMixin": true,
+    "DeleteOverrideMixin": true
   },
   "options": {
     "idInjection": false,
