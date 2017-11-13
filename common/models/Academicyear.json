@@ -16,11 +16,12 @@
   },
   "scope": {
     "where": {
-      "isdelete": 0
+      "isDelete": 0
     }
   },
   "mixins": {
-    "TimestampMixin": true
+    "TimestampMixin": true,
+    "DeleteOverrideMixin": true
   },
   "properties": {
     "id": {
