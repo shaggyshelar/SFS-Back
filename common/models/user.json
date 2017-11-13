@@ -76,8 +76,8 @@
       "precision": null,
       "scale": null,
       "minLength": 8,
-      "pattern": "(?=.*[0-9])",
-      "patternError": "Password should be alphanumeric.",
+      "pattern": "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[+\\-*/*&^%$#@!])",
+      "patternError": "Password should consist of alphabets, numbers and a special character (+-*/&^%$#@!).",
       "mysql": {
         "columnName": "password",
         "dataType": "varchar",
