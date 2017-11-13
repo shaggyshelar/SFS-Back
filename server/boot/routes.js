@@ -3,7 +3,7 @@
 var dsConfig = require('../datasources.json');
 var path = require('path');
 var multer = require('multer');
-var upload = multer({ dest: './Uploads/' });
+var upload = multer({dest: './Uploads/'});
 var fs = require('fs');
 var csv = require('fast-csv');
 var loopback = require('loopback');
@@ -11,7 +11,7 @@ var rootlog = loopback.log;
 var _ = require('underscore');
 var permissionHelper = require('../../common/shared/permissionsHelper');
 
-module.exports = function (app) {
+module.exports = function(app) {
   var User = app.models.user;
 
   // Added by Harnish for validation starts
@@ -21,21 +21,21 @@ module.exports = function (app) {
       id: 22, // Need to change it to school id as variable
     },
     include: ['SchoolClass', 'SchoolBoard', 'SchoolDivision', 'SchoolYear'],
-  }, function (err, lists) {
+  }, function(err, lists) {
     var schoolData = lists;
   });
 
   var Categories = app.models.Category;
-  
+
   Categories.find({
-  },function(err, catLists){
+  }, function(err, catLists) {
     var categoryList = catLists;
   });
   // Added by Harnish for validation ends
 
-  app.get('/verified', function (req, res) {
+  app.get('/verified', function(req, res) {
     rootlog.info('hi');
-    rootlog.warn({ lang: 'fr' }, 'au revoir');
+    rootlog.warn({lang: 'fr'}, 'au revoir');
     res.render('verified');
   });
 
@@ -63,6 +63,16 @@ module.exports = function (app) {
           app.dataSources.mysql.transaction(models => {
             var counter = 0;
             var stream = fs.createReadStream(filepath);
+
+            var fastCsv = csv.createWriteStream();
+            var writeStream = fs.createWriteStream('outputfile.csv');
+            fastCsv.pipe(writeStream);
+
+            // fastCsv.write({a: 'a0', b: 'b0'});
+            // fastCsv.write({a: 'a1', b: 'b1'});
+            // fastCsv.write({a: 'a2', b: 'b2'});
+            // fastCsv.write({a: 'a3', b: 'b4'});
+
             var users = [];
             var failedStudents = [];
             var savedStudents = [];
@@ -108,18 +118,20 @@ module.exports = function (app) {
                   createdBy: 1,
                   createdOn: '11/08/2017',
                 };
-                // studentModel.create(studentToAdd, function(err, post) {
-                //   if (err) {
-                //     console.error('Error while creating student', err);
-                //     failedStudents.push({'Row': data, 'Error': err.message});
-                //   } else {
-                //     savedStudents.push({'Row': data});
-                //   }
-                // });
+                studentModel.create(studentToAdd, function(err, post) {
+                  if (err) {
+                    console.error('Error while creating student', err);
+                    failedStudents.push({'Row': data, 'Error': err.message});
+                    fastCsv.write(data);
+                  } else {
+                    savedStudents.push({'Row': data});
+                  }
+                });
               }
             })
             .on('end', function() {
               // console.timeEnd('dbsave');
+              // fastCsv.end();
               var html = 'Below is the report!';
               app.models.Email.send({
                 to: 'shaggy.shelar@gmail.com',
@@ -127,16 +139,20 @@ module.exports = function (app) {
                 subject: 'Student Upload Status',
                 html: html,
                 attachments: [
-                  {   // binary buffer as an attachment
-                    filename: 'UploadStatus.csv',
-                    content: stream,
+                  {   // stream as an attachment
+                    filename: 'outputfile.csv',
+                    content: fs.createReadStream('outputfile.csv'),
                   }],
               }, function(err) {
-                if (err) return console.log('> error sending password reset email');
+                if (err) {
+                  console.log('> error sending password reset email');
+                }
                 console.log('> sending password reset email to:');
               });
               res.status(200);
-              res.json({'SavedStudents': savedStudents.length, 'FailedStudents': failedStudents.length, 'Success': failedStudents.length == 0});
+              res.json({'SavedStudents': savedStudents.length,
+                'FailedStudents': failedStudents.length,
+                'Success': failedStudents.length == 0});
             });
             stream.pipe(csvStream);
           });
@@ -145,11 +161,11 @@ module.exports = function (app) {
     });
   });
 
-  app.post('/login', function (req, res) {
+  app.post('/login', function(req, res) {
     User.login({
       username: req.body.username,
       password: req.body.password,
-    }, 'user', function (err, token) {
+    }, 'user', function(err, token) {
       if (err) {
         res.status(err.statusCode);
         res.json({
@@ -161,19 +177,19 @@ module.exports = function (app) {
       if (token != undefined) {
         var RoleMapping = app.models.RoleMapping;
         var Role = app.models.Role;
-        RoleMapping.find({ where: { principalId: token.userId } }, function (err, roleMappings) {
+        RoleMapping.find({where: {principalId: token.userId}}, function(err, roleMappings) {
           if (roleMappings && roleMappings.length > 0) {
             var roleIds = _.uniq(roleMappings
-              .map(function (roleMapping) {
+              .map(function(roleMapping) {
                 return roleMapping.roleId;
               }));
-            var conditions = roleIds.map(function (roleId) {
-              return { id: roleId };
+            var conditions = roleIds.map(function(roleId) {
+              return {id: roleId};
             });
-            Role.find({ where: { or: conditions } }, function (err, roles) {
+            Role.find({where: {or: conditions}}, function(err, roles) {
               if (err) throw err;
               token.roles = roles;
-              permissionHelper.setPermissions(token, roles, function (token) {
+              permissionHelper.setPermissions(token, roles, function(token) {
                 res.status(200);
                 res.json(token);
               });
@@ -204,9 +220,9 @@ module.exports = function (app) {
     });
   });
 
-  app.get('/logout', function (req, res, next) {
+  app.get('/logout', function(req, res, next) {
     if (!req.accessToken) return res.sendStatus(401); // return 401:unauthorized if accessToken is not present
-    User.logout(req.accessToken.id, function (err) {
+    User.logout(req.accessToken.id, function(err) {
       if (err) return next(err);
       res.redirect('/'); // on successful logout, redirect
     });
