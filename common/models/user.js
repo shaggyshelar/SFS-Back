@@ -11,7 +11,7 @@ var permissionHelper = require('../shared/permissionsHelper');
 var authHelper = require('../shared/authHelper');
 var randomstring = require('randomstring');
 var app = require('../../server/server');
-
+var g = require('loopback/lib/globalize');
 module.exports = function (User) {
   // send verification email after registration
   User.afterRemote('create', function (context, user, next) {
@@ -239,4 +239,22 @@ module.exports = function (User) {
     http: { path: '/updateUser/:id', verb: 'put' },
     returns: { arg: 'user', type: 'user' }
   });
+
+  User.validatePassword = function (plain) {
+    var err,
+      passwordProperties = User.definition.properties.password;
+    if (plain.length > passwordProperties.length) {
+      err = new Error(g.f('Password too long: %s (maximum %d symbols)', plain, passwordProperties.length));
+      err.code = 'PASSWORD_TOO_LONG';
+    } else if (plain.length < passwordProperties.minLength) {
+      err = new Error(g.f('Password too short: %s (minimum %d symbols)', plain, passwordProperties.minLength));
+      err.code = 'PASSWORD_TOO_SHORT';
+    } else if (!(new RegExp(passwordProperties.pattern, 'g').test(plain))) {
+      err = new Error(g.f(passwordProperties.patternError, plain));
+      err.code = 'INVALID_PASSWORD';
+    } else {
+      return true;
+    } err.statusCode = 422;
+    throw err;
+  };
 };
