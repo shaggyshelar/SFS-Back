@@ -3,26 +3,15 @@ var LoopBackContext = require('loopback-context');
 
 module.exports = function (Model, options) {
     'use strict';
-    // Model.deleteById = function (id, cb) {
-    //     Model.update({ id: id }, { isDelete: true }, cb);
-    // }
 
     Model.deleteRecord = function (id, options, cb) {
+        Model.defaultScope = function () { };
 
         Model.updateAll({ id: id }, { isDelete: true }, function (err, updatedRecord) {
             if (err)
                 throw err;
             else {
-                Model.find({ where: { id: id } }, function (err, updatedRecord) {
-                    if (err)
-                        throw err;
-                    else {
-                        console.log(updatedRecord);
-
-                    }
-                });
                 cb(null);
-
             }
         });
     }
