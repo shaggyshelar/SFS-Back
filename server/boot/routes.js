@@ -8,6 +8,7 @@ var fs = require('fs');
 var csv = require('fast-csv');
 var loopback = require('loopback');
 var rootlog = loopback.log;
+var async = require('async');
 var _ = require('underscore');
 var permissionHelper = require('../../common/shared/permissionsHelper');
 
@@ -76,6 +77,7 @@ module.exports = function(app) {
             var users = [];
             var failedStudents = [];
             var savedStudents = [];
+            var waterfallFunctions = [];
             var csvStream = csv
             .parse()
             .on('data', function(data) {
@@ -118,41 +120,58 @@ module.exports = function(app) {
                   createdBy: 1,
                   createdOn: '11/08/2017',
                 };
-                studentModel.create(studentToAdd, function(err, post) {
-                  if (err) {
-                    console.error('Error while creating student', err);
-                    failedStudents.push({'Row': data, 'Error': err.message});
-                    fastCsv.write(data);
-                  } else {
-                    savedStudents.push({'Row': data});
-                  }
+                waterfallFunctions.push(function(next) {
+                  studentModel.create(studentToAdd, function(err, post) {
+                    if (err) {
+                      console.error('Error while creating student', err);
+                      failedStudents.push({'Row': data, 'Error': err.message});
+                      fastCsv.write(data);
+                      return next(err);
+                    } else {
+                      savedStudents.push({'Row': data});
+                    }
+                    next();
+                  });
                 });
               }
             })
             .on('end', function() {
               // console.timeEnd('dbsave');
               // fastCsv.end();
-              var html = 'Below is the report!';
-              app.models.Email.send({
-                to: 'shaggy.shelar@gmail.com',
-                from: 'espl.sfback@gmail.com',
-                subject: 'Student Upload Status',
-                html: html,
-                attachments: [
-                  {   // stream as an attachment
-                    filename: 'outputfile.csv',
-                    content: fs.createReadStream('outputfile.csv'),
-                  }],
-              }, function(err) {
+
+              async.waterfall(waterfallFunctions, function(err) {
                 if (err) {
-                  console.log('> error sending password reset email');
+                  var html = 'Below is the report!';
+                  app.models.Email.send({
+                    to: 'shaggy.shelar@gmail.com',
+                    from: 'espl.sfback@gmail.com',
+                    subject: 'Student Upload Status',
+                    html: html,
+                    attachments: [
+                      {   // stream as an attachment
+                        filename: 'outputfile.csv',
+                        content: fs.createReadStream('outputfile.csv'),
+                      }],
+                  }, function(err) {
+                    if (err) {
+                      console.log('> error sending password reset email');
+                    }
+                    console.log('> sending password reset email to:');
+                  });
+                  return res.status(500).json({'SavedStudents': savedStudents.length,
+                    'FailedStudents': failedStudents.length,
+                    'Success': failedStudents.length == 0});
                 }
-                console.log('> sending password reset email to:');
+
+                res.status(200);
+                res.json({'SavedStudents': savedStudents.length,
+                  'FailedStudents': failedStudents.length,
+                  'Success': failedStudents.length == 0});
               });
-              res.status(200);
-              res.json({'SavedStudents': savedStudents.length,
-                'FailedStudents': failedStudents.length,
-                'Success': failedStudents.length == 0});
+              // res.status(200);
+              // res.json({'SavedStudents': savedStudents.length,
+              //   'FailedStudents': failedStudents.length,
+              //   'Success': failedStudents.length == 0});
             });
             stream.pipe(csvStream);
           });
