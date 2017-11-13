@@ -23,6 +23,11 @@
         "model": "Menu",
         "foreignKey": "roleId",
         "through": "RolemenuDetails"
+      },
+      "permission": {
+        "model": "RolepermissionDetails",
+        "type": "hasMany",
+        "foreignKey": "roleId"
       }
     }
   },
