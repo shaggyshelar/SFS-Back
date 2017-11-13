@@ -18,9 +18,9 @@ module.exports = function (app) {
   var Schools = app.models.School;
   Schools.find({
     where: {
-      id: 22 // Need to change it to school id as variable
+      id: 22, // Need to change it to school id as variable
     },
-    include: ['SchoolClass', 'SchoolBoard', 'SchoolDivision', 'SchoolYear']
+    include: ['SchoolClass', 'SchoolBoard', 'SchoolDivision', 'SchoolYear'],
   }, function (err, lists) {
     var schoolData = lists;
   });
@@ -108,32 +108,33 @@ module.exports = function (app) {
                   createdBy: 1,
                   createdOn: '11/08/2017',
                 };
-                studentModel.create(studentToAdd, function(err, post) {
-                  if (err) {
-                    console.error('Error while creating student', err);
-                    failedStudents.push({'Row': data, 'Error': err.message});
-                  } else {
-                    savedStudents.push({'Row': data});
-                  }
-                });
-                
-                // var newStuden = {srNo: data[0], firstName: data[1], middleName: data[2],
-                //   lastName: data[3], gender: data[4], dob: data[5],
-                //   doj: data[6], grNumber: data[7], address: data[8],
-                //   phoneNumber: data[9], country: data[10], state: data[11],
-                //   religion: data[12], cast: data[13], bloodGroup: data[14],
-                //   fathersFirstName: data[15], fathersLastName: data[16],
-                //   fathersMobileNumber: data[17], mothersFirstName: data[18],
-                //   mothersLastName: data[19], mothersMobileNumber: data[20],
-                //   guardian: data[21], guardianFirstName: data[22], guardianLastName: data[23],
-                //   guardianMobileNumber: data[24], class: data[25], division: data[26],
-                //   catergory: data[27], acadYear: data[28]
-                // };
-                // console.log('Student', newStuden);
+                // studentModel.create(studentToAdd, function(err, post) {
+                //   if (err) {
+                //     console.error('Error while creating student', err);
+                //     failedStudents.push({'Row': data, 'Error': err.message});
+                //   } else {
+                //     savedStudents.push({'Row': data});
+                //   }
+                // });
               }
             })
             .on('end', function() {
               // console.timeEnd('dbsave');
+              var html = 'Below is the report!';
+              app.models.Email.send({
+                to: 'shaggy.shelar@gmail.com',
+                from: 'espl.sfback@gmail.com',
+                subject: 'Student Upload Status',
+                html: html,
+                attachments: [
+                  {   // binary buffer as an attachment
+                    filename: 'UploadStatus.csv',
+                    content: stream,
+                  }],
+              }, function(err) {
+                if (err) return console.log('> error sending password reset email');
+                console.log('> sending password reset email to:');
+              });
               res.status(200);
               res.json({'SavedStudents': savedStudents.length, 'FailedStudents': failedStudents.length, 'Success': failedStudents.length == 0});
             });
