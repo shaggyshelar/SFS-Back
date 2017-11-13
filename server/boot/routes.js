@@ -1,6 +1,7 @@
 'use strict';
 
 var dsConfig = require('../datasources.json');
+var config = require('../config.json');
 var path = require('path');
 var multer = require('multer');
 var upload = multer({dest: './Uploads/'});
@@ -139,8 +140,8 @@ module.exports = function(app) {
                 '<p>Please refer to attach file with student information which was ' +
                 'not saved due to some error. Please resolve those and try again later.</p>';
                 app.models.Email.send({
-                  to: 'shaggy.shelar@gmail.com',
-                  from: 'espl.sfback@gmail.com',
+                  to: user.toJSON().email,
+                  from: config.supportEmailID,
                   subject: 'Student Upload Status',
                   html: html,
                   attachments: [
