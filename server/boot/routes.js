@@ -15,25 +15,8 @@ var permissionHelper = require('../../common/shared/permissionsHelper');
 
 module.exports = function(app) {
   var User = app.models.user;
-
-  // Added by Harnish for validation starts
   var Schools = app.models.School;
-  Schools.find({
-    where: {
-      id: 22, // Need to change it to school id as variable
-    },
-    include: ['SchoolClass', 'SchoolBoard', 'SchoolDivision', 'SchoolYear'],
-  }, function(err, lists) {
-    var schoolData = lists;
-  });
-
   var Categories = app.models.Category;
-
-  Categories.find({
-  }, function(err, catLists) {
-    var categoryList = catLists;
-  });
-  // Added by Harnish for validation ends
 
   app.get('/verified', function(req, res) {
     rootlog.info('hi');
@@ -62,107 +45,132 @@ module.exports = function(app) {
             trim: true,
           };
 
-          app.dataSources.mysql.transaction(models => {
-            var counter = 0;
-            var stream = fs.createReadStream(filepath);
-            var fastCsv = csv.createWriteStream();
-            var writeStream = fs.createWriteStream('outputfile.csv');
-            fastCsv.pipe(writeStream);
-
-            var failedStudents = [];
-            var savedStudents = [];
-            var waterfallFunctions = [];
-            var csvStream = csv
-            .parse()
-            .on('data', function(data) {
-              counter++;
-              if (counter > 1) {
-                var studentModel = app.models.Student;
-                var studentToAdd = {
-                  schoolId: 22,
-                  categoryId: 3,
-                  classId: 1,
-                  divisionId: 2,
-                  gRNumber: data[7],
-                  studentCode: '1111',
-                  studentFirstName: data[1],
-                  studentMiddleName: data[2],
-                  studentLastName: data[3],
-                  studentGender: data[4],
-                  fatherFirstName: data[15],
-                  fatherLastName: data[16],
-                  fatherMobile: data[17],
-                  motherFirstName: data[18],
-                  motherLastName: data[19],
-                  motherMobile: data[20],
-                  guardianFirstName: data[22],
-                  guardianLastName: data[23],
-                  guardianMobile: data[24],
-                  studentDateOfBirth: '10/10/1987',
-                  dateOfJoining: '10/10/2014',
-                  address: data[8],
-                  city: '111111',
-                  state: data[11],
-                  country: data[10],
-                  phone: data[9],
-                  email: 'test@test.com',
-                  religion: data[12],
-                  cast: data[13],
-                  bloodGroup: data[14],
-                  academicYear: 2011,
-                  isDelete: false,
-                  createdBy: 1,
-                  createdOn: '11/08/2017',
-                };
-                waterfallFunctions.push(function(next) {
-                  studentModel.create(studentToAdd, function(err, post) {
-                    if (err) {
-                      failedStudents.push({'Row': data, 'Error': err.message});
-                      data.push(err.message);
-                      fastCsv.write(data);
-                    } else {
-                      savedStudents.push({'Row': data});
-                    }
-                    next();
-                  });
-                });
-              } else {
-                fastCsv.write(data);
-              }
-            })
-            .on('end', function() {
-              async.waterfall(waterfallFunctions, function(err) {
-                fastCsv.end();
-
-                var html = '<h2>Below is report of student data upload!</h2>' +
-                '<h2>Saved Students: ' + savedStudents.length + '</h2>' +
-                '<h2>Failed Students: ' + failedStudents.length + '</h2>' +
-                '<p>Please refer to attach file with student information which was ' +
-                'not saved due to some error. Please resolve those and try again later.</p>';
-                app.models.Email.send({
-                  to: user.toJSON().email,
-                  from: config.supportEmailID,
-                  subject: 'Student Upload Status',
-                  html: html,
-                  attachments: [
-                    {
-                      filename: 'outputfile.csv',
-                      content: fs.createReadStream('outputfile.csv'),
-                    }],
-                }, function(err) {
-                  if (err) {
-                    console.log('> error sending upload report email');
-                  }
-                  console.log('> upload report mail sent successfully');
-                });
-
-                res.status(200);
-                res.json({'SavedStudents': savedStudents.length,
-                  'FailedStudents': failedStudents.length,
-                  'Success': failedStudents.length == 0});
+          var schoolList = [];
+          var categoryList = [];
+          async.series([
+            function(callback) {
+              Schools.find({
+                where: {
+                  id: req.body.schoolId,
+                },
+                include: ['SchoolClass', 'SchoolBoard', 'SchoolDivision', 'SchoolYear'],
+              }, function(err, lists) {
+                schoolList = lists;
+                callback(null, lists);
               });
+            },
+            function(callback) {
+              Categories.find({
+              }, function(err, catLists) {
+                categoryList = catLists;
+                callback(null, catLists);
+              });
+            },
+          ],
+          function(err, results) {
+            app.dataSources.mysql.transaction(models => {
+              var counter = 0;
+              var stream = fs.createReadStream(filepath);
+              var fastCsv = csv.createWriteStream();
+              var writeStream = fs.createWriteStream('outputfile.csv');
+              fastCsv.pipe(writeStream);
+
+              var failedStudents = [];
+              var savedStudents = [];
+              var waterfallFunctions = [];
+              var csvStream = csv
+              .parse()
+              .on('data', function(data) {
+                counter++;
+                if (counter > 1) {
+                  var studentModel = app.models.Student;
+                  var studentToAdd = {
+                    schoolId: req.body.schoolId,
+                    categoryId: 3,
+                    classId: 1,
+                    divisionId: 2,
+                    gRNumber: data[7],
+                    studentCode: '1111',
+                    studentFirstName: data[1],
+                    studentMiddleName: data[2],
+                    studentLastName: data[3],
+                    studentGender: data[4],
+                    fatherFirstName: data[15],
+                    fatherLastName: data[16],
+                    fatherMobile: data[17],
+                    motherFirstName: data[18],
+                    motherLastName: data[19],
+                    motherMobile: data[20],
+                    guardianFirstName: data[22],
+                    guardianLastName: data[23],
+                    guardianMobile: data[24],
+                    studentDateOfBirth: '10/10/1987',
+                    dateOfJoining: '10/10/2014',
+                    address: data[8],
+                    city: '111111',
+                    state: data[11],
+                    country: data[10],
+                    phone: data[9],
+                    email: 'test@test.com',
+                    religion: data[12],
+                    cast: data[13],
+                    bloodGroup: data[14],
+                    academicYear: 2011,
+                    isDelete: false,
+                    createdBy: 1,
+                    createdOn: '11/08/2017',
+                  };
+                  waterfallFunctions.push(function(next) {
+                    studentModel.create(studentToAdd, function(err, post) {
+                      if (err) {
+                        failedStudents.push({'Row': data, 'Error': err.message});
+                        data.push(err.message);
+                        fastCsv.write(data);
+                      } else {
+                        savedStudents.push({'Row': data});
+                      }
+                      next();
+                    });
+                  });
+                } else {
+                  data.push('Error Message');
+                  fastCsv.write(data);
+                }
+              })
+              .on('end', function() {
+                async.waterfall(waterfallFunctions, function(err) {
+                  fastCsv.end();
+  
+                  var html = '<h2>Below is report of student data upload!</h2>' +
+                  '<h2>Saved Students: ' + savedStudents.length + '</h2>' +
+                  '<h2>Failed Students: ' + failedStudents.length + '</h2>' +
+                  '<p>Please refer to attach file with student information which was ' +
+                  'not saved due to some error. Please resolve those and try again later.</p>';
+                  app.models.Email.send({
+                    to: user.toJSON().email,
+                    from: config.supportEmailID,
+                    subject: 'Student Upload Status',
+                    html: html,
+                    attachments: [
+                      {
+                        filename: 'outputfile.csv',
+                        content: fs.createReadStream('outputfile.csv'),
+                      }],
+                  }, function(err) {
+                    if (err) {
+                      console.log('> error sending upload report email');
+                    }
+                    console.log('> upload report mail sent successfully');
+                  });
+  
+                  res.status(200);
+                  res.json({'SavedStudents': savedStudents.length,
+                    'FailedStudents': failedStudents.length,
+                    'Success': failedStudents.length == 0});
+                });
+              });
+              stream.pipe(csvStream);
             });
-            stream.pipe(csvStream);
           });
         });
       }
