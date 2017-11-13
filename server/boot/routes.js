@@ -64,17 +64,10 @@ module.exports = function(app) {
           app.dataSources.mysql.transaction(models => {
             var counter = 0;
             var stream = fs.createReadStream(filepath);
-
             var fastCsv = csv.createWriteStream();
             var writeStream = fs.createWriteStream('outputfile.csv');
             fastCsv.pipe(writeStream);
 
-            // fastCsv.write({a: 'a0', b: 'b0'});
-            // fastCsv.write({a: 'a1', b: 'b1'});
-            // fastCsv.write({a: 'a2', b: 'b2'});
-            // fastCsv.write({a: 'a3', b: 'b4'});
-
-            var users = [];
             var failedStudents = [];
             var savedStudents = [];
             var waterfallFunctions = [];
@@ -123,55 +116,50 @@ module.exports = function(app) {
                 waterfallFunctions.push(function(next) {
                   studentModel.create(studentToAdd, function(err, post) {
                     if (err) {
-                      console.error('Error while creating student', err);
                       failedStudents.push({'Row': data, 'Error': err.message});
+                      data.push(err.message);
                       fastCsv.write(data);
-                      return next(err);
                     } else {
                       savedStudents.push({'Row': data});
                     }
                     next();
                   });
                 });
+              } else {
+                fastCsv.write(data);
               }
             })
             .on('end', function() {
-              // console.timeEnd('dbsave');
-              // fastCsv.end();
-
               async.waterfall(waterfallFunctions, function(err) {
-                if (err) {
-                  var html = 'Below is the report!';
-                  app.models.Email.send({
-                    to: 'shaggy.shelar@gmail.com',
-                    from: 'espl.sfback@gmail.com',
-                    subject: 'Student Upload Status',
-                    html: html,
-                    attachments: [
-                      {   // stream as an attachment
-                        filename: 'outputfile.csv',
-                        content: fs.createReadStream('outputfile.csv'),
-                      }],
-                  }, function(err) {
-                    if (err) {
-                      console.log('> error sending password reset email');
-                    }
-                    console.log('> sending password reset email to:');
-                  });
-                  return res.status(500).json({'SavedStudents': savedStudents.length,
-                    'FailedStudents': failedStudents.length,
-                    'Success': failedStudents.length == 0});
-                }
+                fastCsv.end();
+
+                var html = '<h2>Below is report of student data upload!</h2>' +
+                '<h2>Saved Students: ' + savedStudents.length + '</h2>' +
+                '<h2>Failed Students: ' + failedStudents.length + '</h2>' +
+                '<p>Please refer to attach file with student information which was ' +
+                'not saved due to some error. Please resolve those and try again later.</p>';
+                app.models.Email.send({
+                  to: 'shaggy.shelar@gmail.com',
+                  from: 'espl.sfback@gmail.com',
+                  subject: 'Student Upload Status',
+                  html: html,
+                  attachments: [
+                    {
+                      filename: 'outputfile.csv',
+                      content: fs.createReadStream('outputfile.csv'),
+                    }],
+                }, function(err) {
+                  if (err) {
+                    console.log('> error sending upload report email');
+                  }
+                  console.log('> upload report mail sent successfully');
+                });
 
                 res.status(200);
                 res.json({'SavedStudents': savedStudents.length,
                   'FailedStudents': failedStudents.length,
                   'Success': failedStudents.length == 0});
               });
-              // res.status(200);
-              // res.json({'SavedStudents': savedStudents.length,
-              //   'FailedStudents': failedStudents.length,
-              //   'Success': failedStudents.length == 0});
             });
             stream.pipe(csvStream);
           });
