@@ -38,11 +38,11 @@ module.exports = function(app) {
         UserModel.findById(accesstoken.userId, function(err, user) {
           console.time('dbsave');
           var filepath = req.file.path;
-          if (req.file.mimetype != 'application/vnd.ms-excel'){
-            res.status(400);
-            res.json({'Message': 'Unsupported file format. Please upload .csv files only.'});
-            return;
-          }
+          // if (req.file.mimetype != 'application/vnd.ms-excel'){
+          //   res.status(400);
+          //   res.json({'Message': 'Unsupported file format. Please upload .csv files only.'});
+          //   return;
+          // }
           var options = {
             objectMode: true,
             headers: true,
@@ -130,14 +130,15 @@ module.exports = function(app) {
                 }
 
                 var filteredClass = schoolDetails.SchoolClass.filter(function(studentClass) {
-                  if (studentClass.className == data[26]) {
+                  if (studentClass.className == data[25]) {
                     return studentClass;
                   }
                 });
                 var matchingClass = filteredClass && filteredClass.length ? filteredClass[0] : null;
                 if (!matchingClass) {
-                  failedStudents.push({'Row': data, 'Error': 'Invalid class'});
-                  data.push('Invalid class');
+                  var invalidClass = 'Invalid class \'' + data[25] + '\'';
+                  failedStudents.push({'Row': data, 'Error': invalidClass});
+                  data.push(invalidClass);
                   fastCsv.write(data);
                   return;
                 }
