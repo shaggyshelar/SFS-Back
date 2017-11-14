@@ -4,7 +4,8 @@
   "restrictResetPasswordTokenScope": true,
   "emailVerificationRequired": true,
   "mixins": {
-    "TimestampMixin": true
+    "TimestampMixin": true,
+    "DeleteOverrideMixin": true
   },
   "options": {
     "idInjection": false,
@@ -23,18 +24,18 @@
         "type": "hasMany",
         "foreignKey": "roleId"
       },
-      "school":{
-          "model": "School",
-          "type": "hasMany",
-          "foreignKey": "userId",
-          "through": "Userschooldetails"
+      "school": {
+        "model": "School",
+        "type": "hasMany",
+        "foreignKey": "userId",
+        "through": "Userschooldetails"
       }
     }
   },
   "scope": {
     "where": {
       "isDelete": 0,
-      "emailVerified":1
+      "emailVerified": 1
     }
   },
   "properties": {
@@ -74,6 +75,9 @@
       "length": 150,
       "precision": null,
       "scale": null,
+      "minLength": 8,
+      "pattern": "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[+\\-*/*&^%$#@!])",
+      "patternError": "Password should consist of alphabets, numbers and a special character (+-*/&^%$#@!).",
       "mysql": {
         "columnName": "password",
         "dataType": "varchar",

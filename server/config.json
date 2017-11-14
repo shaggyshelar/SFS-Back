@@ -11,12 +11,13 @@
     },
     "json": {
       "strict": false,
-      "limit": "100kb"
+      "limit": "5mb"
     },
     "urlencoded": {
       "extended": true,
-      "limit": "100kb"
+      "limit": "5mb"
     },
     "cors": false
-  }
+  },
+  "supportEmailID": "support@sfs.com"
 }

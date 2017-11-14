@@ -17,6 +17,17 @@
         "model":"user",
         "type":"hasMany",
         "foreignKey":"roleId"
+      },
+      "rolemenu" : {
+        "type": "hasMany",
+        "model": "Menu",
+        "foreignKey": "roleId",
+        "through": "RolemenuDetails"
+      },
+      "permission": {
+        "model": "RolepermissionDetails",
+        "type": "hasMany",
+        "foreignKey": "roleId"
       }
     }
   },
