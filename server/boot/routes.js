@@ -38,6 +38,11 @@ module.exports = function(app) {
         UserModel.findById(accesstoken.userId, function(err, user) {
           console.time('dbsave');
           var filepath = req.file.path;
+          if (req.file.mimetype != 'application/vnd.ms-excel'){
+            res.status(400);
+            res.json({'Message': 'Unsupported file format. Please upload .csv files only.'});
+            return;
+          }
           var options = {
             objectMode: true,
             headers: true,
@@ -88,6 +93,13 @@ module.exports = function(app) {
             .on('data', function(data) {
               counter++;
               if (counter > 1) {
+                if (data.length < 28) {
+                  var invalidNumberOfColumns = 'Invalid number of columns in row.';
+                  failedStudents.push({'Row': data, 'Error': invalidNumberOfColumns});
+                  data.push(invalidNumberOfColumns);
+                  fastCsv.write(data);
+                  return;
+                }
                 var studentModel = app.models.Student;
                 var filteredCategory = categoryList.filter(function(category) {
                   if (category.categoryName == data[27]) {
