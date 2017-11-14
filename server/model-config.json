@@ -116,7 +116,7 @@
     "dataSource": "mysql",
     "public": true
   },
-  "Transportzone": {
+  "Zone": {
     "dataSource": "mysql",
     "public": true
   },
