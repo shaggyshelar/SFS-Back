@@ -15,25 +15,8 @@ var permissionHelper = require('../../common/shared/permissionsHelper');
 
 module.exports = function(app) {
   var User = app.models.user;
-
-  // Added by Harnish for validation starts
   var Schools = app.models.School;
-  Schools.find({
-    where: {
-      id: 22, // Need to change it to school id as variable
-    },
-    include: ['SchoolClass', 'SchoolBoard', 'SchoolDivision', 'SchoolYear'],
-  }, function(err, lists) {
-    var schoolData = lists;
-  });
-
   var Categories = app.models.Category;
-
-  Categories.find({
-  }, function(err, catLists) {
-    var categoryList = catLists;
-  });
-  // Added by Harnish for validation ends
 
   app.get('/verified', function(req, res) {
     rootlog.info('hi');
@@ -62,7 +45,26 @@ module.exports = function(app) {
             trim: true,
           };
 
-          app.dataSources.mysql.transaction(models => {
+          async.series([
+            function(callback) {
+              Schools.find({
+                where: {
+                  id: req.body.schoolId,
+                },
+                include: ['SchoolClass', 'SchoolBoard', 'SchoolDivision', 'SchoolYear'],
+              }, function(err, lists) {
+                callback(null, lists);
+              });
+            },
+            function(callback) {
+              Categories.find({
+              }, function(err, catLists) {
+                callback(null, catLists);
+              });
+            },
+          ],
+          function(err, results) {
+            // app.dataSources.mysql.transaction(models => {  //TODO: Implement transaction
             var counter = 0;
             var stream = fs.createReadStream(filepath);
             var fastCsv = csv.createWriteStream();
@@ -72,14 +74,63 @@ module.exports = function(app) {
             var failedStudents = [];
             var savedStudents = [];
             var waterfallFunctions = [];
+            var schoolDetails = results[0][0];
+            if (!schoolDetails) {
+              res.status(400);
+              res.json({'Message': 'Invalid School Information'});
+              return;
+            } else {
+              schoolDetails = schoolDetails.toJSON();
+            }
+            var categoryList = results[1];
             var csvStream = csv
             .parse()
             .on('data', function(data) {
               counter++;
               if (counter > 1) {
                 var studentModel = app.models.Student;
+                var filteredCategory = categoryList.filter(function(category) {
+                  if (category.categoryName == data[27]) {
+                    return category;
+                  }
+                });
+                var matchingCategory = filteredCategory && filteredCategory.length ? filteredCategory[0] : null;
+                if (!matchingCategory) {
+                  var errorMessageCategory = 'Invalid category \'' + data[27] + '\'';
+                  failedStudents.push({'Row': data, 'Error': errorMessageCategory});
+                  data.push(errorMessageCategory);
+                  fastCsv.write(data);
+                  return;
+                }
+
+                var filteredDivision = schoolDetails.SchoolDivision.filter(function(division) {
+                  if (division.divisionName == data[26]) {
+                    return division;
+                  }
+                });
+                var matchingDivision = filteredDivision && filteredDivision.length ? filteredDivision[0] : null;
+                if (!matchingDivision) {
+                  var errorMessage = 'Invalid division \'' + data[26] + '\'';
+                  failedStudents.push({'Row': data, 'Error': errorMessage});
+                  data.push(errorMessage);
+                  fastCsv.write(data);
+                  return;
+                }
+
+                var filteredClass = schoolDetails.SchoolClass.filter(function(studentClass) {
+                  if (studentClass.className == data[26]) {
+                    return studentClass;
+                  }
+                });
+                var matchingClass = filteredClass && filteredClass.length ? filteredClass[0] : null;
+                if (!matchingClass) {
+                  failedStudents.push({'Row': data, 'Error': 'Invalid class'});
+                  data.push('Invalid class');
+                  fastCsv.write(data);
+                  return;
+                }
                 var studentToAdd = {
-                  schoolId: 22,
+                  schoolId: req.body.schoolId,
                   categoryId: 3,
                   classId: 1,
                   divisionId: 2,
@@ -127,6 +178,7 @@ module.exports = function(app) {
                   });
                 });
               } else {
+                data.push('Error Message');
                 fastCsv.write(data);
               }
             })
@@ -163,6 +215,7 @@ module.exports = function(app) {
               });
             });
             stream.pipe(csvStream);
+            // });
           });
         });
       }
