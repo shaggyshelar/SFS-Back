@@ -25,8 +25,7 @@
     }
   },
   "mixins": {
-    "TimestampMixin": true,
-    "DeleteOverrideMixin": true
+    "TimestampMixin": true
   },
   "properties": {
     "id": {
