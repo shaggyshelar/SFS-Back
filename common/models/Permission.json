@@ -11,6 +11,11 @@
         "model": "Menu",
         "type": "belongsTo",
         "foreignKey": "menuId"
+      },
+      "PermissionRole": {
+        "model": "Role",
+        "type": "belongsTo",
+        "foreignKey": "roleId"
       }
     }
   },
@@ -48,6 +53,21 @@
       "scale": 0,
       "mysql": {
         "columnName": "menuId",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
+        "nullable": "N"
+      }
+    },
+    "roleId": {
+      "type": "Number",
+      "required": true,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
+      "mysql": {
+        "columnName": "roleId",
         "dataType": "bigint",
         "dataLength": null,
         "dataPrecision": 19,
