@@ -38,8 +38,23 @@ module.exports = function (RolepermissionDetails) {
                     }
                 }
                 else if (_permission == "Delete") {
-                    options.property = "destroyById";
-                    options.accessType = "WRITE";
+
+                    if (_model.toLowerCase() == "addhocfeedetails" ||
+                        _model.toLowerCase() == "container" ||
+                        _model.toLowerCase() == "feeplanheaddetails" ||
+                        _model.toLowerCase() == "role" ||
+                        _model.toLowerCase() == "rolemenuDetails" ||
+                        _model.toLowerCase() == "rolepermissionDetails" ||
+                        _model.toLowerCase() == "userschooldetails") {
+                        options.property = "destroyById";
+                        options.accessType = "WRITE";
+                    }
+                    else {
+                        options.property = "deleteRecord";
+                        options.accessType = "EXECUTE";
+                    }
+
+
                 }
                 else if (_permission == "Read") {
                     options.accessType = "READ";
@@ -118,11 +133,30 @@ module.exports = function (RolepermissionDetails) {
                             options.accessType = "WRITE";
                         }
                         else if (_permission == "Delete") {
-                            conditions.push({ property: "destroyById" });
-                            conditions.push({ accessType: "WRITE" });
 
-                            options.property = "destroyById";
-                            options.accessType = "WRITE";
+                            if (_model.toLowerCase() == "addhocfeedetails" ||
+                                _model.toLowerCase() == "container" ||
+                                _model.toLowerCase() == "feeplanheaddetails" ||
+                                _model.toLowerCase() == "role" ||
+                                _model.toLowerCase() == "rolemenuDetails" ||
+                                _model.toLowerCase() == "rolepermissionDetails" ||
+                                _model.toLowerCase() == "userschooldetails") {
+
+                                conditions.push({ property: "destroyById" });
+                                conditions.push({ accessType: "WRITE" });
+
+                                options.property = "destroyById";
+                                options.accessType = "WRITE";
+                            }
+                            else {
+                                conditions.push({ property: "deleteRecord" });
+                                conditions.push({ accessType: "EXECUTE" });
+
+                                options.property = "deleteRecord";
+                                options.accessType = "EXECUTE";
+                            }
+
+
                         }
                         else if (_permission == "Read") {
                             conditions.push({ accessType: "READ" });
