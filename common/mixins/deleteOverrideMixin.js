@@ -5,12 +5,15 @@ module.exports = function (Model, options) {
     'use strict';
 
     Model.deleteRecord = function (id, options, cb) {
+
+        var defScope = Model.defaultScope;
         Model.defaultScope = function () { };
 
         Model.updateAll({ id: id }, { isDelete: true }, function (err, updatedRecord) {
             if (err)
                 throw err;
             else {
+                Model.defaultScope = defScope;
                 cb(null);
             }
         });
