@@ -13,6 +13,8 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.json());
 process.env.NODE_ENV = 'production';
 
+app.use(loopback.token());
+
 app.start = function() {
   // start the web server
   return app.listen(function() {
