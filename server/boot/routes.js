@@ -93,7 +93,7 @@ module.exports = function(app) {
             .on('data', function(data) {
               counter++;
               if (counter > 1) {
-                if (data.length < 28) {
+                if (data.length < 30) {
                   var invalidNumberOfColumns = 'Invalid number of columns in row.';
                   failedStudents.push({'Row': data, 'Error': invalidNumberOfColumns});
                   data.push(invalidNumberOfColumns);
@@ -144,11 +144,11 @@ module.exports = function(app) {
                 }
                 var studentToAdd = {
                   schoolId: req.body.schoolId,
-                  categoryId: 3,
-                  classId: 1,
-                  divisionId: 2,
+                  categoryId: matchingCategory.id,
+                  classId: matchingClass.id,
+                  divisionId: matchingDivision.id,
                   gRNumber: data[7],
-                  studentCode: '1111',
+                  studentCode: data[29],
                   studentFirstName: data[1],
                   studentMiddleName: data[2],
                   studentLastName: data[3],
@@ -162,21 +162,21 @@ module.exports = function(app) {
                   guardianFirstName: data[22],
                   guardianLastName: data[23],
                   guardianMobile: data[24],
-                  studentDateOfBirth: '10/10/1987',
-                  dateOfJoining: '10/10/2014',
+                  studentDateOfBirth: data[5],
+                  dateOfJoining: data[6],
                   address: data[8],
-                  city: '111111',
+                  city: '',  // TODO:
                   state: data[11],
                   country: data[10],
                   phone: data[9],
-                  email: 'test@test.com',
+                  email: '', // TODO:
                   religion: data[12],
                   cast: data[13],
                   bloodGroup: data[14],
                   academicYear: 2011,
                   isDelete: false,
                   createdBy: 1,
-                  createdOn: '11/08/2017',
+                  createdOn: '11/14/2017', // TODO:
                 };
                 waterfallFunctions.push(function(next) {
                   studentModel.create(studentToAdd, function(err, post) {
@@ -204,22 +204,36 @@ module.exports = function(app) {
                 '<h2>Failed Students: ' + failedStudents.length + '</h2>' +
                 '<p>Please refer to attach file with student information which was ' +
                 'not saved due to some error. Please resolve those and try again later.</p>';
-                app.models.Email.send({
-                  to: user.toJSON().email,
-                  from: config.supportEmailID,
-                  subject: 'Student Upload Status',
-                  html: html,
-                  attachments: [
-                    {
-                      filename: 'outputfile.csv',
-                      content: fs.createReadStream('outputfile.csv'),
-                    }],
-                }, function(err) {
-                  if (err) {
-                    console.log('> error sending upload report email');
-                  }
-                  console.log('> upload report mail sent successfully');
-                });
+                if (failedStudents.length == 0) {
+                  app.models.Email.send({
+                    to: user.toJSON().email,
+                    from: config.supportEmailID,
+                    subject: 'Student Upload Status',
+                    html: html,
+                  }, function(err) {
+                    if (err) {
+                      console.log('> error sending upload report email');
+                    }
+                    console.log('> upload report mail sent successfully');
+                  });
+                } else {
+                  app.models.Email.send({
+                    to: user.toJSON().email,
+                    from: config.supportEmailID,
+                    subject: 'Student Upload Status',
+                    html: html,
+                    attachments: [
+                      {
+                        filename: 'outputfile.csv',
+                        content: fs.createReadStream('outputfile.csv'),
+                      }],
+                  }, function(err) {
+                    if (err) {
+                      console.log('> error sending upload report email');
+                    }
+                    console.log('> upload report mail sent successfully');
+                  });
+                }
 
                 res.status(200);
                 res.json({'SavedStudents': savedStudents.length,
@@ -299,6 +313,31 @@ module.exports = function(app) {
     User.logout(req.accessToken.id, function(err) {
       if (err) return next(err);
       res.redirect('/'); // on successful logout, redirect
+    });
+  });
+  
+  //send an email with instructions to reset an existing user's password
+  app.post('/request-password-reset', function (req, res, next) {
+    User.resetPassword({
+      email: req.body.email
+    }, function (err) {
+      if (err) return res.status(401).send(err);
+
+      res.render('response', {
+        title: 'Password reset requested',
+        content: 'Check your email for further instructions',
+        redirectTo: '/',
+        redirectToLinkText: 'Log in'
+      });
+    });
+  });
+
+  //show password reset form
+  app.get('/reset-password', function (req, res, next) {
+    if (!req.accessToken) return res.sendStatus(401);
+    res.render('password-reset', {
+      redirectUrl: '/api/users/reset-password?access_token=' +
+      req.accessToken.id
     });
   });
 };
