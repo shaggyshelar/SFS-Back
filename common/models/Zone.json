@@ -1,16 +1,21 @@
 {
-  "name": "Transportzone",
+  "name": "Zone",
   "options": {
     "idInjection": false,
     "mysql": {
       "schema": "schoolfeesystem",
-      "table": "transportzone"
+      "table": "zone"
     },
     "relations": {
-      "TransportzoneSchool": {
+      "ZoneSchool": {
         "model": "School",
         "type": "belongsTo",
         "foreignKey": "schoolId"
+      },
+      "ZoneFrequency": {
+        "model": "Frequency",
+        "type": "belongsTo",
+        "foreignKey": "frequencyId"
       }
     }
   },
@@ -42,7 +47,7 @@
     },
     "schoolId": {
       "type": "Number",
-      "required": false,
+      "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
@@ -52,22 +57,22 @@
         "dataLength": null,
         "dataPrecision": 19,
         "dataScale": 0,
-        "nullable": "Y"
+        "nullable": "N"
       }
     },
-    "zoneName": {
-      "type": "String",
+    "frequencyId": {
+      "type": "Number",
       "required": true,
-      "length": 50,
-      "precision": null,
-      "scale": null,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
       "mysql": {
-        "columnName": "zoneName",
-        "dataType": "varchar",
-        "dataLength": 50,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "N"
+        "columnName": "frequencyId",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
+        "nullable": "F"
       }
     },
     "zoneCode": {
@@ -79,7 +84,52 @@
       "mysql": {
         "columnName": "zoneCode",
         "dataType": "varchar",
-        "dataLength": 20,
+        "dataLength": 24,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "zoneDescription": {
+      "type": "String",
+      "required": false,
+      "length": 100,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "zoneName",
+        "dataType": "varchar",
+        "dataLength": 100,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "zoneCost": {
+      "type": "Number",
+      "required": true,
+      "length": null,
+      "precision": 18,
+      "scale": 2,
+      "mysql": {
+        "columnName": "zoneCost",
+        "dataType": "decimal",
+        "dataLength": null,
+        "dataPrecision": 18,
+        "dataScale": 2,
+        "nullable": "N"
+      }
+    },
+    "dueDate": {
+      "type": "Date",
+      "required": true,
+      "length": null,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "dueDate",
+        "dataType": "date",
+        "dataLength": null,
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "N"
