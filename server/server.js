@@ -73,7 +73,7 @@ i18next
   lng: 'en',
   ns: ['common'],
   fallbackLng: 'en',
-  debug: true,
+  debug: false,
   defaultNS: 'common',
   backend: {
     // path where resources get loaded from
