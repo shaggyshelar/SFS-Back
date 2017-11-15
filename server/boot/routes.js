@@ -34,8 +34,13 @@ module.exports = function(app) {
       if (accesstoken == undefined) {
         res.status(401);
         res.json({
-          'Error': i18next.t('common_unauthorized'),
-          'Message': i18next.t('common_needToBeAuthenticated'),
+          'error': {
+            'statusCode': 401,
+            'name': 'Error',
+            'message': 'Authorization Required',
+            'code': 'AUTHORIZATION_REQUIRED',
+            'stack': 'Error: Authorization Required',
+          },
         });
       } else {
         var UserModel = app.models.user;
@@ -97,6 +102,7 @@ module.exports = function(app) {
             .on('data', function(data) {
               counter++;
               if (counter > 1) {
+                var validationErrors = '';
                 if (data.length < 30) {
                   var invalidNumberOfColumns = i18next.t('csv_validation_invalidNumberOfColumns');
                   failedStudents.push({'Row': data, 'Error': invalidNumberOfColumns});
@@ -146,6 +152,20 @@ module.exports = function(app) {
                   fastCsv.write(data);
                   return;
                 }
+
+                var filteredYear = schoolDetails.SchoolYear.filter(function(studentYear) {
+                  if (studentYear.academicYear == data[28]) {
+                    return studentYear;
+                  }
+                });
+                var matchingYear = filteredYear && filteredYear.length ? filteredYear[0] : null;
+                if (!matchingYear) {
+                  var invalidYear = i18next.t('csv_validation_invalidYear', {acadYear: data[28]});
+                  failedStudents.push({'Row': data, 'Error': invalidYear});
+                  data.push(invalidYear);
+                  fastCsv.write(data);
+                  return;
+                }
                 var studentToAdd = {
                   schoolId: req.body.schoolId,
                   categoryId: matchingCategory.id,
@@ -177,7 +197,7 @@ module.exports = function(app) {
                   religion: data[12],
                   cast: data[13],
                   bloodGroup: data[14],
-                  academicYear: 2011,
+                  academicYear: matchingYear.academicYear,
                   isDelete: false,
                   createdBy: 1,
                   createdOn: '11/14/2017', // TODO:
