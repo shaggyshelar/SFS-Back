@@ -8,5 +8,13 @@
     "csv_validation_invalidDivision": "Invalid division '{{divisionName}}'",
     "csv_validation_invalidClass": "Invalid class '{{className}}'",
     "csv_emailReportHTMLContent": "<h2>Below is report of student data upload!</h2><h2>Saved Students: {{savedStudents}} </h2><h2>Failed Students: {{failedStudents}}.</h2><p>Please refer to attach file with student information which was not saved due to some error. Please resolve those and try again later.</p>",
-    "csv_emailReportSubject": "Student Upload Status"
+    "csv_emailReportSubject": "Student Upload Status",
+    "authentication_failed": "Failed",
+    "authentication_user_locked_code": "LOGIN_FAILED_ACCOUNT_LOCKED",
+    "authentication_user_locked_message": "Account is locked due to multiple failed login attempts.",
+    "authentication_user_locked_subject": "Account has been locked",
+    "authentication_user_locked_email": "<h2>User has been locked</h2><br /> <b>{{username}}</b> has been locked due to multiple unsuccessful login attempts.",
+    "resetpassword_response_title": "Password reset requested",
+    "resetpassword_response_content": "Check your email for further instructions",
+    "school_admin_role_name": "SchoolAdmin"
 }

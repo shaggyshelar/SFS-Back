@@ -14,7 +14,7 @@ authHelper.sendVerificationEmail = function (user, plainPassword, next) {
         template: path.resolve(__dirname, '../../server/views/verify.ejs'),
         redirect: '/verified',
         user: user,
-        text: 'Your temporary password is: ' + plainPassword + ' Please verify your email by opening this link in a web browser: {href}'
+        text: 'Your username is: ' + user.username + ' and temporary password is: ' + plainPassword + ' Please verify your email by opening this link in a web browser: {href}'
     };
 
     user.verify(options, function (err, response) {
