@@ -82,6 +82,4 @@ i18next
     jsonIndent: 2,
   },
 }, function(err, t) {
-  var localizedMessage = i18next.t('key');
-  console.log('Localized Message = ' + localizedMessage);
 });
