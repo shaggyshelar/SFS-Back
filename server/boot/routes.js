@@ -11,6 +11,7 @@ var loopback = require('loopback');
 var rootlog = loopback.log;
 var async = require('async');
 var _ = require('underscore');
+var i18next = require('i18next');
 var permissionHelper = require('../../common/shared/permissionsHelper');
 
 module.exports = function(app) {
@@ -19,6 +20,9 @@ module.exports = function(app) {
   var Categories = app.models.Category;
 
   app.get('/verified', function(req, res) {
+    var localizedMessage = i18next.t('key');
+    console.log('Localized Message = ' + localizedMessage);
+
     rootlog.info('hi');
     rootlog.warn({lang: 'fr'}, 'au revoir');
     res.render('verified');
@@ -30,8 +34,13 @@ module.exports = function(app) {
       if (accesstoken == undefined) {
         res.status(401);
         res.json({
-          'Error': 'Unauthorized',
-          'Message': 'You need to be authenticated to access this endpoint',
+          'error': {
+            'statusCode': 401,
+            'name': 'Error',
+            'message': 'Authorization Required',
+            'code': 'AUTHORIZATION_REQUIRED',
+            'stack': 'Error: Authorization Required',
+          },
         });
       } else {
         var UserModel = app.models.user;
@@ -82,7 +91,7 @@ module.exports = function(app) {
             var schoolDetails = results[0][0];
             if (!schoolDetails) {
               res.status(400);
-              res.json({'Message': 'Invalid School Information'});
+              res.json({'Message': i18next.t('csv_validation_invalidSchoolName')});
               return;
             } else {
               schoolDetails = schoolDetails.toJSON();
@@ -93,12 +102,9 @@ module.exports = function(app) {
             .on('data', function(data) {
               counter++;
               if (counter > 1) {
+                var validationErrors = '';
                 if (data.length < 30) {
-                  var invalidNumberOfColumns = 'Invalid number of columns in row.';
-                  failedStudents.push({'Row': data, 'Error': invalidNumberOfColumns});
-                  data.push(invalidNumberOfColumns);
-                  fastCsv.write(data);
-                  return;
+                  validationErrors += i18next.t('csv_validation_invalidNumberOfColumns');
                 }
                 var studentModel = app.models.Student;
                 var filteredCategory = categoryList.filter(function(category) {
@@ -108,11 +114,7 @@ module.exports = function(app) {
                 });
                 var matchingCategory = filteredCategory && filteredCategory.length ? filteredCategory[0] : null;
                 if (!matchingCategory) {
-                  var errorMessageCategory = 'Invalid category \'' + data[27] + '\'';
-                  failedStudents.push({'Row': data, 'Error': errorMessageCategory});
-                  data.push(errorMessageCategory);
-                  fastCsv.write(data);
-                  return;
+                  validationErrors += i18next.t('csv_validation_invalidCategory', {categoryName: data[27]});
                 }
 
                 var filteredDivision = schoolDetails.SchoolDivision.filter(function(division) {
@@ -122,11 +124,7 @@ module.exports = function(app) {
                 });
                 var matchingDivision = filteredDivision && filteredDivision.length ? filteredDivision[0] : null;
                 if (!matchingDivision) {
-                  var errorMessage = 'Invalid division \'' + data[26] + '\'';
-                  failedStudents.push({'Row': data, 'Error': errorMessage});
-                  data.push(errorMessage);
-                  fastCsv.write(data);
-                  return;
+                  validationErrors += i18next.t('csv_validation_invalidDivision', {divisionName: data[26]});
                 }
 
                 var filteredClass = schoolDetails.SchoolClass.filter(function(studentClass) {
@@ -136,12 +134,27 @@ module.exports = function(app) {
                 });
                 var matchingClass = filteredClass && filteredClass.length ? filteredClass[0] : null;
                 if (!matchingClass) {
-                  var invalidClass = 'Invalid class \'' + data[25] + '\'';
-                  failedStudents.push({'Row': data, 'Error': invalidClass});
-                  data.push(invalidClass);
+                  validationErrors += i18next.t('csv_validation_invalidClass', {className: data[25]});
+                }
+
+                var filteredYear = schoolDetails.SchoolYear.filter(function(studentYear) {
+                  if (studentYear.academicYear == data[28]) {
+                    return studentYear;
+                  }
+                });
+               
+                var matchingYear = filteredYear && filteredYear.length ? filteredYear[0] : null;
+                if (!matchingYear) {
+                  validationErrors += i18next.t('csv_validation_invalidYear', {acadYear: data[28]});
+                }
+
+                if (validationErrors != '') {
+                  failedStudents.push({'Row': data, 'Error': validationErrors});
+                  data.push(validationErrors);
                   fastCsv.write(data);
                   return;
                 }
+
                 var studentToAdd = {
                   schoolId: req.body.schoolId,
                   categoryId: matchingCategory.id,
@@ -173,7 +186,7 @@ module.exports = function(app) {
                   religion: data[12],
                   cast: data[13],
                   bloodGroup: data[14],
-                  academicYear: 2011,
+                  academicYear: matchingYear.academicYear,
                   isDelete: false,
                   createdBy: 1,
                   createdOn: '11/14/2017', // TODO:
@@ -181,8 +194,9 @@ module.exports = function(app) {
                 waterfallFunctions.push(function(next) {
                   studentModel.create(studentToAdd, function(err, post) {
                     if (err) {
-                      failedStudents.push({'Row': data, 'Error': err.message});
-                      data.push(err.message);
+                      validationErrors += err.message;
+                      failedStudents.push({'Row': data, 'Error': validationErrors});
+                      data.push(validationErrors);
                       fastCsv.write(data);
                     } else {
                       savedStudents.push({'Row': data});
@@ -198,17 +212,12 @@ module.exports = function(app) {
             .on('end', function() {
               async.waterfall(waterfallFunctions, function(err) {
                 fastCsv.end();
-
-                var html = '<h2>Below is report of student data upload!</h2>' +
-                '<h2>Saved Students: ' + savedStudents.length + '</h2>' +
-                '<h2>Failed Students: ' + failedStudents.length + '</h2>' +
-                '<p>Please refer to attach file with student information which was ' +
-                'not saved due to some error. Please resolve those and try again later.</p>';
+                var html = i18next.t('csv_emailReportHTMLContent', {savedStudents: savedStudents.length, failedStudents: failedStudents.length});
                 if (failedStudents.length == 0) {
                   app.models.Email.send({
                     to: user.toJSON().email,
                     from: config.supportEmailID,
-                    subject: 'Student Upload Status',
+                    subject: i18next.t('csv_emailReportSubject'),
                     html: html,
                   }, function(err) {
                     if (err) {
@@ -220,7 +229,7 @@ module.exports = function(app) {
                   app.models.Email.send({
                     to: user.toJSON().email,
                     from: config.supportEmailID,
-                    subject: 'Student Upload Status',
+                    subject: i18next.t('csv_emailReportSubject'),
                     html: html,
                     attachments: [
                       {

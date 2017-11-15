@@ -4,6 +4,8 @@ var loopback = require('loopback');
 var boot = require('loopback-boot');
 var path = require('path');
 var bodyParser = require('body-parser');
+var i18next = require('i18next');
+var Backend = require('i18next-node-fs-backend');
 
 var app = module.exports = loopback();
 
@@ -63,4 +65,23 @@ boot(app, __dirname, function(err) {
       });
     });
   }
+});
+
+i18next
+.use(Backend)
+.init({
+  lng: 'en',
+  ns: ['common'],
+  fallbackLng: 'en',
+  debug: true,
+  defaultNS: 'common',
+  backend: {
+    // path where resources get loaded from
+    loadPath: path.join(__dirname, '/locales/{{lng}}/{{ns}}.json'),
+    // jsonIndent to use when storing json files
+    jsonIndent: 2,
+  },
+}, function(err, t) {
+  var localizedMessage = i18next.t('key');
+  console.log('Localized Message = ' + localizedMessage);
 });
