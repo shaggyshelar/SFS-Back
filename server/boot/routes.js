@@ -34,8 +34,8 @@ module.exports = function(app) {
       if (accesstoken == undefined) {
         res.status(401);
         res.json({
-          'Error': 'Unauthorized',
-          'Message': 'You need to be authenticated to access this endpoint',
+          'Error': i18next.t('common_unauthorized'),
+          'Message': i18next.t('common_needToBeAuthenticated'),
         });
       } else {
         var UserModel = app.models.user;
@@ -86,7 +86,7 @@ module.exports = function(app) {
             var schoolDetails = results[0][0];
             if (!schoolDetails) {
               res.status(400);
-              res.json({'Message': 'Invalid School Information'});
+              res.json({'Message': i18next.t('csv_validation_invalidSchoolName')});
               return;
             } else {
               schoolDetails = schoolDetails.toJSON();
@@ -98,7 +98,7 @@ module.exports = function(app) {
               counter++;
               if (counter > 1) {
                 if (data.length < 30) {
-                  var invalidNumberOfColumns = 'Invalid number of columns in row.';
+                  var invalidNumberOfColumns = i18next.t('csv_validation_invalidNumberOfColumns');
                   failedStudents.push({'Row': data, 'Error': invalidNumberOfColumns});
                   data.push(invalidNumberOfColumns);
                   fastCsv.write(data);
