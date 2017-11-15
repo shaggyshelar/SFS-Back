@@ -133,13 +133,13 @@
     "studentCode": {
       "type": "String",
       "required": true,
-      "length": 50,
+      "length": 24,
       "precision": null,
       "scale": null,
       "mysql": {
         "columnName": "studentCode",
         "dataType": "varchar",
-        "dataLength": 50,
+        "dataLength": 24,
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "N"
