@@ -34,8 +34,13 @@ module.exports = function (app) {
       if (accesstoken == undefined) {
         res.status(401);
         res.json({
-          'Error': i18next.t('common_unauthorized'),
-          'Message': i18next.t('common_needToBeAuthenticated'),
+          'error': {
+            'statusCode': 401,
+            'name': 'Error',
+            'message': 'Authorization Required',
+            'code': 'AUTHORIZATION_REQUIRED',
+            'stack': 'Error: Authorization Required',
+          },
         });
       } else {
         var UserModel = app.models.user;
@@ -97,12 +102,9 @@ module.exports = function (app) {
                 .on('data', function (data) {
                   counter++;
                   if (counter > 1) {
+                    var validationErrors = '';
                     if (data.length < 30) {
-                      var invalidNumberOfColumns = i18next.t('csv_validation_invalidNumberOfColumns');
-                      failedStudents.push({ 'Row': data, 'Error': invalidNumberOfColumns });
-                      data.push(invalidNumberOfColumns);
-                      fastCsv.write(data);
-                      return;
+                      validationErrors += i18next.t('csv_validation_invalidNumberOfColumns');
                     }
                     var studentModel = app.models.Student;
                     var filteredCategory = categoryList.filter(function (category) {
@@ -112,11 +114,7 @@ module.exports = function (app) {
                     });
                     var matchingCategory = filteredCategory && filteredCategory.length ? filteredCategory[0] : null;
                     if (!matchingCategory) {
-                      var errorMessageCategory = i18next.t('csv_validation_invalidCategory', { categoryName: data[27] });
-                      failedStudents.push({ 'Row': data, 'Error': errorMessageCategory });
-                      data.push(errorMessageCategory);
-                      fastCsv.write(data);
-                      return;
+                      validationErrors += i18next.t('csv_validation_invalidCategory', { categoryName: data[27] });
                     }
 
                     var filteredDivision = schoolDetails.SchoolDivision.filter(function (division) {
@@ -126,11 +124,7 @@ module.exports = function (app) {
                     });
                     var matchingDivision = filteredDivision && filteredDivision.length ? filteredDivision[0] : null;
                     if (!matchingDivision) {
-                      var errorMessage = i18next.t('csv_validation_invalidDivision', { divisionName: data[26] });
-                      failedStudents.push({ 'Row': data, 'Error': errorMessage });
-                      data.push(errorMessage);
-                      fastCsv.write(data);
-                      return;
+                      validationErrors += i18next.t('csv_validation_invalidDivision', { divisionName: data[26] });
                     }
 
                     var filteredClass = schoolDetails.SchoolClass.filter(function (studentClass) {
@@ -140,12 +134,27 @@ module.exports = function (app) {
                     });
                     var matchingClass = filteredClass && filteredClass.length ? filteredClass[0] : null;
                     if (!matchingClass) {
-                      var invalidClass = i18next.t('csv_validation_invalidClass', { className: data[25] });
-                      failedStudents.push({ 'Row': data, 'Error': invalidClass });
-                      data.push(invalidClass);
+                      validationErrors += i18next.t('csv_validation_invalidClass', { className: data[25] });
+                    }
+
+                    var filteredYear = schoolDetails.SchoolYear.filter(function (studentYear) {
+                      if (studentYear.academicYear == data[28]) {
+                        return studentYear;
+                      }
+                    });
+
+                    var matchingYear = filteredYear && filteredYear.length ? filteredYear[0] : null;
+                    if (!matchingYear) {
+                      validationErrors += i18next.t('csv_validation_invalidYear', { acadYear: data[28] });
+                    }
+
+                    if (validationErrors != '') {
+                      failedStudents.push({ 'Row': data, 'Error': validationErrors });
+                      data.push(validationErrors);
                       fastCsv.write(data);
                       return;
                     }
+
                     var studentToAdd = {
                       schoolId: req.body.schoolId,
                       categoryId: matchingCategory.id,
@@ -177,7 +186,7 @@ module.exports = function (app) {
                       religion: data[12],
                       cast: data[13],
                       bloodGroup: data[14],
-                      academicYear: 2011,
+                      academicYear: matchingYear.academicYear,
                       isDelete: false,
                       createdBy: 1,
                       createdOn: '11/14/2017', // TODO:
@@ -185,8 +194,9 @@ module.exports = function (app) {
                     waterfallFunctions.push(function (next) {
                       studentModel.create(studentToAdd, function (err, post) {
                         if (err) {
-                          failedStudents.push({ 'Row': data, 'Error': err.message });
-                          data.push(err.message);
+                          validationErrors += err.message;
+                          failedStudents.push({ 'Row': data, 'Error': validationErrors });
+                          data.push(validationErrors);
                           fastCsv.write(data);
                         } else {
                           savedStudents.push({ 'Row': data });
