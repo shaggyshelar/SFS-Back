@@ -11,6 +11,7 @@ var loopback = require('loopback');
 var rootlog = loopback.log;
 var async = require('async');
 var _ = require('underscore');
+var i18next = require('i18next');
 var permissionHelper = require('../../common/shared/permissionsHelper');
 
 module.exports = function(app) {
@@ -19,6 +20,9 @@ module.exports = function(app) {
   var Categories = app.models.Category;
 
   app.get('/verified', function(req, res) {
+    var localizedMessage = i18next.t('key');
+    console.log('Localized Message = ' + localizedMessage);
+
     rootlog.info('hi');
     rootlog.warn({lang: 'fr'}, 'au revoir');
     res.render('verified');
