@@ -87,11 +87,18 @@ module.exports = function (User) {
 
   // render UI page after password reset
   User.afterRemote('setPassword', function (context, user, next) {
-    context.res.render('response', {
-      title: 'Password reset success',
-      content: 'Your password has been reset successfully',
-      redirectTo: '/',
-      redirectToLinkText: 'Log in',
+
+    var _user = {};
+    _user.failedPasswordAttemptCount = 0;
+    _user.isBolocked = 0;
+    User.updateAll({ id: context.args.id }, _user, function (err, updatedUser) {
+      if (err) throw err;
+      context.res.render('response', {
+        title: 'Password reset success',
+        content: 'Your password has been reset successfully',
+        redirectTo: '/',
+        redirectToLinkText: 'Log in',
+      });
     });
   });
 
