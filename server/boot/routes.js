@@ -11,6 +11,7 @@ var loopback = require('loopback');
 var rootlog = loopback.log;
 var async = require('async');
 var _ = require('underscore');
+var i18next = require('i18next');
 var permissionHelper = require('../../common/shared/permissionsHelper');
 
 module.exports = function(app) {
@@ -19,6 +20,9 @@ module.exports = function(app) {
   var Categories = app.models.Category;
 
   app.get('/verified', function(req, res) {
+    var localizedMessage = i18next.t('key');
+    console.log('Localized Message = ' + localizedMessage);
+
     rootlog.info('hi');
     rootlog.warn({lang: 'fr'}, 'au revoir');
     res.render('verified');
@@ -30,8 +34,8 @@ module.exports = function(app) {
       if (accesstoken == undefined) {
         res.status(401);
         res.json({
-          'Error': 'Unauthorized',
-          'Message': 'You need to be authenticated to access this endpoint',
+          'Error': i18next.t('common_unauthorized'),
+          'Message': i18next.t('common_needToBeAuthenticated'),
         });
       } else {
         var UserModel = app.models.user;
@@ -82,7 +86,7 @@ module.exports = function(app) {
             var schoolDetails = results[0][0];
             if (!schoolDetails) {
               res.status(400);
-              res.json({'Message': 'Invalid School Information'});
+              res.json({'Message': i18next.t('csv_validation_invalidSchoolName')});
               return;
             } else {
               schoolDetails = schoolDetails.toJSON();
@@ -94,7 +98,7 @@ module.exports = function(app) {
               counter++;
               if (counter > 1) {
                 if (data.length < 30) {
-                  var invalidNumberOfColumns = 'Invalid number of columns in row.';
+                  var invalidNumberOfColumns = i18next.t('csv_validation_invalidNumberOfColumns');
                   failedStudents.push({'Row': data, 'Error': invalidNumberOfColumns});
                   data.push(invalidNumberOfColumns);
                   fastCsv.write(data);
@@ -108,7 +112,7 @@ module.exports = function(app) {
                 });
                 var matchingCategory = filteredCategory && filteredCategory.length ? filteredCategory[0] : null;
                 if (!matchingCategory) {
-                  var errorMessageCategory = 'Invalid category \'' + data[27] + '\'';
+                  var errorMessageCategory = i18next.t('csv_validation_invalidCategory', {categoryName: data[27]});
                   failedStudents.push({'Row': data, 'Error': errorMessageCategory});
                   data.push(errorMessageCategory);
                   fastCsv.write(data);
@@ -122,7 +126,7 @@ module.exports = function(app) {
                 });
                 var matchingDivision = filteredDivision && filteredDivision.length ? filteredDivision[0] : null;
                 if (!matchingDivision) {
-                  var errorMessage = 'Invalid division \'' + data[26] + '\'';
+                  var errorMessage = i18next.t('csv_validation_invalidDivision', {divisionName: data[26]});
                   failedStudents.push({'Row': data, 'Error': errorMessage});
                   data.push(errorMessage);
                   fastCsv.write(data);
@@ -136,7 +140,7 @@ module.exports = function(app) {
                 });
                 var matchingClass = filteredClass && filteredClass.length ? filteredClass[0] : null;
                 if (!matchingClass) {
-                  var invalidClass = 'Invalid class \'' + data[25] + '\'';
+                  var invalidClass = i18next.t('csv_validation_invalidClass', {className: data[25]});
                   failedStudents.push({'Row': data, 'Error': invalidClass});
                   data.push(invalidClass);
                   fastCsv.write(data);
@@ -198,17 +202,12 @@ module.exports = function(app) {
             .on('end', function() {
               async.waterfall(waterfallFunctions, function(err) {
                 fastCsv.end();
-
-                var html = '<h2>Below is report of student data upload!</h2>' +
-                '<h2>Saved Students: ' + savedStudents.length + '</h2>' +
-                '<h2>Failed Students: ' + failedStudents.length + '</h2>' +
-                '<p>Please refer to attach file with student information which was ' +
-                'not saved due to some error. Please resolve those and try again later.</p>';
+                var html = i18next.t('csv_emailReportHTMLContent', {savedStudents: savedStudents.length, failedStudents: failedStudents.length});
                 if (failedStudents.length == 0) {
                   app.models.Email.send({
                     to: user.toJSON().email,
                     from: config.supportEmailID,
-                    subject: 'Student Upload Status',
+                    subject: i18next.t('csv_emailReportSubject'),
                     html: html,
                   }, function(err) {
                     if (err) {
@@ -220,7 +219,7 @@ module.exports = function(app) {
                   app.models.Email.send({
                     to: user.toJSON().email,
                     from: config.supportEmailID,
-                    subject: 'Student Upload Status',
+                    subject: i18next.t('csv_emailReportSubject'),
                     html: html,
                     attachments: [
                       {

@@ -1,0 +1,12 @@
+{
+    "key": "hello world",
+    "common_unauthorized": "Unauthorized",
+    "common_needToBeAuthenticated": "You need to be authenticated to access this endpoint",
+    "csv_validation_invalidSchoolName": "Invalid school information",
+    "csv_validation_invalidNumberOfColumns": "Invalid number of columns in row.",
+    "csv_validation_invalidCategory": "Invalid category '{{categoryName}}'",
+    "csv_validation_invalidDivision": "Invalid division '{{divisionName}}'",
+    "csv_validation_invalidClass": "Invalid class '{{className}}'",
+    "csv_emailReportHTMLContent": "<h2>Below is report of student data upload!</h2><h2>Saved Students: {{savedStudents}} </h2><h2>Failed Students: {{failedStudents}}.</h2><p>Please refer to attach file with student information which was not saved due to some error. Please resolve those and try again later.</p>",
+    "csv_emailReportSubject": "Student Upload Status"
+}
