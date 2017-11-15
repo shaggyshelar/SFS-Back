@@ -9,7 +9,7 @@ var config = require('../../server/config.json');
 var path = require('path');
 var permissionHelper = require('../shared/permissionsHelper');
 var authHelper = require('../shared/authHelper');
-var randomstring = require('randomstring');
+var randomize = require('randomatic');
 var app = require('../../server/server');
 var g = require('loopback/lib/globalize');
 module.exports = function (User) {
@@ -109,11 +109,7 @@ module.exports = function (User) {
 
   User.createUser = function (user, options, cb) {
     if (options.accessToken) {
-
-      var password = randomstring.generate({
-        length: 12,
-        charset: 'alphanumeric'
-      });
+      var password = randomize('a', 6) + randomize('0', 4) + randomize('?', 2, { chars: '+-*/&^%$#@!' });
       user.password = password;
 
       User.create(user, function (err, cUser) {
