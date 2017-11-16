@@ -105,47 +105,88 @@ module.exports = function (app) {
                     var validationErrors = '';
                     if (data.length < 30) {
                       validationErrors += i18next.t('csv_validation_invalidNumberOfColumns');
+                      failedStudents.push({ 'Row': data, 'Error': validationErrors });
+                      data.push(validationErrors);
+                      fastCsv.write(data);
+                      return;
                     }
+
                     var studentModel = app.models.Student;
-                    var filteredCategory = categoryList.filter(function (category) {
-                      if (category.categoryName == data[27]) {
-                        return category;
+
+                    if (data[25] != '') {
+                      var filteredClass = schoolDetails.SchoolClass.filter(function (studentClass) {
+                        if (studentClass.className == data[25]) {
+                          return studentClass;
+                        }
+                      });
+                      var matchingClass = filteredClass && filteredClass.length ? filteredClass[0] : null;
+                      if (!matchingClass) {
+                        validationErrors += i18next.t('csv_validation_invalidClass', { className: data[25] });
                       }
-                    });
-                    var matchingCategory = filteredCategory && filteredCategory.length ? filteredCategory[0] : null;
-                    if (!matchingCategory) {
-                      validationErrors += i18next.t('csv_validation_invalidCategory', { categoryName: data[27] });
+                    } else {
+                      validationErrors += i18next.t('csv_validation_classRequired');
+                    }
+                    
+                    if (data[26] != '') {
+                      var filteredDivision = schoolDetails.SchoolDivision.filter(function (division) {
+                        if (division.divisionName == data[26]) {
+                          return division;
+                        }
+                      });
+                      var matchingDivision = filteredDivision && filteredDivision.length ? filteredDivision[0] : null;
+                      if (!matchingDivision) {
+                        validationErrors += i18next.t('csv_validation_invalidDivision', { divisionName: data[26] });
+                      }
+                    } else {
+                      validationErrors += i18next.t('csv_validation_divisionRequired');
                     }
 
-                    var filteredDivision = schoolDetails.SchoolDivision.filter(function (division) {
-                      if (division.divisionName == data[26]) {
-                        return division;
+                    if (data[27] != '') {
+                      var filteredCategory = categoryList.filter(function(category) {
+                        if (category.categoryName == data[27]) {
+                          return category;
+                        }
+                      });
+                      var matchingCategory = filteredCategory && filteredCategory.length ? filteredCategory[0] : null;
+                      if (!matchingCategory) {
+                        validationErrors += i18next.t('csv_validation_invalidCategory', {categoryName: data[27]});
                       }
-                    });
-                    var matchingDivision = filteredDivision && filteredDivision.length ? filteredDivision[0] : null;
-                    if (!matchingDivision) {
-                      validationErrors += i18next.t('csv_validation_invalidDivision', { divisionName: data[26] });
+                    } else {
+                      validationErrors += i18next.t('csv_validation_categoryRequired');
                     }
 
-                    var filteredClass = schoolDetails.SchoolClass.filter(function (studentClass) {
-                      if (studentClass.className == data[25]) {
-                        return studentClass;
+                    if (data[28] != '') {
+                      var filteredYear = schoolDetails.SchoolYear.filter(function (studentYear) {
+                        if (studentYear.academicYear == data[28]) {
+                          return studentYear;
+                        }
+                      });
+                      var matchingYear = filteredYear && filteredYear.length ? filteredYear[0] : null;
+                      if (!matchingYear) {
+                        validationErrors += i18next.t('csv_validation_invalidYear', { acadYear: data[28] });
                       }
-                    });
-                    var matchingClass = filteredClass && filteredClass.length ? filteredClass[0] : null;
-                    if (!matchingClass) {
-                      validationErrors += i18next.t('csv_validation_invalidClass', { className: data[25] });
+                    } else {
+                      validationErrors += i18next.t('csv_validation_yearRequired');
                     }
 
-                    var filteredYear = schoolDetails.SchoolYear.filter(function (studentYear) {
-                      if (studentYear.academicYear == data[28]) {
-                        return studentYear;
-                      }
-                    });
+                    if (data[29] == '') {
+                      validationErrors += i18next.t('csv_validation_studentCodeRequired');
+                    }
 
-                    var matchingYear = filteredYear && filteredYear.length ? filteredYear[0] : null;
-                    if (!matchingYear) {
-                      validationErrors += i18next.t('csv_validation_invalidYear', { acadYear: data[28] });
+                    if (data[1] == '') {
+                      validationErrors += i18next.t('csv_validation_studentFirstNameRequired');
+                    }
+
+                    if (data[2] == '') {
+                      validationErrors += i18next.t('csv_validation_studentMiddleNameRequired');
+                    }
+
+                    if (data[3] == '') {
+                      validationErrors += i18next.t('csv_validation_studentLastNameRequired');
+                    }
+
+                    if (data[4] == '') {
+                      validationErrors += i18next.t('csv_validation_studentGenderRequired');
                     }
 
                     if (validationErrors != '') {
@@ -175,8 +216,8 @@ module.exports = function (app) {
                       guardianFirstName: data[22],
                       guardianLastName: data[23],
                       guardianMobile: data[24],
-                      studentDateOfBirth: data[5],
-                      dateOfJoining: data[6],
+                      studentDateOfBirth: data[5] == '' ? null : data[5],
+                      dateOfJoining: data[6]  == '' ? null : data[6],
                       address: data[8],
                       city: '',  // TODO:
                       state: data[11],
