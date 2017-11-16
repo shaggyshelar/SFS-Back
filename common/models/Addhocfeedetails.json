@@ -35,7 +35,8 @@
     }
   },
   "mixins": {
-    "TimestampMixin": true
+    "TimestampMixin": true,
+    "DuplicateErrorHandler": true
   },
   "properties": {
     "id": {
