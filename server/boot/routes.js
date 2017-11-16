@@ -185,7 +185,17 @@ module.exports = function (app) {
                       validationErrors += i18next.t('csv_validation_studentLastNameRequired');
                     }
 
-                    if (data[4] == '') {
+                    if (data[4] != '') {
+                      var filteredGender = ['Male', 'Female', 'Other'].filter(function(gender) {
+                        if (gender == data[4]) {
+                          return gender;
+                        }
+                      });
+                      var matchingGender = filteredGender && filteredGender.length ? filteredGender[0] : null;
+                      if (!matchingGender) {
+                        validationErrors += i18next.t('csv_validation_invalidGender', { gender: data[4] });
+                      }
+                    } else {
                       validationErrors += i18next.t('csv_validation_studentGenderRequired');
                     }
 
