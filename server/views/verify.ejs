@@ -1,1 +1,57 @@
-<%= text %>
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <div style="box-shadow: 0 1px 15px 1px rgba(113, 106, 202, .08);width: 500px;margin-bottom:0px;">
+        <table style="background-color: #fff;width: 500px;margin: 0 auto;margin-top:60px;">
+            <tr>
+                <td style="font-size: 16px;font-weight: 600;color: #716aca;margin-top: 0;font-family:Poppins;padding:25px;">
+                    <i class="fa fa-check-circle" aria-hidden="true" style="margin-right: 10px;font-size: 30px;vertical-align: middle;"></i> Welcome to Student Management System
+                </td>
+            </tr>
+        </table>
+
+        <table style="background-color: #fff;width: 500px;margin: 0 auto;margin-top:0px;">
+            <tr>
+                <td style="font-size: 13px;font-weight: 500;color: #000;margin-top: 0;font-family:Poppins;padding:25px;padding-top:0;">
+                    Please verify your email address and activate your account by clicking the link below.
+                    <br/>
+                    <br/>
+                    <a href="<%= text %>" style="letter-spacing:1px;font-weight:600;">
+                        <%= text %>
+                    </a>
+                </td>
+            </tr>
+            <tr>
+                <td style="font-size: 13px;font-weight: 500;color: #000;margin-top: 0;font-family:Poppins;padding:25px;padding-top:0;">
+                    You will need to login thereafter with username and temporary password as given below.
+                </td>
+            </tr>
+        </table>
+
+        <table style="background-color: #fff;width: 500px;margin: 0 auto;margin-top:0px;">
+
+            <tr>
+                <td style="font-size: 13px;font-weight: 500;color: #000;margin-bottom: 25px;margin-top: 0;font-family:Poppins;padding:15px 25px;width:50%;text-align: right;">
+                    Your Username is:
+                </td>
+                <td style="font-size: 13px;font-weight: 600;color: #716aca;margin-bottom: 25px;margin-top: 0;font-family:Poppins;padding:15px 25px;">
+                    <%= username %>
+                </td>
+            </tr>
+            <tr>
+                <td style="font-size: 13px;font-weight: 500;color: #000;margin-bottom: 25px;margin-top: 0;font-family:Poppins;padding:15px 25px;width:50%;text-align: right;">
+                    Temporary Password:
+                </td>
+                <td style="font-size: 13px;font-weight: 600;color: #716aca;margin-bottom: 25px;margin-top: 0;font-family:Poppins;padding:15px 25px;">
+                    <%= password %>
+                </td>
+            </tr>
+            <tr>
+                <td style="font-size: 13px;font-weight: 500;color: #000;margin-top: 0;font-family:Poppins;padding:25px;">
+                    <i>Regards,
+                        <br/> Team School Fee System
+                    </i>
+                </td>
+            </tr>
+        </table>
+    </div>
