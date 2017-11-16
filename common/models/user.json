@@ -5,7 +5,8 @@
   "emailVerificationRequired": true,
   "mixins": {
     "TimestampMixin": true,
-    "DeleteOverrideMixin": true
+    "DeleteOverrideMixin": true,
+    "DuplicateErrorHandler": true
   },
   "options": {
     "idInjection": false,
