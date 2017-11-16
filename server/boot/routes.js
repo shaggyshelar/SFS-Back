@@ -47,11 +47,11 @@ module.exports = function (app) {
         UserModel.findById(accesstoken.userId, function (err, user) {
           console.time('dbsave');
           var filepath = req.file.path;
-          // if (req.file.mimetype != 'application/vnd.ms-excel') { // TODO: Fix it
-          //   res.status(400);
-          //   res.json({'Message': 'Unsupported file format. Please upload .csv files only.'});
-          //   return;
-          // }
+          if (!req.file.originalname.endsWith('.csv')) {
+            res.status(400);
+            res.json({'Message': i18next.t('csv_validation_unsupportedFormat')});
+            return;
+          }
           var options = {
             objectMode: true,
             headers: true,
