@@ -18,7 +18,7 @@
     "public": false
   },
   "AccessToken": {
-    "dataSource": "db",
+    "dataSource": "mysql",
     "public": false
   },
   "ACL": {
@@ -87,7 +87,7 @@
   "Frequency": {
     "dataSource": "mysql",
     "public": true
-  },  
+  },
   "Institute": {
     "dataSource": "mysql",
     "public": true

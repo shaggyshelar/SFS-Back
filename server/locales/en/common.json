@@ -1,0 +1,21 @@
+{
+    "key": "hello world",
+    "common_unauthorized": "Unauthorized",
+    "common_needToBeAuthenticated": "You need to be authenticated to access this endpoint. ",
+    "csv_validation_invalidSchoolName": "Invalid school information. ",
+    "csv_validation_invalidNumberOfColumns": "Invalid number of columns in row. ",
+    "csv_validation_invalidCategory": "Invalid category '{{categoryName}}'. ",
+    "csv_validation_invalidDivision": "Invalid division '{{divisionName}}'. ",
+    "csv_validation_invalidClass": "Invalid class '{{className}}'. ",
+    "csv_validation_invalidYear": "Invalid year '{{acadYear}}'. ",
+    "csv_emailReportHTMLContent": "<link rel=\"stylesheet\" type=\"text/css\" href=\"http://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800\"><div style=\"box-shadow: 0 1px 15px 1px rgba(113, 106, 202, .08);width: 500px;margin: 0 auto;margin-bottom:40px;\"><table style=\"background-color: #fff;width: 500px;margin: 0 auto;margin-top:60px;\"><tr><td style=\"font-size: 18px;font-weight: 600;color: #716aca;margin-top: 0;font-family:Poppins;padding:25px;\"> Status of Student Data Upload -</td></tr></table><table style=\"background-color: #fff;width: 500px;margin: 0 auto;\"><tr><td style=\"font-size: 15px;font-weight: 500;color: #000;margin-bottom: 25px;margin-top: 0;font-family:Poppins;padding:15px 25px;\"> Records successfully uploaded</td><td style=\"font-size: 15px;font-weight: 600;color: #716aca;margin-bottom: 25px;margin-top: 0;font-family:Poppins;padding:15px 25px;\"> {{savedStudents}}</td></tr><tr><td style=\"font-size: 15px;font-weight: 500;color: #000;margin-bottom: 25px;margin-top: 0;font-family:Poppins;padding:15px 25px;\"> Records failed to upload</td><td style=\"font-size: 15px;font-weight: 600;color: #716aca;margin-bottom: 25px;margin-top: 0;font-family:Poppins;padding:15px 25px;\"> {{failedStudents}}</td></tr></table><table style=\"background-color: #fff;width: 500px;margin: 0 auto;margin-top:0px;\"><tr><td style=\"font-size: 13px;font-weight: 500;color: #000;margin-top: 0;font-family:Poppins;padding:25px;padding-bottom:0;\"> Please refer to attach file with student information which was not saved due to some error. Please resolve those and try again later.</td></tr><tr><td style=\"font-size: 13px;font-weight: 500;color: #000;margin-top: 0;font-family:Poppins;padding:25px;\"> <i>Regards, <br/> System Admin - SFS </i></td></tr></table></div>",
+    "csv_emailReportSubject": "Student Upload Status",
+    "authentication_failed": "Failed",
+    "authentication_user_locked_code": "LOGIN_FAILED_ACCOUNT_LOCKED",
+    "authentication_user_locked_message": "Account is locked due to multiple failed login attempts.",
+    "authentication_user_locked_subject": "Account has been locked",
+    "authentication_user_locked_email": "<h2>User has been locked</h2><br /> <b>{{username}}</b> has been locked due to multiple unsuccessful login attempts.",
+    "resetpassword_response_title": "Password reset requested",
+    "resetpassword_response_content": "Check your email for further instructions",
+    "school_admin_role_name": "SchoolAdmin"
+}
