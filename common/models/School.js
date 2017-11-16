@@ -16,9 +16,19 @@ module.exports = function (School) {
         if (err) {
           throw err
         } else {
-          next();
+          var _userSchoolDetails = {
+            "userId": ctx.options.accessToken.userId,
+            "schoolId": ctx.instance.id
+          };
+          app.models.Userschooldetails.create(_userSchoolDetails, function (err, schoolMapping) {
+            if (err) throw err;
+            next();
+          });
+
         }
       });
+    } else {
+      next();
     }
   });
 };
