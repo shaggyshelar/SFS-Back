@@ -41,7 +41,8 @@
   "scope": {
     "where": {
       "isDelete": 0
-    }
+    },
+    "include":"role"
   },
   "properties": {
     "roleId": {
