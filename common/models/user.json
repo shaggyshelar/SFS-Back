@@ -30,6 +30,11 @@
         "type": "hasMany",
         "foreignKey": "userId",
         "through": "Userschooldetails"
+      },
+      "role": {
+        "model": "role",
+        "type": "belongsTo",
+        "foreignKey": "roleId"
       }
     }
   },
