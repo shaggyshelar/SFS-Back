@@ -326,7 +326,15 @@ module.exports = function (app) {
         if (err) {
           throw err;
         } else if (loggedInUser) {
-          if (!loggedInUser.isActivate) {
+          if (!loggedInUser.emailVerified) {
+            res.status(401);
+            res.json({
+              'Error': i18next.t('authentication_failed'),
+              'Code': i18next.t('authentication_email_not_verified_code'),
+              'Message': i18next.t('authentication_email_not_verified_message'),
+            });
+          }
+          else if (!loggedInUser.isActivate) {
 
             res.status(401);
             res.json({
