@@ -29,5 +29,12 @@
     "resetpassword_response_title": "Password reset requested",
     "resetpassword_response_content": "Check your email for further instructions",
     "school_admin_role_name": "SchoolAdmin",
-    "er_dup_entry": "Duplicate Entry, Record is already Available"
+    "er_dup_entry": "Duplicate Entry, Record is already Available",
+    "authentication_superadmin_locked_email": "<h2>User has been locked</h2><br /> <b>{{username}}</b> has been locked due to multiple unsuccessful login attempts.<br /> Please reset password to login again.",
+    "authentication_user_locked_email_admin": "<h2>User has been locked</h2><br /> <b>{{username}}</b> has been locked due to multiple unsuccessful login attempts.",
+    "super_admin_role_name": "SuperAdmin",
+    "super_admin_role_Id": 1,
+    "school_admin_role_Id": 2,
+    "authentication_failed_default_code": "LOGIN_FAILED",
+    "authentication_failed_default_message": "login failed"    
 }
