@@ -19,7 +19,7 @@ module.exports = function (User) {
       type: 'email',
       to: user.email,
       from: 'noreply@loopback.com',
-      subject: 'Thanks for registering.',
+      subject: 'SFS: Thanks for registering.',
       template: path.resolve(__dirname, '../../server/views/verify.ejs'),
       redirect: '/verified',
       user: user,
@@ -54,17 +54,19 @@ module.exports = function (User) {
 
   // send password reset link when requested
   User.on('resetPasswordRequest', function (info) {
-    var url = 'http://' + config.host + ':' + config.port + '/reset-password';
+    var host = app.get("host"); //config.host
+    var port = app.get("port"); // config.port
+    var url = 'http://' + host + ':' + port + '/reset-password';
     var html = 'Click <a href="' + url + '?access_token=' +
       info.accessToken.id + '">here</a> to reset your password';
-    var subject = "Password reset";
+    var subject = "SFS: Password reset";
 
     app.models.user.findOne({ where: { email: info.email } }, function (err, _user) {
       if (err) throw err;
       if (_user.isBolocked) {
         html = 'Click <a href="' + url + '?access_token=' +
           info.accessToken.id + '">here</a> to reset your password and unlock your account.';
-        subject = "Unlock account";
+        subject = "SFS: Unlock account";
       }
 
       User.app.models.Email.send({
