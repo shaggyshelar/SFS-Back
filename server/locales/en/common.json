@@ -4,7 +4,7 @@
     "common_needToBeAuthenticated": "You need to be authenticated to access this endpoint. ",
     "csv_validation_unsupportedFormat": "Unsupported file format. Please upload .csv files only. ",
     "csv_validation_invalidSchoolName": "Invalid school information. ",
-    "csv_validation_invalidNumberOfColumns": "Invalid number of columns in row. ",
+    "csv_validation_invalidNumberOfColumns": "Incorrect number of columns in input file. ",
     "csv_validation_invalidCategory": "Invalid category '{{categoryName}}'. ",
     "csv_validation_categoryRequired": "Required value for 'Category'. ",
     "csv_validation_invalidDivision": "Invalid division '{{divisionName}}'. ",
