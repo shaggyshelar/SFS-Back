@@ -49,7 +49,7 @@ module.exports = function (app) {
           var filepath = req.file.path;
           if (!req.file.originalname.endsWith('.csv')) {
             res.status(400);
-            res.json({'Message': i18next.t('csv_validation_unsupportedFormat')});
+            res.json({ 'Message': i18next.t('csv_validation_unsupportedFormat') });
             return;
           }
           var options = {
@@ -126,7 +126,7 @@ module.exports = function (app) {
                     }
 
                     if (data[4] != '') {
-                      var filteredGender = ['Male', 'Female', 'Other'].filter(function(gender) {
+                      var filteredGender = ['Male', 'Female', 'Other'].filter(function (gender) {
                         if (gender == data[4]) {
                           return gender;
                         }
@@ -152,7 +152,7 @@ module.exports = function (app) {
                     } else {
                       validationErrors += i18next.t('csv_validation_classRequired');
                     }
-                    
+
                     if (data[26] != '') {
                       var filteredDivision = schoolDetails.SchoolDivision.filter(function (division) {
                         if (division.divisionName == data[26]) {
@@ -168,14 +168,14 @@ module.exports = function (app) {
                     }
 
                     if (data[27] != '') {
-                      var filteredCategory = categoryList.filter(function(category) {
+                      var filteredCategory = categoryList.filter(function (category) {
                         if (category.categoryName == data[27]) {
                           return category;
                         }
                       });
                       var matchingCategory = filteredCategory && filteredCategory.length ? filteredCategory[0] : null;
                       if (!matchingCategory) {
-                        validationErrors += i18next.t('csv_validation_invalidCategory', {categoryName: data[27]});
+                        validationErrors += i18next.t('csv_validation_invalidCategory', { categoryName: data[27] });
                       }
                     } else {
                       validationErrors += i18next.t('csv_validation_categoryRequired');
@@ -227,7 +227,7 @@ module.exports = function (app) {
                       guardianLastName: data[23],
                       guardianMobile: data[24],
                       studentDateOfBirth: data[5] == '' ? null : data[5],
-                      dateOfJoining: data[6]  == '' ? null : data[6],
+                      dateOfJoining: data[6] == '' ? null : data[6],
                       address: data[8],
                       city: '',  // TODO:
                       state: data[11],
@@ -321,12 +321,29 @@ module.exports = function (app) {
       password: req.body.password,
     }, 'user', function (loginErr, token) {
       app.models.user.findOne({
-        where: { username: req.body.username }, include: { relation: 'school' }
+        where: { username: req.body.username }, include: ['school', 'role']
       }, function (err, loggedInUser) {
         if (err) {
           throw err;
         } else if (loggedInUser) {
-          if (loggedInUser.isBolocked) {
+          if (!loggedInUser.emailVerified) {
+            res.status(401);
+            res.json({
+              'Error': i18next.t('authentication_failed'),
+              'Code': i18next.t('authentication_email_not_verified_code'),
+              'Message': i18next.t('authentication_email_not_verified_message'),
+            });
+          }
+          else if (!loggedInUser.isActivate) {
+
+            res.status(401);
+            res.json({
+              'Error': i18next.t('authentication_failed'),
+              'Code': i18next.t('authentication_failed_default_code'),
+              'Message': i18next.t('authentication_failed_default_message'),
+            });
+          }
+          else if (loggedInUser.isBolocked) {
             res.status(401);
             res.json({
               'Error': i18next.t('authentication_failed'),
@@ -347,40 +364,119 @@ module.exports = function (app) {
             app.models.user.updateAll({ id: loggedInUser.id }, updateUserObj, function (err, updatedUser) {
               if (err) throw err;
               else {
-                var userSchools = loggedInUser.__data.school;
-                if (userSchools && userSchools.length > 0) {
+                if (updateUserObj.failedPasswordAttemptCount == 3) {
+                  var emailList = [];
+                  emailList.push({ relation: "self", email: loggedInUser.email });
 
-                  var conditions = [];
-                  userSchools.map(function (data, index) {
-                    conditions.push({ schoolId: data.id });
-                  });
+                  if (loggedInUser.roleId == i18next.t('school_admin_role_Id')) {
 
-                  app.models.role.findOne({ where: { name: i18next.t('school_admin_role_name') } }, function (err, saRole) {
-                    if (err) throw err;
-                    app.models.Userschooldetails.find({ where: { or: conditions }, include: { relation: 'UserschoolUser' } },
-                      function (err, _userSchoolDetails) {
-                        if (err) throw err;
-                        var adminUsers = _userSchoolDetails.filter(function (data) { if (data.__data.UserschoolUser) return data.__data.UserschoolUser.roleId == 2 });
-                        adminUsers.map(function (userMapping, index) {
+                    app.models.user.find({ where: { roleId: i18next.t('super_admin_role_Id') }, include: { relation: 'role' } }, function (err, superAdminUsers) {
+                      if (err) throw err;
+                      if (superAdminUsers && superAdminUsers.length > 0) {
+                        superAdminUsers.map(function (superadmin, index) {
                           User.app.models.Email.send({
-                            to: userMapping.UserschoolUser().email,
-                            from: userMapping.UserschoolUser().email,
+                            to: superadmin.email,
+                            from: superadmin.email,
                             subject: i18next.t('authentication_user_locked_subject'),
-                            html: i18next.t('authentication_user_locked_email', { username: loggedInUser.username }),
+                            html: i18next.t('authentication_user_locked_email_admin', { username: loggedInUser.username }),
                           }, function (err) {
                             if (err) return console.log('> error sending user locked email');
-                            console.log('> sending user locked email to:', userMapping.UserschoolUser().email);
+                            console.log('> sending user locked email to:', superadmin.email);
                           });
                         });
+                        User.app.models.Email.send({
+                          to: loggedInUser.email,
+                          from: loggedInUser.email,
+                          subject: i18next.t('authentication_user_locked_subject'),
+                          html: i18next.t('authentication_user_locked_email', { username: loggedInUser.username }),
+                        }, function (err) {
+                          if (err) return console.log('> error sending user locked email');
+                          console.log('> sending user locked email to:', loggedInUser.email);
+                        });
+                      }
+                      res.status(401);
+                      res.json({
+                        'Error': i18next.t('authentication_failed'),
+                        'Code': i18next.t('authentication_user_locked_code'),
+                        'Message': i18next.t('authentication_user_locked_message'),
                       });
+                    });
+                  }
+                  else if (loggedInUser.roleId == i18next.t('super_admin_role_Id')) {
+                    User.app.models.Email.send({
+                      to: loggedInUser.email,
+                      from: loggedInUser.email,
+                      subject: i18next.t('authentication_user_locked_subject'),
+                      html: i18next.t('authentication_superadmin_locked_email', { username: loggedInUser.username }),
+                    }, function (err) {
+                      if (err) return console.log('> error sending user locked email');
+                      console.log('> sending user locked email to:', loggedInUser.email);
+                    });
+                    res.status(401);
+                    res.json({
+                      'Error': i18next.t('authentication_failed'),
+                      'Code': i18next.t('authentication_user_locked_code'),
+                      'Message': i18next.t('authentication_user_locked_message'),
+                    });
+                  }
+                  else {
+                    var userSchools = loggedInUser.__data.school;
+                    if (userSchools && userSchools.length > 0) {
+
+                      var conditions = [];
+                      userSchools.map(function (data, index) {
+                        conditions.push({ schoolId: data.id });
+                      });
+
+                      app.models.role.findOne({ where: { name: i18next.t('school_admin_role_name') } }, function (err, saRole) {
+                        if (err) throw err;
+                        if (saRole) {
+
+
+                          app.models.Userschooldetails.find({ where: { or: conditions }, include: { relation: 'UserschoolUser' } },
+                            function (err, _userSchoolDetails) {
+                              if (err) throw err;
+                              var adminUsers = _userSchoolDetails.filter(function (data) { if (data.__data.UserschoolUser) return data.__data.UserschoolUser.roleId == 2 });
+                              adminUsers.map(function (userMapping, index) {
+                                User.app.models.Email.send({
+                                  to: userMapping.UserschoolUser().email,
+                                  from: userMapping.UserschoolUser().email,
+                                  subject: i18next.t('authentication_user_locked_subject'),
+                                  html: i18next.t('authentication_user_locked_email', { username: loggedInUser.username }),
+                                }, function (err) {
+                                  if (err) return console.log('> error sending user locked email');
+                                  console.log('> sending user locked email to:', userMapping.UserschoolUser().email);
+                                });
+                              });
+                              User.app.models.Email.send({
+                                to: loggedInUser.email,
+                                from: loggedInUser.email,
+                                subject: i18next.t('authentication_user_locked_subject'),
+                                html: i18next.t('authentication_user_locked_email', { username: loggedInUser.username }),
+                              }, function (err) {
+                                if (err) return console.log('> error sending user locked email');
+                                console.log('> sending user locked email to:', loggedInUser.email);
+                              });
+                              res.status(401);
+                              res.json({
+                                'Error': i18next.t('authentication_failed'),
+                                'Code': i18next.t('authentication_user_locked_code'),
+                                'Message': i18next.t('authentication_user_locked_message'),
+                              });
+                            });
+                        }
+                      });
+                    }
+                  }
+                }
+                else {
+                  res.status(loginErr.statusCode);
+                  res.json({
+                    'Error': i18next.t('authentication_failed'),
+                    'Code': loginErr.code,
+                    'Message': loginErr.message,
                   });
                 }
-                res.status(loginErr.statusCode);
-                res.json({
-                  'Error': i18next.t('authentication_failed'),
-                  'Code': loginErr.code,
-                  'Message': loginErr.message,
-                });
               }
             });
           }
@@ -484,7 +580,6 @@ module.exports = function (app) {
         'Code': err.code,
         'Message': err.message,
       });
-
       res.status(200).send({
         title: i18next.t('resetpassword_response_title'),
         content: i18next.t('resetpassword_response_content'),

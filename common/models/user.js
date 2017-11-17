@@ -57,15 +57,25 @@ module.exports = function (User) {
     var url = 'http://' + config.host + ':' + config.port + '/reset-password';
     var html = 'Click <a href="' + url + '?access_token=' +
       info.accessToken.id + '">here</a> to reset your password';
+    var subject = "Password reset";
 
-    User.app.models.Email.send({
-      to: info.email,
-      from: info.email,
-      subject: 'Password reset',
-      html: html,
-    }, function (err) {
-      if (err) return console.log('> error sending password reset email');
-      console.log('> sending password reset email to:', info.email);
+    app.models.user.findOne({ where: { email: info.email } }, function (err, _user) {
+      if (err) throw err;
+      if (_user.isBolocked) {
+        html = 'Click <a href="' + url + '?access_token=' +
+          info.accessToken.id + '">here</a> to reset your password and unlock your account.';
+        subject = "Unlock account";
+      }
+
+      User.app.models.Email.send({
+        to: info.email,
+        from: info.email,
+        subject: subject,
+        html: html,
+      }, function (err) {
+        if (err) return console.log('> error sending password reset email');
+        console.log('> sending password reset email to:', info.email);
+      });
     });
   });
 
@@ -247,13 +257,13 @@ module.exports = function (User) {
     var err,
       passwordProperties = User.definition.properties.password;
     if (plain.length > passwordProperties.length) {
-      err = new Error(g.f('Password too long: %s (maximum %d symbols)', plain, passwordProperties.length));
+      err = new Error(g.f('Password too long: %s (maximum %d symbols)', passwordProperties.length));
       err.code = 'PASSWORD_TOO_LONG';
     } else if (plain.length < passwordProperties.minLength) {
-      err = new Error(g.f('Password too short: %s (minimum %d symbols)', plain, passwordProperties.minLength));
+      err = new Error(g.f('Password too short: %s (minimum %d symbols)', passwordProperties.minLength));
       err.code = 'PASSWORD_TOO_SHORT';
     } else if (!(new RegExp(passwordProperties.pattern, 'g').test(plain))) {
-      err = new Error(g.f(passwordProperties.patternError, plain));
+      err = new Error(g.f(passwordProperties.patternError));
       err.code = 'INVALID_PASSWORD';
     } else {
       return true;
