@@ -8,7 +8,7 @@ var upload = multer({ dest: './Uploads/' });
 var fs = require('fs');
 var csv = require('fast-csv');
 var loopback = require('loopback');
-var rootlog = loopback.log;
+var rootlogger = loopback.log;
 var async = require('async');
 var _ = require('underscore');
 var i18next = require('i18next');
@@ -23,8 +23,8 @@ module.exports = function (app) {
     var localizedMessage = i18next.t('key');
     console.log('Localized Message = ' + localizedMessage);
 
-    rootlog.info('hi');
-    rootlog.warn({ lang: 'fr' }, 'au revoir');
+    rootlogger.info('hi');
+    rootlogger.warn({ lang: 'fr' }, 'au revoir');
     res.render('verified');
   });
 
@@ -45,7 +45,6 @@ module.exports = function (app) {
       } else {
         var UserModel = app.models.user;
         UserModel.findById(accesstoken.userId, function (err, user) {
-          console.time('dbsave');
           var filepath = req.file.path;
           if (!req.file.originalname.endsWith('.csv')) {
             res.status(400);
@@ -276,9 +275,9 @@ module.exports = function (app) {
                         html: html,
                       }, function (err) {
                         if (err) {
-                          console.log('> error sending upload report email');
+                          rootlogger.log('Error sending upload report to email=\'' + user.toJSON().email + '\',\n Error=' + err);
                         }
-                        console.log('> upload report mail sent successfully');
+                        rootlogger.log('Upload report mail sent successfully to ' + user.toJSON().email);
                       });
                     } else {
                       app.models.Email.send({
@@ -293,7 +292,7 @@ module.exports = function (app) {
                           }],
                       }, function (err) {
                         if (err) {
-                          console.log('> error sending upload report email');
+                          rootlogger.log('Error sending upload report to email=\'' + user.toJSON().email + '\',\n Error=' + err);
                         }
                         console.log('> upload report mail sent successfully');
                       });
