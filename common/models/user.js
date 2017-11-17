@@ -257,13 +257,13 @@ module.exports = function (User) {
     var err,
       passwordProperties = User.definition.properties.password;
     if (plain.length > passwordProperties.length) {
-      err = new Error(g.f('Password too long: %s (maximum %d symbols)', plain, passwordProperties.length));
+      err = new Error(g.f('Password too long: %s (maximum %d symbols)', passwordProperties.length));
       err.code = 'PASSWORD_TOO_LONG';
     } else if (plain.length < passwordProperties.minLength) {
-      err = new Error(g.f('Password too short: %s (minimum %d symbols)', plain, passwordProperties.minLength));
+      err = new Error(g.f('Password too short: %s (minimum %d symbols)', passwordProperties.minLength));
       err.code = 'PASSWORD_TOO_SHORT';
     } else if (!(new RegExp(passwordProperties.pattern, 'g').test(plain))) {
-      err = new Error(g.f(passwordProperties.patternError, plain));
+      err = new Error(g.f(passwordProperties.patternError));
       err.code = 'INVALID_PASSWORD';
     } else {
       return true;

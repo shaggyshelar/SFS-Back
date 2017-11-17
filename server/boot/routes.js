@@ -113,6 +113,32 @@ module.exports = function (app) {
 
                     var studentModel = app.models.Student;
 
+                    if (data[1] == '') {
+                      validationErrors += i18next.t('csv_validation_studentFirstNameRequired');
+                    }
+
+                    if (data[2] == '') {
+                      validationErrors += i18next.t('csv_validation_studentMiddleNameRequired');
+                    }
+
+                    if (data[3] == '') {
+                      validationErrors += i18next.t('csv_validation_studentLastNameRequired');
+                    }
+
+                    if (data[4] != '') {
+                      var filteredGender = ['Male', 'Female', 'Other'].filter(function (gender) {
+                        if (gender == data[4]) {
+                          return gender;
+                        }
+                      });
+                      var matchingGender = filteredGender && filteredGender.length ? filteredGender[0] : null;
+                      if (!matchingGender) {
+                        validationErrors += i18next.t('csv_validation_invalidGender', { gender: data[4] });
+                      }
+                    } else {
+                      validationErrors += i18next.t('csv_validation_studentGenderRequired');
+                    }
+
                     if (data[25] != '') {
                       var filteredClass = schoolDetails.SchoolClass.filter(function (studentClass) {
                         if (studentClass.className == data[25]) {
@@ -173,32 +199,6 @@ module.exports = function (app) {
                       validationErrors += i18next.t('csv_validation_studentCodeRequired');
                     }
 
-                    if (data[1] == '') {
-                      validationErrors += i18next.t('csv_validation_studentFirstNameRequired');
-                    }
-
-                    if (data[2] == '') {
-                      validationErrors += i18next.t('csv_validation_studentMiddleNameRequired');
-                    }
-
-                    if (data[3] == '') {
-                      validationErrors += i18next.t('csv_validation_studentLastNameRequired');
-                    }
-
-                    if (data[4] != '') {
-                      var filteredGender = ['Male', 'Female', 'Other'].filter(function (gender) {
-                        if (gender == data[4]) {
-                          return gender;
-                        }
-                      });
-                      var matchingGender = filteredGender && filteredGender.length ? filteredGender[0] : null;
-                      if (!matchingGender) {
-                        validationErrors += i18next.t('csv_validation_invalidGender', { gender: data[4] });
-                      }
-                    } else {
-                      validationErrors += i18next.t('csv_validation_studentGenderRequired');
-                    }
-
                     if (validationErrors != '') {
                       failedStudents.push({ 'Row': data, 'Error': validationErrors });
                       data.push(validationErrors);
@@ -245,7 +245,11 @@ module.exports = function (app) {
                     waterfallFunctions.push(function (next) {
                       studentModel.create(studentToAdd, function (err, post) {
                         if (err) {
-                          validationErrors += err.message;
+                          if (err.errno == 1062) {
+                            validationErrors += i18next.t('er_dup_entry');
+                          } else {
+                            validationErrors += err.message;
+                          }
                           failedStudents.push({ 'Row': data, 'Error': validationErrors });
                           data.push(validationErrors);
                           fastCsv.write(data);
