@@ -27,4 +27,276 @@ permissionsHelper.setPermissionByRoleId = function (model, roleId, callback) {
         callback(model);
     });
 }
+
+permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermission, role, callback) {
+    var propertyAccess = [];
+    if (selectedPermission == "Create") {
+        if (selectedModel.toLowerCase() == "student") {
+            var propertyArr = [{ property: "__create__Students", model: "School" }];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "academicyear") {
+            var propertyArr = [
+                { property: "__create__SchoolYear", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "user") {
+            var propertyArr = [
+                { property: "__create__SchoolUsers", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+            propertyAccess.push({ model: selectedModel, property: "createUser", accessType: "EXECUTE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+        }
+        else if (selectedModel.toLowerCase() == "institute") {
+            var propertyArr = [
+                { property: "__create__SchoolInstitute", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "division") {
+            var propertyArr = [
+                { property: "__create__SchoolDivision", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "class") {
+            var propertyArr = [
+                { property: "__create__SchoolClass", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "board") {
+            var propertyArr = [
+                { property: "__create__SchoolBoard", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "role") {
+            var propertyArr = [
+                { property: "__create__Roles", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else {
+            propertyAccess.push({ model: selectedModel, property: "create", accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+        }
+    }
+    else if (selectedPermission == "Read") {
+        // if (selectedModel.toLowerCase() == "class") {
+        //     propertyAccess.push({ model: "Class", property: "__get__ClassSchool", accessType: "READ" });
+        // }
+        if (selectedModel.toLowerCase() == "student") {
+            var propertyArr = [
+                { property: "__count__Students", model: "School" },
+                { property: "__get__Students", model: "School" },
+                { property: "__findById__Students", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "academicyear") {
+            var propertyArr = [
+                { property: "__count__SchoolYear", model: "School" },
+                { property: "__get__SchoolYear", model: "School" },
+                { property: "__findById__SchoolYear", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "user") {
+            var propertyArr = [
+                { property: "__count__SchoolUsers", model: "School" },
+                { property: "__get__SchoolUsers", model: "School" },
+                { property: "__findById__SchoolUsers", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "institute") {
+            var propertyArr = [
+                { property: "__count__SchoolInstitute", model: "School" },
+                { property: "__get__SchoolInstitute", model: "School" },
+                { property: "__findById__SchoolInstitute", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "division") {
+            var propertyArr = [
+                { property: "__count__SchoolDivision", model: "School" },
+                { property: "__get__SchoolDivision", model: "School" },
+                { property: "__findById__SchoolDivision", model: "School" },
+                { property: "__get__DivisionClass", model: "Division" },
+                { property: "__get__DivisionSchool", model: "Division" },
+                { property: "__get__StudentDivision", model: "Student" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "class") {
+            var propertyArr = [
+                { property: "__count__SchoolClass", model: "School" },
+                { property: "__get__SchoolClass", model: "School" },
+                { property: "__findById__SchoolClass", model: "School" },
+                { property: "__get__ClassSchool", model: "Class" },
+                { property: "__get__StudentClass", model: "Student" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "board") {
+            var propertyArr = [
+                { property: "__count__SchoolBoard", model: "School" },
+                { property: "__get__SchoolBoard", model: "School" },
+                { property: "__findById__SchoolBoard", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "role") {
+            var propertyArr = [
+                { property: "__count__Roles", model: "School" },
+                { property: "__get__Roles", model: "School" },
+                { property: "__findById__Roles", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "school") {
+            var propertyArr = [
+                { property: "__get__StudentSchool", model: "Student" },
+                { property: "__get__ClassSchool", model: "Class" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "category") {
+            var propertyArr = [
+                { property: "__get__StudentCategory", model: "Student" },
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+
+        propertyAccess.push({ model: selectedModel, property: "find", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+        propertyAccess.push({ model: selectedModel, property: "findById", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+        propertyAccess.push({ model: selectedModel, property: "count", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+    }
+    else if (selectedPermission == "Update") {
+        if (selectedModel.toLowerCase() == "student") {
+            var propertyArr = [
+                { property: "__updateById__Students", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "academicyear") {
+            var propertyArr = [
+                { property: "__updateById__SchoolYear", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "user") {
+            var propertyArr = [
+                { property: "__updateById__SchoolUsers", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+            propertyAccess.push({ model: selectedModel, property: "updateUser", accessType: "EXECUTE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+        }
+        else if (selectedModel.toLowerCase() == "institute") {
+            var propertyArr = [
+                { property: "__updateById__SchoolInstitute", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "division") {
+            var propertyArr = [
+                { property: "__updateById__SchoolDivision", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "class") {
+            var propertyArr = [
+                { property: "__updateById__SchoolClass", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "board") {
+            var propertyArr = [
+                { property: "__updateById__SchoolBoard", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "role") {
+            var propertyArr = [
+                { property: "__updateById__Roles", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        propertyAccess.push({ model: selectedModel, property: "updateAttributes", accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+        propertyAccess.push({ model: selectedModel, property: "updateAttribute", accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+    }
+    else if (selectedPermission == "Delete") {
+
+        if (selectedModel.toLowerCase() == "addhocfeedetails" ||
+            selectedModel.toLowerCase() == "container" ||
+            selectedModel.toLowerCase() == "feeplanheaddetails" ||
+            selectedModel.toLowerCase() == "role" ||
+            selectedModel.toLowerCase() == "rolemenuDetails" ||
+            selectedModel.toLowerCase() == "rolepermissionDetails" ||
+            selectedModel.toLowerCase() == "userschooldetails") {
+            propertyAccess.push({ model: selectedModel, property: "destroyById", accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+
+        }
+        else {
+            propertyAccess.push({ model: selectedModel, property: "deleteRecord", accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+        }
+
+
+    }
+    callback(propertyAccess);
+};
+
 module.exports = permissionsHelper;
