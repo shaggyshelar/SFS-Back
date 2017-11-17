@@ -13,6 +13,7 @@ var app = module.exports = loopback();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.json());
+process.env.NODE_ENV = 'staging';
 
 app.use(loopback.token());
 
@@ -72,7 +73,7 @@ i18next
   lng: 'en',
   ns: ['common'],
   fallbackLng: 'en',
-  debug: true,
+  debug: false,
   defaultNS: 'common',
   backend: {
     // path where resources get loaded from
