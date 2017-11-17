@@ -95,8 +95,8 @@ module.exports = function (role) {
             if (err) throw err;
             if (_roleMapping.length > 0) {
                 var error = new Error();
-                error.status = 500;
-                error.message = "Can not delete role as this role is still assigned to some users.";
+                error.status = 422;
+                error.message = "Role is assigned to a user. Cannot delete this role.";
                 next(error);
             }
             next();
