@@ -54,7 +54,9 @@ module.exports = function (User) {
 
   // send password reset link when requested
   User.on('resetPasswordRequest', function (info) {
-    var url = 'http://' + config.host + ':' + config.port + '/reset-password';
+    var host = app.get("host"); //config.host
+    var port = app.get("port"); // config.port
+    var url = 'http://' + host + ':' + port + '/reset-password';
     var html = 'Click <a href="' + url + '?access_token=' +
       info.accessToken.id + '">here</a> to reset your password';
     var subject = "SFS: Password reset";
