@@ -83,13 +83,13 @@
     "email": {
       "type": "String",
       "required": false,
-      "length": 50,
+      "length": 254,
       "precision": null,
       "scale": null,
       "mysql": {
         "columnName": "email",
         "dataType": "varchar",
-        "dataLength": 50,
+        "dataLength": 254,
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "Y"
