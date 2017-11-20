@@ -116,6 +116,10 @@
     "dataSource": "mysql",
     "public": true
   },
+  "Schoolmerchant": {
+    "dataSource": "mysql",
+    "public": true
+  },
   "Student": {
     "dataSource": "mysql",
     "public": true
