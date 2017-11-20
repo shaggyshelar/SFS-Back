@@ -38,5 +38,6 @@
     "authentication_failed_default_code": "LOGIN_FAILED",
     "authentication_failed_default_message": "login failed",
     "authentication_email_not_verified_code": "LOGIN_FAILED_EMAIL_NOT_VERIFIED",
-    "authentication_email_not_verified_message": "login failed as the email has not been verified"
+    "authentication_email_not_verified_message": "login failed as the email has not been verified",
+    "email_verify_subject": "SFS: Verify your email address."
 }

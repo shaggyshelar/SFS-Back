@@ -156,7 +156,7 @@ module.exports = function (User) {
             if (userSchoolMap.length > 0) {
               app.models.Userschooldetails.create(userSchoolMap, function (err, details) {
                 if (err) throw err;
-                authHelper.sendVerificationEmail(cUser, password, cb);
+                authHelper.sendVerificationEmail(cUser, password, false, cb);
               });
             }
           }
@@ -172,48 +172,57 @@ module.exports = function (User) {
       phone: user.phone,
       email: user.email
     };
-    User.updateAll({ id: id }, updateUser, function (err, updatedUser) {
-      if (err)
-        throw err;
-      else {
-        var rolemapping = {
-          principalType: "USER",
-          principalId: id
-        };
-        app.models.RoleMapping.find({ where: { and: [{ principalType: "USER" }, { principalId: id }] } }, function (err, rolemapArr) {
-          if (err) throw err;
-          else {
-            if (rolemapArr.length > 0) {
-              var rolemap = rolemapArr[0];
-              if (rolemap.roleId != user.roleId) {
-                rolemap.roleId = user.roleId;
+    User.findOne({ where: { id: id } }, function (err, userInfo) {
+      if (err) throw err;
+      User.updateAll({ id: id }, updateUser, function (err, updatedUser) {
+        if (err)
+          throw err;
+        else {
+          if (userInfo.email != user.email) {
+            userInfo.email = user.email;
+            authHelper.sendVerificationEmail(userInfo, "", true, function () {
+              console.log("sent email");
+            });
+          }
+          var rolemapping = {
+            principalType: "USER",
+            principalId: id
+          };
+          app.models.RoleMapping.find({ where: { and: [{ principalType: "USER" }, { principalId: id }] } }, function (err, rolemapArr) {
+            if (err) throw err;
+            else {
+              if (rolemapArr.length > 0) {
+                var rolemap = rolemapArr[0];
+                if (rolemap.roleId != user.roleId) {
+                  rolemap.roleId = user.roleId;
 
-                app.models.RoleMapping.updateAll({ and: [{ principalType: "USER" }, { principalId: id }] }, { roleId: user.roleId }, function (err, updatedUser) {
-                  if (err)
-                    throw err;
-                });
-              }
-              app.models.Userschooldetails.destroyAll({ userId: id }, function (err, userSchoolInfo) {
-                if (err) throw err;
-                var userSchoolMap = [];
-                user.schoolIds.map(function (sid, index) {
-                  userSchoolMap.push({
-                    userId: id,
-                    schoolId: sid,
-                  });
-                });
-                if (userSchoolMap.length > 0) {
-                  app.models.Userschooldetails.create(userSchoolMap, function (err, details) {
-                    if (err) throw err;
-                    cb(null, user);
+                  app.models.RoleMapping.updateAll({ and: [{ principalType: "USER" }, { principalId: id }] }, { roleId: user.roleId }, function (err, updatedUser) {
+                    if (err)
+                      throw err;
                   });
                 }
-              });
+                app.models.Userschooldetails.destroyAll({ userId: id }, function (err, userSchoolInfo) {
+                  if (err) throw err;
+                  var userSchoolMap = [];
+                  user.schoolIds.map(function (sid, index) {
+                    userSchoolMap.push({
+                      userId: id,
+                      schoolId: sid,
+                    });
+                  });
+                  if (userSchoolMap.length > 0) {
+                    app.models.Userschooldetails.create(userSchoolMap, function (err, details) {
+                      if (err) throw err;
+                      cb(null, user);
+                    });
+                  }
+                });
 
+              }
             }
-          }
-        });
-      }
+          });
+        }
+      });
     });
   }
 
