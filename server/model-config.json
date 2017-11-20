@@ -80,6 +80,10 @@
     "dataSource": "mysql",
     "public": true
   },
+  "Feeplanassociation": {
+    "dataSource": "mysql",
+    "public": true
+  },
   "Feeplanheaddetails": {
     "dataSource": "mysql",
     "public": true

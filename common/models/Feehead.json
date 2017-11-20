@@ -106,6 +106,21 @@
         "nullable": "Y"
       }
     },
+    "chargeHeadName": {
+      "type": "String",
+      "required": true,
+      "length": 20,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "chargeHeadName",
+        "dataType": "varchar",
+        "dataLength": 20,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
     "isDelete": {
       "type": "Number",
       "required": false,

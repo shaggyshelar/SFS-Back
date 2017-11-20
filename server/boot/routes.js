@@ -111,16 +111,19 @@ module.exports = function (app) {
                     }
 
                     var studentModel = app.models.Student;
-
-                    if (data[1] == '') {
+                    
+                    var firstName = data[1].trim();
+                    if (firstName == '') {
                       validationErrors += i18next.t('csv_validation_studentFirstNameRequired');
                     }
 
-                    if (data[2] == '') {
+                    var middleName = data[2].trim();
+                    if (middleName == '') {
                       validationErrors += i18next.t('csv_validation_studentMiddleNameRequired');
                     }
 
-                    if (data[3] == '') {
+                    var lastName = data[3].trim();
+                    if (lastName == '') {
                       validationErrors += i18next.t('csv_validation_studentLastNameRequired');
                     }
 
@@ -210,21 +213,21 @@ module.exports = function (app) {
                       categoryId: matchingCategory.id,
                       classId: matchingClass.id,
                       divisionId: matchingDivision.id,
-                      gRNumber: data[7],
-                      studentCode: data[29],
-                      studentFirstName: data[1],
-                      studentMiddleName: data[2],
-                      studentLastName: data[3],
-                      studentGender: data[4],
-                      fatherFirstName: data[15],
-                      fatherLastName: data[16],
-                      fatherMobile: data[17],
-                      motherFirstName: data[18],
-                      motherLastName: data[19],
-                      motherMobile: data[20],
-                      guardianFirstName: data[22],
-                      guardianLastName: data[23],
-                      guardianMobile: data[24],
+                      gRNumber: data[7].trim(),
+                      studentCode: data[29].trim(),
+                      studentFirstName: firstName,
+                      studentMiddleName: middleName,
+                      studentLastName: lastName,
+                      studentGender: data[4].trim(),
+                      fatherFirstName: data[15].trim(),
+                      fatherLastName: data[16].trim(),
+                      fatherMobile: data[17].trim(),
+                      motherFirstName: data[18].trim(),
+                      motherLastName: data[19].trim(),
+                      motherMobile: data[20].trim(),
+                      guardianFirstName: data[22].trim(),
+                      guardianLastName: data[23].trim(),
+                      guardianMobile: data[24].trim(),
                       studentDateOfBirth: data[5] == '' ? null : data[5],
                       dateOfJoining: data[6] == '' ? null : data[6],
                       address: data[8],
@@ -233,9 +236,9 @@ module.exports = function (app) {
                       country: data[10],
                       phone: data[9],
                       email: '', // TODO:
-                      religion: data[12],
-                      cast: data[13],
-                      bloodGroup: data[14],
+                      religion: data[12].trim(),
+                      cast: data[13].trim(),
+                      bloodGroup: data[14].trim(),
                       academicYear: matchingYear.academicYear,
                       isDelete: false,
                       createdBy: 1,
