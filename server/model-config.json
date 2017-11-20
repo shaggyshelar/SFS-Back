@@ -48,11 +48,11 @@
     "dataSource": "mysql",
     "public": true
   },
-  "Addhocfee": {
+  "Adhocfee": {
     "dataSource": "mysql",
     "public": true
   },
-  "Addhocfeedetails": {
+  "Adhocfeedetails": {
     "dataSource": "mysql",
     "public": true
   },
