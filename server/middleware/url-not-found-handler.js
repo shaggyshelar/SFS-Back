@@ -7,6 +7,6 @@ module.exports = function() {
     //     res.status(err.status).end();
     //   }
     // });
-    res.sendFile('index.html', { root: __dirname + '/../../Client/' });
+    res.sendFile('index.html', { root: __dirname + '/../../client/' });
   };
 };

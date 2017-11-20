@@ -10,7 +10,7 @@ authHelper.sendVerificationEmail = function (user, plainPassword, next) {
         type: 'email',
         to: user.email,
         from: 'noreply@loopback.com',
-        subject: 'Thanks for registering.',
+        subject: 'SFS: Thanks for registering.',
         template: path.resolve(__dirname, '../../server/views/verify.ejs'),
         redirect: '/verified',
         user: user,
