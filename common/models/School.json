@@ -140,13 +140,13 @@
     "schoolEmail": {
       "type": "String",
       "required": false,
-      "length": 20,
+      "length": 254,
       "precision": null,
       "scale": null,
       "mysql": {
         "columnName": "schoolEmail",
         "dataType": "varchar",
-        "dataLength": 20,
+        "dataLength": 254,
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "Y"
