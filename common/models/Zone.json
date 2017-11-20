@@ -98,7 +98,7 @@
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "zoneName",
+        "columnName": "zoneDescription",
         "dataType": "varchar",
         "dataLength": 100,
         "dataPrecision": null,
