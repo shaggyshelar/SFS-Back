@@ -6,23 +6,24 @@
       "schema": "schoolfeesystem",
       "table": "feeplan"
     },
-    "relations": {      
+    "relations": {
       "FeeplanSchool": {
         "model": "School",
         "type": "belongsTo",
         "foreignKey": "schoolId"
       },
-      "associations":{
-        "type":"hasMany",
-        "model":"Feeplanassociation",
-        "foreignKey":"feeplanId"
+      "associations": {
+        "type": "hasMany",
+        "model": "Feeplanassociation",
+        "foreignKey": "feeplanId"
       }
     }
   },
   "scope": {
     "where": {
       "isDelete": 0
-    }
+    },
+    "include": "associations"
   },
   "mixins": {
     "TimestampMixin": true,
@@ -60,7 +61,7 @@
         "dataScale": 0,
         "nullable": "N"
       }
-    },    
+    },
     "feePlanName": {
       "type": "String",
       "required": true,
@@ -91,7 +92,7 @@
         "nullable": "Y"
       }
     },
-   
+
     "isDelete": {
       "type": "Number",
       "required": false,

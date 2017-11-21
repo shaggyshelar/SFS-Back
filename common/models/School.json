@@ -47,6 +47,11 @@
         "type": "hasMany",
         "model":"Academicyear",
         "foreignKey":"schoolId"
+      },
+      "FeePlans":{
+        "type": "hasMany",
+        "model":"Feeplan",
+        "foreignKey":"schoolId"
       }
     }
   },
