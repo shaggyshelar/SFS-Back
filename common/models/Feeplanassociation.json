@@ -24,6 +24,9 @@
       }
     }
   },
+  "scope": {
+    "include":["FeeplanassociationClass","FeeplanassociationCategory"]
+  },
   "properties": {
     "id": {
       "type": "Number",
