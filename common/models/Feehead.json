@@ -16,13 +16,14 @@
         "model": "School",
         "type": "belongsTo",
         "foreignKey": "schoolId"
-      }
+      }      
     }
   },
   "scope": {
     "where": {
       "isDelete": 0
-    }
+    },
+    "include":"FeeheadsFrequency"
   },
   "mixins": {
     "TimestampMixin": true,
