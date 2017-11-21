@@ -6,7 +6,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var i18next = require('i18next');
 var Backend = require('i18next-node-fs-backend');
-var schedule = require('node-schedule');
+var utilities = require('../common/shared/utilities');
 
 var configFilePath = process.env.NODE_ENV == undefined ?
                           '' : '.' + process.env.NODE_ENV;
@@ -31,11 +31,7 @@ app.start = function() {
       var explorerPath = app.get('loopback-component-explorer').mountPath;
       console.log('Browse your REST API at %s%s', baseUrl, explorerPath);
     }
-
-    // Execute a cron job when the minute is 10 (e.g. 19:10, 20:10, etc.).
-    var j = schedule.scheduleJob('10 * * * *', function() {
-      console.log('The answer to life, the universe, and everything!');
-    });
+    utilities.init();
   });
 };
 
