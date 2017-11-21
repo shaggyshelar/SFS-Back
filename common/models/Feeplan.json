@@ -11,6 +11,11 @@
         "model": "School",
         "type": "belongsTo",
         "foreignKey": "schoolId"
+      },
+      "associations":{
+        "type":"hasMany",
+        "model":"Feeplanassociation",
+        "foreignKey":"feeplanId"
       }
     }
   },
