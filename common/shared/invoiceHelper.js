@@ -8,26 +8,34 @@ var async = require('async');
 var _ = require('underscore');
 
 module.exports = function(app) {
-  var Schools = app.models.School;
+  var Feeplan = app.models.Feeplan;
+  var Feehead = app.models.Feehead;
+  var Frequency = app.models.Frequency;
 
   return {
     generateTodaysInvoice: () => {
       async.series([
         function(callback) {
-          Schools.find({
-            where: {
-              id: 22,
-            },
-            include: ['SchoolClass', 'SchoolBoard', 'SchoolDivision', 'SchoolYear'],
-          }, function (err, lists) {
+          Feeplan.find({
+          }, function(err, lists) {
             callback(null, lists);
           });
         },
         function(callback) {
-          console.log('second');
+          Feehead.find({
+          }, function(err, lists) {
+            callback(null, lists);
+          });
+        },
+        function(callback) {
+          Frequency.find({
+          }, function(err, lists) {
+            callback(null, lists);
+          });
         },
       ],
       function(err, results) {
+        console.log('Input Data for Invoice =', results);
       });
     },
   };
