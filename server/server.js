@@ -6,6 +6,11 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var i18next = require('i18next');
 var Backend = require('i18next-node-fs-backend');
+var utilities = require('../common/shared/utilities');
+
+var configFilePath = process.env.NODE_ENV == undefined ?
+                          '' : '.' + process.env.NODE_ENV;
+var config = require('./config' + configFilePath + '.json');
 
 var app = module.exports = loopback();
 
@@ -26,6 +31,7 @@ app.start = function() {
       var explorerPath = app.get('loopback-component-explorer').mountPath;
       console.log('Browse your REST API at %s%s', baseUrl, explorerPath);
     }
+    utilities.init();
   });
 };
 

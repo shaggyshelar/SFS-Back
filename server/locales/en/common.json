@@ -39,5 +39,7 @@
     "authentication_failed_default_message": "login failed",
     "authentication_email_not_verified_code": "LOGIN_FAILED_EMAIL_NOT_VERIFIED",
     "authentication_email_not_verified_message": "login failed as the email has not been verified",
-    "email_verify_subject": "SFS: Verify your email address."
+    "email_verify_subject": "SFS: Verify your email address.",
+    "log_fileDeleted": "File deleted successfully: '{{filePath}}'. ",
+    "log_errFileDelete": "Error deleting file: '{{filePath}}'. "
 }
