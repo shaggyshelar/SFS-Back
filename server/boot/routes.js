@@ -13,11 +13,13 @@ var async = require('async');
 var _ = require('underscore');
 var i18next = require('i18next');
 var permissionHelper = require('../../common/shared/permissionsHelper');
+var utilities = require('../../common/shared/utilities');
 
 module.exports = function (app) {
   var User = app.models.user;
   var Schools = app.models.School;
   var Categories = app.models.Category;
+  utilities.init(app);
 
   app.get('/verified', function (req, res) {
     var localizedMessage = i18next.t('key');
@@ -111,7 +113,7 @@ module.exports = function (app) {
                     }
 
                     var studentModel = app.models.Student;
-                    
+
                     var firstName = data[1].trim();
                     if (firstName == '') {
                       validationErrors += i18next.t('csv_validation_studentFirstNameRequired');
