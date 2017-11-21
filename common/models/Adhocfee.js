@@ -1,6 +1,6 @@
 'use strict';
-module.exports = function (Addhocfee) {
-  Addhocfee.validatesPresenceOf(
+module.exports = function (Adhocfee) {
+  Adhocfee.validatesPresenceOf(
     'schoolId',
     'addhocFeeName',
     'addhocFeeDescription',
