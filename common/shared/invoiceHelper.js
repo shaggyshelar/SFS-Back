@@ -7,30 +7,29 @@ var rootlogger = loopback.log;
 var async = require('async');
 var _ = require('underscore');
 
-var invoiceHelper = function () {
-};
+module.exports = function(app) {
+  var Schools = app.models.School;
 
-invoiceHelper.generateTodaysInvoice = function () {
-  async.series([
-    function(callback) {
-      Schools.find({
-        where: {
-          id: req.body.schoolId,
+  return {
+    generateTodaysInvoice: () => {
+      async.series([
+        function(callback) {
+          Schools.find({
+            where: {
+              id: 22,
+            },
+            include: ['SchoolClass', 'SchoolBoard', 'SchoolDivision', 'SchoolYear'],
+          }, function (err, lists) {
+            callback(null, lists);
+          });
         },
-        include: ['SchoolClass', 'SchoolBoard', 'SchoolDivision', 'SchoolYear'],
-      }, function (err, lists) {
-        callback(null, lists);
+        function(callback) {
+          console.log('second');
+        },
+      ],
+      function(err, results) {
       });
     },
-    function(callback) {
-      Categories.find({
-      }, function (err, catLists) {
-        callback(null, catLists);
-      });
-    },
-  ],
-  function(err, results) {
-  });
+  };
 };
 
-module.exports = invoiceHelper;

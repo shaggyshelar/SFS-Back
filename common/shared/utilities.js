@@ -7,7 +7,7 @@ var invoiceHelper = require('./invoiceHelper');
 var utilities = function() {
 };
 
-utilities.init = function() {
+utilities.init = function(app) {
   fileHelper.init();
 
   // Execute a cron job when the minute is 10 (e.g. 19:10, 20:10, etc.).
@@ -17,9 +17,9 @@ utilities.init = function() {
 
   // Execute a cron job at 1.30 am every day
   // var invoiceScheduler = schedule.scheduleJob('30 1 * * *', function() {
-  var invoiceScheduler = schedule.scheduleJob('35 15 * * *', function() {
-    // var invHelper = invoiceHelper();
-    // invHelper.generateTodaysInvoice();
+  var invoiceScheduler = schedule.scheduleJob('30 1 * * *', function() {
+    var invHelper = invoiceHelper(app);
+    invHelper.generateTodaysInvoice();
   });
 
   // var myInt = setInterval(function() {
