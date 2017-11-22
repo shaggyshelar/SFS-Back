@@ -7,13 +7,15 @@ var rootlogger = loopback.log;
 var async = require('async');
 var _ = require('underscore');
 var request = require('request');
-var appConfig = require('../../server/appConfig');
+var configFilePath = process.env.NODE_ENV == undefined ?
+'' : '.' + process.env.NODE_ENV;
+var config = require('../../server/config' + configFilePath + '.json');
 
 module.exports = function(app) {
   return {
     paymentInvoiceRequest: (postInvoiceForm) => {
       request.post({
-        url: appConfig.payPhiServerRoot + '/' + appConfig.payPhiPostInvoiceURL,
+        url: config.payPhiServerRoot + '/' + config.payPhiPostInvoiceURL,
         form: postInvoiceForm,
       },
         function(error, response, body) {
@@ -24,7 +26,7 @@ module.exports = function(app) {
     },
     paymentInvoiceUpdate: (updateInvoiceForm) => {
       request.post({
-        url: appConfig.payPhiServerRoot + '/' + appConfig.payPhiUpdateInvoiceURL,
+        url: config.payPhiServerRoot + '/' + config.payPhiUpdateInvoiceURL,
         form: updateInvoiceForm,
       },
         function(error, response, body) {
@@ -35,7 +37,7 @@ module.exports = function(app) {
     },
     registerUser: (registerUserForm) => {
       request.post({
-        url: appConfig.payPhiServerRoot + '/' + appConfig.payPhiRegisterUserURL,
+        url: config.payPhiServerRoot + '/' + config.payPhiRegisterUserURL,
         form: registerUserForm,
       },
         function(error, response, body) {
@@ -46,7 +48,7 @@ module.exports = function(app) {
     },
     listInvoice: (listInvoiceForm) => {
       request.post({
-        url: appConfig.payPhiServerRoot + '/' + appConfig.payPhiListInvoiceURL,
+        url: config.payPhiServerRoot + '/' + config.payPhiListInvoiceURL,
         form: listInvoiceForm,
       },
         function(error, response, body) {
@@ -57,7 +59,7 @@ module.exports = function(app) {
     },
     downloadReceipt: (downloadReceiptForm) => {
       request.post({
-        url: appConfig.payPhiServerRoot + '/' + appConfig.payPhiDownloadReceiptURL,
+        url: config.payPhiServerRoot + '/' + config.payPhiDownloadReceiptURL,
         form: downloadReceiptForm,
       },
         function(error, response, body) {
