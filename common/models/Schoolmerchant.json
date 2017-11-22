@@ -10,9 +10,14 @@
       "fkSchoolmerchantSchoolrel": {
         "model": "School",
         "type": "belongsTo",
-        "foreignKey": "schoolid"
+        "foreignKey": "schoolId"
       }
     }
+  },
+  "mixins": {
+    "TimestampMixin": true,
+    "DeleteOverrideMixin": true,
+    "DuplicateErrorHandler": true
   },
   "properties": {
     "id": {

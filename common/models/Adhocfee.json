@@ -56,14 +56,14 @@
         "nullable": "N"
       }
     },
-    "AdhocfeeName": {
+    "adhocfeeName": {
       "type": "String",
       "required": true,
       "length": 50,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "AdhocfeeName",
+        "columnName": "adhocfeeName",
         "dataType": "varchar",
         "dataLength": 50,
         "dataPrecision": null,
@@ -71,14 +71,14 @@
         "nullable": "N"
       }
     },
-    "AdhocfeeDescription": {
+    "adhocfeeDescription": {
       "type": "String",
       "required": false,
       "length": 100,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "AdhocfeeDescription",
+        "columnName": "adhocfeeDescription",
         "dataType": "varchar",
         "dataLength": 100,
         "dataPrecision": null,
