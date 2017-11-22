@@ -10,22 +10,29 @@
       "FeeplanassociationCategory": {
         "model": "Category",
         "type": "belongsTo",
-        "foreignKey": "categoryid"
+        "foreignKey": "categoryId"
       },
       "FeeplanassociationClass": {
         "model": "Class",
         "type": "belongsTo",
-        "foreignKey": "classid"
+        "foreignKey": "classId"
       },
       "FeeplanassociationFeeplan": {
         "model": "Feeplan",
         "type": "belongsTo",
-        "foreignKey": "feeplanid"
+        "foreignKey": "feeplanId"
       }
     }
   },
   "scope": {
-    "include":["FeeplanassociationClass","FeeplanassociationCategory"]
+    "include": [
+      "FeeplanassociationClass",
+      "FeeplanassociationCategory"
+    ]
+  },
+  "mixins": {
+    "TimestampMixin": true,
+    "DuplicateErrorHandler": true
   },
   "properties": {
     "id": {
