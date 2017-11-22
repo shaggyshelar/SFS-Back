@@ -52,6 +52,11 @@
         "type": "hasMany",
         "model":"Feeplan",
         "foreignKey":"schoolId"
+      },
+      "Adhocfees": {
+        "type": "hasMany",
+        "model": "Adhocfee",
+        "foreignKey": "schoolId"
       }
     }
   },
