@@ -19,6 +19,7 @@
     },
     "cors": false
   },
+  "sessionTimoutIntervalInSeconds" : 60,
   "supportEmailID": "support@sfs.com",
   "fileCleanerSchedulerTime": "10 * * * *",
   "invoiceSchedulerTime": "30 1 * * *",
