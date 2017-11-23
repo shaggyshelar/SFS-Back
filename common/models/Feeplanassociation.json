@@ -10,24 +10,34 @@
       "FeeplanassociationCategory": {
         "model": "Category",
         "type": "belongsTo",
-        "foreignKey": "categoryid"
+        "foreignKey": "categoryId"
       },
       "FeeplanassociationClass": {
         "model": "Class",
         "type": "belongsTo",
-        "foreignKey": "classid"
+        "foreignKey": "classId"
       },
       "FeeplanassociationFeeplan": {
         "model": "Feeplan",
         "type": "belongsTo",
-        "foreignKey": "feeplanid"
+        "foreignKey": "feeplanId"
       }
     }
+  },
+  "scope": {
+    "include": [
+      "FeeplanassociationClass",
+      "FeeplanassociationCategory"
+    ]
+  },
+  "mixins": {
+    "TimestampMixin": true,
+    "DuplicateErrorHandler": true
   },
   "properties": {
     "id": {
       "type": "Number",
-      "required": true,
+      "required": false,
       "length": null,
       "precision": 19,
       "scale": 0,
@@ -41,7 +51,7 @@
         "nullable": "N"
       }
     },
-    "": {
+    "feeplanId": {
       "type": "Number",
       "required": true,
       "length": null,
@@ -84,6 +94,36 @@
         "dataPrecision": 19,
         "dataScale": 0,
         "nullable": "N"
+      }
+    },
+    "academicYear": {
+      "type": "string",
+      "required": true,
+      "length": 20,
+      "precision": null,
+      "scale": 0,
+      "mysql": {
+        "columnName": "academicYear",
+        "dataType": "varchar",
+        "dataLength": 20,
+        "dataPrecision": null,
+        "dataScale": 0,
+        "nullable": "N"
+      }
+    },
+    "isTransactionProcessed": {
+      "type": "boolean",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "isTransactionProcessed",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "Y"
       }
     },
     "createdBy": {

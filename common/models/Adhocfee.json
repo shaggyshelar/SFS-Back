@@ -1,21 +1,16 @@
 {
-  "name": "Feeplanheaddetails",
+  "name": "Adhocfee",
   "options": {
     "idInjection": false,
     "mysql": {
       "schema": "schoolfeesystem",
-      "table": "feeplanheaddetails"
+      "table": "Adhocfee"
     },
     "relations": {
-      "FeeplandetailsFeehead": {
-        "model": "Feehead",
+      "AdhocfeeSchool": {
+        "model": "School",
         "type": "belongsTo",
-        "foreignKey": "feeheadId"
-      },
-      "FeeplandetailsFeeplan": {
-        "model": "Feeplan",
-        "type": "belongsTo",
-        "foreignKey": "feeplanId"
+        "foreignKey": "schoolId"
       }
     }
   },
@@ -26,6 +21,7 @@
   },
   "mixins": {
     "TimestampMixin": true,
+    "DeleteOverrideMixin": true,
     "DuplicateErrorHandler": true
   },
   "properties": {
@@ -45,14 +41,14 @@
         "nullable": "N"
       }
     },
-    "feePlanId": {
+    "schoolId": {
       "type": "Number",
       "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
       "mysql": {
-        "columnName": "feePlanId",
+        "columnName": "schoolId",
         "dataType": "bigint",
         "dataLength": null,
         "dataPrecision": 19,
@@ -60,51 +56,36 @@
         "nullable": "N"
       }
     },
-    "feeHeadId": {
-      "type": "Number",
+    "adhocfeeName": {
+      "type": "String",
       "required": true,
-      "length": null,
-      "precision": 19,
-      "scale": 0,
+      "length": 50,
+      "precision": null,
+      "scale": null,
       "mysql": {
-        "columnName": "feeHeadId",
-        "dataType": "bigint",
-        "dataLength": null,
-        "dataPrecision": 19,
-        "dataScale": 0,
+        "columnName": "adhocfeeName",
+        "dataType": "varchar",
+        "dataLength": 50,
+        "dataPrecision": null,
+        "dataScale": null,
         "nullable": "N"
       }
     },
-    "feeCharges": {
-      "type": "Number",
-      "required": true,
-      "length": null,
-      "precision": 9,
-      "scale": 2,
-      "mysql": {
-        "columnName": "feeCharges",
-        "dataType": "decimal",
-        "dataLength": null,
-        "dataPrecision": 9,
-        "dataScale": 2,
-        "nullable": "N"
-      }
-    },
-    "sequenceNumber": {
-      "type": "Number",
+    "adhocfeeDescription": {
+      "type": "String",
       "required": false,
-      "length": null,
-      "precision": 10,
-      "scale": 0,
+      "length": 100,
+      "precision": null,
+      "scale": null,
       "mysql": {
-        "columnName": "sequenceNumber",
-        "dataType": "int",
-        "dataLength": null,
-        "dataPrecision": 10,
-        "dataScale": 0,
+        "columnName": "adhocfeeDescription",
+        "dataType": "varchar",
+        "dataLength": 100,
+        "dataPrecision": null,
+        "dataScale": null,
         "nullable": "Y"
       }
-    },	
+    },
     "dueDate": {
       "type": "Date",
       "required": true,
@@ -113,36 +94,21 @@
       "scale": null,
       "mysql": {
         "columnName": "dueDate",
-        "dataType": "date",
+        "dataType": "datetime",
         "dataLength": null,
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "N"
       }
     },
-    "academicYear": {
-      "type": "string",
-      "required": true,
-      "length": 20,
-      "precision": null,
-      "scale": 0,
-      "mysql": {
-        "columnName": "academicYear",
-        "dataType": "varchar",
-        "dataLength": 20,
-        "dataPrecision": null,
-        "dataScale": 0,
-        "nullable": "N"
-      }
-    },
-    "isTransactionProcessed": {
+    "isDelete": {
       "type": "Number",
       "required": false,
       "length": null,
       "precision": 3,
       "scale": 0,
       "mysql": {
-        "columnName": "isTransactionProcessed",
+        "columnName": "isDelete",
         "dataType": "tinyint",
         "dataLength": null,
         "dataPrecision": 3,
