@@ -2,8 +2,8 @@
 module.exports = function (Adhocfee) {
   Adhocfee.validatesPresenceOf(
     'schoolId',
-    'addhocFeeName',
-    'addhocFeeDescription',
+    'adhocfeeName',
+    'adhocfeeDescription',
     'dueDate'
   );
 };
