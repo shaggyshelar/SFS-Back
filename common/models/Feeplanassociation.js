@@ -1,4 +1,5 @@
 'use strict';
+var _ = require("lodash");
 module.exports = function (Feeplanassociation) {
 
     Feeplanassociation.updateFeeplanAssociation = function (feeplanassociations, options, cb) {
@@ -14,16 +15,22 @@ module.exports = function (Feeplanassociation) {
                     var errorFeePlans = [];
                     var error = new Error();
                     error.status = 422;
-                    error.message = "A combination for class and category already exist for ";
-                    duplicateAssoc.map(function (errorRecords, index) {
-                        if (errorFeePlans.indexOf(errorRecords.__data.FeeplanassociationFeeplan.feePlanName) == -1) {
-                            errorFeePlans.push(errorRecords.__data.FeeplanassociationFeeplan.feePlanName);
-                        }
+                    var groupedDuplicateRecords = _.groupBy(duplicateAssoc, function (n) {
+                        return n.feeplanId;
                     });
-                    errorFeePlans.map(function (errorPlan, index) {
-                        error.message += errorPlan;
-                        if (errorFeePlans.length != (index + 1))
-                            error.message += ", "
+                    error.message += "Combination already exists for ";
+                    var assocIndexes = Object.keys(groupedDuplicateRecords);
+                    assocIndexes.map(function (item, index) {
+                        groupedDuplicateRecords[item].map(function (i, arrIndex) {
+                            error.message += i.__data.FeeplanassociationClass.className
+                                + " - " + i.__data.FeeplanassociationCategory.categoryName;
+                            if (groupedDuplicateRecords[item].length != (arrIndex + 1)) {
+                                error.message += ", "
+                            } else if (groupedDuplicateRecords[item].length == (arrIndex + 1)) {
+                                error.message += " for " + i.__data.FeeplanassociationFeeplan.feePlanName + ".";
+                            }
+                        });
+
                     });
                     cb(error)
                 }
