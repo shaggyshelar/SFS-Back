@@ -203,6 +203,16 @@ module.exports = function (app) {
                       validationErrors += i18next.t('csv_validation_studentCodeRequired');
                     }
 
+                    var dateOfBirth = data[5] == '' ? null : data[5];
+                    if (dateOfBirth != null && !Date.parse(dateOfBirth)) {
+                      validationErrors += i18next.t('csv_validation_invalidDateOfBirth', {birthDate: dateOfBirth});
+                    } else if (dateOfBirth) {
+                      var birthdate = new Date(dateOfBirth);
+                      var cur = new Date();
+                      var diff = cur - birthdate;
+                      var age = Math.floor(diff / 31557600000);
+                    }
+
                     if (validationErrors != '') {
                       failedStudents.push({ 'Row': data, 'Error': validationErrors });
                       data.push(validationErrors);
@@ -230,7 +240,7 @@ module.exports = function (app) {
                       guardianFirstName: data[22].trim(),
                       guardianLastName: data[23].trim(),
                       guardianMobile: data[24].trim(),
-                      studentDateOfBirth: data[5] == '' ? null : data[5],
+                      studentDateOfBirth: dateOfBirth,
                       dateOfJoining: data[6] == '' ? null : data[6],
                       address: data[8],
                       city: '',  // TODO:
