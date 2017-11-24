@@ -1,18 +1,23 @@
 {
-  "name": "Feeplanheaddetails",
+  "name": "Feeplanassociation",
   "options": {
     "idInjection": false,
     "mysql": {
       "schema": "schoolfeesystem",
-      "table": "feeplanheaddetails"
+      "table": "feeplanassociation"
     },
     "relations": {
-      "FeeplandetailsFeehead": {
-        "model": "Feehead",
+      "FeeplanassociationCategory": {
+        "model": "Category",
         "type": "belongsTo",
-        "foreignKey": "feeheadId"
+        "foreignKey": "categoryId"
       },
-      "FeeplandetailsFeeplan": {
+      "FeeplanassociationClass": {
+        "model": "Class",
+        "type": "belongsTo",
+        "foreignKey": "classId"
+      },
+      "FeeplanassociationFeeplan": {
         "model": "Feeplan",
         "type": "belongsTo",
         "foreignKey": "feeplanId"
@@ -20,9 +25,10 @@
     }
   },
   "scope": {
-    "where": {
-      "isDelete": 0
-    }
+    "include": [
+      "FeeplanassociationClass",
+      "FeeplanassociationCategory"
+    ]
   },
   "mixins": {
     "TimestampMixin": true,
@@ -31,11 +37,11 @@
   "properties": {
     "id": {
       "type": "Number",
-      "id": 1,
       "required": false,
       "length": null,
       "precision": 19,
       "scale": 0,
+      "id": 1,
       "mysql": {
         "columnName": "id",
         "dataType": "bigint",
@@ -45,14 +51,14 @@
         "nullable": "N"
       }
     },
-    "feePlanId": {
+    "feeplanId": {
       "type": "Number",
       "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
       "mysql": {
-        "columnName": "feePlanId",
+        "columnName": "feeplanId",
         "dataType": "bigint",
         "dataLength": null,
         "dataPrecision": 19,
@@ -60,14 +66,14 @@
         "nullable": "N"
       }
     },
-    "feeHeadId": {
+    "classId": {
       "type": "Number",
       "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
       "mysql": {
-        "columnName": "feeHeadId",
+        "columnName": "classId",
         "dataType": "bigint",
         "dataLength": null,
         "dataPrecision": 19,
@@ -75,48 +81,18 @@
         "nullable": "N"
       }
     },
-    "feeCharges": {
+    "categoryId": {
       "type": "Number",
       "required": true,
       "length": null,
-      "precision": 9,
-      "scale": 2,
-      "mysql": {
-        "columnName": "feeCharges",
-        "dataType": "decimal",
-        "dataLength": null,
-        "dataPrecision": 9,
-        "dataScale": 2,
-        "nullable": "N"
-      }
-    },
-    "sequenceNumber": {
-      "type": "Number",
-      "required": false,
-      "length": null,
-      "precision": 10,
+      "precision": 19,
       "scale": 0,
       "mysql": {
-        "columnName": "sequenceNumber",
-        "dataType": "int",
+        "columnName": "categoryId",
+        "dataType": "bigint",
         "dataLength": null,
-        "dataPrecision": 10,
+        "dataPrecision": 19,
         "dataScale": 0,
-        "nullable": "Y"
-      }
-    },	
-    "dueDate": {
-      "type": "Date",
-      "required": true,
-      "length": null,
-      "precision": null,
-      "scale": null,
-      "mysql": {
-        "columnName": "dueDate",
-        "dataType": "date",
-        "dataLength": null,
-        "dataPrecision": null,
-        "dataScale": null,
         "nullable": "N"
       }
     },
@@ -136,7 +112,7 @@
       }
     },
     "isTransactionProcessed": {
-      "type": "Number",
+      "type": "boolean",
       "required": false,
       "length": null,
       "precision": 3,
@@ -152,7 +128,7 @@
     },
     "createdBy": {
       "type": "Number",
-      "required": false,
+      "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
@@ -167,7 +143,7 @@
     },
     "createdOn": {
       "type": "Date",
-      "required": false,
+      "required": true,
       "length": null,
       "precision": null,
       "scale": null,
@@ -184,7 +160,7 @@
       "type": "Number",
       "required": false,
       "length": null,
-      "precision": 3,
+      "precision": 19,
       "scale": 0,
       "mysql": {
         "columnName": "updatedBy",
@@ -210,9 +186,5 @@
         "nullable": "Y"
       }
     }
-  },
-  "validations": [],
-  "relations": {},
-  "acls": [],
-  "methods": {}
+  }
 }

@@ -1,16 +1,31 @@
 {
-  "name": "Addhocfee",
+  "name": "Adhocfeedetails",
   "options": {
     "idInjection": false,
     "mysql": {
       "schema": "schoolfeesystem",
-      "table": "addhocfee"
+      "table": "Adhocfeedetails"
     },
     "relations": {
-      "AddhocfeeSchool": {
-        "model": "School",
+      "AdhockfeedetailsAdhocfee": {
+        "model": "Adhocfee",
         "type": "belongsTo",
-        "foreignKey": "schoolId"
+        "foreignKey": "AdhocfeeId"
+      },
+      "AdhockfeedetailsCategory": {
+        "model": "Category",
+        "type": "belongsTo",
+        "foreignKey": "categoryId"
+      },
+      "AdhockfeedetailsClass": {
+        "model": "Class",
+        "type": "belongsTo",
+        "foreignKey": "classId"
+      },
+      "AdhockfeedetailsDvision": {
+        "model": "Division",
+        "type": "belongsTo",
+        "foreignKey": "divisionId"
       }
     }
   },
@@ -21,7 +36,6 @@
   },
   "mixins": {
     "TimestampMixin": true,
-    "DeleteOverrideMixin": true,
     "DuplicateErrorHandler": true
   },
   "properties": {
@@ -41,14 +55,14 @@
         "nullable": "N"
       }
     },
-    "schoolId": {
+    "AdhocFeeId": {
       "type": "Number",
       "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
       "mysql": {
-        "columnName": "schoolId",
+        "columnName": "AdhocFeeId",
         "dataType": "bigint",
         "dataLength": null,
         "dataPrecision": 19,
@@ -56,62 +70,47 @@
         "nullable": "N"
       }
     },
-    "addhocFeeName": {
-      "type": "String",
-      "required": true,
-      "length": 50,
-      "precision": null,
-      "scale": null,
-      "mysql": {
-        "columnName": "addhocFeeName",
-        "dataType": "varchar",
-        "dataLength": 50,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "N"
-      }
-    },
-    "addhocFeeDescription": {
-      "type": "String",
-      "required": false,
-      "length": 100,
-      "precision": null,
-      "scale": null,
-      "mysql": {
-        "columnName": "addhocFeeDescription",
-        "dataType": "varchar",
-        "dataLength": 100,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "Y"
-      }
-    },
-    "dueDate": {
-      "type": "Date",
+    "categoryId": {
+      "type": "Number",
       "required": true,
       "length": null,
-      "precision": null,
-      "scale": null,
+      "precision": 19,
+      "scale": 0,
       "mysql": {
-        "columnName": "dueDate",
-        "dataType": "datetime",
+        "columnName": "categoryId",
+        "dataType": "bigint",
         "dataLength": null,
-        "dataPrecision": null,
-        "dataScale": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
         "nullable": "N"
       }
     },
-    "isDelete": {
+    "classId": {
+      "type": "Number",
+      "required": true,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
+      "mysql": {
+        "columnName": "classId",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
+        "nullable": "N"
+      }
+    },
+    "divisionId": {
       "type": "Number",
       "required": false,
       "length": null,
-      "precision": 3,
+      "precision": 19,
       "scale": 0,
       "mysql": {
-        "columnName": "isDelete",
-        "dataType": "tinyint",
+        "columnName": "divisionId",
+        "dataType": "bigint",
         "dataLength": null,
-        "dataPrecision": 3,
+        "dataPrecision": 19,
         "dataScale": 0,
         "nullable": "Y"
       }

@@ -101,6 +101,21 @@
         "nullable": "N"
       }
     },
+    "isCurrent": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "isCurrent",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
     "isDelete": {
       "type": "Number",
       "required": false,

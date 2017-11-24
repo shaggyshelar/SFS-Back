@@ -8,23 +8,25 @@ var upload = multer({ dest: './Uploads/' });
 var fs = require('fs');
 var csv = require('fast-csv');
 var loopback = require('loopback');
-var rootlog = loopback.log;
+var rootlogger = loopback.log;
 var async = require('async');
 var _ = require('underscore');
 var i18next = require('i18next');
 var permissionHelper = require('../../common/shared/permissionsHelper');
+var utilities = require('../../common/shared/utilities');
 
 module.exports = function (app) {
   var User = app.models.user;
   var Schools = app.models.School;
   var Categories = app.models.Category;
+  utilities.init(app);
 
   app.get('/verified', function (req, res) {
     var localizedMessage = i18next.t('key');
     console.log('Localized Message = ' + localizedMessage);
 
-    rootlog.info('hi');
-    rootlog.warn({ lang: 'fr' }, 'au revoir');
+    rootlogger.info('hi');
+    rootlogger.warn({ lang: 'fr' }, 'au revoir');
     res.render('verified');
   });
 
@@ -45,7 +47,6 @@ module.exports = function (app) {
       } else {
         var UserModel = app.models.user;
         UserModel.findById(accesstoken.userId, function (err, user) {
-          console.time('dbsave');
           var filepath = req.file.path;
           if (!req.file.originalname.endsWith('.csv')) {
             res.status(400);
@@ -112,7 +113,7 @@ module.exports = function (app) {
                     }
 
                     var studentModel = app.models.Student;
-                    
+
                     var firstName = data[1].trim();
                     if (firstName == '') {
                       validationErrors += i18next.t('csv_validation_studentFirstNameRequired');
@@ -202,6 +203,16 @@ module.exports = function (app) {
                       validationErrors += i18next.t('csv_validation_studentCodeRequired');
                     }
 
+                    var dateOfBirth = data[5] == '' ? null : data[5];
+                    if (dateOfBirth != null && !Date.parse(dateOfBirth)) {
+                      validationErrors += i18next.t('csv_validation_invalidDateOfBirth', {birthDate: dateOfBirth});
+                    } else if (dateOfBirth) {
+                      var birthdate = new Date(dateOfBirth);
+                      var cur = new Date();
+                      var diff = cur - birthdate;
+                      var age = Math.floor(diff / 31557600000);
+                    }
+
                     if (validationErrors != '') {
                       failedStudents.push({ 'Row': data, 'Error': validationErrors });
                       data.push(validationErrors);
@@ -229,7 +240,7 @@ module.exports = function (app) {
                       guardianFirstName: data[22].trim(),
                       guardianLastName: data[23].trim(),
                       guardianMobile: data[24].trim(),
-                      studentDateOfBirth: data[5] == '' ? null : data[5],
+                      studentDateOfBirth: dateOfBirth,
                       dateOfJoining: data[6] == '' ? null : data[6],
                       address: data[8],
                       city: '',  // TODO:
@@ -279,9 +290,9 @@ module.exports = function (app) {
                         html: html,
                       }, function (err) {
                         if (err) {
-                          console.log('> error sending upload report email');
+                          rootlogger.log('Error sending upload report to email=\'' + user.toJSON().email + '\',\n Error=' + err);
                         }
-                        console.log('> upload report mail sent successfully');
+                        rootlogger.log('Upload report mail sent successfully to ' + user.toJSON().email);
                       });
                     } else {
                       app.models.Email.send({
@@ -296,7 +307,7 @@ module.exports = function (app) {
                           }],
                       }, function (err) {
                         if (err) {
-                          console.log('> error sending upload report email');
+                          rootlogger.log('Error sending upload report to email=\'' + user.toJSON().email + '\',\n Error=' + err);
                         }
                         console.log('> upload report mail sent successfully');
                       });

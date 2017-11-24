@@ -1,21 +1,16 @@
 {
-  "name": "Feeplanheaddetails",
+  "name": "Schoolmerchant",
   "options": {
     "idInjection": false,
     "mysql": {
       "schema": "schoolfeesystem",
-      "table": "feeplanheaddetails"
+      "table": "schoolmerchant"
     },
     "relations": {
-      "FeeplandetailsFeehead": {
-        "model": "Feehead",
+      "fkSchoolmerchantSchoolrel": {
+        "model": "School",
         "type": "belongsTo",
-        "foreignKey": "feeheadId"
-      },
-      "FeeplandetailsFeeplan": {
-        "model": "Feeplan",
-        "type": "belongsTo",
-        "foreignKey": "feeplanId"
+        "foreignKey": "schoolId"
       }
     }
   },
@@ -26,16 +21,17 @@
   },
   "mixins": {
     "TimestampMixin": true,
+    "DeleteOverrideMixin": true,
     "DuplicateErrorHandler": true
   },
   "properties": {
     "id": {
       "type": "Number",
-      "id": 1,
-      "required": false,
+      "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
+      "id": 1,
       "mysql": {
         "columnName": "id",
         "dataType": "bigint",
@@ -45,14 +41,14 @@
         "nullable": "N"
       }
     },
-    "feePlanId": {
+    "schoolId": {
       "type": "Number",
       "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
       "mysql": {
-        "columnName": "feePlanId",
+        "columnName": "schoolId",
         "dataType": "bigint",
         "dataLength": null,
         "dataPrecision": 19,
@@ -60,89 +56,59 @@
         "nullable": "N"
       }
     },
-    "feeHeadId": {
-      "type": "Number",
+    "merchantId": {
+      "type": "String",
       "required": true,
-      "length": null,
-      "precision": 19,
-      "scale": 0,
-      "mysql": {
-        "columnName": "feeHeadId",
-        "dataType": "bigint",
-        "dataLength": null,
-        "dataPrecision": 19,
-        "dataScale": 0,
-        "nullable": "N"
-      }
-    },
-    "feeCharges": {
-      "type": "Number",
-      "required": true,
-      "length": null,
-      "precision": 9,
-      "scale": 2,
-      "mysql": {
-        "columnName": "feeCharges",
-        "dataType": "decimal",
-        "dataLength": null,
-        "dataPrecision": 9,
-        "dataScale": 2,
-        "nullable": "N"
-      }
-    },
-    "sequenceNumber": {
-      "type": "Number",
-      "required": false,
-      "length": null,
-      "precision": 10,
-      "scale": 0,
-      "mysql": {
-        "columnName": "sequenceNumber",
-        "dataType": "int",
-        "dataLength": null,
-        "dataPrecision": 10,
-        "dataScale": 0,
-        "nullable": "Y"
-      }
-    },	
-    "dueDate": {
-      "type": "Date",
-      "required": true,
-      "length": null,
+      "length": 12,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "dueDate",
-        "dataType": "date",
-        "dataLength": null,
+        "columnName": "merchantId",
+        "dataType": "varchar",
+        "dataLength": 12,
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "N"
       }
     },
-    "academicYear": {
-      "type": "string",
+    "securityKey": {
+      "type": "String",
       "required": true,
-      "length": 20,
+      "length": 64,
       "precision": null,
-      "scale": 0,
+      "scale": null,
       "mysql": {
-        "columnName": "academicYear",
+        "columnName": "securityKey",
         "dataType": "varchar",
-        "dataLength": 20,
+        "dataLength": 64,
         "dataPrecision": null,
-        "dataScale": 0,
+        "dataScale": null,
         "nullable": "N"
       }
     },
-    "isTransactionProcessed": {
+    "isDefault": {
       "type": "Number",
       "required": false,
       "length": null,
       "precision": 3,
       "scale": 0,
       "mysql": {
-        "columnName": "isTransactionProcessed",
+        "columnName": "isDefault",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "isDelete": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "isDelete",
         "dataType": "tinyint",
         "dataLength": null,
         "dataPrecision": 3,
@@ -152,7 +118,7 @@
     },
     "createdBy": {
       "type": "Number",
-      "required": false,
+      "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
@@ -167,7 +133,7 @@
     },
     "createdOn": {
       "type": "Date",
-      "required": false,
+      "required": true,
       "length": null,
       "precision": null,
       "scale": null,
@@ -184,7 +150,7 @@
       "type": "Number",
       "required": false,
       "length": null,
-      "precision": 3,
+      "precision": 19,
       "scale": 0,
       "mysql": {
         "columnName": "updatedBy",
@@ -210,9 +176,5 @@
         "nullable": "Y"
       }
     }
-  },
-  "validations": [],
-  "relations": {},
-  "acls": [],
-  "methods": {}
+  }
 }

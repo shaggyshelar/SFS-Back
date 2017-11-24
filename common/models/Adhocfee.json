@@ -1,31 +1,16 @@
 {
-  "name": "Addhocfeedetails",
+  "name": "Adhocfee",
   "options": {
     "idInjection": false,
     "mysql": {
       "schema": "schoolfeesystem",
-      "table": "addhocfeedetails"
+      "table": "Adhocfee"
     },
     "relations": {
-      "AddhockfeedetailsAddhocfee": {
-        "model": "Addhocfee",
+      "AdhocfeeSchool": {
+        "model": "School",
         "type": "belongsTo",
-        "foreignKey": "addhocfeeId"
-      },
-      "AddhockfeedetailsCategory": {
-        "model": "Category",
-        "type": "belongsTo",
-        "foreignKey": "categoryId"
-      },
-      "AddhockfeedetailsClass": {
-        "model": "Class",
-        "type": "belongsTo",
-        "foreignKey": "classId"
-      },
-      "AddhockfeedetailsDvision": {
-        "model": "Division",
-        "type": "belongsTo",
-        "foreignKey": "divisionId"
+        "foreignKey": "schoolId"
       }
     }
   },
@@ -36,6 +21,7 @@
   },
   "mixins": {
     "TimestampMixin": true,
+    "DeleteOverrideMixin": true,
     "DuplicateErrorHandler": true
   },
   "properties": {
@@ -55,14 +41,14 @@
         "nullable": "N"
       }
     },
-    "addhocFeeId": {
+    "schoolId": {
       "type": "Number",
       "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
       "mysql": {
-        "columnName": "addhocFeeId",
+        "columnName": "schoolId",
         "dataType": "bigint",
         "dataLength": null,
         "dataPrecision": 19,
@@ -70,64 +56,109 @@
         "nullable": "N"
       }
     },
-    "categoryId": {
-      "type": "Number",
+    "adhocfeeName": {
+      "type": "String",
       "required": true,
-      "length": null,
-      "precision": 19,
-      "scale": 0,
+      "length": 50,
+      "precision": null,
+      "scale": null,
       "mysql": {
-        "columnName": "categoryId",
-        "dataType": "bigint",
-        "dataLength": null,
-        "dataPrecision": 19,
-        "dataScale": 0,
+        "columnName": "adhocfeeName",
+        "dataType": "varchar",
+        "dataLength": 50,
+        "dataPrecision": null,
+        "dataScale": null,
         "nullable": "N"
       }
     },
-    "classId": {
-      "type": "Number",
-      "required": true,
-      "length": null,
-      "precision": 19,
-      "scale": 0,
-      "mysql": {
-        "columnName": "classId",
-        "dataType": "bigint",
-        "dataLength": null,
-        "dataPrecision": 19,
-        "dataScale": 0,
-        "nullable": "N"
-      }
-    },
-    "divisionId": {
-      "type": "Number",
+    "adhocfeeDescription": {
+      "type": "String",
       "required": false,
-      "length": null,
-      "precision": 19,
-      "scale": 0,
+      "length": 100,
+      "precision": null,
+      "scale": null,
       "mysql": {
-        "columnName": "divisionId",
-        "dataType": "bigint",
-        "dataLength": null,
-        "dataPrecision": 19,
-        "dataScale": 0,
+        "columnName": "adhocfeeDescription",
+        "dataType": "varchar",
+        "dataLength": 100,
+        "dataPrecision": null,
+        "dataScale": null,
         "nullable": "Y"
       }
     },
-    "addhocFeeCharges": {
+    "dueDate": {
+      "type": "Date",
+      "required": true,
+      "length": null,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "dueDate",
+        "dataType": "datetime",
+        "dataLength": null,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "invoiceDescription": {
+      "type": "String",
+      "required": true,
+      "length": 50,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "invoiceDescription",
+        "dataType": "varchar",
+        "dataLength": 50,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "invoiceDetailText": {
+      "type": "String",
+      "required": false,
+      "length": 100,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "invoiceDetailText",
+        "dataType": "varchar",
+        "dataLength": 100,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "adhocFeeCharges": {
       "type": "Number",
       "required": true,
       "length": null,
       "precision": 18,
       "scale": 2,
       "mysql": {
-        "columnName": "addhocFeeCharges",
+        "columnName": "adhocFeeCharges",
         "dataType": "decimal",
         "dataLength": null,
         "dataPrecision": 18,
         "dataScale": 2,
         "nullable": "N"
+      }
+    },
+    "isDelete": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "isDelete",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "Y"
       }
     },
     "createdBy": {
