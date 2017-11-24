@@ -94,9 +94,8 @@ module.exports = function (app) {
                 res.status(400);
                 res.json({ 'Message': i18next.t('csv_validation_invalidSchoolName') });
                 return;
-              } else {
-                schoolDetails = schoolDetails.toJSON();
               }
+
               var categoryList = results[1];
               var csvStream = csv
                 .parse()
@@ -203,12 +202,24 @@ module.exports = function (app) {
                       validationErrors += i18next.t('csv_validation_studentCodeRequired');
                     }
 
+                    var dateOfBirth = data[5] == '' ? '2000/01/01' : data[5];
+                    if (!Date.parse(dateOfBirth)) {
+                      validationErrors += i18next.t('csv_validation_invalidDateOfBirth', {birthDate: dateOfBirth});
+                    } else if (dateOfBirth) {
+                      var birthdate = new Date(dateOfBirth);
+                      var cur = new Date();
+                      var diff = cur - birthdate;
+                      var age = Math.floor(diff / 31557600000);
+                    }
+
                     if (validationErrors != '') {
                       failedStudents.push({ 'Row': data, 'Error': validationErrors });
                       data.push(validationErrors);
                       fastCsv.write(data);
                       return;
                     }
+
+                    var currentDay = cur.getFullYear() + '/' + cur.getMonth() + '/' + cur.getDate();
 
                     var studentToAdd = {
                       schoolId: req.body.schoolId,
@@ -230,8 +241,8 @@ module.exports = function (app) {
                       guardianFirstName: data[22].trim(),
                       guardianLastName: data[23].trim(),
                       guardianMobile: data[24].trim(),
-                      studentDateOfBirth: data[5] == '' ? null : data[5],
-                      dateOfJoining: data[6] == '' ? null : data[6],
+                      studentDateOfBirth: dateOfBirth,
+                      dateOfJoining: data[6] == currentDay ? null : data[6],
                       address: data[8],
                       city: '',  // TODO:
                       state: data[11],
@@ -243,8 +254,8 @@ module.exports = function (app) {
                       bloodGroup: data[14].trim(),
                       academicYear: matchingYear.academicYear,
                       isDelete: false,
-                      createdBy: 1,
-                      createdOn: '11/14/2017', // TODO:
+                      createdBy: user.id,
+                      createdOn: currentDay,
                     };
                     waterfallFunctions.push(function (next) {
                       studentModel.create(studentToAdd, function (err, post) {
