@@ -11,13 +11,21 @@
         "model": "School",
         "type": "belongsTo",
         "foreignKey": "schoolId"
+      },
+      "feeDetails": {
+        "type": "hasMany",
+        "model": "Adhocfeedetails",
+        "foreignKey": "adhocFeeId"
       }
     }
   },
   "scope": {
     "where": {
       "isDelete": 0
-    }
+    },
+    "include": [
+      "feeDetails"
+    ]
   },
   "mixins": {
     "TimestampMixin": true,
