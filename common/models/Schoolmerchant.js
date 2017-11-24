@@ -22,17 +22,19 @@ module.exports = function (Schoolmerchant) {
                     next();
                 });
             }
-            else if (ctx.data.schoolId == undefined) {
+            else if (ctx.data.isDefault && ctx.data.schoolId == undefined) {
                 var error = new Error();
                 error.status = 422;
-                error.message = i18next.t('error_schoolid_is_required');
+                error.message = i18next.t('error_schoolIdIsRequired');
                 next(error);
             }
             else {
                 next();
             }
         }
-        next();
+        else {
+            next();
+        }
     });
 
 };
