@@ -115,21 +115,6 @@
         "nullable": "Y"
       }
     },
-    "AdhocFeeCharges": {
-      "type": "Number",
-      "required": true,
-      "length": null,
-      "precision": 18,
-      "scale": 2,
-      "mysql": {
-        "columnName": "AdhocFeeCharges",
-        "dataType": "decimal",
-        "dataLength": null,
-        "dataPrecision": 18,
-        "dataScale": 2,
-        "nullable": "N"
-      }
-    },
     "createdBy": {
       "type": "Number",
       "required": false,
