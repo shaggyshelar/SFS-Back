@@ -27,7 +27,7 @@
   "properties": {
     "id": {
       "type": "Number",
-      "required": true,
+      "required": false,
       "length": null,
       "precision": 19,
       "scale": 0,
@@ -87,7 +87,7 @@
       }
     },
     "isDefault": {
-      "type": "Number",
+      "type": "boolean",
       "required": false,
       "length": null,
       "precision": 3,
