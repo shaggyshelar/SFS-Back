@@ -101,6 +101,51 @@
         "nullable": "N"
       }
     },
+    "invoiceDescription": {
+      "type": "String",
+      "required": true,
+      "length": 50,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "invoiceDescription",
+        "dataType": "varchar",
+        "dataLength": 50,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "invoiceDetailText": {
+      "type": "String",
+      "required": false,
+      "length": 100,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "invoiceDetailText",
+        "dataType": "varchar",
+        "dataLength": 100,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "adhocFeeCharges": {
+      "type": "Number",
+      "required": true,
+      "length": null,
+      "precision": 18,
+      "scale": 2,
+      "mysql": {
+        "columnName": "adhocFeeCharges",
+        "dataType": "decimal",
+        "dataLength": null,
+        "dataPrecision": 18,
+        "dataScale": 2,
+        "nullable": "N"
+      }
+    },
     "isDelete": {
       "type": "Number",
       "required": false,

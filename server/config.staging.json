@@ -8,5 +8,6 @@
     "payPhiUpdateInvoiceURL": "/api/updateInvoice",
     "payPhiRegisterUserURL": "/api/registerUser",
     "payPhiListInvoiceURL": "/api/listInvoice",
-    "payPhiDownloadReceiptURL": "/api/downloadReceipt"
+    "payPhiDownloadReceiptURL": "/api/downloadReceipt",
+    "sessionTimoutIntervalInSeconds" : 60
 }
