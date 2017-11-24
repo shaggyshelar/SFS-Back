@@ -42,5 +42,6 @@
     "authentication_email_not_verified_message": "login failed as the email has not been verified",
     "email_verify_subject": "SFS: Verify your email address.",
     "log_fileDeleted": "File deleted successfully: '{{filePath}}'. ",
-    "log_errFileDelete": "Error deleting file: '{{filePath}}'. "
+    "log_errFileDelete": "Error deleting file: '{{filePath}}'. ",
+    "error_schoolid_is_required": "School Id is required"
 }
