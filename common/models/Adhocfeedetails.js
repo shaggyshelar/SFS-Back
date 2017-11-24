@@ -1,9 +1,47 @@
 'use strict';
 module.exports = function (Adhocfeedetails) {
   Adhocfeedetails.validatesPresenceOf(
-    'addhocFeeId',
+    'adhocFeeId',
     'categoryId',
-    'classId',
-    'addhocFeeCharges'
+    'classId'
   );
+
+  Adhocfeedetails.updateAdhocfeedetails = function (adhocfeedetails, options, cb) {
+
+    if (adhocfeedetails && adhocfeedetails.length > 0) {
+
+      var conditions = [];
+      adhocfeedetails.map(function (assocn, index) {
+        conditions.push({ adhocFeeId: assocn.adhocFeeId });
+      });
+
+      Adhocfeedetails.destroyAll({ or: conditions }, function (err, info) {
+        if (err) throw err;
+        Adhocfeedetails.create(adhocfeedetails, function (err, savedAssociations) {
+          if (err) throw err;
+          cb(null, savedAssociations);
+        });
+      });
+    }
+    else {
+      cb(null);
+    }
+  }
+
+  Adhocfeedetails.remoteMethod('updateAdhocfeedetails', {
+    accepts: [{
+      arg: 'adhocfeedetails',
+      type: 'any',
+      http: {
+        source: 'body',
+      },
+    },
+    {
+      arg: "options",
+      type: "object",
+      http: "optionsFromRequest"
+    }],
+    http: { path: '/updateAdhocfeedetails', verb: 'put' },
+    returns: { arg: 'adhocfeedetails', type: 'Adhocfeedetails' }
+  });
 };
