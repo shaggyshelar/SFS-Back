@@ -22,6 +22,9 @@
   "scope": {
     "where": {
       "isDelete": 0
+    },
+    "include": {
+      "relation": "ZoneFrequency"
     }
   },
   "mixins": {
@@ -118,21 +121,6 @@
         "dataLength": null,
         "dataPrecision": 18,
         "dataScale": 2,
-        "nullable": "N"
-      }
-    },
-    "dueDate": {
-      "type": "Date",
-      "required": true,
-      "length": null,
-      "precision": null,
-      "scale": null,
-      "mysql": {
-        "columnName": "dueDate",
-        "dataType": "date",
-        "dataLength": null,
-        "dataPrecision": null,
-        "dataScale": null,
         "nullable": "N"
       }
     },
