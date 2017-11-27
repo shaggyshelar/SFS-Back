@@ -119,6 +119,14 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
                 propertyAccess.push({ model: p.model, property: p.property, accessType: p.accessType, permission: "ALLOW", principalId: role, principalType: "ROLE" });
             });
         }
+        else if (selectedModel.toLowerCase() == "zone") {
+            var propertyArr = [
+                { property: "__create__zones", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
         else {
             propertyAccess.push({ model: selectedModel, property: "create", accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
         }
@@ -259,6 +267,16 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
                 propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
             });
         }
+        else if (selectedModel.toLowerCase() == "zone") {
+            var propertyArr = [
+                { property: "__get__zones", model: "School" },
+                { property: "__findById__zones", model: "School" },
+                { property: "__count__zones", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
 
         propertyAccess.push({ model: selectedModel, property: "find", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
         propertyAccess.push({ model: selectedModel, property: "findById", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
@@ -355,6 +373,14 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
                 propertyAccess.push({ model: p.model, property: p.property, accessType: p.accessType, permission: "ALLOW", principalId: role, principalType: "ROLE" });
             });
         }
+        else if (selectedModel.toLowerCase() == "zone") {
+            var propertyArr = [
+                { property: "__updateById__zones", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
         propertyAccess.push({ model: selectedModel, property: "updateAttributes", accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
         propertyAccess.push({ model: selectedModel, property: "updateAttribute", accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
     }
@@ -363,7 +389,6 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
         if (selectedModel.toLowerCase() == "addhocfeedetails" ||
             selectedModel.toLowerCase() == "container" ||
             selectedModel.toLowerCase() == "feeplanheaddetails" ||
-            selectedModel.toLowerCase() == "role" ||
             selectedModel.toLowerCase() == "rolemenuDetails" ||
             selectedModel.toLowerCase() == "rolepermissionDetails" ||
             selectedModel.toLowerCase() == "userschooldetails") {
