@@ -74,7 +74,7 @@ module.exports = function(app) {
         return [];
       }
       var sortedParams = params.sort(function(a, b) {
-        return a[0].localeCompare(b[0]);
+        return a[1].localeCompare(b[1]);
       });
 
       var concatenatedValues = '';
