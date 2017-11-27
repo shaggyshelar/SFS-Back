@@ -9,5 +9,8 @@
     "payPhiRegisterUserURL": "/api/registerUser",
     "payPhiListInvoiceURL": "/api/listInvoice",
     "payPhiDownloadReceiptURL": "/api/downloadReceipt",
-    "sessionTimoutIntervalInSeconds" : 60
+    "sessionTimoutIntervalInSeconds" : 60,
+    "payPhiAggregatorID" : "",
+    "payPhiMerchantID" : "",
+    "payPhiHashKey" : ""
 }

@@ -7,6 +7,7 @@ var rootlogger = loopback.log;
 var async = require('async');
 var _ = require('underscore');
 var request = require('request');
+var crypto = require('crypto');
 var configFilePath = process.env.NODE_ENV == undefined ?
 '' : '.' + process.env.NODE_ENV;
 var config = require('../../server/config' + configFilePath + '.json');
@@ -75,8 +76,21 @@ module.exports = function(app) {
       var sortedParams = params.sort(function(a, b) {
         return a[0].localeCompare(b[0]);
       });
-      console.log('SortedParams =', sortedParams);
-      return sortedParams;
+
+      var concatenatedValues = '';
+      _.each(sortedParams, function(param) {
+        concatenatedValues += param[1];
+      });
+
+      return concatenatedValues;
+    },
+    getHashedKey: function(concatenatedValues) {
+      const secret = config.payPhiHashKey;
+      const lowerCaseHash = crypto.createHmac('sha256', secret)
+                         .update(concatenatedValues)
+                         .digest('hex')
+                         .toLowerCase();
+      return lowerCaseHash;
     },
   };
 };
