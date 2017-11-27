@@ -38,7 +38,7 @@ module.exports = function(app) {
     },
     registerUser: (registerUserForm) => {
       request.post({
-        url: config.payPhiServerRoot + '/' + config.payPhiRegisterUserURL,
+        url: config.payPhiServerRoot + config.payPhiRegisterUserURL,
         form: registerUserForm,
       },
         function(error, response, body) {
@@ -83,6 +83,40 @@ module.exports = function(app) {
       });
 
       return concatenatedValues;
+    },
+    getForm: function(params, hashedKey) {
+      if (!params) {
+        return [];
+      }
+
+      var formData = {};
+      _.each(params, function(param) {
+        formData[param[0]] = param[1];
+      });
+
+      formData['secureHash'] = hashedKey;
+
+      return formData;
+    },
+    getConcatenatedURL: function(params) {
+      if (!params) {
+        return [];
+      }
+
+      var concatenatedURL = '';
+      _.each(params, function(param) {
+        if (concatenatedURL.endsWith('&')) {
+          concatenatedURL += param[0] + '=' + param[1];
+        } else {
+          if (concatenatedURL != '') {
+            concatenatedURL += '&' + param[0] + '=' + param[1];
+          } else {
+            concatenatedURL += param[0] + '=' + param[1];
+          }
+        }
+      });
+
+      return concatenatedURL;
     },
     getHashedKey: function(concatenatedValues) {
       const secret = config.payPhiHashKey;
