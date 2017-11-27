@@ -124,6 +124,21 @@
         "nullable": "N"
       }
     },
+    "academicyear": {
+      "type": "String",
+      "required": true,
+      "length": 20,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "academicYear",
+        "dataType": "varchar",
+        "dataLength": 20,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
     "isDelete": {
       "type": "Number",
       "required": false,
