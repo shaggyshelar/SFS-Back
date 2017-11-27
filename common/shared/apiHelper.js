@@ -68,6 +68,16 @@ module.exports = function(app) {
           console.log('body:', body);
         });
     },
+    getConcatenatedParams: function(params) {
+      if (!params) {
+        return [];
+      }
+      var sortedParams = params.sort(function(a, b) {
+        return a[0].localeCompare(b[0]);
+      });
+      console.log('SortedParams =', sortedParams);
+      return sortedParams;
+    },
   };
 };
 
