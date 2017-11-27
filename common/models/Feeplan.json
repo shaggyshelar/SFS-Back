@@ -16,6 +16,11 @@
         "type": "hasMany",
         "model": "Feeplanassociation",
         "foreignKey": "feeplanId"
+      },
+      "FeePlanDetails": {
+        "type":"hasMany",
+        "model":"Feeplanheaddetails",
+        "foreignKey":"feePlanId"
       }
     }
   },
@@ -23,7 +28,7 @@
     "where": {
       "isDelete": 0
     },
-    "include": "associations"
+    "include": ["associations","FeePlanDetails"]
   },
   "mixins": {
     "TimestampMixin": true,

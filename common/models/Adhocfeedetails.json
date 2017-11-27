@@ -7,22 +7,22 @@
       "table": "Adhocfeedetails"
     },
     "relations": {
-      "AdhockfeedetailsAdhocfee": {
+      "AdhocfeedetailsAdhocfee": {
         "model": "Adhocfee",
         "type": "belongsTo",
-        "foreignKey": "AdhocfeeId"
+        "foreignKey": "adhocFeeId"
       },
-      "AdhockfeedetailsCategory": {
+      "AdhocfeedetailsCategory": {
         "model": "Category",
         "type": "belongsTo",
         "foreignKey": "categoryId"
       },
-      "AdhockfeedetailsClass": {
+      "AdhocfeedetailsClass": {
         "model": "Class",
         "type": "belongsTo",
         "foreignKey": "classId"
       },
-      "AdhockfeedetailsDvision": {
+      "AdhocfeedetailsDivision": {
         "model": "Division",
         "type": "belongsTo",
         "foreignKey": "divisionId"
@@ -32,7 +32,12 @@
   "scope": {
     "where": {
       "isDelete": 0
-    }
+    },
+    "include": [
+      "AdhocfeedetailsCategory",
+      "AdhocfeedetailsClass",
+      "AdhocfeedetailsDivision"
+    ]
   },
   "mixins": {
     "TimestampMixin": true,
@@ -55,14 +60,14 @@
         "nullable": "N"
       }
     },
-    "AdhocFeeId": {
+    "adhocFeeId": {
       "type": "Number",
       "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
       "mysql": {
-        "columnName": "AdhocFeeId",
+        "columnName": "adhocFeeId",
         "dataType": "bigint",
         "dataLength": null,
         "dataPrecision": 19,
