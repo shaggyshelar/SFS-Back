@@ -102,7 +102,7 @@
       }
     },
     "isCurrent": {
-      "type": "Number",
+      "type": "boolean",
       "required": false,
       "length": null,
       "precision": 3,
