@@ -32,7 +32,6 @@ utilities.registerUser = function(app) {
   userParams.push(['emailID', newUserId + '@test.com']);
   userParams.push(['countryCode', 'IND']);
 
-  var params = [['param1', 'abc'], ['param2', 'xyz'], ['name', 'aa']];
   var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
   var hashedKey = apiHelper.getHashedKey(concatenatedParams);
   var userForm = apiHelper.getForm(userParams, hashedKey);
@@ -55,7 +54,44 @@ utilities.listInvoiceEnquiry = function(app) {
   // apiHelper.registerUser(userForm);
 };
 
-utilities.receiptDownload = function(app) {
+utilities.createInvoice = function(app) {
+  var apiHelper = apiHelperObject(app);
+  var invoiceParams = [];
+  var cur = new Date();
+  var newUserId = 'espl1' + cur.getDate() + '' + cur.getMonth() + '' + cur.getFullYear() + cur.getHours() + cur.getSeconds();
+  invoiceParams.push(['merchantId', config.payPhiMerchantID]);
+  invoiceParams.push(['aggregatorId', config.payPhiAggregatorID]);
+  invoiceParams.push(['userID', newUserId]);
+  invoiceParams.push(['invoiceNo', 'SOMEUNIQUEINVOICENUMBER']);
+  invoiceParams.push(['desc', 'SOME DESCRIPTION RELATED TO INVOICE']);
+  invoiceParams.push(['chargeAmount', '10000.00']);
+  invoiceParams.push(['currencyCode', 'INR']); // TO CHECK
+  invoiceParams.push(['dueDate', '30/05/2018']);
+  invoiceParams.push(['chargeHead1', '3000.00']);
+  invoiceParams.push(['chargeHead2', '3000.00']);
+  invoiceParams.push(['chargeHead3', '4000.00']);
+
+  var concatenatedParams = apiHelper.getConcatenatedParams(invoiceParams);
+  var hashedKey = apiHelper.getHashedKey(concatenatedParams);
+  var userForm = apiHelper.getForm(invoiceParams, hashedKey);
+  apiHelper.paymentInvoiceRequest(userForm);
+};
+
+utilities.updateInvoice = function(app) {
+  var apiHelper = apiHelperObject(app);
+  var invoiceParams = [];
+  var cur = new Date();
+  var newUserId = 'espl1' + cur.getDate() + '' + cur.getMonth() + '' + cur.getFullYear() + cur.getHours() + cur.getSeconds();
+  invoiceParams.push(['merchantId', config.payPhiMerchantID]);
+  invoiceParams.push(['aggregatorId', config.payPhiAggregatorID]);
+  invoiceParams.push(['userID', newUserId]);
+  invoiceParams.push(['invoiceNo', 'SOMEUNIQUEINVOICENUMBER']);
+  invoiceParams.push(['invoiceStatus', 'O']);
+
+  var concatenatedParams = apiHelper.getConcatenatedParams(invoiceParams);
+  var hashedKey = apiHelper.getHashedKey(concatenatedParams);
+  var userForm = apiHelper.getForm(invoiceParams, hashedKey);
+  apiHelper.paymentInvoiceUpdate(userForm);
 };
 
 utilities.init = function(app) {

@@ -16,7 +16,7 @@ module.exports = function(app) {
   return {
     paymentInvoiceRequest: (postInvoiceForm) => {
       request.post({
-        url: config.payPhiServerRoot + '/' + config.payPhiPostInvoiceURL,
+        url: config.payPhiServerRoot + config.payPhiPostInvoiceURL,
         form: postInvoiceForm,
       },
         function(error, response, body) {
@@ -27,7 +27,7 @@ module.exports = function(app) {
     },
     paymentInvoiceUpdate: (updateInvoiceForm) => {
       request.post({
-        url: config.payPhiServerRoot + '/' + config.payPhiUpdateInvoiceURL,
+        url: config.payPhiServerRoot + config.payPhiUpdateInvoiceURL,
         form: updateInvoiceForm,
       },
         function(error, response, body) {
@@ -49,7 +49,7 @@ module.exports = function(app) {
     },
     listInvoice: (listInvoiceForm) => {
       request.post({
-        url: config.payPhiServerRoot + '/' + config.payPhiListInvoiceURL,
+        url: config.payPhiServerRoot + config.payPhiListInvoiceURL,
         form: listInvoiceForm,
       },
         function(error, response, body) {
@@ -60,7 +60,7 @@ module.exports = function(app) {
     },
     downloadReceipt: (downloadReceiptForm) => {
       request.post({
-        url: config.payPhiServerRoot + '/' + config.payPhiDownloadReceiptURL,
+        url: config.payPhiServerRoot + config.payPhiDownloadReceiptURL,
         form: downloadReceiptForm,
       },
         function(error, response, body) {
@@ -74,7 +74,10 @@ module.exports = function(app) {
         return [];
       }
       var sortedParams = params.sort(function(a, b) {
-        return a[1].localeCompare(b[1]);
+        var a1 = a[0];
+        var b1 = b[0];
+        return a1 == b1 ? 0 : (a1 < b1 ? -1 : 1);
+        // return a[0].localeCompare(b[0]);
       });
 
       var concatenatedValues = '';
