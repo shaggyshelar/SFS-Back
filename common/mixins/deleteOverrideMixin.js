@@ -11,7 +11,7 @@ module.exports = function (Model, options) {
 
         Model.updateAll({ id: id }, { isDelete: true }, function (err, updatedRecord) {
             if (err)
-                throw err;
+                cb(err);
             else {
                 Model.defaultScope = defScope;
                 cb(null);

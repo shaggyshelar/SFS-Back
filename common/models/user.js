@@ -62,22 +62,26 @@ module.exports = function (User) {
     var subject = "SFS: Password reset";
 
     app.models.user.findOne({ where: { email: info.email } }, function (err, _user) {
-      if (err) throw err;
-      if (_user.isBolocked) {
-        html = 'Click <a href="' + url + '?access_token=' +
-          info.accessToken.id + '">here</a> to reset your password and unlock your account.';
-        subject = "SFS: Unlock account";
+      if (err) {
+        console.log(err);
       }
+      else {
+        if (_user.isBolocked) {
+          html = 'Click <a href="' + url + '?access_token=' +
+            info.accessToken.id + '">here</a> to reset your password and unlock your account.';
+          subject = "SFS: Unlock account";
+        }
 
-      User.app.models.Email.send({
-        to: info.email,
-        from: info.email,
-        subject: subject,
-        html: html,
-      }, function (err) {
-        if (err) return console.log('> error sending password reset email');
-        console.log('> sending password reset email to:', info.email);
-      });
+        User.app.models.Email.send({
+          to: info.email,
+          from: info.email,
+          subject: subject,
+          html: html,
+        }, function (err) {
+          if (err) return console.log('> error sending password reset email');
+          console.log('> sending password reset email to:', info.email);
+        });
+      }
     });
   });
 
@@ -104,7 +108,9 @@ module.exports = function (User) {
     _user.failedPasswordAttemptCount = 0;
     _user.isBolocked = 0;
     User.updateAll({ id: context.args.id }, _user, function (err, updatedUser) {
-      if (err) throw err;
+      if (err) {
+        return next(err);
+      }
       context.res.render('response', {
         title: 'Password reset success',
         content: 'Your password has been reset successfully',
@@ -118,7 +124,7 @@ module.exports = function (User) {
     if (context.args) {
       User.updateAll({ id: context.args.uid }, { isActivate: true }, function (err, updatedUser) {
         if (err)
-          throw err;
+          return next(err);
         else {
           next();
         }
@@ -142,7 +148,7 @@ module.exports = function (User) {
               roleId: cUser.roleId
             };
             app.models.RoleMapping.create(rolemapping, function (err, rolemap) {
-              if (err) throw err;
+              if (err) cb(err);
             });
 
             var userSchoolMap = [];
@@ -155,8 +161,10 @@ module.exports = function (User) {
             });
             if (userSchoolMap.length > 0) {
               app.models.Userschooldetails.create(userSchoolMap, function (err, details) {
-                if (err) throw err;
-                authHelper.sendVerificationEmail(cUser, password, false, cb);
+                if (err)
+                  cb(err);
+                else
+                  authHelper.sendVerificationEmail(cUser, password, false, cb);
               });
             }
           }
@@ -173,10 +181,10 @@ module.exports = function (User) {
       email: user.email
     };
     User.findOne({ where: { id: id } }, function (err, userInfo) {
-      if (err) throw err;
+      if (err) cb(err);
       User.updateAll({ id: id }, updateUser, function (err, updatedUser) {
         if (err)
-          throw err;
+          cb(err);
         else {
           if (userInfo.email != user.email) {
             userInfo.email = user.email;
@@ -189,7 +197,7 @@ module.exports = function (User) {
             principalId: id
           };
           app.models.RoleMapping.find({ where: { and: [{ principalType: "USER" }, { principalId: id }] } }, function (err, rolemapArr) {
-            if (err) throw err;
+            if (err) cb(err);
             else {
               if (rolemapArr.length > 0) {
                 var rolemap = rolemapArr[0];
@@ -198,23 +206,26 @@ module.exports = function (User) {
 
                   app.models.RoleMapping.updateAll({ and: [{ principalType: "USER" }, { principalId: id }] }, { roleId: user.roleId }, function (err, updatedUser) {
                     if (err)
-                      throw err;
+                      cb(err);
                   });
                 }
                 app.models.Userschooldetails.destroyAll({ userId: id }, function (err, userSchoolInfo) {
-                  if (err) throw err;
-                  var userSchoolMap = [];
-                  user.schoolIds.map(function (sid, index) {
-                    userSchoolMap.push({
-                      userId: id,
-                      schoolId: sid,
+                  if (err) cb(err);
+                  else {
+                    var userSchoolMap = [];
+                    user.schoolIds.map(function (sid, index) {
+                      userSchoolMap.push({
+                        userId: id,
+                        schoolId: sid,
+                      });
                     });
-                  });
-                  if (userSchoolMap.length > 0) {
-                    app.models.Userschooldetails.create(userSchoolMap, function (err, details) {
-                      if (err) throw err;
-                      cb(null, user);
-                    });
+                    if (userSchoolMap.length > 0) {
+                      app.models.Userschooldetails.create(userSchoolMap, function (err, details) {
+                        if (err) cb(err);
+                        else
+                          cb(null, user);
+                      });
+                    }
                   }
                 });
 
