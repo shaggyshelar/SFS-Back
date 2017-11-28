@@ -9,11 +9,16 @@ module.exports = function (Feeplanheaddetails) {
             });
 
             Feeplanheaddetails.destroyAll({ or: conditions }, function (err, info) {
-                if (err) throw err;
-                Feeplanheaddetails.create(feeplanheaddetails, function (err, savedAssociations) {
-                    if (err) throw err;
-                    cb(null, savedAssociations);
-                });
+                if (err) {
+                    cb(err);
+                } else {
+                    Feeplanheaddetails.create(feeplanheaddetails, function (err, savedAssociations) {
+                        if (err)
+                            cb(err);
+                        else
+                            cb(null, savedAssociations);
+                    });
+                }
             });
         }
         else {
