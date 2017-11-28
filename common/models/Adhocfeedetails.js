@@ -16,11 +16,17 @@ module.exports = function (Adhocfeedetails) {
       });
 
       Adhocfeedetails.destroyAll({ or: conditions }, function (err, info) {
-        if (err) throw err;
-        Adhocfeedetails.create(adhocfeedetails, function (err, savedAssociations) {
-          if (err) throw err;
-          cb(null, savedAssociations);
-        });
+        if (err) cb(err);
+        else {
+          Adhocfeedetails.create(adhocfeedetails, function (err, savedAssociations) {
+            if (err) {
+              cb(err);
+            }
+            else {
+              cb(null, savedAssociations);
+            }
+          });
+        }
       });
     }
     else {

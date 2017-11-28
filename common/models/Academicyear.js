@@ -32,7 +32,7 @@ module.exports = function (Academicyear) {
     }
     if (isCurrent) {
       Academicyear.updateAll({ schoolId: ctx.data.schoolId, isCurrent: true }, { isCurrent: false }, function (err, updatedMerchants) {
-        if (err) throw err;
+        if (err) return next(err);
         next();
       });
     }

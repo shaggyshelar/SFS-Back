@@ -7,7 +7,7 @@ module.exports = function (Schoolmerchant) {
         if (ctx.instance) {
             if (ctx.instance.isDefault && ctx.instance.schoolId != undefined) {
                 Schoolmerchant.updateAll({ schoolId: ctx.instance.schoolId, isDefault: true }, { isDefault: false }, function (err, updatedMerchants) {
-                    if (err) throw err;
+                    if (err) return next(err);
                     next();
                 });
             }
@@ -18,7 +18,7 @@ module.exports = function (Schoolmerchant) {
         else if (ctx.data) {
             if (ctx.data.isDefault && ctx.data.schoolId != undefined) {
                 Schoolmerchant.updateAll({ schoolId: ctx.data.schoolId, isDefault: true }, { isDefault: false }, function (err, updatedMerchants) {
-                    if (err) throw err;
+                    if (err) return next(err);
                     next();
                 });
             }
@@ -26,7 +26,7 @@ module.exports = function (Schoolmerchant) {
                 var error = new Error();
                 error.status = 422;
                 error.message = i18next.t('error_schoolIdIsRequired');
-                next(error);
+                return next(error);
             }
             else {
                 next();

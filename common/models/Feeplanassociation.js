@@ -41,11 +41,17 @@ module.exports = function (Feeplanassociation) {
                     });
 
                     Feeplanassociation.destroyAll({ or: conditions }, function (err, info) {
-                        if (err) throw err;
-                        Feeplanassociation.create(feeplanassociations, function (err, savedAssociations) {
-                            if (err) throw err;
-                            cb(null, savedAssociations);
-                        });
+                        if (err) {
+                            cb(err);
+                        }
+                        else {
+                            Feeplanassociation.create(feeplanassociations, function (err, savedAssociations) {
+                                if (err)
+                                    cb(err);
+                                else
+                                    cb(null, savedAssociations);
+                            });
+                        }
                     });
                 }
             });
