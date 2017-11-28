@@ -35,23 +35,23 @@ utilities.registerUser = function(app) {
   var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
   var hashedKey = apiHelper.getHashedKey(concatenatedParams);
   var userForm = apiHelper.getForm(userParams, hashedKey);
-  apiHelper.registerUser(userForm);
+  apiHelper.registerOrUpdateUser(userForm);
 };
 
-utilities.listInvoiceEnquiry = function(app) {
+utilities.updateUser = function(app, userID) {
   var apiHelper = apiHelperObject(app);
   var userParams = [];
-  var cur = new Date();
-  var currentDay = cur.getDate() + '/' + cur.getMonth() + '/' + cur.getFullYear();
   userParams.push(['merchantId', config.payPhiMerchantID]);
   userParams.push(['aggregatorId', config.payPhiAggregatorID]);
-  userParams.push(['userID', '008']);
-  userParams.push(['status', 'O']);
+  userParams.push(['userID', userID]);
+  userParams.push(['actionCode', 'U']);
+  userParams.push(['fName', 'SagarU']);
+  userParams.push(['lName', 'ShelarU']);
 
   var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
   var hashedKey = apiHelper.getHashedKey(concatenatedParams);
   var userForm = apiHelper.getForm(userParams, hashedKey);
-  // apiHelper.registerUser(userForm);
+  apiHelper.registerOrUpdateUser(userForm);
 };
 
 utilities.createInvoice = function(app) {
@@ -97,6 +97,7 @@ utilities.updateInvoice = function(app) {
 utilities.init = function(app) {
   fileHelper.init();
   // this.registerUser(app);
+  // this.updateUser(app, 'espl1281020171745');
   // this.listInvoiceEnquiry(app);
 
   // Execute a cron job when the minute is 10 (e.g. 19:10, 20:10, etc.).
