@@ -116,6 +116,21 @@
         "nullable": "Y"
       }
     },
+    "zoneCode": {
+      "type": "String",
+      "required": false,
+      "length": 24,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "zoneCode",
+        "dataType": "varchar",
+        "dataLength": 24,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
     "gRNumber": {
       "type": "String",
       "required": false,
