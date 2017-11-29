@@ -26,6 +26,11 @@
         "model": "School",
         "type": "belongsTo",
         "foreignKey": "schoolId"
+      },
+      "StudentZone": {
+        "model": "Zone",
+        "type": "belongsTo",
+        "foreignKey": "zoneId"
       }
     }
   },
@@ -116,18 +121,18 @@
         "nullable": "Y"
       }
     },
-    "zoneCode": {
-      "type": "String",
+    "zoneId": {
+      "type": "Number",
       "required": false,
-      "length": 24,
-      "precision": null,
-      "scale": null,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
       "mysql": {
-        "columnName": "zoneCode",
-        "dataType": "varchar",
-        "dataLength": 24,
-        "dataPrecision": null,
-        "dataScale": null,
+        "columnName": "zoneId",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
         "nullable": "Y"
       }
     },
