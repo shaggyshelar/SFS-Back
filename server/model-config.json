@@ -135,5 +135,9 @@
   "container": {
     "dataSource": "storage",
     "public": true
+  },
+  "Zonedetails": {
+    "dataSource": "mysql",
+    "public": true
   }
 }
