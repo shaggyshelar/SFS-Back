@@ -36,32 +36,10 @@ module.exports = function(app) {
           console.log('body:', body);
         });
     },
-    registerUser: (registerUserForm) => {
+    registerOrUpdateUser: (userForm) => {
       request.post({
         url: config.payPhiServerRoot + config.payPhiRegisterUserURL,
-        form: registerUserForm,
-      },
-        function(error, response, body) {
-          console.log('error:', error);
-          console.log('statusCode:', response && response.statusCode);
-          console.log('body:', body);
-        });
-    },
-    listInvoice: (listInvoiceForm) => {
-      request.post({
-        url: config.payPhiServerRoot + config.payPhiListInvoiceURL,
-        form: listInvoiceForm,
-      },
-        function(error, response, body) {
-          console.log('error:', error);
-          console.log('statusCode:', response && response.statusCode);
-          console.log('body:', body);
-        });
-    },
-    downloadReceipt: (downloadReceiptForm) => {
-      request.post({
-        url: config.payPhiServerRoot + config.payPhiDownloadReceiptURL,
-        form: downloadReceiptForm,
+        form: userForm,
       },
         function(error, response, body) {
           console.log('error:', error);

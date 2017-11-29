@@ -35,37 +35,36 @@ utilities.registerUser = function(app) {
   var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
   var hashedKey = apiHelper.getHashedKey(concatenatedParams);
   var userForm = apiHelper.getForm(userParams, hashedKey);
-  apiHelper.registerUser(userForm);
+  apiHelper.registerOrUpdateUser(userForm);
 };
 
-utilities.listInvoiceEnquiry = function(app) {
+utilities.updateUser = function(app, userID) {
   var apiHelper = apiHelperObject(app);
   var userParams = [];
-  var cur = new Date();
-  var currentDay = cur.getDate() + '/' + cur.getMonth() + '/' + cur.getFullYear();
   userParams.push(['merchantId', config.payPhiMerchantID]);
   userParams.push(['aggregatorId', config.payPhiAggregatorID]);
-  userParams.push(['userID', '008']);
-  userParams.push(['status', 'O']);
+  userParams.push(['userID', userID]);
+  userParams.push(['actionCode', 'U']);
+  userParams.push(['fName', 'SagarU']);
+  userParams.push(['lName', 'ShelarU']);
 
   var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
   var hashedKey = apiHelper.getHashedKey(concatenatedParams);
   var userForm = apiHelper.getForm(userParams, hashedKey);
-  // apiHelper.registerUser(userForm);
+  apiHelper.registerOrUpdateUser(userForm);
 };
 
 utilities.createInvoice = function(app) {
   var apiHelper = apiHelperObject(app);
   var invoiceParams = [];
   var cur = new Date();
-  var newUserId = 'espl1' + cur.getDate() + '' + cur.getMonth() + '' + cur.getFullYear() + cur.getHours() + cur.getSeconds();
   invoiceParams.push(['merchantId', config.payPhiMerchantID]);
   invoiceParams.push(['aggregatorId', config.payPhiAggregatorID]);
-  invoiceParams.push(['userID', newUserId]);
-  invoiceParams.push(['invoiceNo', 'SOMEUNIQUEINVOICENUMBER']);
+  invoiceParams.push(['userID', 'espl1281020171745']);
+  invoiceParams.push(['invoiceNo', 'AqKpCp7FG8dJbjn51jx2OApW19ZiZy4i']);
   invoiceParams.push(['desc', 'SOME DESCRIPTION RELATED TO INVOICE']);
   invoiceParams.push(['chargeAmount', '10000.00']);
-  invoiceParams.push(['currencyCode', 'INR']); // TO CHECK
+  invoiceParams.push(['currencyCode', '356']); // TO CHECK
   invoiceParams.push(['dueDate', '30/05/2018']);
   invoiceParams.push(['chargeHead1', '3000.00']);
   invoiceParams.push(['chargeHead2', '3000.00']);
@@ -97,7 +96,8 @@ utilities.updateInvoice = function(app) {
 utilities.init = function(app) {
   fileHelper.init();
   // this.registerUser(app);
-  // this.listInvoiceEnquiry(app);
+  // this.updateUser(app, 'espl1281020171745');
+  // this.createInvoice(app);
 
   // Execute a cron job when the minute is 10 (e.g. 19:10, 20:10, etc.).
   var clearFileScheduler = schedule.scheduleJob(config.fileCleanerSchedulerTime, function() {
