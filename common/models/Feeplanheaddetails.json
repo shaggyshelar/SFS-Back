@@ -11,7 +11,8 @@
         "model": "School",
         "type": "belongsTo",
         "foreignKey": "schoolId"
-      },"FeeplandetailsFeehead": {
+      },
+      "FeeplandetailsFeehead": {
         "model": "Feehead",
         "type": "belongsTo",
         "foreignKey": "feeHeadId"
