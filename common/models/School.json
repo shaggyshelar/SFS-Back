@@ -58,7 +58,7 @@
         "model": "Adhocfee",
         "foreignKey": "schoolId"
       },
-      "Zones": {
+      "zones": {
         "type": "hasMany",
         "model": "Zone",
         "foreignKey": "schoolId"

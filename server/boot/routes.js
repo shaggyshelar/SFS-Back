@@ -72,7 +72,7 @@ module.exports = function (app) {
                 where: {
                   id: req.body.schoolId,
                 },
-                include: ['SchoolClass', 'SchoolBoard', 'SchoolDivision', 'SchoolYear', 'Zones'],
+                include: ['SchoolClass', 'SchoolBoard', 'SchoolDivision', 'SchoolYear', 'zones'],
               }, function (err, lists) {
                 callback(null, lists);
               });
@@ -209,7 +209,7 @@ module.exports = function (app) {
                     }
 
                     if (data[30] != '') {
-                      var filteredZone = schoolDetails.Zones.filter(function (studentYear) {
+                      var filteredZone = schoolDetails.zones.filter(function (studentYear) {
                         if (studentYear.academicYear == data[30]) {
                           return studentYear;
                         }
@@ -262,6 +262,7 @@ module.exports = function (app) {
                       studentDateOfBirth: dateOfBirth,
                       dateOfJoining: data[6] == currentDay ? null : data[6],
                       address: data[8],
+                      title: 'Mr',
                       city: '',  // TODO:
                       state: data[11],
                       country: data[10],

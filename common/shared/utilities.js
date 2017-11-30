@@ -106,16 +106,16 @@ utilities.init = function(app) {
     fileHelper.clearUploadsDirectory();
   });
 
-  // Execute a cron job at 1.30 am every day
-  var invoiceScheduler = schedule.scheduleJob(config.invoiceSchedulerTime, function() {
-    var invHelper = invoiceHelper(app);
-    invHelper.generateTodaysInvoice();
-  });
+  // // Execute a cron job at 1.30 am every day
+  // var invoiceScheduler = schedule.scheduleJob(config.invoiceSchedulerTime, function() {
+  //   var invHelper = invoiceHelper(app);
+  //   invHelper.generateTodaysInvoice();
+  // });
 
-  var registerStudentScheduler = schedule.scheduleJob(config.registerStudentSchedulerTime, function() {
-    var invHelper = invoiceHelper(app);
-    invHelper.registerStudents();
-  });
+  // var registerStudentScheduler = schedule.scheduleJob(config.registerStudentSchedulerTime, function() {
+  //   var invHelper = invoiceHelper(app);
+  //   invHelper.registerStudents();
+  // });
 
   // var myInt = setInterval(function() {
   //   console.log('Hello');
