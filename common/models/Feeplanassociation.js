@@ -8,7 +8,7 @@ module.exports = function (Feeplanassociation) {
 
             var searchConditions = [];
             feeplanassociations.map(function (assocn, index) {
-                searchConditions.push({ categoryId: assocn.categoryId, classId: assocn.classId, academicYear: assocn.academicYear });
+                searchConditions.push({ feeplanId: { "neq": assocn.feeplanId }, categoryId: assocn.categoryId, classId: assocn.classId, academicYear: assocn.academicYear });
             });
             Feeplanassociation.find({ where: { or: searchConditions }, include: { relation: "FeeplanassociationFeeplan" } }, function (err, duplicateAssoc) {
                 if (duplicateAssoc && duplicateAssoc.length > 0) {
@@ -41,11 +41,17 @@ module.exports = function (Feeplanassociation) {
                     });
 
                     Feeplanassociation.destroyAll({ or: conditions }, function (err, info) {
-                        if (err) throw err;
-                        Feeplanassociation.create(feeplanassociations, function (err, savedAssociations) {
-                            if (err) throw err;
-                            cb(null, savedAssociations);
-                        });
+                        if (err) {
+                            cb(err);
+                        }
+                        else {
+                            Feeplanassociation.create(feeplanassociations, function (err, savedAssociations) {
+                                if (err)
+                                    cb(err);
+                                else
+                                    cb(null, savedAssociations);
+                            });
+                        }
                     });
                 }
             });

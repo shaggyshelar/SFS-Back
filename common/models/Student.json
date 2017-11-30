@@ -26,6 +26,11 @@
         "model": "School",
         "type": "belongsTo",
         "foreignKey": "schoolId"
+      },
+      "StudentZone": {
+        "model": "Zone",
+        "type": "belongsTo",
+        "foreignKey": "zoneId"
       }
     }
   },
@@ -109,6 +114,21 @@
       "scale": 0,
       "mysql": {
         "columnName": "divisionId",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "zoneId": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
+      "mysql": {
+        "columnName": "zoneId",
         "dataType": "bigint",
         "dataLength": null,
         "dataPrecision": 19,
@@ -536,7 +556,22 @@
         "nullable": "N"
       }
     },
-    "isactive": {
+    "isRegistered": {
+      "type": "Number",
+      "required": true,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "isRegistered",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "N"
+      }
+    },
+    "isActive": {
       "type": "Number",
       "required": false,
       "length": null,
@@ -551,7 +586,7 @@
         "nullable": "Y"
       }
     },
-    "deactivedate": {
+    "deactiveDate": {
       "type": "Date",
       "required": false,
       "length": null,
@@ -566,7 +601,7 @@
         "nullable": "Y"
       }
     },
-    "deactivedesc": {
+    "deactiveDesc": {
       "type": "String",
       "required": false,
       "length": 100,

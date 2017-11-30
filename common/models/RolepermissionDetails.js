@@ -6,7 +6,7 @@ module.exports = function (RolepermissionDetails) {
     RolepermissionDetails.afterRemote('create', function (context, permission, next) {
 
         app.models.role.findById(permission.roleId, function (err, srole) {
-            if (err) throw err;
+            if (err) return next(err);
             var modelPermissionArray = permission.permissionName.split('.');
             if (modelPermissionArray != undefined && modelPermissionArray.length == 2) {
                 var _model = modelPermissionArray[0];
@@ -31,7 +31,7 @@ module.exports = function (RolepermissionDetails) {
         });
 
         // app.models.role.findById(permission.roleId, function (err, srole) {
-        //     if (err) throw err;
+        //     if (err) return next(err);
         //     var modelPermissionArray = permission.permissionName.split('.');
         //     if (modelPermissionArray != undefined && modelPermissionArray.length == 2) {
         //         var _model = modelPermissionArray[0];
@@ -116,7 +116,7 @@ module.exports = function (RolepermissionDetails) {
         RolepermissionDetails.findById(ctx.where.and[0].id, function (err, permissionModel) {
             if (permissionModel) {
                 app.models.role.findById(permissionModel.roleId, function (err, srole) {
-                    if (err) throw err;
+                    if (err) return next(err);
 
                     var permissionStr = permissionModel.permissionName;
                     var modelPermissionArray = permissionStr.split('.');
@@ -132,7 +132,7 @@ module.exports = function (RolepermissionDetails) {
                                 conditions.push({ model: perm.model, principalId: perm.principalId, principalType: perm.principalType, property: perm.property, accessType: perm.accessType });
                             });
                             app.models.ACL.destroyAll({ or: conditions }, function (err, info) {
-                                if (err) throw err;
+                                if (err) return next(err);
 
                                 aclArray.map(function (perm, index) {
                                     var modelInstance = app.models[perm.model];
@@ -219,7 +219,7 @@ module.exports = function (RolepermissionDetails) {
                         // }
 
                         // app.models.ACL.destroyAll({ and: conditions }, function (err, info) {
-                        //     if (err) throw err;
+                        //     if (err) return next(err);
                         //     var modelInstance = app.models[_model];
                         //     if (modelInstance && modelInstance != undefined) {
                         //         // modelInstance.settings.acls.push(options);

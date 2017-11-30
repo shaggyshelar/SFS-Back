@@ -14,14 +14,14 @@ module.exports = function (School) {
         "name": ctx.instance.id.toString()
       }, function (err, container) {
         if (err) {
-          throw err
+          return next(err);
         } else {
           var _userSchoolDetails = {
             "userId": ctx.options.accessToken.userId,
             "schoolId": ctx.instance.id
           };
           app.models.Userschooldetails.create(_userSchoolDetails, function (err, schoolMapping) {
-            if (err) throw err;
+            if (err) return next(err);
             next();
           });
 

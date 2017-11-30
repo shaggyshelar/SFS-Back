@@ -1,4 +1,6 @@
 'use strict';
+var i18next = require('i18next');
+
 module.exports = function (Academicyear) {
   Academicyear.validatesPresenceOf(
     'schoolId',
@@ -8,33 +10,41 @@ module.exports = function (Academicyear) {
   );
 
   Academicyear.observe('before save', function updateTimestamp(ctx, next) {
-    var schoolId, isCurrent = false;
+    var schoolId, isCurrent = false, isCreate = false;;
     if (ctx.instance) {
-      if (ctx.instance.isCurrent && ctx.instance.schoolId != undefined) {
-        schoolId = ctx.instance.schoolId;
-        isCurrent = ctx.instance.isCurrent;
-      }
+      schoolId = ctx.instance.schoolId;
+      isCurrent = ctx.instance.isCurrent;
+      isCreate = true;
     }
     else if (ctx.data) {
-      if (ctx.data.isCurrent && ctx.data.schoolId != undefined) {
-        schoolId = ctx.data.schoolId;
-        isCurrent = ctx.data.isCurrent;
-      }
-      // else if (ctx.data.isCurrent && ctx.data.schoolId == undefined) {
-      //   var error = new Error();
-      //   error.status = 422;
-      //   error.message = i18next.t('error_schoolIdIsRequired');
-      //   next(error);
-      // }
-      // else {
-      //   next();
-      // }
+      schoolId = ctx.data.schoolId;
+      isCurrent = ctx.data.isCurrent;
     }
-    if (isCurrent) {
-      Academicyear.updateAll({ schoolId: ctx.data.schoolId, isCurrent: true }, { isCurrent: false }, function (err, updatedMerchants) {
-        if (err) throw err;
-        next();
+    if (!isCurrent && schoolId != undefined) {
+      var condn = { schoolId: schoolId, isCurrent: true };
+      if (ctx.where !== undefined) {
+        condn.id = ctx.where.id;
+      }
+      Academicyear.find({ where: condn }, function (err, _academicYear) {
+        if (err) return next(err);
+        if (_academicYear.length == 0) {
+          if (isCreate) {
+            ctx.instance.isCurrent = true;
+            next();
+          } else {
+            var error = new Error();
+            error.status = 422;
+            error.message = i18next.t('error_noCurrentAcademicYear');
+            return next(error);
+          }
+        }
+        else {
+          next();
+        }
       });
+    }
+    else if (isCurrent) {
+      Academicyear.resetIsCurrent(schoolId, next);
     }
     else {
       next();
@@ -42,5 +52,12 @@ module.exports = function (Academicyear) {
 
 
   });
+
+  Academicyear.resetIsCurrent = function (schoolId, next) {
+    Academicyear.updateAll({ schoolId: schoolId, isCurrent: true }, { isCurrent: false }, function (err, updatedMerchants) {
+      if (err) return next(err);
+      next();
+    });
+  }
 
 };

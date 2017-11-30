@@ -7,6 +7,11 @@
       "table": "feeplanassociation"
     },
     "relations": {
+      "FeeplanassociationSchool": {
+        "model": "School",
+        "type": "belongsTo",
+        "foreignKey": "schoolId"
+      },
       "FeeplanassociationCategory": {
         "model": "Category",
         "type": "belongsTo",
@@ -25,10 +30,7 @@
     }
   },
   "scope": {
-    "include": [
-      "FeeplanassociationClass",
-      "FeeplanassociationCategory"
-    ]
+    "include": "FeeplanassociationCategory"
   },
   "mixins": {
     "TimestampMixin": true,
@@ -44,6 +46,21 @@
       "id": 1,
       "mysql": {
         "columnName": "id",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
+        "nullable": "N"
+      }
+    },
+    "schoolId": {
+      "type": "Number",
+      "required": true,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
+      "mysql": {
+        "columnName": "schoolId",
         "dataType": "bigint",
         "dataLength": null,
         "dataPrecision": 19,
@@ -109,21 +126,6 @@
         "dataPrecision": null,
         "dataScale": 0,
         "nullable": "N"
-      }
-    },
-    "isTransactionProcessed": {
-      "type": "boolean",
-      "required": false,
-      "length": null,
-      "precision": 3,
-      "scale": 0,
-      "mysql": {
-        "columnName": "isTransactionProcessed",
-        "dataType": "tinyint",
-        "dataLength": null,
-        "dataPrecision": 3,
-        "dataScale": 0,
-        "nullable": "Y"
       }
     },
     "createdBy": {
