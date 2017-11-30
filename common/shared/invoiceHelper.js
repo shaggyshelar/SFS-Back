@@ -102,7 +102,7 @@ module.exports = function(app) {
         },
       ],
       function(err, results) {
-        var students = results[0].slice(0, 1);
+        var students = results[0];
         _.each(students, function(studentDetails) {
           invoiceHelper.registerStudent(studentDetails);
         });

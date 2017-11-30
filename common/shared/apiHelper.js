@@ -39,6 +39,7 @@ module.exports = function(app) {
         });
     },
     registerOrUpdateUser: (userForm) => {
+      rootlogger.info('Registering User', userForm);
       request.post({
         url: config.payPhiServerRoot + config.payPhiRegisterUserURL,
         form: userForm,
@@ -69,7 +70,6 @@ module.exports = function(app) {
         var a1 = a[0];
         var b1 = b[0];
         return a1 == b1 ? 0 : (a1 < b1 ? -1 : 1);
-        // return a[0].localeCompare(b[0]);
       });
 
       var concatenatedValues = '';

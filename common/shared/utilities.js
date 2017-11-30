@@ -95,8 +95,8 @@ utilities.updateInvoice = function(app) {
 
 utilities.init = function(app) {
   fileHelper.init();
-  var invHelper = invoiceHelper(app);
-  invHelper.registerStudents();
+  // var invHelper = invoiceHelper(app);
+  // invHelper.registerStudents();
   // this.registerUser(app);
   // this.updateUser(app, 'espl1281020171745');
   // this.createInvoice(app);
