@@ -12,6 +12,7 @@
     "csv_validation_invalidClass": "Invalid class '{{className}}'. ",
     "csv_validation_classRequired": "Required value for 'Class'. ",
     "csv_validation_invalidYear": "Invalid year '{{acadYear}}'. ",
+    "csv_validation_invalidZone": "Invalid zone '{{zoneName}}'. ",
     "csv_validation_yearRequired": "Required value for 'Academic Year'. ",
     "csv_validation_invalidGender": "Invalid gender '{{gender}}'. ",
     "csv_validation_studentCodeRequired": "Required value for 'Student Code'. ",
