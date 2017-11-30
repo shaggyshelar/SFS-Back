@@ -30,6 +30,12 @@ module.exports = function (app) {
     res.render('verified');
   });
 
+  app.post('/api/paymentAdvice', function (req, res) {
+    // req.body.username
+    res.status(400);
+    res.json({'Message': i18next.t('csv_validation_unsupportedFormat')});
+  });
+
   app.post('/api/uploadcsv', upload.single('csvdata'), function (req, res) {
     var AccessToken = app.models.AccessToken;
     AccessToken.findForRequest(req, {}, function (aux, accesstoken) {
@@ -66,7 +72,7 @@ module.exports = function (app) {
                 where: {
                   id: req.body.schoolId,
                 },
-                include: ['SchoolClass', 'SchoolBoard', 'SchoolDivision', 'SchoolYear'],
+                include: ['SchoolClass', 'SchoolBoard', 'SchoolDivision', 'SchoolYear', 'Zones'],
               }, function (err, lists) {
                 callback(null, lists);
               });
@@ -200,6 +206,18 @@ module.exports = function (app) {
 
                     if (data[29] == '') {
                       validationErrors += i18next.t('csv_validation_studentCodeRequired');
+                    }
+
+                    if (data[30] != '') {
+                      var filteredZone = schoolDetails.Zones.filter(function (studentYear) {
+                        if (studentYear.academicYear == data[30]) {
+                          return studentYear;
+                        }
+                      });
+                      var matchingZone = filteredZone && filteredZone.length ? filteredZone[0] : null;
+                      if (!matchingZone) {
+                        validationErrors += i18next.t('csv_validation_invalidZone', { zoneName: data[30] });
+                      }
                     }
 
                     var dateOfBirth = data[5] == '' ? '2000/01/01' : data[5];
