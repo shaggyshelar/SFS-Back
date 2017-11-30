@@ -10,7 +10,7 @@ module.exports = function (Feeplanassociation) {
             feeplanassociations.map(function (assocn, index) {
                 searchConditions.push({ feeplanId: { "neq": assocn.feeplanId }, categoryId: assocn.categoryId, classId: assocn.classId, academicYear: assocn.academicYear });
             });
-            Feeplanassociation.find({ where: { or: searchConditions }, include: { relation: "FeeplanassociationFeeplan" } }, function (err, duplicateAssoc) {
+            Feeplanassociation.find({ where: { or: searchConditions }, include: ["FeeplanassociationFeeplan", "FeeplanassociationClass"] }, function (err, duplicateAssoc) {
                 if (duplicateAssoc && duplicateAssoc.length > 0) {
                     var errorFeePlans = [];
                     var error = new Error();
