@@ -100,6 +100,32 @@ module.exports = function (app) {
                 res.status(400);
                 res.json({ 'Message': i18next.t('csv_validation_invalidSchoolName') });
                 return;
+              } else {
+                schoolDetails = schoolDetails.toJSON();
+              }
+
+              if (!schoolDetails.SchoolClass || schoolDetails.SchoolClass.length == 0){
+                res.status(400);
+                res.json({ 'Message': i18next.t('csv_validation_noClassesAvailable') });
+                return;
+              }
+
+              if (!schoolDetails.SchoolDivision || schoolDetails.SchoolDivision.length == 0){
+                res.status(400);
+                res.json({ 'Message': i18next.t('csv_validation_noDivisionsAvailable') });
+                return;
+              }
+
+              if (!schoolDetails.SchoolYear || schoolDetails.SchoolYear.length == 0){
+                res.status(400);
+                res.json({ 'Message': i18next.t('csv_validation_noYearsAvailable') });
+                return;
+              }
+
+              if (!schoolDetails.zones || schoolDetails.zones.length == 0){
+                res.status(400);
+                res.json({ 'Message': i18next.t('csv_validation_noZonesAvailable') });
+                return;
               }
 
               var categoryList = results[1];
