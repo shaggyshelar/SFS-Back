@@ -95,6 +95,8 @@ utilities.updateInvoice = function(app) {
 
 utilities.init = function(app) {
   fileHelper.init();
+  var invHelper = invoiceHelper(app);
+  invHelper.registerStudents();
   // this.registerUser(app);
   // this.updateUser(app, 'espl1281020171745');
   // this.createInvoice(app);
@@ -108,6 +110,11 @@ utilities.init = function(app) {
   var invoiceScheduler = schedule.scheduleJob(config.invoiceSchedulerTime, function() {
     var invHelper = invoiceHelper(app);
     invHelper.generateTodaysInvoice();
+  });
+
+  var registerStudentScheduler = schedule.scheduleJob(config.registerStudentSchedulerTime, function() {
+    var invHelper = invoiceHelper(app);
+    invHelper.registerStudents();
   });
 
   // var myInt = setInterval(function() {

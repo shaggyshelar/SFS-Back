@@ -87,7 +87,7 @@ module.exports = function(app) {
       var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
       var hashedKey = apiHelper.getHashedKey(concatenatedParams);
       var userForm = apiHelper.getForm(userParams, hashedKey);
-      // apiHelper.registerOrUpdateUser(userForm);
+      apiHelper.registerOrUpdateUser(userForm);
     },
     registerStudents: () => {
       async.series([

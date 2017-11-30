@@ -13,6 +13,8 @@ var configFilePath = process.env.NODE_ENV == undefined ?
 var config = require('../../server/config' + configFilePath + '.json');
 
 module.exports = function(app) {
+  var Student = app.models.Student;
+
   return {
     paymentInvoiceRequest: (postInvoiceForm) => {
       request.post({
@@ -42,9 +44,21 @@ module.exports = function(app) {
         form: userForm,
       },
         function(error, response, body) {
-          console.log('error:', error);
-          console.log('statusCode:', response && response.statusCode);
-          console.log('body:', body);
+          if (!error) {
+            var responseData = JSON.parse(body);
+            if (responseData.responseCode == '0000') {
+              Student.updateAll({'studentCode': userForm.studentCode}, {isRegistered: 1},
+              function(err, updatedUser) {
+                if (err) {
+                  rootlogger.error(responseData);
+                }
+              });
+            } else {
+              rootlogger.error(responseData);
+            }
+          } else {
+            rootlogger.error('Error while registering student into PayPhi system.');
+          }
         });
     },
     getConcatenatedParams: function(params) {
