@@ -122,10 +122,11 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
         }
         else if (selectedModel.toLowerCase() == "zone") {
             var propertyArr = [
-                { property: "__create__zones", model: "School" }
+                { property: "__create__zones", model: "School", accessType: "WRITE" },
+                { property: "updateZonedetails", model: "Zonedetails", accessType: "EXECUTE" }
             ];
             propertyArr.map(function (p, i) {
-                propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+                propertyAccess.push({ model: p.model, property: p.property, accessType: p.accessType, permission: "ALLOW", principalId: role, principalType: "ROLE" });
             });
         }
         else if (selectedModel.toLowerCase() == "feeplanheaddetails") {
@@ -280,7 +281,11 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
             var propertyArr = [
                 { property: "__get__zones", model: "School" },
                 { property: "__findById__zones", model: "School" },
-                { property: "__count__zones", model: "School" }
+                { property: "__count__zones", model: "School" },
+                { property: "find", model: "Zonedetails" },
+                { property: "findById", model: "Zonedetails" },
+                { property: "count", model: "Zonedetails" }
+
             ];
             propertyArr.map(function (p, i) {
                 propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
@@ -385,10 +390,11 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
         }
         else if (selectedModel.toLowerCase() == "zone") {
             var propertyArr = [
-                { property: "__updateById__zones", model: "School" }
+                { property: "__updateById__zones", model: "School", accessType: "WRITE" },
+                { property: "updateZonedetails", model: "Zonedetails", accessType: "EXECUTE" }
             ];
             propertyArr.map(function (p, i) {
-                propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+                propertyAccess.push({ model: p.model, property: p.property, accessType: p.accessType, permission: "ALLOW", principalId: role, principalType: "ROLE" });
             });
         }
         else if (selectedModel.toLowerCase() == "feeplanheaddetails") {
