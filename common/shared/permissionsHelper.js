@@ -115,7 +115,8 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
             var propertyArr = [
                 { property: "__create__FeePlans", model: "School", accessType: "WRITE" },
                 { property: "findById", model: "School", accessType: "READ" },
-                { property: "create",  model: "Feeplan", accessType: "WRITE" }
+                { property: "create",  model: "Feeplan", accessType: "WRITE" },
+                { property: "updateFeeplanheaddetails", model: "Feeplanheaddetails", accessType: "EXECUTE" }
             ];
             propertyArr.map(function (p, i) {
                 propertyAccess.push({ model: p.model, property: p.property, accessType: p.accessType, permission: "ALLOW", principalId: role, principalType: "ROLE" });
