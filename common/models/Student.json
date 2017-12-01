@@ -168,7 +168,7 @@
     },
     "title": {
       "type": "String",
-      "required": true,
+      "required": false,
       "length": 10,
       "precision": null,
       "scale": null,

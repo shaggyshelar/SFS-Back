@@ -270,6 +270,7 @@ module.exports = function (app) {
                       categoryId: matchingCategory.id,
                       classId: matchingClass.id,
                       divisionId: matchingDivision.id,
+                      zoneId: (data[30] == '') ? null : matchingZone.id,
                       gRNumber: data[7].trim(),
                       studentCode: data[29].trim(),
                       studentFirstName: firstName,
@@ -299,6 +300,7 @@ module.exports = function (app) {
                       bloodGroup: data[14].trim(),
                       academicYear: matchingYear.academicYear,
                       isDelete: false,
+                      isRegistered: 0,
                       createdBy: user.id,
                       createdOn: currentDay,
                     };
