@@ -122,12 +122,6 @@ module.exports = function (app) {
                 return;
               }
 
-              if (!schoolDetails.zones || schoolDetails.zones.length == 0){
-                res.status(400);
-                res.json({ 'Message': i18next.t('csv_validation_noZonesAvailable') });
-                return;
-              }
-
               var categoryList = results[1];
               var csvStream = csv
                 .parse()
@@ -233,16 +227,19 @@ module.exports = function (app) {
                     if (data[29] == '') {
                       validationErrors += i18next.t('csv_validation_studentCodeRequired');
                     }
-
                     if (data[30] != '') {
-                      var filteredZone = schoolDetails.zones.filter(function (studentYear) {
-                        if (studentYear.academicYear == data[30]) {
-                          return studentYear;
-                        }
-                      });
-                      var matchingZone = filteredZone && filteredZone.length ? filteredZone[0] : null;
-                      if (!matchingZone) {
+                      if (!schoolDetails.zones || schoolDetails.zones.length == 0) {
                         validationErrors += i18next.t('csv_validation_invalidZone', { zoneName: data[30] });
+                      } else {
+                        var filteredZone = schoolDetails.zones.filter(function (studentYear) {
+                          if (studentYear.academicYear == data[30]) {
+                            return studentYear;
+                          }
+                        });
+                        var matchingZone = filteredZone && filteredZone.length ? filteredZone[0] : null;
+                        if (!matchingZone) {
+                          validationErrors += i18next.t('csv_validation_invalidZone', { zoneName: data[30] });
+                        }
                       }
                     }
 
