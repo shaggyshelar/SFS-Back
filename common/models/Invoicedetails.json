@@ -1,0 +1,150 @@
+{
+  "name": "Invoicedetails",
+  "options": {
+    "idInjection": false,
+    "mysql": {
+      "schema": "schoolfeesystem",
+      "table": "invoicedetails"
+    },
+    "relations": {
+      "InvoicedetailFeeplan": {
+        "model": "Feeplan",
+        "type": "belongsTo",
+        "foreignKey": "feeplanid"
+      },
+      "InvoicedetailFeeplanAdhocfee": {
+        "model": "Adhocfee",
+        "type": "belongsTo",
+        "foreignKey": "adhocfeeid"
+      },
+      "InvoicedetailZone": {
+        "model": "Zone",
+        "type": "belongsTo",
+        "foreignKey": "zoneid"
+      }
+    }
+  },
+  "properties": {
+    "id": {
+      "type": "Number",
+      "required": true,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
+      "id": 1,
+      "mysql": {
+        "columnName": "id",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
+        "nullable": "N"
+      }
+    },
+    "feeplanid": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
+      "mysql": {
+        "columnName": "feePlanId",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "adhocfeeid": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
+      "mysql": {
+        "columnName": "adhocFeeId",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "zoneid": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
+      "mysql": {
+        "columnName": "zoneId",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "invoicenumber": {
+      "type": "String",
+      "required": true,
+      "length": 32,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "invoiceNumber",
+        "dataType": "varchar",
+        "dataLength": 32,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "feeheadname": {
+      "type": "String",
+      "required": false,
+      "length": 50,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "feeHeadName",
+        "dataType": "varchar",
+        "dataLength": 50,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "chargeheadname": {
+      "type": "String",
+      "required": false,
+      "length": 20,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "chargeHeadName",
+        "dataType": "varchar",
+        "dataLength": 20,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "chargeamount": {
+      "type": "Number",
+      "required": true,
+      "length": null,
+      "precision": 9,
+      "scale": 2,
+      "mysql": {
+        "columnName": "chargeAmount",
+        "dataType": "decimal",
+        "dataLength": null,
+        "dataPrecision": 9,
+        "dataScale": 2,
+        "nullable": "N"
+      }
+    }
+  }
+}

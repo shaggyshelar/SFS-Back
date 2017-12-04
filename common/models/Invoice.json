@@ -1,0 +1,359 @@
+{
+  "name": "Invoice",
+  "options": {
+    "idInjection": false,
+    "mysql": {
+      "schema": "schoolfeesystem",
+      "table": "invoice"
+    },
+    "relations": {}
+  },
+  "properties": {
+    "id": {
+      "type": "Number",
+      "required": true,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
+      "id": 1,
+      "mysql": {
+        "columnName": "id",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
+        "nullable": "N"
+      }
+    },
+    "invoicenumber": {
+      "type": "String",
+      "required": true,
+      "length": 32,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "invoiceNumber",
+        "dataType": "varchar",
+        "dataLength": 32,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "merchantid": {
+      "type": "String",
+      "required": true,
+      "length": 12,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "merchantId",
+        "dataType": "varchar",
+        "dataLength": 12,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "aggregatorid": {
+      "type": "String",
+      "required": false,
+      "length": 12,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "aggregatorId",
+        "dataType": "varchar",
+        "dataLength": 12,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "userid": {
+      "type": "String",
+      "required": true,
+      "length": 24,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "userId",
+        "dataType": "varchar",
+        "dataLength": 24,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "desc": {
+      "type": "String",
+      "required": true,
+      "length": 48,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "desc",
+        "dataType": "varchar",
+        "dataLength": 48,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "duedate": {
+      "type": "Date",
+      "required": true,
+      "length": null,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "dueDate",
+        "dataType": "date",
+        "dataLength": null,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "totalchargeamount": {
+      "type": "Number",
+      "required": true,
+      "length": null,
+      "precision": 9,
+      "scale": 2,
+      "mysql": {
+        "columnName": "totalChargeAmount",
+        "dataType": "decimal",
+        "dataLength": null,
+        "dataPrecision": 9,
+        "dataScale": 2,
+        "nullable": "N"
+      }
+    },
+    "isprocessed": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "isProcessed",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "transactionid": {
+      "type": "String",
+      "required": false,
+      "length": 24,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "transactionId",
+        "dataType": "varchar",
+        "dataLength": 24,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "paymentid": {
+      "type": "String",
+      "required": false,
+      "length": 24,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "paymentId",
+        "dataType": "varchar",
+        "dataLength": 24,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "paymentdate": {
+      "type": "Date",
+      "required": false,
+      "length": null,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "paymentDate",
+        "dataType": "datetime",
+        "dataLength": null,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "calculatedlatefees": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 9,
+      "scale": 2,
+      "mysql": {
+        "columnName": "calculatedLateFees",
+        "dataType": "decimal",
+        "dataLength": null,
+        "dataPrecision": 9,
+        "dataScale": 2,
+        "nullable": "Y"
+      }
+    },
+    "totalchargeamountpaid": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 9,
+      "scale": 2,
+      "mysql": {
+        "columnName": "totalChargeAmountPaid",
+        "dataType": "decimal",
+        "dataLength": null,
+        "dataPrecision": 9,
+        "dataScale": 2,
+        "nullable": "Y"
+      }
+    },
+    "settlementid": {
+      "type": "String",
+      "required": false,
+      "length": 32,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "settlementID",
+        "dataType": "varchar",
+        "dataLength": 32,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "settlementdate": {
+      "type": "Date",
+      "required": false,
+      "length": null,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "settlementDate",
+        "dataType": "datetime",
+        "dataLength": null,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "type": {
+      "type": "String",
+      "required": true,
+      "length": 20,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "type",
+        "dataType": "varchar",
+        "dataLength": 20,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "securehash": {
+      "type": "String",
+      "required": true,
+      "length": 64,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "secureHash",
+        "dataType": "varchar",
+        "dataLength": 64,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "invoicestatus": {
+      "type": "Boolean",
+      "required": true,
+      "length": 1,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "invoiceStatus",
+        "dataType": "char",
+        "dataLength": 1,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "currencycode": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 10,
+      "scale": 0,
+      "mysql": {
+        "columnName": "currencyCode",
+        "dataType": "int",
+        "dataLength": null,
+        "dataPrecision": 10,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "additionalfee": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 9,
+      "scale": 2,
+      "mysql": {
+        "columnName": "additionalFee",
+        "dataType": "decimal",
+        "dataLength": null,
+        "dataPrecision": 9,
+        "dataScale": 2,
+        "nullable": "Y"
+      }
+    },
+    "responcecdoe": {
+      "type": "String",
+      "required": false,
+      "length": 4,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "responceCdoe",
+        "dataType": "varchar",
+        "dataLength": 4,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "responcedescription": {
+      "type": "String",
+      "required": false,
+      "length": 45,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "responceDescription",
+        "dataType": "varchar",
+        "dataLength": 45,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    }
+  }
+}
