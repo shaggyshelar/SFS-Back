@@ -79,6 +79,9 @@ module.exports = function (app) {
             },
             function (callback) {
               Categories.find({
+                where: {
+                  schoolId: req.body.schoolId,
+                },
               }, function (err, catLists) {
                 callback(null, catLists);
               });
