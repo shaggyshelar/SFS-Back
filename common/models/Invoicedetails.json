@@ -24,6 +24,11 @@
       }
     }
   },
+  "scope": {
+    "include": [
+      "InvoicedetailFeeplanAdhocfee"
+    ]
+  },
   "properties": {
     "id": {
       "type": "Number",
@@ -161,5 +166,9 @@
         "nullable": "N"
       }
     }
-  }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
 }
