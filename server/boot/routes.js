@@ -14,6 +14,7 @@ var _ = require('underscore');
 var i18next = require('i18next');
 var permissionHelper = require('../../common/shared/permissionsHelper');
 var utilities = require('../../common/shared/utilities');
+var apiHelperObject = require('../../common/shared/apiHelper');
 
 module.exports = function (app) {
   var User = app.models.user;
@@ -31,9 +32,79 @@ module.exports = function (app) {
   });
 
   app.post('/api/paymentAdvice', function (req, res) {
-    // req.body.username
+    // TODO: Create table to store client details with key
+    var clientDetails = {
+      'secretKey': '442b2091ed744bfb8ee82814c6698fdd',
+      'clientId': 'J_00009',
+    };
+    var apiHelper = apiHelperObject(app);
+    var errorMessages = '';
+    var userParams = [];
+    if (req.body.aggregatorID) {
+      userParams.push(['aggregatorId', req.body.aggregatorID]);
+    } else {
+      errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'aggregatorId' });
+    }
+    if (req.body.merchantId) {
+      userParams.push(['merchantId', req.body.merchantId]);
+    } else {
+      errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'merchantId' });
+    }
+    if (req.body.invoiceNo) {
+      userParams.push(['invoiceNo', req.body.invoiceNo]);
+    } else {
+      errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'invoiceNo' });
+    }
+    if (req.body.userID) {
+      userParams.push(['userID', req.body.userID]);
+    }
+    if (req.body.chargeAmount) {
+      userParams.push(['chargeAmount', req.body.chargeAmount]);
+    } else {
+      errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'chargeAmount' });
+    }
+    if (req.body.txnID) {
+      userParams.push(['txnID', req.body.txnID]);
+    } else {
+      errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'txnID' });
+    }
+    if (req.body.paymentID) {
+      userParams.push(['paymentID', req.body.paymentID]);
+    } else {
+      errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'paymentID' });
+    }
+    if (req.body.paymentDateTime) {
+      userParams.push(['paymentDateTime', req.body.paymentDateTime]);
+    } else {
+      errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'paymentDateTime' });
+    }
+    if (req.body.optionalChargeHeadsPaid) {
+      userParams.push(['optionalChargeHeadsPaid', req.body.optionalChargeHeadsPaid]);
+    }
+    if (req.body.calculatedLateFees) {
+      userParams.push(['calculatedLateFees', req.body.calculatedLateFees]);
+    }
+    if (!req.body.secureHash) {
+      errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'secureHash' });
+    }
+
+    if (errorMessages != '') {
+      res.status(400);
+      res.json({'Message': errorMessages});
+      return;
+    }
+
+    var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
+    var hashedKey = apiHelper.getHashedKeyForSecret(concatenatedParams, clientDetails.secretKey);
+
+    if (req.body.secureHash !== hashedKey) {
+      res.status(400);
+      res.json({'Message': i18next.t('api_validation_adviceInvalidSecureHash')});
+      return;
+    }
+
     res.status(400);
-    res.json({'Message': i18next.t('csv_validation_unsupportedFormat')});
+    res.json({'Message': 'Okay'});
   });
 
   app.post('/api/uploadcsv', upload.single('csvdata'), function (req, res) {
