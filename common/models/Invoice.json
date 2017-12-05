@@ -25,7 +25,7 @@
         "nullable": "N"
       }
     },
-    "invoicenumber": {
+    "invoiceNumber": {
       "type": "String",
       "required": true,
       "length": 32,
@@ -40,7 +40,7 @@
         "nullable": "N"
       }
     },
-    "merchantid": {
+    "merchantId": {
       "type": "String",
       "required": true,
       "length": 12,
@@ -55,7 +55,7 @@
         "nullable": "N"
       }
     },
-    "aggregatorid": {
+    "aggregatorId": {
       "type": "String",
       "required": false,
       "length": 12,
@@ -70,7 +70,7 @@
         "nullable": "Y"
       }
     },
-    "userid": {
+    "userId": {
       "type": "String",
       "required": true,
       "length": 24,
@@ -83,6 +83,21 @@
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "N"
+      }
+    },
+    "studentId": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
+      "mysql": {
+        "columnName": "studentId",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
+        "nullable": "Y"
       }
     },
     "desc": {
@@ -100,7 +115,7 @@
         "nullable": "N"
       }
     },
-    "duedate": {
+    "dueDate": {
       "type": "Date",
       "required": true,
       "length": null,
@@ -115,7 +130,7 @@
         "nullable": "N"
       }
     },
-    "totalchargeamount": {
+    "totalChargeAmount": {
       "type": "Number",
       "required": true,
       "length": null,
@@ -130,7 +145,7 @@
         "nullable": "N"
       }
     },
-    "isprocessed": {
+    "isProcessed": {
       "type": "Number",
       "required": false,
       "length": null,
@@ -145,7 +160,7 @@
         "nullable": "Y"
       }
     },
-    "transactionid": {
+    "transactionId": {
       "type": "String",
       "required": false,
       "length": 24,
@@ -160,7 +175,7 @@
         "nullable": "Y"
       }
     },
-    "paymentid": {
+    "paymentId": {
       "type": "String",
       "required": false,
       "length": 24,
@@ -175,7 +190,7 @@
         "nullable": "Y"
       }
     },
-    "paymentdate": {
+    "paymentDate": {
       "type": "Date",
       "required": false,
       "length": null,
@@ -190,7 +205,7 @@
         "nullable": "Y"
       }
     },
-    "calculatedlatefees": {
+    "calculatedLateFees": {
       "type": "Number",
       "required": false,
       "length": null,
@@ -205,7 +220,7 @@
         "nullable": "Y"
       }
     },
-    "totalchargeamountpaid": {
+    "totalChargeAmountPaid": {
       "type": "Number",
       "required": false,
       "length": null,
@@ -220,7 +235,7 @@
         "nullable": "Y"
       }
     },
-    "settlementid": {
+    "settlementID": {
       "type": "String",
       "required": false,
       "length": 32,
@@ -235,7 +250,7 @@
         "nullable": "Y"
       }
     },
-    "settlementdate": {
+    "settlementDate": {
       "type": "Date",
       "required": false,
       "length": null,
@@ -265,7 +280,7 @@
         "nullable": "N"
       }
     },
-    "securehash": {
+    "secureHash": {
       "type": "String",
       "required": true,
       "length": 64,
@@ -280,7 +295,7 @@
         "nullable": "N"
       }
     },
-    "invoicestatus": {
+    "invoiceStatus": {
       "type": "Boolean",
       "required": true,
       "length": 1,
@@ -295,7 +310,7 @@
         "nullable": "N"
       }
     },
-    "currencycode": {
+    "currencyCode": {
       "type": "Number",
       "required": false,
       "length": null,
@@ -310,7 +325,7 @@
         "nullable": "Y"
       }
     },
-    "additionalfee": {
+    "additionalFee": {
       "type": "Number",
       "required": false,
       "length": null,
@@ -325,7 +340,7 @@
         "nullable": "Y"
       }
     },
-    "responcecdoe": {
+    "responceCdoe": {
       "type": "String",
       "required": false,
       "length": 4,
@@ -340,7 +355,7 @@
         "nullable": "Y"
       }
     },
-    "responcedescription": {
+    "responceDescription": {
       "type": "String",
       "required": false,
       "length": 45,
