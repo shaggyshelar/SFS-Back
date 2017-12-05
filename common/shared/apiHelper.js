@@ -121,13 +121,6 @@ module.exports = function(app) {
                          .toLowerCase();
       return lowerCaseHash;
     },
-    getHashedKeyForSecret: function(concatenatedValues, secretKey) {
-      const lowerCaseHash = crypto.createHmac('sha256', secretKey)
-                         .update(concatenatedValues)
-                         .digest('hex')
-                         .toLowerCase();
-      return lowerCaseHash;
-    },
   };
 };
 

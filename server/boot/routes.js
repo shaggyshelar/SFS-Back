@@ -20,6 +20,7 @@ module.exports = function (app) {
   var User = app.models.user;
   var Schools = app.models.School;
   var Categories = app.models.Category;
+  var Invoice = app.models.Invoice;
   utilities.init(app);
 
   app.get('/verified', function (req, res) {
@@ -32,13 +33,6 @@ module.exports = function (app) {
   });
 
   app.post('/api/paymentAdvice', function (req, res) {
-    // TODO: Create table to store client details with key
-    var clientDetails = {
-      'secretKey': '442b2091ed744bfb8ee82814c6698fdd',
-      'merchantId': 'J_00009',
-      'invoiceNo': '111111111',
-      'userID': '111111',
-    };
     var apiHelper = apiHelperObject(app);
     var errorMessages = '';
     var userParams = [];
@@ -90,21 +84,6 @@ module.exports = function (app) {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'secureHash' });
     }
 
-    // TODO: match merchant ID with DB
-    if (req.body.merchantId != clientDetails.merchantId) {
-      errorMessages += i18next.t('api_validation_invalidMerchantId', {merchantId: req.body.merchantId });
-    }
-
-    // TODO: match invoiceNo with DB
-    if (req.body.invoiceNo != clientDetails.invoiceNo) {
-      errorMessages += i18next.t('api_validation_invalidInvoiceId', {invoiceId: req.body.merchantId });
-    }
-
-    // TODO: match userID with DB
-    if (req.body.userID && req.body.userID != clientDetails.userID) {
-      errorMessages += i18next.t('api_validation_invalidUserId', {userID: req.body.merchantId });
-    }
-
     if (errorMessages != '') {
       res.status(400);
       res.json({'Message': errorMessages});
@@ -112,7 +91,7 @@ module.exports = function (app) {
     }
 
     var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
-    var hashedKey = apiHelper.getHashedKeyForSecret(concatenatedParams, clientDetails.secretKey);
+    var hashedKey = apiHelper.getHashedKey(concatenatedParams);
 
     if (req.body.secureHash !== hashedKey) {
       res.status(400);
@@ -120,8 +99,42 @@ module.exports = function (app) {
       return;
     }
 
-    res.status(400);
-    res.json({'Message': 'Okay'});
+    var findInvoiceQuery = {
+      invoicenumber: req.body.invoiceNo,
+      merchantId: req.body.merchantId,
+      aggregatorID: req.body.aggregatorID,
+    };
+
+    if (req.body.userID) {
+      findInvoiceQuery.userid = req.body.userID;
+    }
+
+    Invoice.find({
+      where: findInvoiceQuery,
+    }, function(err, invoiceList) {
+      if (err) {
+        res.status(500);
+        res.json(err);
+      } else {
+        if (!invoiceList || invoiceList.length == 0) {
+          res.status(400);
+          res.json({'Message': i18next.t('api_validation_noMatchingInvoiceFound')});
+          return;
+        }
+
+        var foundInvoice = invoiceList[0];
+        var updatedInvoice = {};
+        Invoice.updateAll({id: foundInvoice.id}, updatedInvoice, function (err, updatedUser) {
+          if (err) {
+            res.status(500);
+            res.json(err);
+          } else {
+            res.status(400);
+            res.json({'Message': i18next.t('api_paymentAdviceSuccess')});
+          }
+        });
+      }
+    });
   });
 
   app.post('/api/uploadcsv', upload.single('csvdata'), function (req, res) {
