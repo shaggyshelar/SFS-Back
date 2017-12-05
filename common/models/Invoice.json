@@ -6,7 +6,19 @@
       "schema": "schoolfeesystem",
       "table": "invoice"
     },
-    "relations": {}
+    "relations": {
+      "invoiceDetails": {
+        "model": "Invoicedetails",
+        "type": "hasMany",
+        "foreignKey": "invoiceId"
+      },
+      "studentData": {
+        "model": "Student",
+        "type": "hasOne",
+        "foreignKey": "id",
+        "primaryKey": "studentId"
+      }
+    }
   },
   "properties": {
     "id": {
@@ -370,5 +382,9 @@
         "nullable": "Y"
       }
     }
-  }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
 }
