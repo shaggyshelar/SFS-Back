@@ -35,7 +35,9 @@ module.exports = function (app) {
     // TODO: Create table to store client details with key
     var clientDetails = {
       'secretKey': '442b2091ed744bfb8ee82814c6698fdd',
-      'clientId': 'J_00009',
+      'merchantId': 'J_00009',
+      'invoiceNo': '111111111',
+      'userID': '111111',
     };
     var apiHelper = apiHelperObject(app);
     var errorMessages = '';
@@ -86,6 +88,21 @@ module.exports = function (app) {
     }
     if (!req.body.secureHash) {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'secureHash' });
+    }
+
+    // TODO: match merchant ID with DB
+    if (req.body.merchantId != clientDetails.merchantId) {
+      errorMessages += i18next.t('api_validation_invalidMerchantId', {merchantId: req.body.merchantId });
+    }
+
+    // TODO: match invoiceNo with DB
+    if (req.body.invoiceNo != clientDetails.invoiceNo) {
+      errorMessages += i18next.t('api_validation_invalidInvoiceId', {invoiceId: req.body.merchantId });
+    }
+
+    // TODO: match userID with DB
+    if (req.body.userID && req.body.userID != clientDetails.userID) {
+      errorMessages += i18next.t('api_validation_invalidUserId', {userID: req.body.merchantId });
     }
 
     if (errorMessages != '') {
