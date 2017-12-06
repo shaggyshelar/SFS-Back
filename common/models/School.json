@@ -307,6 +307,36 @@
         "nullable": "N"
       }
     },
+    "invoiceMnemonic": {
+      "type": "String",
+      "required": true,
+      "length": 7,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "invoiceMnemonic",
+        "dataType": "varchar",
+        "dataLength": 7,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "invoiceSequenceNumber": {
+      "type": "Number",
+      "required": true,
+      "length": null,
+      "precision": 5,
+      "scale": 0,
+      "mysql": {
+        "columnName": "invoiceSequenceNumber",
+        "dataType": "int",
+        "dataLength": null,
+        "dataPrecision": 5,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
     "isDelete": {
       "type": "Number",
       "required": false,
