@@ -100,13 +100,13 @@ module.exports = function (app) {
     }
 
     var findInvoiceQuery = {
-      invoicenumber: req.body.invoiceNo,
+      invoiceNumber: req.body.invoiceNo,
       merchantId: req.body.merchantId,
-      aggregatorID: req.body.aggregatorID,
+      aggregatorId: req.body.aggregatorID,
     };
 
     if (req.body.userID) {
-      findInvoiceQuery.userid = req.body.userID;
+      findInvoiceQuery.userId = req.body.userID;
     }
 
     Invoice.find({
@@ -124,11 +124,11 @@ module.exports = function (app) {
 
         var foundInvoice = invoiceList[0];
         var updatedInvoice = {
-          'totalchargeamountpaid': req.body.chargeAmount,
-          'transactionid': req.body.txnID,
-          'paymentid': req.body.paymentID,
-          'paymentdate': req.body.paymentDateTime,
-          'calculatedlatefees': req.body.calculatedLateFees,
+          'totalChargeAmountPaid': req.body.chargeAmount,
+          'transactionId': req.body.txnID,
+          'paymentId': req.body.paymentID,
+          'paymentDate': req.body.paymentDateTime,
+          'calculatedLateFees': req.body.calculatedLateFees,
         };
         Invoice.updateAll({id: foundInvoice.id}, updatedInvoice, function (err, updatedUser) {
           if (err) {
