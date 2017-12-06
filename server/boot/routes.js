@@ -99,6 +99,7 @@ module.exports = function (app) {
       return;
     }
 
+    // TODO: Get invoice with status, type of specific value
     var findInvoiceQuery = {
       invoiceNumber: req.body.invoiceNo,
       merchantId: req.body.merchantId,
@@ -123,12 +124,21 @@ module.exports = function (app) {
         }
 
         var foundInvoice = invoiceList[0];
+
+        if (foundInvoice.invoiceStatus == 'Paid') {
+          res.status(400);
+          res.json({'Message': i18next.t('api_validation_invoiceAlreadyPaid')});
+          return;
+        }
+
+        // TODO: Change updated by, updated date, type, invoiceStatus
         var updatedInvoice = {
           'totalChargeAmountPaid': req.body.chargeAmount,
           'transactionId': req.body.txnID,
           'paymentId': req.body.paymentID,
           'paymentDate': req.body.paymentDateTime,
           'calculatedLateFees': req.body.calculatedLateFees,
+          'invoiceStatus': 'Paid',
         };
         Invoice.updateAll({id: foundInvoice.id}, updatedInvoice, function (err, updatedUser) {
           if (err) {

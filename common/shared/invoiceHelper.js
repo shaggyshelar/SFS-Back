@@ -103,8 +103,30 @@ module.exports = function(app) {
       ],
       function(err, results) {
         var students = results[0];
+        var studentListBySchool = [];
         _.each(students, function(studentDetails) {
-          invoiceHelper.registerStudent(studentDetails);
+          var schoolIndex = studentListBySchool.findIndex(x => x.schoolId == studentDetails.schoolId);
+          if (schoolIndex != -1) {
+            studentListBySchool[schoolIndex].students.push(studentDetails);
+          } else {
+            studentListBySchool.push({
+              'schoolId': studentDetails.schoolId,
+              'students': [studentDetails],
+            });
+          }
+        });
+        _.each(studentListBySchool, function(schoolDetail) {
+          var waterfallFunctions = [];
+          var failedStudent = [];
+          _.each(schoolDetail.students, function(student) {
+            waterfallFunctions.push(function(next) {
+              // invoiceHelper.registerStudent(student, function(error) {
+              });
+            });
+          });
+          async.waterfall(waterfallFunctions, function(err) {
+          });
+          // invoiceHelper.registerStudent(studentDetails);
         });
       });
     },
