@@ -8,6 +8,22 @@ module.exports = function (School) {
     'schoolHeader'
   );
 
+  School.observe('before save', function (ctx, next) {
+    if (ctx.isNewInstance) {
+      ctx.instance.invoiceSequenceNumber = 0;
+      next();
+    }
+    else {
+      var itemId = ctx.data.id != undefined ? ctx.data.id : ctx.where.id;
+      School.findById(itemId, function (err, _savedSchool) {
+        if (_savedSchool.invoiceMnemonic != ctx.data.invoiceMnemonic) {
+          ctx.data.invoiceSequenceNumber = 0;
+        }
+        next();
+      });
+    }
+  });
+
   School.observe('after save', function (ctx, next) {
     if (ctx.isNewInstance) {
       app.models.container.createContainer({
