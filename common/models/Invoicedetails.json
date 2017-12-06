@@ -24,6 +24,11 @@
       }
     }
   },
+  "scope": {
+    "include": [
+      "InvoicedetailFeeplanAdhocfee"
+    ]
+  },
   "properties": {
     "id": {
       "type": "Number",
@@ -41,7 +46,22 @@
         "nullable": "N"
       }
     },
-    "feeplanid": {
+    "invoiceId": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
+      "mysql": {
+        "columnName": "invoiceId",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "feePlanId": {
       "type": "Number",
       "required": false,
       "length": null,
@@ -56,7 +76,7 @@
         "nullable": "Y"
       }
     },
-    "adhocfeeid": {
+    "adhocFeeId": {
       "type": "Number",
       "required": false,
       "length": null,
@@ -71,7 +91,7 @@
         "nullable": "Y"
       }
     },
-    "zoneid": {
+    "zoneId": {
       "type": "Number",
       "required": false,
       "length": null,
@@ -86,7 +106,7 @@
         "nullable": "Y"
       }
     },
-    "invoicenumber": {
+    "invoiceNumber": {
       "type": "String",
       "required": true,
       "length": 32,
@@ -101,7 +121,7 @@
         "nullable": "N"
       }
     },
-    "feeheadname": {
+    "feeHeadName": {
       "type": "String",
       "required": false,
       "length": 50,
@@ -116,7 +136,7 @@
         "nullable": "Y"
       }
     },
-    "chargeheadname": {
+    "chargeHeadName": {
       "type": "String",
       "required": false,
       "length": 20,
@@ -131,7 +151,7 @@
         "nullable": "Y"
       }
     },
-    "chargeamount": {
+    "chargeAmount": {
       "type": "Number",
       "required": true,
       "length": null,
@@ -146,5 +166,9 @@
         "nullable": "N"
       }
     }
-  }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
 }

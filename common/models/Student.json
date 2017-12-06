@@ -37,7 +37,12 @@
   "scope": {
     "where": {
       "isDelete": 0
-    }
+    },
+    "include": [
+      "StudentDivision",
+      "StudentClass",
+      "StudentCategory"
+    ]
   },
   "mixins": {
     "TimestampMixin": true,
@@ -633,7 +638,7 @@
     },
     "createdBy": {
       "type": "Number",
-      "required":false,
+      "required": false,
       "length": null,
       "precision": 19,
       "scale": 0,
