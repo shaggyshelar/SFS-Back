@@ -292,21 +292,6 @@
         "nullable": "N"
       }
     },
-    "secureHash": {
-      "type": "String",
-      "required": true,
-      "length": 64,
-      "precision": null,
-      "scale": null,
-      "mysql": {
-        "columnName": "secureHash",
-        "dataType": "varchar",
-        "dataLength": 64,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "N"
-      }
-    },
     "invoiceStatus": {
       "type": "Boolean",
       "required": true,
@@ -320,6 +305,36 @@
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "N"
+      }
+    },
+    "status": {
+      "type": "String",
+      "required": true,
+      "length": 20,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "status",
+        "dataType": "varchar",
+        "dataLength": 20,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "statusDesc": {
+      "type": "String",
+      "required": false,
+      "length": 500,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "status",
+        "dataType": "varchar",
+        "dataLength": 500,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
       }
     },
     "currencyCode": {
