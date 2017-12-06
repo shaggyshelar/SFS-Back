@@ -58,7 +58,7 @@ module.exports = function(app) {
     convertParentName: (name) => {
       return name != '' ? name : 'NA';
     },
-    registerStudent: (studentDetails) => {
+    registerStudent: (studentDetails, callback) => {
       var apiHelper = apiHelperObject(app);
       var userParams = [];
       userParams.push(['merchantId', config.payPhiMerchantID]);
@@ -87,7 +87,7 @@ module.exports = function(app) {
       var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
       var hashedKey = apiHelper.getHashedKey(concatenatedParams);
       var userForm = apiHelper.getForm(userParams, hashedKey);
-      apiHelper.registerOrUpdateUser(userForm);
+      apiHelper.registerOrUpdateUser(userForm, callback);
     },
     registerStudents: () => {
       async.series([
@@ -120,7 +120,11 @@ module.exports = function(app) {
           var failedStudent = [];
           _.each(schoolDetail.students, function(student) {
             waterfallFunctions.push(function(next) {
-              // invoiceHelper.registerStudent(student, function(error) {
+              invoiceHelper.registerStudent(student, function(error) {
+                if (error) {
+                  var errorMessage = 'Failed to register student with id =' + student.id +'. Error ='+ error;
+                  failedStudent.push(errorMessage);
+                }
               });
             });
           });

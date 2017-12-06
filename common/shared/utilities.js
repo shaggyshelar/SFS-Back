@@ -35,7 +35,12 @@ utilities.registerUser = function(app) {
   var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
   var hashedKey = apiHelper.getHashedKey(concatenatedParams);
   var userForm = apiHelper.getForm(userParams, hashedKey);
-  apiHelper.registerOrUpdateUser(userForm);
+  apiHelper.registerOrUpdateUser(userForm, function(error) {
+    if (error) {
+      var errorMessage = 'Failed to register student with id =' + student.id +'. Error ='+ error;
+      console.log(errorMessage);
+    }
+  });
 };
 
 utilities.updateUser = function(app, userID) {
@@ -51,7 +56,12 @@ utilities.updateUser = function(app, userID) {
   var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
   var hashedKey = apiHelper.getHashedKey(concatenatedParams);
   var userForm = apiHelper.getForm(userParams, hashedKey);
-  apiHelper.registerOrUpdateUser(userForm);
+  apiHelper.registerOrUpdateUser(userForm, function(error) {
+    if (error) {
+      var errorMessage = 'Failed to register student with id =' + student.id +'. Error ='+ error;
+      console.log(errorMessage);
+    }
+  });
 };
 
 utilities.createInvoice = function(app) {

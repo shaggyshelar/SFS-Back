@@ -38,7 +38,7 @@ module.exports = function(app) {
           console.log('body:', body);
         });
     },
-    registerOrUpdateUser: (userForm) => {
+    registerOrUpdateUser: (userForm, callback) => {
       rootlogger.info('Registering User', userForm);
       request.post({
         url: config.payPhiServerRoot + config.payPhiRegisterUserURL,
@@ -52,13 +52,16 @@ module.exports = function(app) {
               function(err, updatedUser) {
                 if (err) {
                   rootlogger.error(responseData);
+                  callback(responseData);
                 }
               });
             } else {
               rootlogger.error(responseData);
+              callback(responseData);
             }
           } else {
             rootlogger.error('Error while registering student into PayPhi system.');
+            callback('Error while registering student into PayPhi system.');
           }
         });
     },
