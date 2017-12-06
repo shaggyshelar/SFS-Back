@@ -1,36 +1,23 @@
 {
-  "name": "Feeplanassociation",
+  "name": "Zonedetails",
   "options": {
     "idInjection": false,
     "mysql": {
       "schema": "schoolfeesystem",
-      "table": "feeplanassociation"
+      "table": "zonedetails"
     },
     "relations": {
-      "FeeplanassociationSchool": {
+      "ZonedetailsSchool": {
         "model": "School",
         "type": "belongsTo",
         "foreignKey": "schoolId"
       },
-      "FeeplanassociationCategory": {
-        "model": "Category",
+      "ZonedetailsZone": {
+        "model": "Zone",
         "type": "belongsTo",
-        "foreignKey": "categoryId"
-      },
-      "FeeplanassociationClass": {
-        "model": "Class",
-        "type": "belongsTo",
-        "foreignKey": "classId"
-      },
-      "FeeplanassociationFeeplan": {
-        "model": "Feeplan",
-        "type": "belongsTo",
-        "foreignKey": "feeplanId"
+        "foreignKey": "zoneId"
       }
     }
-  },
-  "scope": {
-    "include": "FeeplanassociationCategory"
   },
   "mixins": {
     "TimestampMixin": true,
@@ -68,14 +55,14 @@
         "nullable": "N"
       }
     },
-    "feeplanId": {
+    "zoneId": {
       "type": "Number",
       "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
       "mysql": {
-        "columnName": "feeplanId",
+        "columnName": "zoneId",
         "dataType": "bigint",
         "dataLength": null,
         "dataPrecision": 19,
@@ -83,47 +70,47 @@
         "nullable": "N"
       }
     },
-    "classId": {
-      "type": "Number",
+    "dueDate": {
+      "type": "Date",
       "required": true,
       "length": null,
-      "precision": 19,
-      "scale": 0,
+      "precision": null,
+      "scale": null,
       "mysql": {
-        "columnName": "classId",
-        "dataType": "bigint",
+        "columnName": "dueDate",
+        "dataType": "date",
         "dataLength": null,
-        "dataPrecision": 19,
-        "dataScale": 0,
-        "nullable": "N"
-      }
-    },
-    "categoryId": {
-      "type": "Number",
-      "required": true,
-      "length": null,
-      "precision": 19,
-      "scale": 0,
-      "mysql": {
-        "columnName": "categoryId",
-        "dataType": "bigint",
-        "dataLength": null,
-        "dataPrecision": 19,
-        "dataScale": 0,
+        "dataPrecision": null,
+        "dataScale": null,
         "nullable": "N"
       }
     },
     "academicYear": {
-      "type": "string",
+      "type": "String",
       "required": true,
       "length": 20,
       "precision": null,
-      "scale": 0,
+      "scale": null,
       "mysql": {
         "columnName": "academicYear",
         "dataType": "varchar",
         "dataLength": 20,
         "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "sequenceNumber": {
+      "type": "Number",
+      "required": true,
+      "length": null,
+      "precision": 10,
+      "scale": 0,
+      "mysql": {
+        "columnName": "sequenceNumber",
+        "dataType": "int",
+        "dataLength": null,
+        "dataPrecision": 10,
         "dataScale": 0,
         "nullable": "N"
       }

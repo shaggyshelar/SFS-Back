@@ -19,6 +19,7 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.json());
 process.env.NODE_ENV = 'staging';
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(loopback.token());
 app.use(function(req, res, next) {

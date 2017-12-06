@@ -3,11 +3,15 @@
     "supportEmailID": "support@sfs.com",
     "fileCleanerSchedulerTime": "10 * * * *",
     "invoiceSchedulerTime": "30 1 * * *",
-    "payPhiServerRoot": "https://payphi.com",
-    "payPhiPostInvoiceURL": "/api/postInvoice",
-    "payPhiUpdateInvoiceURL": "/api/updateInvoice",
-    "payPhiRegisterUserURL": "/api/registerUser",
+    "registerStudentSchedulerTime": "30 1 * * *",
+    "payPhiServerRoot": "https://qa.phicommerce.com/pg/portal",
+    "payPhiPostInvoiceURL": "/pay/paymentInvoiceService",
+    "payPhiUpdateInvoiceURL": "/pay/paymentInvoiceService",
+    "payPhiRegisterUserURL": "/pay/userService",
     "payPhiListInvoiceURL": "/api/listInvoice",
     "payPhiDownloadReceiptURL": "/api/downloadReceipt",
-    "sessionTimoutIntervalInSeconds" : 60
+    "sessionTimoutIntervalInSeconds" : 60,
+    "payPhiAggregatorID" : "J_00009",
+    "payPhiMerchantID" : "T_00078",
+    "payPhiHashKey" : "442b2091ed744bfb8ee82814c6698fdd"
 }

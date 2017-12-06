@@ -6,7 +6,7 @@ module.exports = function (Model, options) {
         if (ctx.error.errno == 1062) {
           var error = new Error();
           error.status = 422;
-          error.message = i18next.t('er_dup_entry');
+          error.message = i18next.t('error_duplicateEntry');
           next(error);
         }
         else

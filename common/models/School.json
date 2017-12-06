@@ -57,6 +57,16 @@
         "type": "hasMany",
         "model": "Adhocfee",
         "foreignKey": "schoolId"
+      },
+      "zones": {
+        "type": "hasMany",
+        "model": "Zone",
+        "foreignKey": "schoolId"
+      },
+      "Schoolcategories": {
+        "type": "hasMany",
+        "model": "Category",
+        "foreignKey": "schoolId"
       }
     }
   },

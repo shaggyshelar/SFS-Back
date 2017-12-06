@@ -13,13 +13,13 @@ module.exports = function (Container) {
     app.models.School.update({
       id: container,
     }, {
-      schoolLogo: path
-    }, function (err, updateLogo) {
-      if (err)
-        throw err;
-      else {
-        next();
-      }
-    });
+        schoolLogo: path
+      }, function (err, updateLogo) {
+        if (err)
+          return next(err);
+        else {
+          next();
+        }
+      });
   }); // works
 };

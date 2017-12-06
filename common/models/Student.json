@@ -26,13 +26,23 @@
         "model": "School",
         "type": "belongsTo",
         "foreignKey": "schoolId"
+      },
+      "StudentZone": {
+        "model": "Zone",
+        "type": "belongsTo",
+        "foreignKey": "zoneId"
       }
     }
   },
   "scope": {
     "where": {
       "isDelete": 0
-    }
+    },
+    "include": [
+      "StudentDivision",
+      "StudentClass",
+      "StudentCategory"
+    ]
   },
   "mixins": {
     "TimestampMixin": true,
@@ -116,6 +126,21 @@
         "nullable": "Y"
       }
     },
+    "zoneId": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
+      "mysql": {
+        "columnName": "zoneId",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
     "gRNumber": {
       "type": "String",
       "required": false,
@@ -144,6 +169,21 @@
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "N"
+      }
+    },
+    "title": {
+      "type": "String",
+      "required": false,
+      "length": 10,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "title",
+        "dataType": "varchar",
+        "dataLength": 10,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
       }
     },
     "studentFirstName": {
@@ -521,6 +561,66 @@
         "nullable": "N"
       }
     },
+    "isRegistered": {
+      "type": "Number",
+      "required": true,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "isRegistered",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "N"
+      }
+    },
+    "isActive": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "isActive",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "deactiveDate": {
+      "type": "Date",
+      "required": false,
+      "length": null,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "deactiveDate",
+        "dataType": "datetime",
+        "dataLength": null,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "deactiveDesc": {
+      "type": "String",
+      "required": false,
+      "length": 100,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "deactiveDesc",
+        "dataType": "varchar",
+        "dataLength": 100,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
     "isDelete": {
       "type": "Number",
       "required": false,
@@ -538,7 +638,7 @@
     },
     "createdBy": {
       "type": "Number",
-      "required":false,
+      "required": false,
       "length": null,
       "precision": 19,
       "scale": 0,

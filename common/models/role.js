@@ -51,7 +51,7 @@ module.exports = function (role) {
             ctx.instance.name = roleName + ctx.instance.id;
             role.updateAll({ id: ctx.instance.id }, { name: roleName + ctx.instance.id }, function (err, updatedRole) {
                 if (err)
-                    throw err;
+                    return next(err);
                 else {
                     next();
                 }
@@ -66,14 +66,16 @@ module.exports = function (role) {
     role.observe('before delete', function (ctx, next) {
         var roleId = ctx.where.id;
         app.models.RoleMapping.find({ where: { roleId: roleId } }, function (err, _roleMapping) {
-            if (err) throw err;
+            if (err) next(err);
             if (_roleMapping.length > 0) {
                 var error = new Error();
                 error.status = 500;
                 error.message = "Can not delete role as this role is still assigned to some users.";
-                next(error);
+                return next(error);
             }
-            next();
+            else {
+                next();
+            }
         });
     });
 
@@ -81,7 +83,7 @@ module.exports = function (role) {
     //     var roleId = context.args.id;
     //     role.findById({ id: roleId }, function (err, _role) {
     //         app.models.ACL.destroyAll({ principalId: _role.name }, function (err, info) {
-    //             if (err) throw err;
+    //             if (err) next(err);
     //             next();
     //         });
     //     });
@@ -92,12 +94,12 @@ module.exports = function (role) {
         console.log(_role);
         var roleId = context.args.id;
         app.models.RoleMapping.find({ where: { roleId: roleId } }, function (err, _roleMapping) {
-            if (err) throw err;
+            if (err) return next(err);
             if (_roleMapping.length > 0) {
                 var error = new Error();
                 error.status = 422;
                 error.message = "Role is assigned to a user. Cannot delete this role.";
-                next(error);
+                return next(error);
             }
             next();
         });

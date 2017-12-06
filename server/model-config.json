@@ -135,5 +135,17 @@
   "container": {
     "dataSource": "storage",
     "public": true
+  },
+  "Zonedetails": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Invoice": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Invoicedetails": {
+    "dataSource": "mysql",
+    "public": true
   }
 }

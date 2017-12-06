@@ -14,11 +14,13 @@ var _ = require('underscore');
 var i18next = require('i18next');
 var permissionHelper = require('../../common/shared/permissionsHelper');
 var utilities = require('../../common/shared/utilities');
+var apiHelperObject = require('../../common/shared/apiHelper');
 
 module.exports = function (app) {
   var User = app.models.user;
   var Schools = app.models.School;
   var Categories = app.models.Category;
+  var Invoice = app.models.Invoice;
   utilities.init(app);
 
   app.get('/verified', function (req, res) {
@@ -28,6 +30,117 @@ module.exports = function (app) {
     rootlogger.info('hi');
     rootlogger.warn({ lang: 'fr' }, 'au revoir');
     res.render('verified');
+  });
+
+  app.post('/api/paymentAdvice', function (req, res) {
+    var apiHelper = apiHelperObject(app);
+    var errorMessages = '';
+    var userParams = [];
+    if (req.body.aggregatorID) {
+      userParams.push(['aggregatorId', req.body.aggregatorID]);
+    } else {
+      errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'aggregatorId' });
+    }
+    if (req.body.merchantId) {
+      userParams.push(['merchantId', req.body.merchantId]);
+    } else {
+      errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'merchantId' });
+    }
+    if (req.body.invoiceNo) {
+      userParams.push(['invoiceNo', req.body.invoiceNo]);
+    } else {
+      errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'invoiceNo' });
+    }
+    if (req.body.userID) {
+      userParams.push(['userID', req.body.userID]);
+    }
+    if (req.body.chargeAmount) {
+      userParams.push(['chargeAmount', req.body.chargeAmount]);
+    } else {
+      errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'chargeAmount' });
+    }
+    if (req.body.txnID) {
+      userParams.push(['txnID', req.body.txnID]);
+    } else {
+      errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'txnID' });
+    }
+    if (req.body.paymentID) {
+      userParams.push(['paymentID', req.body.paymentID]);
+    } else {
+      errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'paymentID' });
+    }
+    if (req.body.paymentDateTime) {
+      userParams.push(['paymentDateTime', req.body.paymentDateTime]);
+    } else {
+      errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'paymentDateTime' });
+    }
+    if (req.body.optionalChargeHeadsPaid) {
+      userParams.push(['optionalChargeHeadsPaid', req.body.optionalChargeHeadsPaid]);
+    }
+    if (req.body.calculatedLateFees) {
+      userParams.push(['calculatedLateFees', req.body.calculatedLateFees]);
+    }
+    if (!req.body.secureHash) {
+      errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'secureHash' });
+    }
+
+    if (errorMessages != '') {
+      res.status(400);
+      res.json({'Message': errorMessages});
+      return;
+    }
+
+    var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
+    var hashedKey = apiHelper.getHashedKey(concatenatedParams);
+
+    if (req.body.secureHash !== hashedKey) {
+      res.status(400);
+      res.json({'Message': i18next.t('api_validation_adviceInvalidSecureHash')});
+      return;
+    }
+
+    var findInvoiceQuery = {
+      invoicenumber: req.body.invoiceNo,
+      merchantId: req.body.merchantId,
+      aggregatorID: req.body.aggregatorID,
+    };
+
+    if (req.body.userID) {
+      findInvoiceQuery.userid = req.body.userID;
+    }
+
+    Invoice.find({
+      where: findInvoiceQuery,
+    }, function(err, invoiceList) {
+      if (err) {
+        res.status(500);
+        res.json(err);
+      } else {
+        if (!invoiceList || invoiceList.length == 0) {
+          res.status(400);
+          res.json({'Message': i18next.t('api_validation_noMatchingInvoiceFound')});
+          return;
+        }
+
+        var foundInvoice = invoiceList[0];
+        var updatedInvoice = {
+          'totalchargeamountpaid': req.body.chargeAmount,
+          'transactionid': req.body.txnID,
+          'paymentid': req.body.paymentID,
+          'paymentdate': req.body.paymentDateTime,
+          'calculatedlatefees': req.body.calculatedLateFees,
+        };
+        Invoice.updateAll({id: foundInvoice.id}, updatedInvoice, function (err, updatedUser) {
+          if (err) {
+            res.status(500);
+            res.json(err);
+          } else {
+            res.status(400);
+            res.json({'Message': i18next.t('api_paymentAdviceSuccess')});
+          }
+        });
+      }
+    });
   });
 
   app.post('/api/uploadcsv', upload.single('csvdata'), function (req, res) {
@@ -66,13 +179,16 @@ module.exports = function (app) {
                 where: {
                   id: req.body.schoolId,
                 },
-                include: ['SchoolClass', 'SchoolBoard', 'SchoolDivision', 'SchoolYear'],
+                include: ['SchoolClass', 'SchoolBoard', 'SchoolDivision', 'SchoolYear', 'zones'],
               }, function (err, lists) {
                 callback(null, lists);
               });
             },
             function (callback) {
               Categories.find({
+                where: {
+                  schoolId: req.body.schoolId,
+                },
               }, function (err, catLists) {
                 callback(null, catLists);
               });
@@ -97,6 +213,25 @@ module.exports = function (app) {
               } else {
                 schoolDetails = schoolDetails.toJSON();
               }
+
+              if (!schoolDetails.SchoolClass || schoolDetails.SchoolClass.length == 0){
+                res.status(400);
+                res.json({ 'Message': i18next.t('csv_validation_noClassesAvailable') });
+                return;
+              }
+
+              if (!schoolDetails.SchoolDivision || schoolDetails.SchoolDivision.length == 0){
+                res.status(400);
+                res.json({ 'Message': i18next.t('csv_validation_noDivisionsAvailable') });
+                return;
+              }
+
+              if (!schoolDetails.SchoolYear || schoolDetails.SchoolYear.length == 0){
+                res.status(400);
+                res.json({ 'Message': i18next.t('csv_validation_noYearsAvailable') });
+                return;
+              }
+
               var categoryList = results[1];
               var csvStream = csv
                 .parse()
@@ -202,10 +337,25 @@ module.exports = function (app) {
                     if (data[29] == '') {
                       validationErrors += i18next.t('csv_validation_studentCodeRequired');
                     }
+                    if (data[30] != '') {
+                      if (!schoolDetails.zones || schoolDetails.zones.length == 0) {
+                        validationErrors += i18next.t('csv_validation_invalidZone', { zoneName: data[30] });
+                      } else {
+                        var filteredZone = schoolDetails.zones.filter(function (studentYear) {
+                          if (studentYear.academicYear == data[30]) {
+                            return studentYear;
+                          }
+                        });
+                        var matchingZone = filteredZone && filteredZone.length ? filteredZone[0] : null;
+                        if (!matchingZone) {
+                          validationErrors += i18next.t('csv_validation_invalidZone', { zoneName: data[30] });
+                        }
+                      }
+                    }
 
-                    var dateOfBirth = data[5] == '' ? null : data[5];
-                    if (dateOfBirth != null && !Date.parse(dateOfBirth)) {
-                      validationErrors += i18next.t('csv_validation_invalidDateOfBirth', {birthDate: dateOfBirth});
+                    var dateOfBirth = data[5] == '' ? '2000/01/01' : data[5];
+                    if (!Date.parse(dateOfBirth)) {
+                      validationErrors += i18next.t('csv_validation_invalidDateOfBirth', { birthDate: dateOfBirth });
                     } else if (dateOfBirth) {
                       var birthdate = new Date(dateOfBirth);
                       var cur = new Date();
@@ -220,11 +370,14 @@ module.exports = function (app) {
                       return;
                     }
 
+                    var currentDay = cur.getFullYear() + '/' + cur.getMonth() + '/' + cur.getDate();
+
                     var studentToAdd = {
                       schoolId: req.body.schoolId,
                       categoryId: matchingCategory.id,
                       classId: matchingClass.id,
                       divisionId: matchingDivision.id,
+                      zoneId: (data[30] == '') ? null : matchingZone.id,
                       gRNumber: data[7].trim(),
                       studentCode: data[29].trim(),
                       studentFirstName: firstName,
@@ -241,8 +394,9 @@ module.exports = function (app) {
                       guardianLastName: data[23].trim(),
                       guardianMobile: data[24].trim(),
                       studentDateOfBirth: dateOfBirth,
-                      dateOfJoining: data[6] == '' ? null : data[6],
+                      dateOfJoining: data[6] == currentDay ? null : data[6],
                       address: data[8],
+                      title: 'Mr',
                       city: '',  // TODO:
                       state: data[11],
                       country: data[10],
@@ -253,14 +407,15 @@ module.exports = function (app) {
                       bloodGroup: data[14].trim(),
                       academicYear: matchingYear.academicYear,
                       isDelete: false,
-                      createdBy: 1,
-                      createdOn: '11/14/2017', // TODO:
+                      isRegistered: 0,
+                      createdBy: user.id,
+                      createdOn: currentDay,
                     };
                     waterfallFunctions.push(function (next) {
                       studentModel.create(studentToAdd, function (err, post) {
                         if (err) {
                           if (err.errno == 1062) {
-                            validationErrors += i18next.t('er_dup_entry');
+                            validationErrors += i18next.t('error_duplicateEntry');
                           } else {
                             validationErrors += err.message;
                           }
@@ -338,31 +493,32 @@ module.exports = function (app) {
         where: { username: req.body.username }, include: ['school', 'role']
       }, function (err, loggedInUser) {
         if (err) {
-          throw err;
+          res.status(err.statusCode);
+          res.json(err);
         } else if (loggedInUser) {
           if (!loggedInUser.emailVerified) {
             res.status(401);
             res.json({
-              'Error': i18next.t('authentication_failed'),
-              'Code': i18next.t('authentication_email_not_verified_code'),
-              'Message': i18next.t('authentication_email_not_verified_message'),
+              'Error': i18next.t('error_authenticationFailed'),
+              'Code': i18next.t('error_code_authenticationEmailNotVerified'),
+              'Message': i18next.t('error_AuthenticationEmailNotVerified'),
             });
           }
           else if (!loggedInUser.isActivate) {
 
             res.status(401);
             res.json({
-              'Error': i18next.t('authentication_failed'),
-              'Code': i18next.t('authentication_failed_default_code'),
-              'Message': i18next.t('authentication_failed_default_message'),
+              'Error': i18next.t('error_authenticationFailed'),
+              'Code': i18next.t('error_code_authenticationFailedDefault'),
+              'Message': i18next.t('error_message_authenticationFailedDefault'),
             });
           }
           else if (loggedInUser.isBolocked) {
             res.status(401);
             res.json({
-              'Error': i18next.t('authentication_failed'),
-              'Code': i18next.t('authentication_user_locked_code'),
-              'Message': i18next.t('authentication_user_locked_message'),
+              'Error': i18next.t('error_authenticationFailed'),
+              'Code': i18next.t('error_code_authenticationUserLocked'),
+              'Message': i18next.t('error_authenticationUserLocked'),
             });
           }
           else if (loginErr) {
@@ -376,7 +532,10 @@ module.exports = function (app) {
             }
 
             app.models.user.updateAll({ id: loggedInUser.id }, updateUserObj, function (err, updatedUser) {
-              if (err) throw err;
+              if (err) {
+                res.status(err.statusCode);
+                res.json(err);
+              }
               else {
                 if (updateUserObj.failedPasswordAttemptCount == 3) {
                   var emailList = [];
@@ -385,52 +544,57 @@ module.exports = function (app) {
                   if (loggedInUser.roleId == i18next.t('school_admin_role_Id')) {
 
                     app.models.user.find({ where: { roleId: i18next.t('super_admin_role_Id') }, include: { relation: 'role' } }, function (err, superAdminUsers) {
-                      if (err) throw err;
-                      if (superAdminUsers && superAdminUsers.length > 0) {
-                        superAdminUsers.map(function (superadmin, index) {
+                      if (err) {
+                        res.status(err.statusCode);
+                        res.json(err);
+                      }
+                      else {
+                        if (superAdminUsers && superAdminUsers.length > 0) {
+                          superAdminUsers.map(function (superadmin, index) {
+                            User.app.models.Email.send({
+                              to: superadmin.email,
+                              from: superadmin.email,
+                              subject: i18next.t('email_subject_authenticationUserLocked'),
+                              html: i18next.t('email_authenticationUserLockedAdmin', { username: loggedInUser.username }),
+                            }, function (err) {
+                              if (err) return console.log('> error sending user locked email');
+                              console.log('> sending user locked email to:', superadmin.email);
+                            });
+                          });
                           User.app.models.Email.send({
-                            to: superadmin.email,
-                            from: superadmin.email,
-                            subject: i18next.t('authentication_user_locked_subject'),
-                            html: i18next.t('authentication_user_locked_email_admin', { username: loggedInUser.username }),
+                            to: loggedInUser.email,
+                            from: loggedInUser.email,
+                            subject: i18next.t('email_subject_authenticationUserLocked'),
+                            html: i18next.t('email_authenticationUserLocked', { username: loggedInUser.username }),
                           }, function (err) {
                             if (err) return console.log('> error sending user locked email');
-                            console.log('> sending user locked email to:', superadmin.email);
+                            console.log('> sending user locked email to:', loggedInUser.email);
                           });
-                        });
-                        User.app.models.Email.send({
-                          to: loggedInUser.email,
-                          from: loggedInUser.email,
-                          subject: i18next.t('authentication_user_locked_subject'),
-                          html: i18next.t('authentication_user_locked_email', { username: loggedInUser.username }),
-                        }, function (err) {
-                          if (err) return console.log('> error sending user locked email');
-                          console.log('> sending user locked email to:', loggedInUser.email);
+                        }
+                        res.status(401);
+                        res.json({
+                          'Error': i18next.t('error_authenticationFailed'),
+                          'Code': i18next.t('error_code_authenticationUserLocked'),
+                          'Message': i18next.t('error_authenticationUserLocked'),
                         });
                       }
-                      res.status(401);
-                      res.json({
-                        'Error': i18next.t('authentication_failed'),
-                        'Code': i18next.t('authentication_user_locked_code'),
-                        'Message': i18next.t('authentication_user_locked_message'),
-                      });
                     });
                   }
                   else if (loggedInUser.roleId == i18next.t('super_admin_role_Id')) {
                     User.app.models.Email.send({
                       to: loggedInUser.email,
                       from: loggedInUser.email,
-                      subject: i18next.t('authentication_user_locked_subject'),
-                      html: i18next.t('authentication_superadmin_locked_email', { username: loggedInUser.username }),
+                      subject: i18next.t('email_subject_authenticationUserLocked'),
+                      html: i18next.t('email_authenticationSuperadminLocked', { username: loggedInUser.username }),
                     }, function (err) {
                       if (err) return console.log('> error sending user locked email');
                       console.log('> sending user locked email to:', loggedInUser.email);
                     });
                     res.status(401);
                     res.json({
-                      'Error': i18next.t('authentication_failed'),
-                      'Code': i18next.t('authentication_user_locked_code'),
-                      'Message': i18next.t('authentication_user_locked_message'),
+                      'Error': i18next.t('error_authenticationFailed'),
+                      'Code': i18next.t('error_code_authenticationUserLocked'),
+                      'Message': i18next.t('error_authenticationUserLocked'),
                     });
                   }
                   else {
@@ -443,40 +607,46 @@ module.exports = function (app) {
                       });
 
                       app.models.role.findOne({ where: { name: i18next.t('school_admin_role_name') } }, function (err, saRole) {
-                        if (err) throw err;
+                        if (err) {
+                          res.status(err.statusCode);
+                          res.json(err);
+                        }
                         if (saRole) {
-
-
                           app.models.Userschooldetails.find({ where: { or: conditions }, include: { relation: 'UserschoolUser' } },
                             function (err, _userSchoolDetails) {
-                              if (err) throw err;
-                              var adminUsers = _userSchoolDetails.filter(function (data) { if (data.__data.UserschoolUser) return data.__data.UserschoolUser.roleId == 2 });
-                              adminUsers.map(function (userMapping, index) {
+                              if (err) {
+                                res.status(err.statusCode);
+                                res.json(err);
+                              }
+                              else {
+                                var adminUsers = _userSchoolDetails.filter(function (data) { if (data.__data.UserschoolUser) return data.__data.UserschoolUser.roleId == 2 });
+                                adminUsers.map(function (userMapping, index) {
+                                  User.app.models.Email.send({
+                                    to: userMapping.UserschoolUser().email,
+                                    from: userMapping.UserschoolUser().email,
+                                    subject: i18next.t('email_subject_authenticationUserLocked'),
+                                    html: i18next.t('email_authenticationUserLocked', { username: loggedInUser.username }),
+                                  }, function (err) {
+                                    if (err) return console.log('> error sending user locked email');
+                                    console.log('> sending user locked email to:', userMapping.UserschoolUser().email);
+                                  });
+                                });
                                 User.app.models.Email.send({
-                                  to: userMapping.UserschoolUser().email,
-                                  from: userMapping.UserschoolUser().email,
-                                  subject: i18next.t('authentication_user_locked_subject'),
-                                  html: i18next.t('authentication_user_locked_email', { username: loggedInUser.username }),
+                                  to: loggedInUser.email,
+                                  from: loggedInUser.email,
+                                  subject: i18next.t('email_subject_authenticationUserLocked'),
+                                  html: i18next.t('email_authenticationUserLocked', { username: loggedInUser.username }),
                                 }, function (err) {
                                   if (err) return console.log('> error sending user locked email');
-                                  console.log('> sending user locked email to:', userMapping.UserschoolUser().email);
+                                  console.log('> sending user locked email to:', loggedInUser.email);
                                 });
-                              });
-                              User.app.models.Email.send({
-                                to: loggedInUser.email,
-                                from: loggedInUser.email,
-                                subject: i18next.t('authentication_user_locked_subject'),
-                                html: i18next.t('authentication_user_locked_email', { username: loggedInUser.username }),
-                              }, function (err) {
-                                if (err) return console.log('> error sending user locked email');
-                                console.log('> sending user locked email to:', loggedInUser.email);
-                              });
-                              res.status(401);
-                              res.json({
-                                'Error': i18next.t('authentication_failed'),
-                                'Code': i18next.t('authentication_user_locked_code'),
-                                'Message': i18next.t('authentication_user_locked_message'),
-                              });
+                                res.status(401);
+                                res.json({
+                                  'Error': i18next.t('error_authenticationFailed'),
+                                  'Code': i18next.t('error_code_authenticationUserLocked'),
+                                  'Message': i18next.t('error_authenticationUserLocked'),
+                                });
+                              }
                             });
                         }
                       });
@@ -486,7 +656,7 @@ module.exports = function (app) {
                 else {
                   res.status(loginErr.statusCode);
                   res.json({
-                    'Error': i18next.t('authentication_failed'),
+                    'Error': i18next.t('error_authenticationFailed'),
                     'Code': loginErr.code,
                     'Message': loginErr.message,
                   });
@@ -497,7 +667,10 @@ module.exports = function (app) {
           else if (token) {
             // if (loggedInUser.failedPasswordAttemptCount > 0) {
             app.models.user.updateAll({ id: token.userId }, { failedPasswordAttemptCount: 0, lastLogin: new Date() }, function (err, updatedUser) {
-              if (err) throw err;
+              if (err) {
+                res.status(err.statusCode);
+                res.json(err);
+              }
               else {
                 app.models.user.createTokenObject(token, function (token) {
                   res.status(200);
@@ -509,7 +682,7 @@ module.exports = function (app) {
         } else {
           res.status(loginErr.statusCode);
           res.json({
-            'Error': i18next.t('authentication_failed'),
+            'Error': i18next.t('error_authenticationFailed'),
             'Code': loginErr.code,
             'Message': loginErr.message,
           });
@@ -590,7 +763,7 @@ module.exports = function (app) {
       email: req.body.email
     }, function (err) {
       if (err) return res.status(401).send({
-        'Error': i18next.t('authentication_failed'),
+        'Error': i18next.t('error_authenticationFailed'),
         'Code': err.code,
         'Message': err.message,
       });
@@ -616,24 +789,32 @@ module.exports = function (app) {
     var RoleMapping = app.models.RoleMapping;
     var Role = app.models.Role;
     RoleMapping.find({ where: { principalId: token.userId } }, function (err, roleMappings) {
-      if (roleMappings && roleMappings.length > 0) {
-        var roleIds = _.uniq(roleMappings
-          .map(function (roleMapping) {
-            return roleMapping.roleId;
-          }));
-        var conditions = roleIds.map(function (roleId) {
-          return { id: roleId };
-        });
-        Role.find({ where: { or: conditions } }, function (err, roles) {
-          if (err) throw err;
-          token.roles = roles;
-          permissionHelper.setPermissions(token, roles, function (token) {
-
-            callBack(token);
-          });
-        });
+      if (err) {
+        callBack(err);
       } else {
-        callBack(token);
+        if (roleMappings && roleMappings.length > 0) {
+          var roleIds = _.uniq(roleMappings
+            .map(function (roleMapping) {
+              return roleMapping.roleId;
+            }));
+          var conditions = roleIds.map(function (roleId) {
+            return { id: roleId };
+          });
+          Role.find({ where: { or: conditions } }, function (err, roles) {
+            if (err) {
+              callBack(err);
+            }
+            else {
+              token.roles = roles;
+              permissionHelper.setPermissions(token, roles, function (token) {
+
+                callBack(token);
+              });
+            }
+          });
+        } else {
+          callBack(token);
+        }
       }
     });
   }

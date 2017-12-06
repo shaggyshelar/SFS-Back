@@ -94,6 +94,51 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
                 propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
             });
         }
+        else if (selectedModel.toLowerCase() == "adhocfee") {
+            var propertyArr = [
+                { property: "__create__Adhocfees", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "feeplanassociation") {
+            var propertyArr = [
+                { property: "__create__associations", model: "Feeplan", accessType: "WRITE" },
+                { property: "updateFeeplanAssociation", model: "Feeplanassociation", accessType: "EXECUTE" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: p.accessType, permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "feeplan") {
+            var propertyArr = [
+                { property: "__create__FeePlans", model: "School", accessType: "WRITE" },
+                { property: "findById", model: "School", accessType: "READ" },
+                { property: "create",  model: "Feeplan", accessType: "WRITE" },
+                { property: "updateFeeplanheaddetails", model: "Feeplanheaddetails", accessType: "EXECUTE" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: p.accessType, permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "zone") {
+            var propertyArr = [
+                { property: "__create__zones", model: "School", accessType: "WRITE" },
+                { property: "updateZonedetails", model: "Zonedetails", accessType: "EXECUTE" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: p.accessType, permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "feeplanheaddetails") {
+            var propertyArr = [
+                { property: "updateFeeplanheaddetails", model: "Feeplanheaddetails", accessType: "EXECUTE" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: p.accessType, permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
         else {
             propertyAccess.push({ model: selectedModel, property: "create", accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
         }
@@ -204,6 +249,50 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
                 propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
             });
         }
+        else if (selectedModel.toLowerCase() == "feeplan") {
+            var propertyArr = [
+                { property: "__get__FeePlans", model: "School" },
+                { property: "__findById__FeePlans", model: "School" },
+                { property: "__count__FeePlans", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "adhocfee") {
+            var propertyArr = [
+                { property: "__get__Adhocfees", model: "School" },
+                { property: "__findById__Adhocfees", model: "School" },
+                { property: "__count__Adhocfees", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "feeplanassociation") {
+            var propertyArr = [
+                { property: "__get__associations", model: "Feeplan" },
+                { property: "__findById__associations", model: "Feeplan" },
+                { property: "__count__associations", model: "Feeplan" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "zone") {
+            var propertyArr = [
+                { property: "__get__zones", model: "School" },
+                { property: "__findById__zones", model: "School" },
+                { property: "__count__zones", model: "School" },
+                { property: "find", model: "Zonedetails" },
+                { property: "findById", model: "Zonedetails" },
+                { property: "count", model: "Zonedetails" }
+
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
 
         propertyAccess.push({ model: selectedModel, property: "find", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
         propertyAccess.push({ model: selectedModel, property: "findById", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
@@ -275,6 +364,50 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
                 propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
             });
         }
+        else if (selectedModel.toLowerCase() == "adhocfee") {
+            var propertyArr = [
+                { property: "__updateById__Adhocfees    ", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "feeplanassociation") {
+            var propertyArr = [
+                { property: "__updateById__associations", model: "Feeplan", accessType: "WRITE" },
+                { property: "updateFeeplanAssociation", model: "Feeplanassociation", accessType: "EXECUTE" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: p.accessType, permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "feeplan") {
+            var propertyArr = [
+                { property: "__updateById__FeePlans", model: "School", accessType: "WRITE" },
+                { property: "findById", model: "School", accessType: "READ" },
+                { property: "updateFeeplanheaddetails", model: "Feeplanheaddetails", accessType: "EXECUTE" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: p.accessType, permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "zone") {
+            var propertyArr = [
+                { property: "__updateById__zones", model: "School", accessType: "WRITE" },
+                { property: "updateZonedetails", model: "Zonedetails", accessType: "EXECUTE" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: p.accessType, permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
+        else if (selectedModel.toLowerCase() == "feeplanheaddetails") {
+            var propertyArr = [
+                { property: "updateFeeplanheaddetails", model: "Feeplanheaddetails", accessType: "EXECUTE" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: p.accessType, permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
         propertyAccess.push({ model: selectedModel, property: "updateAttributes", accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
         propertyAccess.push({ model: selectedModel, property: "updateAttribute", accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
     }
@@ -283,7 +416,6 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
         if (selectedModel.toLowerCase() == "addhocfeedetails" ||
             selectedModel.toLowerCase() == "container" ||
             selectedModel.toLowerCase() == "feeplanheaddetails" ||
-            selectedModel.toLowerCase() == "role" ||
             selectedModel.toLowerCase() == "rolemenuDetails" ||
             selectedModel.toLowerCase() == "rolepermissionDetails" ||
             selectedModel.toLowerCase() == "userschooldetails") {
