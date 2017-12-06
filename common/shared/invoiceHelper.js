@@ -121,7 +121,7 @@ module.exports = function(app) {
           _.each(schoolDetail.students, function(student) {
             waterfallFunctions.push(function(next) {
               // invoiceHelper.registerStudent(student, function(error) {
-              });
+              // });
             });
           });
           async.waterfall(waterfallFunctions, function(err) {
