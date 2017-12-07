@@ -15,6 +15,7 @@ var i18next = require('i18next');
 var permissionHelper = require('../../common/shared/permissionsHelper');
 var utilities = require('../../common/shared/utilities');
 var apiHelperObject = require('../../common/shared/apiHelper');
+var invoiceHelper = require('../../common/shared/invoiceHelper');
 
 module.exports = function (app) {
   var User = app.models.user;
@@ -30,6 +31,13 @@ module.exports = function (app) {
     rootlogger.info('hi');
     rootlogger.warn({ lang: 'fr' }, 'au revoir');
     res.render('verified');
+  });
+
+  app.get('/registerStudents', function (req, res) {
+    var invHelper = invoiceHelper(app);
+    invHelper.registerStudents();
+    res.status(200);
+    res.json({'Message': 'Student Registration in progress...'});
   });
 
   app.post('/api/paymentAdvice', function (req, res) {
