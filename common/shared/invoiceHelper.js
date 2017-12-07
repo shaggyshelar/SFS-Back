@@ -124,8 +124,10 @@ module.exports = function(app) {
             waterfallFunctions.push(function(next) {
               invoiceHelper.registerStudent(student, function(error) {
                 if (error) {
+                  student['ErrorMessage'] = error.respDescription;
                   failedStudents.push(student);
                 } else {
+                  student['ErrorMessage'] = 'User created successfully';
                   registeredStudents.push(student);
                 }
                 next();
@@ -136,11 +138,11 @@ module.exports = function(app) {
             var fileName = 'RegistrationReport.csv';
             var filePath = csvHelper.generateStudentRegistrationCSV(fileName, registeredStudents, failedStudents);
             var userEmail = 'shaggy.shelar@gmail.com';
-            var html = i18next.t('csv_emailReportHTMLContent', {savedStudents: registeredStudents.length, failedStudents: failedStudents.length});
+            var html = i18next.t('csv_registerStudentEmailReportHTMLContent', {savedStudents: registeredStudents.length, failedStudents: failedStudents.length});
             app.models.Email.send({
               to: userEmail,
               from: config.supportEmailID,
-              subject: i18next.t('csv_emailReportSubject'),
+              subject: i18next.t('csv_studentRegistrationEmailSubject'),
               html: html,
               attachments: [
                 {

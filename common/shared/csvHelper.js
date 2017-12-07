@@ -3,8 +3,48 @@ var fs = require('fs');
 var path = require('path');
 var i18next = require('i18next');
 var csv = require('fast-csv');
+var _ = require('underscore');
 
 var csvHelper = function() {
+};
+
+csvHelper.getCSVHeader = function(student) {
+  return {
+    'Registered': 'Is Registered',
+    'gRNumber': 'GR Number',
+    'studentCode': 'Student Code',
+    'studentFirstName': 'First Name',
+    'studentLastName': 'Last Name',
+    'studentGender': 'Gender',
+    'phone': 'Phone',
+    'Response Description': 'Response Description',
+  };
+};
+
+csvHelper.getRegisteredStudentCSVFormat = function(student) {
+  return {
+    'Registered': 'Yes',
+    'gRNumber': student.gRNumber,
+    'studentCode': student.studentCode,
+    'studentFirstName': student.studentFirstName,
+    'studentLastName': student.studentLastName,
+    'studentGender': student.studentGender,
+    'phone': student.phone,
+    'Response Description': student.ErrorMessage,
+  };
+};
+
+csvHelper.getFailedStudentCSVFormat = function(student) {
+  return {
+    'Registered': 'No',
+    'gRNumber': student.gRNumber,
+    'studentCode': student.studentCode,
+    'studentFirstName': student.studentFirstName,
+    'studentLastName': student.studentLastName,
+    'studentGender': student.studentGender,
+    'phone': student.phone,
+    'Response Description': student.ErrorMessage,
+  };
 };
 
 csvHelper.generateStudentRegistrationCSV = function(filepath, registeredStudents, failedStudents) {
@@ -14,12 +54,15 @@ csvHelper.generateStudentRegistrationCSV = function(filepath, registeredStudents
     console.log('DONE!');
   });
   fastCsv.pipe(writeStream);
+  fastCsv.write(csvHelper.getCSVHeader());
 
-  fastCsv.write({a: 'a0', b: 'b0'});
-  fastCsv.write({a: 'a1', b: 'b1'});
-  fastCsv.write({a: 'a2', b: 'b2'});
-  fastCsv.write({a: 'a3', b: 'b4'});
-  fastCsv.write({a: 'a3', b: 'b4'});
+  _.each(registeredStudents, function(studentDetails) {
+    fastCsv.write(csvHelper.getRegisteredStudentCSVFormat(studentDetails));
+  });
+
+  _.each(failedStudents, function(studentDetails) {
+    fastCsv.write(csvHelper.getFailedStudentCSVFormat(studentDetails));
+  });
   fastCsv.end();
 };
 module.exports = csvHelper;

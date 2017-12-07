@@ -52,6 +52,7 @@ module.exports = function(app) {
               Student.updateAll({'studentCode': userForm.studentCode}, updateStudentQuery,
               function(err, updatedUser) {
                 if (err) {
+                  // TODO: Set Proper Error Message
                   rootlogger.error(responseData);
                   callback(responseData);
                 }
@@ -64,7 +65,9 @@ module.exports = function(app) {
             }
           } else {
             rootlogger.error('Error while registering student into PayPhi system.');
-            callback('Error while registering student into PayPhi system.');
+            callback({
+              'respDescription': 'Error while registering student into PayPhi system.',
+            });
           }
         });
     },
