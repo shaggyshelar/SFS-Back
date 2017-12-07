@@ -138,7 +138,7 @@ module.exports = function (School) {
         http: "optionsFromRequest"
       }],
     http: { path: '/:schoolId/SchoolInvoices/', verb: 'get' },
-    returns: { arg: '_students', type: 'Invoice' }
+    returns: { arg: 'invoices', type: 'Invoice' }
   });
 
   School.remoteMethod('getInvoiceById', {
@@ -162,6 +162,6 @@ module.exports = function (School) {
         http: "optionsFromRequest"
       }],
     http: { path: '/:schoolId/SchoolInvoices/:id', verb: 'get' },
-    returns: { arg: '_students', type: 'Invoice' }
+    returns: { arg: 'invoices', type: 'Invoice' }
   });
 };
