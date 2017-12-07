@@ -139,6 +139,8 @@ module.exports = function (app) {
           'paymentDate': req.body.paymentDateTime,
           'calculatedLateFees': req.body.calculatedLateFees,
           'invoiceStatus': 'Paid',
+          'updatedBy': 1,
+          'updatedOn': new Date(),
         };
         Invoice.updateAll({id: foundInvoice.id}, updatedInvoice, function (err, updatedUser) {
           if (err) {

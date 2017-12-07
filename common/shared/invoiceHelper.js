@@ -127,6 +127,7 @@ module.exports = function(app) {
                 } else {
                   registeredStudents.push(student);
                 }
+                next();
               });
             });
           });

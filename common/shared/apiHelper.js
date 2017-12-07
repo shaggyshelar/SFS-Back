@@ -48,12 +48,15 @@ module.exports = function(app) {
           if (!error) {
             var responseData = JSON.parse(body);
             if (responseData.responseCode == '0000') {
-              Student.updateAll({'studentCode': userForm.studentCode}, {isRegistered: 1},
+              var updateStudentQuery = {isRegistered: 1, updatedBy: 1, updatedOn: new Date()};
+              Student.updateAll({'studentCode': userForm.studentCode}, updateStudentQuery,
               function(err, updatedUser) {
                 if (err) {
                   rootlogger.error(responseData);
                   callback(responseData);
                 }
+                rootlogger.info('User registered successfully', responseData);
+                callback();
               });
             } else {
               rootlogger.error(responseData);
