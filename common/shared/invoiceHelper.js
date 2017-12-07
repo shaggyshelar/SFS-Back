@@ -7,6 +7,7 @@ var rootlogger = loopback.log;
 var async = require('async');
 var _ = require('underscore');
 var apiHelperObject = require('./apiHelper');
+var csvHelper = require('./csvHelper');
 var configFilePath = process.env.NODE_ENV == undefined ?
 '' : '.' + process.env.NODE_ENV;
 var config = require('../../server/config' + configFilePath + '.json');
@@ -58,7 +59,7 @@ module.exports = function(app) {
     convertParentName: (name) => {
       return name != '' ? name : 'NA';
     },
-    registerStudent: (studentDetails) => {
+    registerStudent: (studentDetails, callback) => {
       var apiHelper = apiHelperObject(app);
       var userParams = [];
       userParams.push(['merchantId', config.payPhiMerchantID]);
@@ -87,7 +88,7 @@ module.exports = function(app) {
       var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
       var hashedKey = apiHelper.getHashedKey(concatenatedParams);
       var userForm = apiHelper.getForm(userParams, hashedKey);
-      apiHelper.registerOrUpdateUser(userForm);
+      apiHelper.registerOrUpdateUser(userForm, callback);
     },
     registerStudents: () => {
       async.series([
@@ -117,16 +118,44 @@ module.exports = function(app) {
         });
         _.each(studentListBySchool, function(schoolDetail) {
           var waterfallFunctions = [];
-          var failedStudent = [];
+          var failedStudents = [];
+          var registeredStudents = [];
           _.each(schoolDetail.students, function(student) {
             waterfallFunctions.push(function(next) {
-              // invoiceHelper.registerStudent(student, function(error) {
-              // });
+              invoiceHelper.registerStudent(student, function(error) {
+                if (error) {
+                  student['ErrorMessage'] = error.respDescription;
+                  failedStudents.push(student);
+                } else {
+                  student['ErrorMessage'] = 'User created successfully';
+                  registeredStudents.push(student);
+                }
+                next();
+              });
             });
           });
           async.waterfall(waterfallFunctions, function(err) {
+            var fileName = 'RegistrationReport.csv';
+            var filePath = csvHelper.generateStudentRegistrationCSV(fileName, registeredStudents, failedStudents);
+            var userEmail = 'shaggy.shelar@gmail.com';
+            var html = i18next.t('csv_registerStudentEmailReportHTMLContent', {savedStudents: registeredStudents.length, failedStudents: failedStudents.length});
+            app.models.Email.send({
+              to: userEmail,
+              from: config.supportEmailID,
+              subject: i18next.t('csv_studentRegistrationEmailSubject'),
+              html: html,
+              attachments: [
+                {
+                  filename: fileName,
+                  content: fs.createReadStream(fileName),
+                }],
+            }, function(err) {
+              if (err) {
+                rootlogger.log('Error sending upload report to email=\'' + userEmail + '\',\n Error=' + err);
+              }
+              console.log('> upload report mail sent successfully');
+            });
           });
-          // invoiceHelper.registerStudent(studentDetails);
         });
       });
     },
