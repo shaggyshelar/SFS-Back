@@ -147,5 +147,13 @@
   "Invoicedetails": {
     "dataSource": "mysql",
     "public": true
+  },
+  "Schoolconfiguration":{
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Sfsconfiguration":{
+    "dataSource": "mysql",
+    "public": true
   }
 }

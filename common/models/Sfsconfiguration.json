@@ -8,10 +8,15 @@
     },
     "relations": {}
   },
+  "mixins": {
+    "TimestampMixin": true,
+    "DeleteOverrideMixin": true,
+    "DuplicateErrorHandler": true
+  },
   "properties": {
     "id": {
       "type": "Number",
-      "required": true,
+      "required": false,
       "length": null,
       "precision": 19,
       "scale": 0,
@@ -130,5 +135,9 @@
         "nullable": "Y"
       }
     }
-  }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
 }

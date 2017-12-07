@@ -67,6 +67,11 @@
         "type": "hasMany",
         "model": "Category",
         "foreignKey": "schoolId"
+      },
+      "SchoolConfiguration": {
+        "type": "hasMany",
+        "model": "Schoolconfiguration",
+        "foreignKey": "schoolId"
       }
     }
   },
