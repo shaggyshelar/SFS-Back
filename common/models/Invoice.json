@@ -329,7 +329,7 @@
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "status",
+        "columnName": "statusDesc",
         "dataType": "varchar",
         "dataLength": 500,
         "dataPrecision": null,

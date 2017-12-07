@@ -47,4 +47,121 @@ module.exports = function (School) {
       next();
     }
   });
+
+  School.getInvoices = function (schoolId, filter, options, cb) {
+    app.models.Student.find({ where: { schoolId: schoolId } }, function (err, _students) {
+      if (err) cb(err);
+      else {
+        if (_students.length > 0) {
+          var searchCondition = _students.map(function (s, i) {
+            return { studentId: s.id };
+          });
+          if (filter && filter.where) {
+            filter.where = {
+              and: [
+                { or: searchCondition },
+                filter.where
+              ]
+            }
+          }
+          else {
+            if (filter == undefined)
+              filter = {};
+            filter.where = { or: searchCondition };
+          }
+          filter.include = ["invoiceDetails", "studentData"];
+          // app.models.Invoice.find({ where: { or: searchCondition }, include: ["invoiceDetails", "studentData"] }, function (err, _invoices) {
+          app.models.Invoice.find(filter, function (err, _invoices) {
+            if (err) cb(err);
+            else {
+              cb(null, _invoices);
+            }
+          });
+        }
+        else {
+          cb(null, []);
+        }
+      }
+    });
+  }
+
+  School.getInvoiceById = function (schoolId, id, filter, options, cb) {
+    app.models.Student.find({ where: { schoolId: schoolId } }, function (err, _students) {
+      if (err) cb(err);
+      else {
+        if (_students.length > 0) {
+          var searchConditions = _students.map(function (s, i) {
+            return { studentId: s.id };
+          });
+          var finalCondition = {};
+          finalCondition.where = {
+            and: [
+              { or: searchConditions },
+              { id: id }
+            ]
+          }
+
+          finalCondition.include = ["invoiceDetails", "studentData"];
+          app.models.Invoice.find(finalCondition, function (err, _invoices) {
+            if (err) cb(err);
+            else {
+              if (_invoices.length > 0) {
+                cb(null, _invoices[0]);
+              }
+              else {
+                cb(null, {});
+              }
+            }
+          });
+        }
+        else {
+          cb(null, []);
+        }
+      }
+    });
+  }
+
+  School.remoteMethod('getInvoices', {
+    accepts: [
+      {
+        arg: 'schoolId',
+        type: 'Number'
+      },
+      {
+        arg: 'filter',
+        type: 'object',
+        'http': { source: 'query' }
+      },
+      {
+        arg: "options",
+        type: "object",
+        http: "optionsFromRequest"
+      }],
+    http: { path: '/:schoolId/SchoolInvoices/', verb: 'get' },
+    returns: { arg: '_students', type: 'Invoice' }
+  });
+
+  School.remoteMethod('getInvoiceById', {
+    accepts: [
+      {
+        arg: 'schoolId',
+        type: 'Number'
+      },
+      {
+        arg: 'id',
+        type: 'Number'
+      },
+      {
+        arg: 'filter',
+        type: 'object',
+        'http': { source: 'query' }
+      },
+      {
+        arg: "options",
+        type: "object",
+        http: "optionsFromRequest"
+      }],
+    http: { path: '/:schoolId/SchoolInvoices/:id', verb: 'get' },
+    returns: { arg: '_students', type: 'Invoice' }
+  });
 };
