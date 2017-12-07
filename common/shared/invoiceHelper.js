@@ -7,6 +7,7 @@ var rootlogger = loopback.log;
 var async = require('async');
 var _ = require('underscore');
 var apiHelperObject = require('./apiHelper');
+var csvHelper = require('./csvHelper');
 var configFilePath = process.env.NODE_ENV == undefined ?
 '' : '.' + process.env.NODE_ENV;
 var config = require('../../server/config' + configFilePath + '.json');
