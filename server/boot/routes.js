@@ -15,6 +15,7 @@ var i18next = require('i18next');
 var permissionHelper = require('../../common/shared/permissionsHelper');
 var utilities = require('../../common/shared/utilities');
 var apiHelperObject = require('../../common/shared/apiHelper');
+var invoiceHelper = require('../../common/shared/invoiceHelper');
 
 module.exports = function (app) {
   var User = app.models.user;
@@ -30,6 +31,13 @@ module.exports = function (app) {
     rootlogger.info('hi');
     rootlogger.warn({ lang: 'fr' }, 'au revoir');
     res.render('verified');
+  });
+
+  app.get('/registerStudents', function (req, res) {
+    var invHelper = invoiceHelper(app);
+    invHelper.registerStudents();
+    res.status(200);
+    res.json({'Message': 'Student Registration in progress...'});
   });
 
   app.post('/api/paymentAdvice', function (req, res) {
@@ -139,6 +147,8 @@ module.exports = function (app) {
           'paymentDate': req.body.paymentDateTime,
           'calculatedLateFees': req.body.calculatedLateFees,
           'invoiceStatus': 'Paid',
+          'updatedBy': 1,
+          'updatedOn': new Date(),
         };
         Invoice.updateAll({id: foundInvoice.id}, updatedInvoice, function (err, updatedUser) {
           if (err) {
@@ -700,64 +710,6 @@ module.exports = function (app) {
       });
     });
   });
-  // app.post('/login', function(req, res) {
-  //   User.login({
-  //     username: req.body.username,
-  //     password: req.body.password,
-  //   }, 'user', function(err, token) {
-  // if (err) {
-  //   res.status(err.statusCode);
-  //   res.json({
-  //     'Error': 'Failed',
-  //     'Code': err.code,
-  //     'Message': err.message,
-  //   });
-  // }
-  // if (token != undefined) {
-  //   var RoleMapping = app.models.RoleMapping;
-  //   var Role = app.models.Role;
-  //   RoleMapping.find({where: {principalId: token.userId}}, function(err, roleMappings) {
-  //     if (roleMappings && roleMappings.length > 0) {
-  //       var roleIds = _.uniq(roleMappings
-  //         .map(function(roleMapping) {
-  //           return roleMapping.roleId;
-  //         }));
-  //       var conditions = roleIds.map(function(roleId) {
-  //         return {id: roleId};
-  //       });
-  //       Role.find({where: {or: conditions}}, function(err, roles) {
-  //         if (err) throw err;
-  //         token.roles = roles;
-  //         permissionHelper.setPermissions(token, roles, function(token) {
-  //           res.status(200);
-  //           res.json(token);
-  //         });
-  //       });
-  //     } else {
-  //       res.status(200);
-  //       res.json(token);
-  //     }
-  //   });
-
-  //   // var isPasswordChanged = token.toJSON().user.isPasswordChanged;
-  //   // if (isPasswordChanged) {
-  //   //   res.status(200);
-  //   //   res.send({
-  //   //     'token': token.id,
-  //   //     'ttl': token.ttl,
-  //   //     'created': token.created,
-  //   //     'userId': token.userId,
-  //   //   });
-  //   // } else {
-  //   //   res.status(401);
-  //   //   res.send({
-  //   //     'Error': 'ChangeTemporaryPassword',
-  //   //     'Message': 'Please change password first.',
-  //   //   });
-  //   // }
-  // }
-  //   });
-  // });
 
   app.get('/logout', function (req, res, next) {
     if (!req.accessToken) return res.sendStatus(401); // return 401:unauthorized if accessToken is not present
@@ -767,7 +719,7 @@ module.exports = function (app) {
     });
   });
 
-  //send an email with instructions to reset an existing user's password
+  // send an email with instructions to reset an existing user's password
   app.post('/request-password-reset', function (req, res, next) {
     User.resetPassword({
       email: req.body.email
@@ -786,7 +738,7 @@ module.exports = function (app) {
     });
   });
 
-  //show password reset form
+  // show password reset form
   app.get('/reset-password', function (req, res, next) {
     if (!req.accessToken) return res.sendStatus(401);
     res.render('password-reset', {
@@ -827,5 +779,5 @@ module.exports = function (app) {
         }
       }
     });
-  }
+  };
 };
