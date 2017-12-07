@@ -213,6 +213,12 @@ module.exports = function (app) {
                 callback(null, catLists);
               });
             },
+            function (callback) {
+              UserModel.getEmails(req.body.schoolId, function(err, user){
+                if(err) callback(err);
+                else callback(null,user);
+              });
+            },
           ],
             function (err, results) {
               // app.dataSources.mysql.transaction(models => {  //TODO: Implement transaction

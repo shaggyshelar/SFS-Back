@@ -33,7 +33,7 @@ module.exports = function (User) {
       context.res.render('response', {
         title: 'Signed up successfully',
         content: 'Please check your email and click on the verification link ' +
-        'before logging in.',
+          'before logging in.',
         redirectTo: '/',
         redirectToLinkText: 'Log in',
       });
@@ -44,9 +44,9 @@ module.exports = function (User) {
   User.afterRemote('prototype.verify', function (context, user, next) {
     context.res.render('response', {
       title: 'A Link to reverify your identity has been sent ' +
-      'to your email successfully',
+        'to your email successfully',
       content: 'Please check your email and click on the verification link ' +
-      'before logging in',
+        'before logging in',
       redirectTo: '/',
       redirectToLinkText: 'Log in',
     });
@@ -61,11 +61,14 @@ module.exports = function (User) {
       info.accessToken.id + '">here</a> to reset your password';
     var subject = "SFS: Password reset";
 
-    app.models.user.findOne({ where: { email: info.email } }, function (err, _user) {
+    app.models.user.findOne({
+      where: {
+        email: info.email
+      }
+    }, function (err, _user) {
       if (err) {
         console.log(err);
-      }
-      else {
+      } else {
         if (_user.isBolocked) {
           html = 'Click <a href="' + url + '?access_token=' +
             info.accessToken.id + '">here</a> to reset your password and unlock your account.';
@@ -90,7 +93,9 @@ module.exports = function (User) {
     var userid = context.args.options.accessToken.userId;
     User.findById(userid, function (err, _user) {
       if (err) return next(err);
-      _user.updateAttributes({ isPasswordChanged: true }, function (err, data) {
+      _user.updateAttributes({
+        isPasswordChanged: true
+      }, function (err, data) {
         context.res.render('response', {
           title: 'Password changed successfully',
           content: 'Please login again with new password',
@@ -107,7 +112,9 @@ module.exports = function (User) {
     var _user = {};
     _user.failedPasswordAttemptCount = 0;
     _user.isBolocked = 0;
-    User.updateAll({ id: context.args.id }, _user, function (err, updatedUser) {
+    User.updateAll({
+      id: context.args.id
+    }, _user, function (err, updatedUser) {
       if (err) {
         return next(err);
       }
@@ -122,7 +129,11 @@ module.exports = function (User) {
 
   User.afterRemote('confirm', function (context, user, next) {
     if (context.args) {
-      User.updateAll({ id: context.args.uid }, { isActivate: true }, function (err, updatedUser) {
+      User.updateAll({
+        id: context.args.uid
+      }, {
+        isActivate: true
+      }, function (err, updatedUser) {
         if (err)
           return next(err);
         else {
@@ -134,7 +145,9 @@ module.exports = function (User) {
 
   User.createUser = function (user, options, cb) {
     if (options.accessToken) {
-      var password = randomize('a', 6) + randomize('0', 4) + randomize('?', 2, { chars: '+-*/&^%$#@!' });
+      var password = randomize('a', 6) + randomize('0', 4) + randomize('?', 2, {
+        chars: '+-*/&^%$#@!'
+      });
       user.password = password;
 
       User.create(user, function (err, cUser) {
@@ -173,6 +186,16 @@ module.exports = function (User) {
     }
   }
 
+  User.getEmails = function (id, cb) {
+    var ds = User.dataSource;
+    var sql = "select u.id,u.email from user u left join userschooldetails usd on u.id = usd.userId where usd.schoolId=? and u.roleId=2";
+    
+    ds.connector.query(sql, [id], function (err, User) {
+      if (err) console.error(err);
+      cb(err, User);
+    });
+  }
+  
   User.updateUser = function (id, user, options, cb) {
     var updateUser = {
       roleId: user.roleId,
@@ -180,9 +203,15 @@ module.exports = function (User) {
       phone: user.phone,
       email: user.email
     };
-    User.findOne({ where: { id: id } }, function (err, userInfo) {
+    User.findOne({
+      where: {
+        id: id
+      }
+    }, function (err, userInfo) {
       if (err) cb(err);
-      User.updateAll({ id: id }, updateUser, function (err, updatedUser) {
+      User.updateAll({
+        id: id
+      }, updateUser, function (err, updatedUser) {
         if (err)
           cb(err);
         else {
@@ -196,7 +225,15 @@ module.exports = function (User) {
             principalType: "USER",
             principalId: id
           };
-          app.models.RoleMapping.find({ where: { and: [{ principalType: "USER" }, { principalId: id }] } }, function (err, rolemapArr) {
+          app.models.RoleMapping.find({
+            where: {
+              and: [{
+                principalType: "USER"
+              }, {
+                principalId: id
+              }]
+            }
+          }, function (err, rolemapArr) {
             if (err) cb(err);
             else {
               if (rolemapArr.length > 0) {
@@ -204,12 +241,22 @@ module.exports = function (User) {
                 if (rolemap.roleId != user.roleId) {
                   rolemap.roleId = user.roleId;
 
-                  app.models.RoleMapping.updateAll({ and: [{ principalType: "USER" }, { principalId: id }] }, { roleId: user.roleId }, function (err, updatedUser) {
+                  app.models.RoleMapping.updateAll({
+                    and: [{
+                      principalType: "USER"
+                    }, {
+                      principalId: id
+                    }]
+                  }, {
+                    roleId: user.roleId
+                  }, function (err, updatedUser) {
                     if (err)
                       cb(err);
                   });
                 }
-                app.models.Userschooldetails.destroyAll({ userId: id }, function (err, userSchoolInfo) {
+                app.models.Userschooldetails.destroyAll({
+                  userId: id
+                }, function (err, userSchoolInfo) {
                   if (err) cb(err);
                   else {
                     var userSchoolMap = [];
@@ -239,40 +286,69 @@ module.exports = function (User) {
 
   User.remoteMethod('createUser', {
     accepts: [{
-      arg: 'user',
-      type: 'user',
-      http: {
-        source: 'body',
+        arg: 'user',
+        type: 'user',
+        http: {
+          source: 'body',
+        },
       },
+      {
+        arg: "options",
+        type: "object",
+        http: "optionsFromRequest"
+      }
+    ],
+    http: {
+      path: '/createUser',
+      verb: 'post'
     },
-    {
-      arg: "options",
-      type: "object",
-      http: "optionsFromRequest"
-    }],
-    http: { path: '/createUser', verb: 'post' },
-    returns: { arg: 'user', type: 'user' }
+    returns: {
+      arg: 'user',
+      type: 'user'
+    }
   });
 
 
   User.remoteMethod('updateUser', {
     accepts: [{
-      arg: 'id',
-      type: 'Number'
-    }, {
-      arg: 'user',
-      type: 'user',
-      http: {
-        source: 'body',
+        arg: 'id',
+        type: 'Number'
+      }, {
+        arg: 'user',
+        type: 'user',
+        http: {
+          source: 'body',
+        },
       },
+      {
+        arg: "options",
+        type: "object",
+        http: "optionsFromRequest"
+      }
+    ],
+    http: {
+      path: '/updateUser/:id',
+      verb: 'put'
     },
-    {
-      arg: "options",
-      type: "object",
-      http: "optionsFromRequest"
-    }],
-    http: { path: '/updateUser/:id', verb: 'put' },
-    returns: { arg: 'user', type: 'user' }
+    returns: {
+      arg: 'user',
+      type: 'user'
+    }
+  });
+
+  User.remoteMethod('getEmails', {
+    accepts: [{
+        arg: 'id',
+        type: 'string'
+      }, 
+    ],
+    http: {
+      verb: 'get'
+    },
+    returns: {
+      arg: 'user',
+      type: 'user'
+    }
   });
 
   User.validatePassword = function (plain) {
@@ -289,7 +365,8 @@ module.exports = function (User) {
       err.code = 'INVALID_PASSWORD';
     } else {
       return true;
-    } err.statusCode = 422;
+    }
+    err.statusCode = 422;
     throw err;
   };
 };
