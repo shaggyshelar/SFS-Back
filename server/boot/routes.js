@@ -213,12 +213,15 @@ module.exports = function (app) {
                 callback(null, catLists);
               });
             },
-            function (callback) {
-              UserModel.getEmails(req.body.schoolId, function(err, user){
-                if(err) callback(err);
-                else callback(null,user);
+            User.getEmails = function (id, cb) {
+              var ds = User.dataSource;
+              var sql = "select u.id,u.email from user u left join userschooldetails usd on u.id = usd.userId where usd.schoolId=? and u.roleId=2";
+              
+              ds.connector.query(sql, [id], function (err, User) {
+                if (err) console.error(err);
+                cb(err, User);
               });
-            },
+            }
           ],
             function (err, results) {
               // app.dataSources.mysql.transaction(models => {  //TODO: Implement transaction
