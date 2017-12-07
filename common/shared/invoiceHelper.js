@@ -133,7 +133,8 @@ module.exports = function(app) {
             });
           });
           async.waterfall(waterfallFunctions, function(err) {
-            // invoiceHelper.registerStudent(studentDetails);
+            var fileName = 'RegistrationReport.csv';
+            var filePath = csvHelper.generateStudentRegistrationCSV(fileName, registeredStudents, failedStudents);
             var userEmail = 'shaggy.shelar@gmail.com';
             var html = i18next.t('csv_emailReportHTMLContent', {savedStudents: registeredStudents.length, failedStudents: failedStudents.length});
             app.models.Email.send({
@@ -141,6 +142,11 @@ module.exports = function(app) {
               from: config.supportEmailID,
               subject: i18next.t('csv_emailReportSubject'),
               html: html,
+              attachments: [
+                {
+                  filename: fileName,
+                  content: fs.createReadStream(fileName),
+                }],
             }, function(err) {
               if (err) {
                 rootlogger.log('Error sending upload report to email=\'' + userEmail + '\',\n Error=' + err);
