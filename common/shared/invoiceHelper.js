@@ -117,20 +117,35 @@ module.exports = function(app) {
         });
         _.each(studentListBySchool, function(schoolDetail) {
           var waterfallFunctions = [];
-          var failedStudent = [];
+          var failedStudents = [];
+          var registeredStudents = [];
           _.each(schoolDetail.students, function(student) {
             waterfallFunctions.push(function(next) {
               invoiceHelper.registerStudent(student, function(error) {
                 if (error) {
-                  var errorMessage = 'Failed to register student with id =' + student.id +'. Error ='+ error;
-                  failedStudent.push(errorMessage);
+                  failedStudents.push(student);
+                } else {
+                  registeredStudents.push(student);
                 }
               });
             });
           });
           async.waterfall(waterfallFunctions, function(err) {
+            // invoiceHelper.registerStudent(studentDetails);
+            var userEmail = 'shaggy.shelar@gmail.com';
+            var html = i18next.t('csv_emailReportHTMLContent', {savedStudents: registeredStudents.length, failedStudents: failedStudents.length});
+            app.models.Email.send({
+              to: userEmail,
+              from: config.supportEmailID,
+              subject: i18next.t('csv_emailReportSubject'),
+              html: html,
+            }, function(err) {
+              if (err) {
+                rootlogger.log('Error sending upload report to email=\'' + userEmail + '\',\n Error=' + err);
+              }
+              console.log('> upload report mail sent successfully');
+            });
           });
-          // invoiceHelper.registerStudent(studentDetails);
         });
       });
     },
