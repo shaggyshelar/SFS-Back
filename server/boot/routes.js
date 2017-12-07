@@ -147,7 +147,7 @@ module.exports = function (app) {
             res.status(500);
             res.json(err);
           } else {
-            res.status(400);
+            res.status(200);
             res.json({'Message': i18next.t('api_paymentAdviceSuccess')});
           }
         });
