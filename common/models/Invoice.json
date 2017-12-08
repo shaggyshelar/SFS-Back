@@ -307,21 +307,6 @@
         "nullable": "N"
       }
     },
-    "invoiceStatus": {
-      "type": "Boolean",
-      "required": true,
-      "length": 1,
-      "precision": null,
-      "scale": null,
-      "mysql": {
-        "columnName": "invoiceStatus",
-        "dataType": "char",
-        "dataLength": 1,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "N"
-      }
-    },
     "status": {
       "type": "String",
       "required": true,
