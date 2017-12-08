@@ -22,10 +22,16 @@ module.exports = function (Schoolconfiguration) {
                     });
                 }
                 else {
-                    var error = new Error();
-                    error.status = 404;
-                    error.message = i18next.t('error_noRecordFound');
-                    cb(error);
+                    Schoolconfiguration.create(_schoolconfiguration, function (err, _savedSchoolconfiguration) {
+                        if (err) cb(err);
+                        else {
+                            cb(null, _savedSchoolconfiguration);
+                        }
+                    });
+                    // var error = new Error();
+                    // error.status = 404;
+                    // error.message = i18next.t('error_noRecordFound');
+                    // cb(error);
                 }
             }
         });

@@ -16,10 +16,13 @@ module.exports = function (School) {
     else {
       var itemId = ctx.data.id != undefined ? ctx.data.id : ctx.where.id;
       School.findById(itemId, function (err, _savedSchool) {
-        if (_savedSchool.invoiceMnemonic != ctx.data.invoiceMnemonic) {
-          ctx.data.invoiceSequenceNumber = 0;
+        if (err) next(err);
+        else {
+          if ((_savedSchool != null || _savedSchool != undefined) && _savedSchool.invoiceMnemonic != ctx.data.invoiceMnemonic) {
+            ctx.data.invoiceSequenceNumber = 0;
+          }
+          next();
         }
-        next();
       });
     }
   });
