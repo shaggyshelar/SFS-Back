@@ -17,14 +17,15 @@
 
 ALTER TABLE `academicyear` AUTO_INCREMENT = 1;
 ALTER TABLE `acl` AUTO_INCREMENT = 1;
-ALTER TABLE `addhocfee` AUTO_INCREMENT = 1;
-ALTER TABLE `addhocfeedetails` AUTO_INCREMENT = 1;
+ALTER TABLE `Adhocfee` AUTO_INCREMENT = 1;
+ALTER TABLE `Adhocfeedetails` AUTO_INCREMENT = 1;
 ALTER TABLE `board` AUTO_INCREMENT = 1;
 ALTER TABLE `category` AUTO_INCREMENT = 1;
 ALTER TABLE `class` AUTO_INCREMENT = 1;
 ALTER TABLE `division` AUTO_INCREMENT = 1;
 ALTER TABLE `feehead` AUTO_INCREMENT = 1;
 ALTER TABLE `feeplan` AUTO_INCREMENT = 1;
+ALTER TABLE `feeplanassociation` AUTO_INCREMENT = 1;
 ALTER TABLE `feeplanheaddetails` AUTO_INCREMENT = 1;
 ALTER TABLE `frequency` AUTO_INCREMENT = 1;
 ALTER TABLE `institute` AUTO_INCREMENT = 1;
@@ -36,11 +37,12 @@ ALTER TABLE `rolemenudetails` AUTO_INCREMENT = 1;
 ALTER TABLE `rolepermissiondetails` AUTO_INCREMENT = 1;
 ALTER TABLE `roleschooldetails` AUTO_INCREMENT = 1;
 ALTER TABLE `school` AUTO_INCREMENT = 1;
+ALTER TABLE `schoolmerchant` AUTO_INCREMENT = 1;
 ALTER TABLE `student` AUTO_INCREMENT = 1;
 ALTER TABLE `user` AUTO_INCREMENT = 1;
 ALTER TABLE `userschooldetails` AUTO_INCREMENT = 1;
 ALTER TABLE `zone` AUTO_INCREMENT = 1;
-
+ALTER TABLE `zonedetails` AUTO_INCREMENT = 1;
 
 
 --
@@ -62,14 +64,103 @@ INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permiss
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Category', '*', '*', 'DENY', 'ROLE', '$everyone');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feehead', '*', '*', 'DENY', 'ROLE', '$everyone');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', '*', '*', 'DENY', 'ROLE', '$everyone');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Transport', '*', '*', 'DENY', 'ROLE', '$everyone');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Addhocfee', '*', '*', 'DENY', 'ROLE', '$everyone');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', '*', '*', 'DENY', 'ROLE', '$everyone');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Adhocfee', '*', '*', 'DENY', 'ROLE', '$everyone');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', '*', '*', 'DENY', 'ROLE', '$everyone');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('ProcessFee', '*', '*', 'DENY', 'ROLE', '$everyone');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Report', '*', '*', 'DENY', 'ROLE', '$everyone');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Academicyear', '*', '*', 'DENY', 'ROLE', '$everyone');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanheaddetails', '*', '*', 'DENY', 'ROLE', '$everyone');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanassociation', '*', '*', 'DENY', 'ROLE', '$everyone');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', '*', '*', 'DENY', 'ROLE', '$everyone');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zonedetails', '*', '*', 'DENY', 'ROLE', '$everyone');
 
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', '__get__permission', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+
+-- Authenticate read Access
+
+-- Frequency, Class, Division, Category, AcademicYear
+INSERT INTO `schoolfeesystem_int`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Frequency', 'find', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem_int`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Class', 'find', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem_int`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Division', 'find', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem_int`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Category', 'find', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem_int`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Academicyear', 'find', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+
+INSERT INTO `schoolfeesystem_int`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Frequency', 'findById', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem_int`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Class', 'findById', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem_int`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Division', 'findById', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem_int`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Category', 'findById', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem_int`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Academicyear', 'findById', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+
+-- School Get
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__get__Students', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__get__SchoolYear', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__get__SchoolUsers', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__get__SchoolInstitute', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__get__SchoolDivision', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__get__SchoolClass', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__get__SchoolBoard', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__get__Roles', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+
+-- Scholl Get by Id
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__findById__Students', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__findById__SchoolYear', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__findById__SchoolUsers', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__findById__SchoolInstitute', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__findById__SchoolDivision', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__findById__SchoolClass', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__findById__SchoolBoard', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__findById__Roles', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+
+-- School Count
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__Students', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__SchoolYear', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__SchoolUsers', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__SchoolInstitute', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__SchoolDivision', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__SchoolClass', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__SchoolBoard', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__Roles', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+
+
+-- Sudents GET
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', '__get__StudentCategory', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', '__get__StudentClass', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', '__get__StudentDivision', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', '__get__StudentSchool', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', 'getStudentFeeplanDetails', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+
+-- Classes
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Class', '__get__ClassSchool', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+
+-- Divisions
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Division', '__get__DivisionSchool', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+--  RoleMenu
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', '__get__rolemenu', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', '__findById__rolemenu', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__get__FeePlans', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__findById__FeePlans', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__FeePlans', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', '__get__associations', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', '__findById__associations', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', '__count__associations', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__get__Adhocfees', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__findById__Adhocfees', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__Adhocfees', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__get__zones', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__findById__zones', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__zones', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+
+-- School Category
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__get__Schoolcategories', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__findById__Schoolcategories', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__Schoolcategories', 'READ', 'ALLOW', 'ROLE', '$authenticated');
+
+
 
 -- Allow for  SuperAdmin
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Institute', 'find', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
@@ -83,8 +174,11 @@ INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permiss
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Category', 'find', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feehead', 'find', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', 'find', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Transport', 'find', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Addhocfee', 'find', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanassociation', 'find', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanheaddetails', 'find', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', 'find', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zonedetails', 'find', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Adhocfee', 'find', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', 'find', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('ProcessFee', 'find', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Report', 'find', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
@@ -102,8 +196,11 @@ INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permiss
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Category', 'findById', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feehead', 'findById', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', 'findById', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Transport', 'findById', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Addhocfee', 'findById', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanassociation', 'findById', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanheaddetails', 'findById', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', 'findById', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zonedetails', 'findById', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Adhocfee', 'findById', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', 'findById', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('ProcessFee', 'findById', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Report', 'findById', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
@@ -121,8 +218,10 @@ INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permiss
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Category', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feehead', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Transport', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Addhocfee', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanassociation', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanheaddetails', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Adhocfee', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('ProcessFee', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Report', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
@@ -140,8 +239,11 @@ INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permiss
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Category', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feehead', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Transport', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Addhocfee', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanassociation', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanheaddetails', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zonedetails', 'updateZonedetails', 'EXECUTE', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Adhocfee', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('ProcessFee', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Report', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
@@ -158,15 +260,12 @@ INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permiss
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Category', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feehead', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Transport', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Addhocfee', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Adhocfee', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('ProcessFee', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Report', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Academicyear', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
-
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('user', 'createUser', 'EXECUTE', 'ALLOW', 'ROLE', 'SuperAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('user', 'updateUser', 'EXECUTE', 'ALLOW', 'ROLE', 'SuperAdmin');
 
 -- Count
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Institute', 'count', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
@@ -180,13 +279,15 @@ INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permiss
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Category', 'count', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feehead', 'count', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', 'count', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Transport', 'count', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Addhocfee', 'count', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanassociation', 'count', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanheaddetails', 'count', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', 'count', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zonedetails', 'count', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Adhocfee', 'count', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', 'count', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('ProcessFee', 'count', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Report', 'count', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Academicyear', 'count', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Permission', 'count', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 
 -- Soft Delete
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Institute', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SuperAdmin');
@@ -200,12 +301,24 @@ INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permiss
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Category', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feehead', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SuperAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Transport', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SuperAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Addhocfee', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Adhocfee', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('ProcessFee', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Report', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Academicyear', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SuperAdmin');
+
+-- INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', 'find', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+-- INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', 'findById', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+-- INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+-- INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+
+
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('user', 'createUser', 'EXECUTE', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('user', 'updateUser', 'EXECUTE', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanheaddetails', 'updateFeeplanheaddetails', 'EXECUTE', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanassociation', 'updateFeeplanAssociation', 'EXECUTE', 'ALLOW', 'ROLE', 'SuperAdmin');
+
 
 -- School Get
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__get__Students', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
@@ -236,7 +349,7 @@ INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permiss
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__SchoolClass', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__SchoolBoard', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__Roles', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
-
+-- 
 -- School Create
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__create__Students', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__create__SchoolYear', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
@@ -262,6 +375,7 @@ INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permiss
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', '__get__StudentClass', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', '__get__StudentDivision', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', '__get__StudentSchool', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', 'getStudentFeeplanDetails', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 
 -- Classes
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Class', '__get__ClassSchool', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
@@ -269,21 +383,56 @@ INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permiss
 -- Divisions
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Division', '__get__DivisionSchool', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
 --  RoleMenu
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', '__get__rolemenu', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', '__findById__rolemenu', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', '__findById__rolemenu', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', '__updateById__rolemenu', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', '__get__rolemenu', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', '__findById__rolemenu', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', '__updateById__rolemenu', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__get__FeePlans', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__findById__FeePlans', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__FeePlans', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__create__FeePlans', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__updateById__FeePlans', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', '__get__associations', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', '__findById__associations', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', '__count__associations', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', '__create__associations', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', '__updateById__associations', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__get__Adhocfees', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__findById__Adhocfees', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__Adhocfees', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__create__Adhocfees', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__updateById__Adhocfees', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__get__zones', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__findById__zones', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__zones', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__create__zones', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__updateById__zones', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__get__Schoolcategories', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__findById__Schoolcategories', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__Schoolcategories', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__create__Schoolcategories', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__updateById__Schoolcategories', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+
 
 -- ========================================================== Allow for  SchoolAdmin=============================================================================================
 
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', 'find', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('user', 'find', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Frequency', 'find', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Class', 'find', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Division', 'find', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Category', 'find', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feehead', 'find', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', 'find', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Transport', 'find', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Addhocfee', 'find', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanassociation', 'find', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanheaddetails', 'find', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', 'find', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zonedetails', 'find', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Adhocfee', 'find', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', 'find', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('ProcessFee', 'find', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Report', 'find', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
@@ -292,69 +441,89 @@ INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permiss
 
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', 'findById', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('user', 'findById', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Frequency',	'findById', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Class', 'findById', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Division', 'findById', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Category',	'findById', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feehead', 'findById', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', 'findById', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Transport', 'findById', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Addhocfee', 'findById', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanassociation', 'findById', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanheaddetails', 'findById', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', 'findById', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zonedetails', 'findById', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Adhocfee', 'findById', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', 'findById', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('ProcessFee', 'findById', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Report', 'findById', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Academicyear', 'findById', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Permission', 'findById', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', 'findById', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('user', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Frequency', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Class', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Division', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Category', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feehead', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Transport', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Addhocfee', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanassociation', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanheaddetails', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Adhocfee', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('ProcessFee', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Report', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Academicyear', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+-- INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Academicyear', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('user', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Frequency', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Class', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Division', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Category', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feehead', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Transport', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Addhocfee', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanassociation', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanheaddetails', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zonedetails', 'updateZonedetails', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Adhocfee', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('ProcessFee', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Report', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Academicyear', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+-- INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Academicyear', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('user', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Frequency', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Class', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Division', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Category', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feehead', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Transport', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Addhocfee', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Adhocfee', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('ProcessFee', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Report', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Academicyear', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+-- INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Academicyear', 'destroyById', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('User', 'createUser', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('user', 'updateUser', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 
 -- Count
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', 'count', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('user', 'count', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Frequency', 'count', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Class', 'count', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Division', 'count', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Category', 'count', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feehead', 'count', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', 'count', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Transport', 'count', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Addhocfee', 'count', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanassociation', 'count', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanheaddetails', 'count', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', 'count', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zonedetails', 'count', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Adhocfee', 'count', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', 'count', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('ProcessFee', 'count', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Report', 'count', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
@@ -364,16 +533,30 @@ INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permiss
 -- Soft Delete
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('user', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Frequency', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Class', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Division', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Category', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feehead', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Transport', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Addhocfee', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Adhocfee', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('ProcessFee', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Report', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Academicyear', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+-- INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Academicyear', 'deleteRecord', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+
+-- INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', 'find', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+-- INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', 'findById', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+-- INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', 'create', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+-- INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Zone', 'updateAttributes', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+-- 
+
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('User', 'createUser', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('user', 'updateUser', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanheaddetails', 'updateFeeplanheaddetails', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplanassociation', 'updateFeeplanAssociation', 'EXECUTE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+
 
 -- School GET
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__get__Students', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
@@ -430,6 +613,7 @@ INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permiss
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', '__get__StudentClass', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', '__get__StudentDivision', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', '__get__StudentSchool', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Student', 'getStudentFeeplanDetails', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 
 -- Classes
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Class', '__get__ClassSchool', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
@@ -437,10 +621,40 @@ INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permiss
 -- Divisions
 INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Division', '__get__DivisionClass', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
 --  RoleMenu
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', '__get__rolemenu', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', '__findById__rolemenu', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', '__findById__rolemenu', 'READ', 'ALLOW', 'ROLE', 'SuperAdmin');
-INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', '__updateById__rolemenu', 'WRITE', 'ALLOW', 'ROLE', 'SuperAdmin');
+
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', '__get__rolemenu', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+-- INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', '__findById__rolemenu', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+-- INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('role', '__updateById__rolemenu', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__get__FeePlans', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__findById__FeePlans', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__FeePlans', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__create__FeePlans', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__updateById__FeePlans', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', '__get__associations', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', '__findById__associations', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', '__count__associations', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', '__create__associations', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('Feeplan', '__updateById__associations', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__get__Adhocfees', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__findById__Adhocfees', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__Adhocfees', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__create__Adhocfees', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__updateById__Adhocfees', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__get__zones', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__findById__zones', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__zones', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__create__zones', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__updateById__zones', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__get__Schoolcategories', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__findById__Schoolcategories', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__count__Schoolcategories', 'READ', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__create__Schoolcategories', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
+INSERT INTO `schoolfeesystem`.`acl` (`model`, `property`, `accessType`, `permission`, `principalType`, `principalId`) VALUES ('School', '__updateById__Schoolcategories', 'WRITE', 'ALLOW', 'ROLE', 'SchoolAdmin');
 /*!40000 ALTER TABLE `acl` ENABLE KEYS */;
 
 UNLOCK TABLES;
@@ -470,23 +684,23 @@ UNLOCK TABLES;
 -- Dumping data for table `category`
 --
 
-LOCK TABLES `category` WRITE;
-/*!40000 ALTER TABLE `category` DISABLE KEYS */;
-INSERT INTO `category`(
-`categoryName`,
-`categoryDescription`,
-`categoryCode`,
-`isDelete`,
-`createdBy`,
-`createdOn`,
-`updatedBy`,
-`updatedOn`) VALUES 
-('General','General Category','Genral',0,1,'2017-11-06 12:32:49',NULL,NULL),
-('Staff','Staff Category','Staff',0,1,'2017-11-06 12:32:49',NULL,NULL),
-('Management','Management Category','Management',0,1,'2017-11-06 12:32:49',NULL,NULL),
-('RTE','RTE Category','RTE',0,1,'2017-11-06 12:32:49',NULL,NULL);
-/*!40000 ALTER TABLE `category` ENABLE KEYS */;
-UNLOCK TABLES;
+-- LOCK TABLES `category` WRITE;
+-- /*!40000 ALTER TABLE `category` DISABLE KEYS */;
+-- INSERT INTO `category`(
+-- `categoryName`,
+-- `categoryDescription`,
+-- `categoryCode`,
+-- `isDelete`,
+-- `createdBy`,
+-- `createdOn`,
+-- `updatedBy`,
+-- `updatedOn`) VALUES 
+-- ('General','General Category','Genral',0,1,'2017-11-06 12:32:49',NULL,NULL),
+-- ('Staff','Staff Category','Staff',0,1,'2017-11-06 12:32:49',NULL,NULL),
+-- ('Management','Management Category','Management',0,1,'2017-11-06 12:32:49',NULL,NULL),
+-- ('RTE','RTE Category','RTE',0,1,'2017-11-06 12:32:49',NULL,NULL);
+-- /*!40000 ALTER TABLE `category` ENABLE KEYS */;
+-- UNLOCK TABLES;
 
 --
 -- Dumping data for table `frequency`
@@ -503,7 +717,7 @@ INSERT INTO `frequency` (
 `updatedBy`,
 `updatedOn`) VALUES 
 ('Monthly',12,0,1,'2017-11-06 12:35:41',NULL,NULL),
-('Quarterly',3,0,1,'2017-11-06 12:35:41',NULL,NULL),
+('Quarterly',4,0,1,'2017-11-06 12:35:41',NULL,NULL),
 ('Half Yearly',2,0,1,'2017-11-06 12:35:41',NULL,NULL),
 ('Yearly',1,0,1,'2017-11-06 12:35:41',NULL,NULL),
 ('OneTime',1,0,1,'2017-11-06 12:35:41',NULL,NULL);
@@ -529,12 +743,13 @@ INSERT INTO `menu` VALUES
 (10,'Fee Heads',0,10,0,1,'2017-11-03 15:12:09',NULL,NULL),
 (11,'Fee Plans',0,11,0,1,'2017-11-03 15:12:09',NULL,NULL),
 (12,'Zone',0,12,0,1,'2017-11-03 15:12:09',NULL,NULL),
-(13,'AddHoc Fee',0,13,0,1,'2017-11-03 15:12:09',NULL,NULL),
+(13,'AdHoc Fee',0,13,0,1,'2017-11-03 15:12:09',NULL,NULL),
 (14,'Student Management',0,14,0,1,'2017-11-03 15:12:09',NULL,NULL),
 (15,'Process Fee',0,15,0,1,'2017-11-03 15:12:09',NULL,NULL),
 (16,'Reports',0,16,0,1,'2017-11-03 15:12:09',NULL,NULL),
 (17,'AcademicYear',0,17,0,1,'2017-11-03 12:49:35',NULL,NULL),
-(18,'Permission',0,18,0,1,'2017-11-03 12:49:35',NULL,NULL);
+(18,'FeePlanAssociation',0,18,0,1,'2017-11-03 12:49:35',NULL,NULL),
+(19,'Invoice',0,19,0,1,'2017-11-03 12:49:35',NULL,NULL);
 /*!40000 ALTER TABLE `menu` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -598,14 +813,14 @@ INSERT INTO `permission` (
 (11,1,'Feeplan.Read','Feeplan',0,1,'2017-11-03 16:11:24',NULL,NULL),
 (11,1,'Feeplan.Update','Feeplan',0,1,'2017-11-03 16:11:24',NULL,NULL),
 (11,1,'Feeplan.Delete','Feeplan',0,1,'2017-11-03 16:11:24',NULL,NULL),
-(12,1,'Transport.Create','Transport',0,1,'2017-11-03 16:11:24',NULL,NULL),
-(12,1,'Transport.Read','Transport',0,1,'2017-11-03 16:11:24',NULL,NULL),
-(12,1,'Transport.Update','Transport',0,1,'2017-11-03 16:11:24',NULL,NULL),
-(12,1,'Transport.Delete','Transport',0,1,'2017-11-03 16:11:24',NULL,NULL),
-(13,1,'Addhocfee.Create','Addhocfee',0,1,'2017-11-03 16:11:24',NULL,NULL),
-(13,1,'Addhocfee.Read','Addhocfee',0,1,'2017-11-03 16:11:24',NULL,NULL),
-(13,1,'Addhocfee.Update','Addhocfee',0,1,'2017-11-03 16:11:24',NULL,NULL),
-(13,1,'Addhocfee.Delete','Addhocfee',0,1,'2017-11-03 16:11:24',NULL,NULL),
+(12,1,'Zone.Create','Zone',0,1,'2017-11-03 16:11:24',NULL,NULL),
+(12,1,'Zone.Read','Zone',0,1,'2017-11-03 16:11:24',NULL,NULL),
+(12,1,'Zone.Update','Zone',0,1,'2017-11-03 16:11:24',NULL,NULL),
+(12,1,'Zone.Delete','Zone',0,1,'2017-11-03 16:11:24',NULL,NULL),
+(13,1,'Adhocfee.Create','Adhocfee',0,1,'2017-11-03 16:11:24',NULL,NULL),
+(13,1,'Adhocfee.Read','Adhocfee',0,1,'2017-11-03 16:11:24',NULL,NULL),
+(13,1,'Adhocfee.Update','Adhocfee',0,1,'2017-11-03 16:11:24',NULL,NULL),
+(13,1,'Adhocfee.Delete','Adhocfee',0,1,'2017-11-03 16:11:24',NULL,NULL),
 (14,1,'Student.Create','Student',0,1,'2017-11-03 16:11:24',NULL,NULL),
 (14,1,'Student.Read','Student',0,1,'2017-11-03 16:11:25',NULL,NULL),
 (14,1,'Student.Update','Student',0,1,'2017-11-03 16:11:25',NULL,NULL),
@@ -622,6 +837,12 @@ INSERT INTO `permission` (
 (17,1,'AcademicYear.Read','Academicyear',0,1,'2017-11-03 12:51:59',NULL,NULL),
 (17,1,'AcademicYear.Update','Academicyear',0,1,'2017-11-03 12:51:59',NULL,NULL),
 (17,1,'AcademicYear.Delete','Academicyear',0,1,'2017-11-03 12:51:59',NULL,NULL),
+(18,1,'Feeplanassociation.Create','Feeplanassociation',0,1,'2017-11-03 12:51:59',NULL,NULL),
+(18,1,'Feeplanassociation.Read','Feeplanassociation',0,1,'2017-11-03 12:51:59',NULL,NULL),
+(18,1,'Feeplanassociation.Update','Feeplanassociation',0,1,'2017-11-03 12:51:59',NULL,NULL),
+(18,1,'Feeplanassociation.Delete','Feeplanassociation',0,1,'2017-11-03 12:51:59',NULL,NULL),
+(19,1,'Invoice.Read','Invoice',0,1,'2017-11-03 12:51:59',NULL,NULL),
+(19,1,'Invoice.Update','Invoice',0,1,'2017-11-03 12:51:59',NULL,NULL),
 -- (6,2,'Frequency.Create','Frequency',0,1,'2017-11-03 15:52:26',NULL,NULL),
 -- (6,2,'Frequency.Read','Frequency',0,1,'2017-11-03 15:52:26',NULL,NULL),
 -- (6,2,'Frequency.Update','Frequency',0,1,'2017-11-03 15:52:26',NULL,NULL),
@@ -634,10 +855,10 @@ INSERT INTO `permission` (
 (8,2,'Division.Read','Dvision',0,1,'2017-11-03 16:11:23',NULL,NULL),
 (8,2,'Division.Update','Dvision',0,1,'2017-11-03 16:11:23',NULL,NULL),
 (8,2,'Division.Delete','Dvision',0,1,'2017-11-03 16:11:23',NULL,NULL),
--- (9,2,'Category.Create','Category',0,1,'2017-11-03 16:11:23',NULL,NULL),
--- (9,2,'Category.Read','Category',0,1,'2017-11-03 16:11:23',NULL,NULL),
--- (9,2,'Category.Update','Category',0,1,'2017-11-03 16:11:23',NULL,NULL),
--- (9,2,'Category.Delete','Category',0,1,'2017-11-03 16:11:23',NULL,NULL),
+(9,2,'Category.Create','Category',0,1,'2017-11-03 16:11:23',NULL,NULL),
+(9,2,'Category.Read','Category',0,1,'2017-11-03 16:11:23',NULL,NULL),
+(9,2,'Category.Update','Category',0,1,'2017-11-03 16:11:23',NULL,NULL),
+(9,2,'Category.Delete','Category',0,1,'2017-11-03 16:11:23',NULL,NULL),
 (10,2,'Feehead.Create','Feehead',0,1,'2017-11-03 16:11:23',NULL,NULL),
 (10,2,'Feehead.Read','Feehead',0,1,'2017-11-03 16:11:23',NULL,NULL),
 (10,2,'Feehead.Update','Feehead',0,1,'2017-11-03 16:11:23',NULL,NULL),
@@ -646,14 +867,14 @@ INSERT INTO `permission` (
 (11,2,'Feeplan.Read','Feeplan',0,1,'2017-11-03 16:11:24',NULL,NULL),
 (11,2,'Feeplan.Update','Feeplan',0,1,'2017-11-03 16:11:24',NULL,NULL),
 (11,2,'Feeplan.Delete','Feeplan',0,1,'2017-11-03 16:11:24',NULL,NULL),
-(12,2,'Transport.Create','Transport',0,1,'2017-11-03 16:11:24',NULL,NULL),
-(12,2,'Transport.Read','Transport',0,1,'2017-11-03 16:11:24',NULL,NULL),
-(12,2,'Transport.Update','Transport',0,1,'2017-11-03 16:11:24',NULL,NULL),
-(12,2,'Transport.Delete','Transport',0,1,'2017-11-03 16:11:24',NULL,NULL),
-(13,2,'Addhocfee.Create','Addhocfee',0,1,'2017-11-03 16:11:24',NULL,NULL),
-(13,2,'Addhocfee.Read','Addhocfee',0,1,'2017-11-03 16:11:24',NULL,NULL),
-(13,2,'Addhocfee.Update','Addhocfee',0,1,'2017-11-03 16:11:24',NULL,NULL),
-(13,2,'Addhocfee.Delete','Addhocfee',0,1,'2017-11-03 16:11:24',NULL,NULL),
+(12,2,'Zone.Create','Zone',0,1,'2017-11-03 16:11:24',NULL,NULL),
+(12,2,'Zone.Read','Zone',0,1,'2017-11-03 16:11:24',NULL,NULL),
+(12,2,'Zone.Update','Zone',0,1,'2017-11-03 16:11:24',NULL,NULL),
+(12,2,'Zone.Delete','Zone',0,1,'2017-11-03 16:11:24',NULL,NULL),
+(13,2,'Adhocfee.Create','Adhocfee',0,1,'2017-11-03 16:11:24',NULL,NULL),
+(13,2,'Adhocfee.Read','Adhocfee',0,1,'2017-11-03 16:11:24',NULL,NULL),
+(13,2,'Adhocfee.Update','Adhocfee',0,1,'2017-11-03 16:11:24',NULL,NULL),
+(13,2,'Adhocfee.Delete','Adhocfee',0,1,'2017-11-03 16:11:24',NULL,NULL),
 (14,2,'Student.Create','Student',0,1,'2017-11-03 16:11:24',NULL,NULL),
 (14,2,'Student.Read','Student',0,1,'2017-11-03 16:11:25',NULL,NULL),
 (14,2,'Student.Update','Student',0,1,'2017-11-03 16:11:25',NULL,NULL),
@@ -666,11 +887,14 @@ INSERT INTO `permission` (
 (16,2,'Report.Read','Report',0,1,'2017-11-03 16:11:25',NULL,NULL),
 (16,2,'Report.Update','Report',0,1,'2017-11-03 16:11:25',NULL,NULL),
 (16,2,'Report.Delete','Report',0,1,'2017-11-03 16:11:25',NULL,NULL),
-(17,2,'AcademicYear.Create','Academicyear',0,1,'2017-11-03 12:51:59',NULL,NULL),
-(17,2,'AcademicYear.Read','Academicyear',0,1,'2017-11-03 12:51:59',NULL,NULL),
-(17,2,'AcademicYear.Update','Academicyear',0,1,'2017-11-03 12:51:59',NULL,NULL),
-(17,2,'AcademicYear.Delete','Academicyear',0,1,'2017-11-03 12:51:59',NULL,NULL);
-
+-- (17,2,'AcademicYear.Create','Academicyear',0,1,'2017-11-03 12:51:59',NULL,NULL),
+-- (17,2,'AcademicYear.Read','Academicyear',0,1,'2017-11-03 12:51:59',NULL,NULL),
+-- (17,2,'AcademicYear.Update','Academicyear',0,1,'2017-11-03 12:51:59',NULL,NULL),
+-- (17,2,'AcademicYear.Delete','Academicyear',0,1,'2017-11-03 12:51:59',NULL,NULL),
+(18,2,'Feeplanassociation.Create','Feeplanassociation',0,1,'2017-11-03 12:51:59',NULL,NULL),
+(18,2,'Feeplanassociation.Read','Feeplanassociation',0,1,'2017-11-03 12:51:59',NULL,NULL),
+(18,2,'Feeplanassociation.Update','Feeplanassociation',0,1,'2017-11-03 12:51:59',NULL,NULL),
+(18,2,'Feeplanassociation.Delete','Feeplanassociation',0,1,'2017-11-03 12:51:59',NULL,NULL);
 /*!40000 ALTER TABLE `permission` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -727,12 +951,14 @@ INSERT INTO `rolemenudetails` (
 (1,15,1,'2017-11-03 12:20:07',NULL,NULL),
 (1,16,1,'2017-11-03 12:20:07',NULL,NULL),
 (1,17,1,'2017-11-03 13:16:14',NULL,NULL),
+(1,18,1,'2017-11-03 13:16:14',NULL,NULL),
+(1,19,1,'2017-11-03 13:16:14',NULL,NULL),
 (2,4,1,'2017-11-03 14:03:33',NULL,NULL),
 (2,5,1,'2017-11-03 14:03:33',NULL,NULL),
 -- (2,6,1,'2017-11-03 14:03:33',NULL,NULL),
 (2,7,1,'2017-11-03 14:03:33',NULL,NULL),
 (2,8,1,'2017-11-03 14:03:33',NULL,NULL),
--- (2,9,1,'2017-11-03 14:03:33',NULL,NULL),
+(2,9,1,'2017-11-03 14:03:33',NULL,NULL),
 (2,10,1,'2017-11-03 14:03:33',NULL,NULL),
 (2,11,1,'2017-11-03 14:03:33',NULL,NULL),
 (2,12,1,'2017-11-03 14:03:33',NULL,NULL),
@@ -740,7 +966,9 @@ INSERT INTO `rolemenudetails` (
 (2,14,1,'2017-11-03 14:03:33',NULL,NULL),
 (2,15,1,'2017-11-03 14:03:33',NULL,NULL),
 (2,16,1,'2017-11-03 14:03:33',NULL,NULL),
-(2,17,1,'2017-11-03 14:03:33',NULL,NULL);
+-- (2,17,1,'2017-11-03 14:03:33',NULL,NULL),
+(2,18,1,'2017-11-03 14:03:33',NULL,NULL),
+(2,19,1,'2017-11-03 14:03:33',NULL,NULL);
 /*!40000 ALTER TABLE `rolemenudetails` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -802,14 +1030,14 @@ INSERT INTO `rolepermissiondetails` (
 (1,42,'Feeplan.Read',1,'2017-11-03 13:56:01',NULL,NULL),
 (1,43,'Feeplan.Update',1,'2017-11-03 13:56:01',NULL,NULL),
 (1,44,'Feeplan.Delete',1,'2017-11-03 13:56:01',NULL,NULL),
-(1,45,'Transport.Create',1,'2017-11-03 13:56:01',NULL,NULL),
-(1,46,'Transport.Read',1,'2017-11-03 13:56:01',NULL,NULL),
-(1,47,'Transport.Update',1,'2017-11-03 13:56:01',NULL,NULL),
-(1,48,'Transport.Delete',1,'2017-11-03 13:56:01',NULL,NULL),
-(1,49,'Addhocfee.Create',1,'2017-11-03 13:56:01',NULL,NULL),
-(1,50,'Addhocfee.Read',1,'2017-11-03 13:56:01',NULL,NULL),
-(1,51,'Addhocfee.Update',1,'2017-11-03 13:56:01',NULL,NULL),
-(1,52,'Addhocfee.Delete',1,'2017-11-03 13:56:01',NULL,NULL),
+(1,45,'Zone.Create',1,'2017-11-03 13:56:01',NULL,NULL),
+(1,46,'Zone.Read',1,'2017-11-03 13:56:01',NULL,NULL),
+(1,47,'Zone.Update',1,'2017-11-03 13:56:01',NULL,NULL),
+(1,48,'Zone.Delete',1,'2017-11-03 13:56:01',NULL,NULL),
+(1,49,'Adhocfee.Create',1,'2017-11-03 13:56:01',NULL,NULL),
+(1,50,'Adhocfee.Read',1,'2017-11-03 13:56:01',NULL,NULL),
+(1,51,'Adhocfee.Update',1,'2017-11-03 13:56:01',NULL,NULL),
+(1,52,'Adhocfee.Delete',1,'2017-11-03 13:56:01',NULL,NULL),
 (1,53,'Student.Create',1,'2017-11-03 13:56:01',NULL,NULL),
 (1,54,'Student.Read',1,'2017-11-03 13:56:01',NULL,NULL),
 (1,55,'Student.Update',1,'2017-11-03 13:56:01',NULL,NULL),
@@ -826,6 +1054,12 @@ INSERT INTO `rolepermissiondetails` (
 (1,66,'AcademicYear.Read',1,'2017-11-03 13:56:01',NULL,NULL),
 (1,67,'AcademicYear.Update',1,'2017-11-03 13:56:01',NULL,NULL),
 (1,68,'AcademicYear.Delete',1,'2017-11-03 13:56:01',NULL,NULL),
+(1,69,'Feeplanassociation.Create',1,'2017-11-03 13:56:01',NULL,NULL),
+(1,70,'Feeplanassociation.Read',1,'2017-11-03 13:56:01',NULL,NULL),
+(1,71,'Feeplanassociation.Update',1,'2017-11-03 13:56:01',NULL,NULL),
+(1,72,'Feeplanassociation.Delete',1,'2017-11-03 13:56:01',NULL,NULL),
+(1,73,'Invoice.Read',1,'2017-11-03 13:56:01',NULL,NULL),
+(1,74,'Invoice.Update',1,'2017-11-03 13:56:01',NULL,NULL),
 (2,13,'Role.Create',1,'2017-11-03 14:06:07',NULL,NULL),
 (2,14,'Role.Read',1,'2017-11-03 14:06:07',NULL,NULL),
 (2,15,'Role.Update',1,'2017-11-03 14:06:07',NULL,NULL),
@@ -846,10 +1080,10 @@ INSERT INTO `rolepermissiondetails` (
 (2,30,'Division.Read',1,'2017-11-03 14:06:07',NULL,NULL),
 (2,31,'Division.Update',1,'2017-11-03 14:06:07',NULL,NULL),
 (2,32,'Division.Delete',1,'2017-11-03 14:06:07',NULL,NULL),
--- (2,33,'Category.Create',1,'2017-11-03 14:06:07',NULL,NULL),
--- (2,34,'Category.Read',1,'2017-11-03 14:06:07',NULL,NULL),
--- (2,35,'Category.Update',1,'2017-11-03 14:06:07',NULL,NULL),
--- (2,36,'Category.Delete',1,'2017-11-03 14:06:07',NULL,NULL),
+(2,33,'Category.Create',1,'2017-11-03 14:06:07',NULL,NULL),
+(2,34,'Category.Read',1,'2017-11-03 14:06:07',NULL,NULL),
+(2,35,'Category.Update',1,'2017-11-03 14:06:07',NULL,NULL),
+(2,36,'Category.Delete',1,'2017-11-03 14:06:07',NULL,NULL),
 (2,37,'Feehead.Create',1,'2017-11-03 14:06:07',NULL,NULL),
 (2,38,'Feehead.Read',1,'2017-11-03 14:06:07',NULL,NULL),
 (2,39,'Feehead.Update',1,'2017-11-03 14:06:07',NULL,NULL),
@@ -858,14 +1092,14 @@ INSERT INTO `rolepermissiondetails` (
 (2,42,'Feeplan.Read',1,'2017-11-03 14:06:07',NULL,NULL),
 (2,43,'Feeplan.Update',1,'2017-11-03 14:06:07',NULL,NULL),
 (2,44,'Feeplan.Delete',1,'2017-11-03 14:06:07',NULL,NULL),
-(2,45,'Transport.Create',1,'2017-11-03 14:06:07',NULL,NULL),
-(2,46,'Transport.Read',1,'2017-11-03 14:06:07',NULL,NULL),
-(2,47,'Transport.Update',1,'2017-11-03 14:06:07',NULL,NULL),
-(2,48,'Transport.Delete',1,'2017-11-03 14:06:07',NULL,NULL),
-(2,49,'Addhocfee.Create',1,'2017-11-03 14:06:07',NULL,NULL),
-(2,50,'Addhocfee.Read',1,'2017-11-03 14:06:07',NULL,NULL),
-(2,51,'Addhocfee.Update',1,'2017-11-03 14:06:07',NULL,NULL),
-(2,52,'Addhocfee.Delete',1,'2017-11-03 14:06:07',NULL,NULL),
+(2,45,'Zone.Create',1,'2017-11-03 14:06:07',NULL,NULL),
+(2,46,'Zone.Read',1,'2017-11-03 14:06:07',NULL,NULL),
+(2,47,'Zone.Update',1,'2017-11-03 14:06:07',NULL,NULL),
+(2,48,'Zone.Delete',1,'2017-11-03 14:06:07',NULL,NULL),
+(2,49,'Adhocfee.Create',1,'2017-11-03 14:06:07',NULL,NULL),
+(2,50,'Adhocfee.Read',1,'2017-11-03 14:06:07',NULL,NULL),
+(2,51,'Adhocfee.Update',1,'2017-11-03 14:06:07',NULL,NULL),
+(2,52,'Adhocfee.Delete',1,'2017-11-03 14:06:07',NULL,NULL),
 (2,53,'Student.Create',1,'2017-11-03 14:06:07',NULL,NULL),
 (2,54,'Student.Read',1,'2017-11-03 14:06:07',NULL,NULL),
 (2,55,'Student.Update',1,'2017-11-03 14:06:07',NULL,NULL),
@@ -878,10 +1112,16 @@ INSERT INTO `rolepermissiondetails` (
 (2,62,'Report.Read',1,'2017-11-03 14:06:07',NULL,NULL),
 (2,63,'Report.Update',1,'2017-11-03 14:06:07',NULL,NULL),
 (2,64,'Report.Delete',1,'2017-11-03 14:06:07',NULL,NULL),
-(2,65,'AcademicYear.Create',1,'2017-11-03 14:06:07',NULL,NULL),
-(2,66,'AcademicYear.Read',1,'2017-11-03 14:06:07',NULL,NULL),
-(2,67,'AcademicYear.Update',1,'2017-11-03 14:06:07',NULL,NULL),
-(2,68,'AcademicYear.Delete',1,'2017-11-03 14:06:07',NULL,NULL);
+-- (2,65,'AcademicYear.Create',1,'2017-11-03 14:06:07',NULL,NULL),
+-- (2,66,'AcademicYear.Read',1,'2017-11-03 14:06:07',NULL,NULL),
+-- (2,67,'AcademicYear.Update',1,'2017-11-03 14:06:07',NULL,NULL),
+-- (2,68,'AcademicYear.Delete',1,'2017-11-03 14:06:07',NULL,NULL),
+(2,69,'Feeplanassociation.Create',1,'2017-11-03 13:56:01',NULL,NULL),
+(2,70,'Feeplanassociation.Read',1,'2017-11-03 13:56:01',NULL,NULL),
+(2,71,'Feeplanassociation.Update',1,'2017-11-03 13:56:01',NULL,NULL),
+(2,72,'Feeplanassociation.Delete',1,'2017-11-03 13:56:01',NULL,NULL),
+(2,73,'Invoice.Read',1,'2017-11-03 13:56:01',NULL,NULL),
+(2,74,'Invoice.Update',1,'2017-11-03 13:56:01',NULL,NULL);
 /*!40000 ALTER TABLE `rolepermissiondetails` ENABLE KEYS */;
 UNLOCK TABLES;
 
