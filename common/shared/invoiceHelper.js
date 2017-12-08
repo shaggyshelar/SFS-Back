@@ -109,9 +109,6 @@ module.exports = function(app) {
             });
           });
           async.waterfall(waterfallFunctions, function(err) {
-            var fileName = 'RegistrationReport.csv';
-            var filePath = csvHelper.generateStudentRegistrationCSV(fileName, registeredStudents, failedStudents);
-            var userEmail = 'shaggy.shelar@gmail.com';
 
             async.series([
               function(callback) {
@@ -129,15 +126,23 @@ module.exports = function(app) {
                 });
               },
               function(callback) {
-                // TODO: Get SuperAdmin email IDs
-                UserModel.getEmails(schoolDetail.schoolId, function(err, superAdminEmailsList) {
-                  callback(null, superAdminEmailsList);
+                UserModel.find({
+                  where: {
+                    roleId: 1,
+                  },
+                }, function(err, schoolsList) {
+                  callback(null, schoolsList);
                 });
               },
             ],
             function(err, results) {
+              var schoolName = results[0].length > 0 ? results[0][0].schoolName : '';
               var schoolAdminEmails = '';
               var superAdminEmails = '';
+
+              var fileName = schoolName + 'Registration Report.csv';
+              csvHelper.generateStudentRegistrationCSV(fileName, registeredStudents, failedStudents);
+
               _.each(results[1], function(schoolAdminEmail) {
                 if (schoolAdminEmails == '') {
                   schoolAdminEmails += schoolAdminEmail.email;
@@ -152,13 +157,12 @@ module.exports = function(app) {
                   superAdminEmails += (', ' + superAdminEmail.email);
                 }
               });
-              // TODO: Parse results to get school name, school admin and super admin emails
               var html = i18next.t('csv_registerStudentEmailReportHTMLContent', {savedStudents: registeredStudents.length, failedStudents: failedStudents.length});
               app.models.Email.send({
                 to: schoolAdminEmails,
                 cc: superAdminEmails,
                 from: config.supportEmailID,
-                subject: i18next.t('csv_studentRegistrationEmailSubject'),
+                subject: i18next.t('csv_studentRegistrationEmailSubject', {schoolName: schoolName}),
                 html: html,
                 attachments: [
                   {
@@ -167,7 +171,7 @@ module.exports = function(app) {
                   }],
               }, function(err) {
                 if (err) {
-                  rootlogger.log('Error sending upload report to email=\'' + userEmail + '\',\n Error=' + err);
+                  rootlogger.log('Error sending upload report to email=\'' + schoolAdminEmails + '\',\n Error=' + err);
                 }
                 console.log('> upload report mail sent successfully');
               });

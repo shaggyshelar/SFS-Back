@@ -107,7 +107,6 @@ module.exports = function (app) {
       return;
     }
 
-    // TODO: Get invoice with status, type of specific value
     var findInvoiceQuery = {
       invoiceNumber: req.body.invoiceNo,
       merchantId: req.body.merchantId,
@@ -145,7 +144,6 @@ module.exports = function (app) {
           return;
         }
 
-        // TODO: Change updated by, updated date, type, status
         var updatedInvoice = {
           'totalChargeAmountPaid': req.body.chargeAmount,
           'transactionId': req.body.txnID,
