@@ -295,9 +295,9 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
         }
         else if (selectedModel.toLowerCase() == "invoice") {
             var propertyArr = [
-                { property: "getInvoices", model: "School" },
-                { property: "getInvoiceById", model: "School" },
-                { property: "getInvoiceCount", model: "School" }
+                { property: "__get__SchoolInvoices", model: "School" },
+                { property: "__findById__SchoolInvoices", model: "School" },
+                { property: "__count__SchoolInvoices", model: "School" }
             ];
             propertyArr.map(function (p, i) {
                 propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
