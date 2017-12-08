@@ -493,6 +493,7 @@ module.exports = function (app) {
                     }
 
                     var dateOfBirth = data[5] == '' ? '2000/01/01' : data[5];
+                    var studentTitle = '';
                     if (!Date.parse(dateOfBirth)) {
                       validationErrors += i18next.t('csv_validation_invalidDateOfBirth', { birthDate: dateOfBirth });
                     } else if (dateOfBirth) {
@@ -500,6 +501,18 @@ module.exports = function (app) {
                       var cur = new Date();
                       var diff = cur - birthdate;
                       var age = Math.floor(diff / 31557600000);
+                      switch (matchingGender) {
+                        case 'Male':
+                          if (age < 16) {
+                            studentTitle = 'Mast';
+                          } else {
+                            studentTitle = 'Mr';
+                          }
+                          break;
+                        case 'Female':
+                          studentTitle = 'Miss';
+                          break;
+                      }
                     }
 
                     if (validationErrors != '') {
@@ -535,7 +548,7 @@ module.exports = function (app) {
                       studentDateOfBirth: dateOfBirth,
                       dateOfJoining: data[6] == currentDay ? null : data[6],
                       address: data[8],
-                      title: 'Mr',
+                      title: studentTitle,
                       city: '',  // TODO:
                       state: data[11],
                       country: data[10],
