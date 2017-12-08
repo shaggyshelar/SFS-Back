@@ -136,10 +136,27 @@ module.exports = function(app) {
               },
             ],
             function(err, results) {
+              var schoolAdminEmails = '';
+              var superAdminEmails = '';
+              _.each(results[1], function(schoolAdminEmail) {
+                if (schoolAdminEmails == '') {
+                  schoolAdminEmails += schoolAdminEmail.email;
+                } else {
+                  schoolAdminEmails += (', ' + schoolAdminEmail.email);
+                }
+              });
+              _.each(results[2], function(superAdminEmail) {
+                if (superAdminEmails == '') {
+                  superAdminEmails += superAdminEmail.email;
+                } else {
+                  superAdminEmails += (', ' + superAdminEmail.email);
+                }
+              });
               // TODO: Parse results to get school name, school admin and super admin emails
               var html = i18next.t('csv_registerStudentEmailReportHTMLContent', {savedStudents: registeredStudents.length, failedStudents: failedStudents.length});
               app.models.Email.send({
-                to: userEmail,
+                to: schoolAdminEmails,
+                cc: superAdminEmails,
                 from: config.supportEmailID,
                 subject: i18next.t('csv_studentRegistrationEmailSubject'),
                 html: html,

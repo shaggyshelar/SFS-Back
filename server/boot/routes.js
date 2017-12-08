@@ -133,26 +133,26 @@ module.exports = function (app) {
 
         var foundInvoice = invoiceList[0];
 
-        if (foundInvoice.invoiceStatus != 'Processed') {
+        if (foundInvoice.status != 'Processed') {
           res.status(400);
           res.json({'Message': i18next.t('api_validation_invoiceNotInProcessedStatus')});
           return;
         }
 
-        if (foundInvoice.invoiceStatus == 'Paid') {
+        if (foundInvoice.status == 'Paid') {
           res.status(400);
           res.json({'Message': i18next.t('api_validation_invoiceAlreadyPaid')});
           return;
         }
 
-        // TODO: Change updated by, updated date, type, invoiceStatus
+        // TODO: Change updated by, updated date, type, status
         var updatedInvoice = {
           'totalChargeAmountPaid': req.body.chargeAmount,
           'transactionId': req.body.txnID,
           'paymentId': req.body.paymentID,
           'paymentDate': req.body.paymentDateTime,
           'calculatedLateFees': req.body.calculatedLateFees,
-          'invoiceStatus': 'Paid',
+          'status': 'Paid',
           'updatedBy': 1,
           'updatedOn': new Date(),
         };
@@ -245,13 +245,13 @@ module.exports = function (app) {
 
         var foundInvoice = invoiceList[0];
 
-        if (foundInvoice.invoiceStatus != 'Paid') {
+        if (foundInvoice.status != 'Paid') {
           res.status(400);
           res.json({'Message': i18next.t('api_validation_invoiceNotInPaidStatus')});
           return;
         }
 
-        if (foundInvoice.invoiceStatus == 'Settled') {
+        if (foundInvoice.status == 'Settled') {
           res.status(400);
           res.json({'Message': i18next.t('api_validation_invoiceAlreadySettled')});
           return;
@@ -260,7 +260,7 @@ module.exports = function (app) {
         var updatedInvoice = {
           'settlementID': req.body.settlementID,
           'settlementDate': req.body.settlementDate,
-          'invoiceStatus': 'Settled',
+          'status': 'Settled',
           'updatedBy': 1,
           'updatedOn': new Date(),
         };
