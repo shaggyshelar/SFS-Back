@@ -142,6 +142,21 @@
         "nullable": "N"
       }
     },
+    "feeDate": {
+      "type": "Date",
+      "required": true,
+      "length": null,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "feeDate",
+        "dataType": "date",
+        "dataLength": null,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
     "totalChargeAmount": {
       "type": "Number",
       "required": true,
@@ -280,13 +295,13 @@
     "type": {
       "type": "String",
       "required": true,
-      "length": 20,
+      "length": 3,
       "precision": null,
       "scale": null,
       "mysql": {
         "columnName": "type",
         "dataType": "varchar",
-        "dataLength": 20,
+        "dataLength": 3,
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "N"
@@ -329,7 +344,7 @@
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "status",
+        "columnName": "statusDesc",
         "dataType": "varchar",
         "dataLength": 500,
         "dataPrecision": null,

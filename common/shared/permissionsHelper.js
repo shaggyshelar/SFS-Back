@@ -115,7 +115,7 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
             var propertyArr = [
                 { property: "__create__FeePlans", model: "School", accessType: "WRITE" },
                 { property: "findById", model: "School", accessType: "READ" },
-                { property: "create",  model: "Feeplan", accessType: "WRITE" },
+                { property: "create", model: "Feeplan", accessType: "WRITE" },
                 { property: "updateFeeplanheaddetails", model: "Feeplanheaddetails", accessType: "EXECUTE" }
             ];
             propertyArr.map(function (p, i) {
@@ -293,7 +293,16 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
                 propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
             });
         }
-
+        else if (selectedModel.toLowerCase() == "invoice") {
+            var propertyArr = [
+                { property: "getInvoices", model: "School" },
+                { property: "getInvoiceById", model: "School" },
+                { property: "getInvoiceCount", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
         propertyAccess.push({ model: selectedModel, property: "find", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
         propertyAccess.push({ model: selectedModel, property: "findById", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
         propertyAccess.push({ model: selectedModel, property: "count", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
