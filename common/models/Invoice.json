@@ -17,6 +17,11 @@
         "type": "hasOne",
         "foreignKey": "id",
         "primaryKey": "studentId"
+      },
+      "InvoiceSchool": {
+        "model": "School",
+        "type": "belongsTo",
+        "foreignKey": "studentId"
       }
     }
   },
@@ -49,6 +54,21 @@
         "dataLength": 32,
         "dataPrecision": null,
         "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "schoolId": {
+      "type": "Number",
+      "required": true,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
+      "mysql": {
+        "columnName": "schoolId",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
         "nullable": "N"
       }
     },
@@ -99,7 +119,7 @@
     },
     "studentId": {
       "type": "Number",
-      "required": false,
+      "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
@@ -109,7 +129,7 @@
         "dataLength": null,
         "dataPrecision": 19,
         "dataScale": 0,
-        "nullable": "Y"
+        "nullable": "N"
       }
     },
     "desc": {
