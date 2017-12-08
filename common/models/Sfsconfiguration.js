@@ -22,10 +22,17 @@ module.exports = function (Sfsconfiguration) {
                     });
                 }
                 else {
-                    var error = new Error();
-                    error.status = 404;
-                    error.message = i18next.t('error_noRecordFound');
-                    cb(error);
+                    Sfsconfiguration.create(_sfsConfiguration, function (err, _savedSFSconfiguration) {
+                        if (err) cb(err);
+                        else {
+                            cb(null, _savedSFSconfiguration);
+                        }
+                    });
+
+                    // var error = new Error();
+                    // error.status = 404;
+                    // error.message = i18next.t('error_noRecordFound');
+                    // cb(error);
                 }
             }
         });
