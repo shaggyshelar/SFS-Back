@@ -21,7 +21,7 @@
       "InvoiceSchool": {
         "model": "School",
         "type": "belongsTo",
-        "foreignKey": "studentId"
+        "foreignKey": "schoolId"
       }
     }
   },

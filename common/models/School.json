@@ -72,6 +72,17 @@
         "type": "hasMany",
         "model": "Schoolconfiguration",
         "foreignKey": "schoolId"
+      },
+      "SchoolInvoices": {
+        "type": "hasMany",
+        "model": "Invoice",
+        "foreignKey": "schoolId",
+        "scope": {
+          "include": [
+            "invoiceDetails",
+            "studentData"
+          ]
+        }
       }
     }
   },
