@@ -20,7 +20,7 @@ module.exports = function(app) {
 
   var invoiceHelper =  {
     generateTodaysInvoice: () => {
-      rootlogger.log('Starting invoice generation process');
+      rootlogger.info('Starting invoice generation process');
       async.series([
         function(callback) {
           var sql = 'CALL `' + config.invoiceGeneratorSP1 + '`();';
@@ -51,7 +51,7 @@ module.exports = function(app) {
         },
       ],
       function(err, results) {
-        rootlogger.log('Completed invoice generation process.');
+        rootlogger.info('Completed invoice generation process.');
       });
     },
     convertGender: (gender) => {
@@ -207,7 +207,7 @@ module.exports = function(app) {
                   }],
               }, function(err) {
                 if (err) {
-                  rootlogger.log('Error sending upload report to email=\'' + schoolAdminEmails + '\',\n Error=' + err);
+                  rootlogger.info('Error sending upload report to email=\'' + schoolAdminEmails + '\',\n Error=' + err);
                 }
                 console.log('> upload report mail sent successfully');
               });

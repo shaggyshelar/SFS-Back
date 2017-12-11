@@ -597,9 +597,9 @@ module.exports = function (app) {
                         html: html,
                       }, function (err) {
                         if (err) {
-                          rootlogger.log('Error sending upload report to email=\'' + user.toJSON().email + '\',\n Error=' + err);
+                          rootlogger.info('Error sending upload report to email=\'' + user.toJSON().email + '\',\n Error=' + err);
                         }
-                        rootlogger.log('Upload report mail sent successfully to ' + user.toJSON().email);
+                        rootlogger.info('Upload report mail sent successfully to ' + user.toJSON().email);
                       });
                     } else {
                       app.models.Email.send({
@@ -614,7 +614,7 @@ module.exports = function (app) {
                           }],
                       }, function (err) {
                         if (err) {
-                          rootlogger.log('Error sending upload report to email=\'' + user.toJSON().email + '\',\n Error=' + err);
+                          rootlogger.info('Error sending upload report to email=\'' + user.toJSON().email + '\',\n Error=' + err);
                         }
                         console.log('> upload report mail sent successfully');
                       });
