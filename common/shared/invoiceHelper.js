@@ -13,11 +13,47 @@ var configFilePath = process.env.NODE_ENV == undefined ?
 var config = require('../../server/config' + configFilePath + '.json');
 
 module.exports = function(app) {
+  var ds = app.dataSources.mysql;
   var Student = app.models.Student;
   var UserModel = app.models.user;
   var Schools = app.models.School;
 
   var invoiceHelper =  {
+    generateTodaysInvoice: () => {
+      rootlogger.log('Starting invoice generation process');
+      async.series([
+        function(callback) {
+          var sql = 'CALL `' + config.invoiceGeneratorSP1 + '`();';
+          ds.connector.query(sql, function(err, data) {
+            if (err) {
+              console.log('Error:', err);
+            }
+            callback(null, data);
+          });
+        },
+        function(callback) {
+          var sql = 'CALL `' + config.invoiceGeneratorSP2 + '`();';
+          ds.connector.query(sql, function(err, data) {
+            if (err) {
+              console.log('Error:', err);
+            }
+            callback(null, data);
+          });
+        },
+        function(callback) {
+          var sql = 'CALL `' + config.invoiceGeneratorSP3 + '`();';
+          ds.connector.query(sql, function(err, data) {
+            if (err) {
+              console.log('Error:', err);
+            }
+            callback(null, data);
+          });
+        },
+      ],
+      function(err, results) {
+        rootlogger.log('Completed invoice generation process.');
+      });
+    },
     convertGender: (gender) => {
       switch (gender) {
         case 'Male':
