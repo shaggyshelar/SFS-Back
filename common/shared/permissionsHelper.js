@@ -125,7 +125,8 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
         else if (selectedModel.toLowerCase() == "zone") {
             var propertyArr = [
                 { property: "__create__zones", model: "School", accessType: "WRITE" },
-                { property: "updateZonedetails", model: "Zonedetails", accessType: "EXECUTE" }
+                { property: "updateZonedetails", model: "Zonedetails", accessType: "EXECUTE" },
+                { property: "updateZoneAcademicYear", model: "School", accessType: "EXECUTE" }
             ];
             propertyArr.map(function (p, i) {
                 propertyAccess.push({ model: p.model, property: p.property, accessType: p.accessType, permission: "ALLOW", principalId: role, principalType: "ROLE" });
@@ -403,7 +404,8 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
         else if (selectedModel.toLowerCase() == "zone") {
             var propertyArr = [
                 { property: "__updateById__zones", model: "School", accessType: "WRITE" },
-                { property: "updateZonedetails", model: "Zonedetails", accessType: "EXECUTE" }
+                { property: "updateZonedetails", model: "Zonedetails", accessType: "EXECUTE" },
+                { property: "updateZoneAcademicYear", model: "School", accessType: "EXECUTE" }
             ];
             propertyArr.map(function (p, i) {
                 propertyAccess.push({ model: p.model, property: p.property, accessType: p.accessType, permission: "ALLOW", principalId: role, principalType: "ROLE" });
