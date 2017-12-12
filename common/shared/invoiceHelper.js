@@ -95,11 +95,16 @@ module.exports = function(app) {
         _.each(invoices, function(invoiceDetails) {
           var invoiceIndex = invoiceListBySchool.findIndex(x => x.schoolId == invoiceDetails.schoolId);
           if (invoiceIndex != -1) {
-            invoiceListBySchool[invoiceIndex].invoices.push(invoiceDetails);
+            var invoiceArrayIndex = invoiceListBySchool[invoiceIndex].invoices.findIndex(x => x.invoiceNumber == invoiceDetails.invoiceNumber);
+            if (invoiceArrayIndex != -1) {
+              invoiceListBySchool[invoiceIndex].invoices[invoiceArrayIndex].values.push(invoiceDetails);
+            } else {
+              invoiceListBySchool[invoiceIndex].invoices.push({'invoiceNumber': invoiceDetails.invoiceNumber, 'values': [invoiceDetails]});
+            }
           } else {
             invoiceListBySchool.push({
               'schoolId': invoiceDetails.schoolId,
-              'invoices': [invoiceDetails],
+              'invoices': [{'invoiceNumber': invoiceDetails.invoiceNumber, 'values': [invoiceDetails]}],
             });
           }
         });
