@@ -74,6 +74,30 @@ module.exports = function(app) {
       var userForm = apiHelper.getForm(invoiceParams, hashedKey);
       // apiHelper.paymentInvoiceRequest(userForm);
     },
+    parseInvoiceDetails: (invoiceDetails, callback) => {
+      var firstInvoice = invoiceDetails.values[0];
+      var invoiceData = {
+        'merchantId': config.payPhiMerchantID,
+        'aggregatorId': config.payPhiAggregatorID,
+        'userID': firstInvoice.userId,
+        'invoiceNo': firstInvoice.invoiceNumber,
+        'desc': firstInvoice.desc,
+        'chargeAmount': firstInvoice.totalChargeAmount,
+        'currencyCode': '356',
+        'dueDate': firstInvoice.dueDate,
+      };
+      _.each(invoiceDetails.values, function(invoiceRow) {
+        switch (invoiceRow.invoiceType) {
+          case 'ACD':
+            invoiceData[invoiceRow.chargeHeadName] = invoiceRow.chargeAmount;
+            break;
+          case 'ADH':
+            invoiceData['additionalChargeHeadDetails'] = invoiceRow.feeHeadName + ': ' + invoiceRow.chargeAmount;
+            break;
+        }
+      });
+      return invoiceData;
+    },
     registerInvoices: () => {
       rootlogger.info('Starting invoice registration process');
       async.series([
@@ -108,6 +132,14 @@ module.exports = function(app) {
             });
           }
         });
+        _.each(invoiceListBySchool, function(schoolDetail) {
+          _.each(schoolDetail.invoices, function(invoiceDetail) {
+            var invoiceData = invoiceHelper.parseInvoiceDetails(invoiceDetail);
+            console.log(invoiceData);
+          });
+        });
+
+        return;
         _.each(invoiceListBySchool, function(schoolDetail) {
           var waterfallFunctions = [];
           var failedInvoices = [];
