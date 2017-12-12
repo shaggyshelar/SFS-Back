@@ -480,9 +480,9 @@ module.exports = function (app) {
                       if (!schoolDetails.zones || schoolDetails.zones.length == 0) {
                         validationErrors += i18next.t('csv_validation_invalidZone', { zoneName: data[30] });
                       } else {
-                        var filteredZone = schoolDetails.zones.filter(function (studentYear) {
-                          if (studentYear.academicYear == data[30]) {
-                            return studentYear;
+                        var filteredZone = schoolDetails.zones.filter(function (zoneDetails) {
+                          if (zoneDetails.zoneCode == data[30]) {
+                            return zoneDetails;
                           }
                         });
                         var matchingZone = filteredZone && filteredZone.length ? filteredZone[0] : null;
@@ -493,7 +493,7 @@ module.exports = function (app) {
                     }
 
                     var dateOfBirth = data[5] == '' ? '2000/01/01' : data[5];
-                    var studentTitle = '';
+                    var studentTitle = 'Mr';
                     if (!Date.parse(dateOfBirth)) {
                       validationErrors += i18next.t('csv_validation_invalidDateOfBirth', { birthDate: dateOfBirth });
                     } else if (dateOfBirth) {
