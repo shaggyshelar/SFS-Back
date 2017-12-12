@@ -54,6 +54,26 @@ module.exports = function(app) {
         rootlogger.info('Completed invoice generation process.');
       });
     },
+    registerInvoice: (invoiceDetails, callback) => {
+      var apiHelper = apiHelperObject(app);
+      var invoiceParams = [];
+      invoiceParams.push(['merchantId', config.payPhiMerchantID]);
+      invoiceParams.push(['aggregatorId', config.payPhiAggregatorID]);
+      invoiceParams.push(['userID', invoiceDetails.userId]);
+      invoiceParams.push(['invoiceNo', invoiceDetails.invoiceNumber]);
+      invoiceParams.push(['desc', invoiceDetails.desc]);
+      invoiceParams.push(['chargeAmount', invoiceDetails.totalChargeAmount]);
+      invoiceParams.push(['currencyCode', '356']); // TO CHECK
+      invoiceParams.push(['dueDate', invoiceDetails.dueDate]);
+      invoiceParams.push(['chargeHead1', '3000.00']);
+      invoiceParams.push(['chargeHead2', '3000.00']);
+      invoiceParams.push(['chargeHead3', '4000.00']);
+
+      var concatenatedParams = apiHelper.getConcatenatedParams(invoiceParams);
+      var hashedKey = apiHelper.getHashedKey(concatenatedParams);
+      var userForm = apiHelper.getForm(invoiceParams, hashedKey);
+      // apiHelper.paymentInvoiceRequest(userForm);
+    },
     registerInvoices: () => {
       rootlogger.info('Starting invoice registration process');
       async.series([
@@ -62,13 +82,15 @@ module.exports = function(app) {
           ds.connector.query(sql, function(err, data) {
             if (err) {
               console.log('Error:', err);
+              callback(null, [[]]);
+            } else {
+              callback(null, data);
             }
-            callback(null, data);
           });
         },
       ],
       function(err, results) {
-        var invoices = results[0];
+        var invoices = results[0][0];
         var invoiceListBySchool = [];
         _.each(invoices, function(invoiceDetails) {
           var invoiceIndex = invoiceListBySchool.findIndex(x => x.schoolId == invoiceDetails.schoolId);
@@ -85,15 +107,15 @@ module.exports = function(app) {
           var waterfallFunctions = [];
           var failedInvoices = [];
           var registeredInvoices = [];
-          _.each(schoolDetail.invoices, function(student) {
+          _.each(schoolDetail.invoices, function(invoice) {
             waterfallFunctions.push(function(next) {
-              invoiceHelper.registerStudent(student, function(error) {
+              invoiceHelper.registerInvoice(invoice, function(error) {
                 if (error) {
-                  student['ErrorMessage'] = error.respDescription;
-                  failedInvoices.push(student);
+                  invoice['ErrorMessage'] = error.respDescription;
+                  failedInvoices.push(invoice);
                 } else {
-                  student['ErrorMessage'] = 'Invoice created successfully';
-                  registeredInvoices.push(student);
+                  invoice['ErrorMessage'] = 'Invoice created successfully';
+                  registeredInvoices.push(invoice);
                 }
                 next();
               });
