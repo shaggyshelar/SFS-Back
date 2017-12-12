@@ -173,6 +173,16 @@ module.exports = function (User) {
     }
   }
 
+  User.getEmails = function (id, cb) {
+    var ds = User.dataSource;
+    var sql = "select u.id,u.email from user u left join userschooldetails usd on u.id = usd.userId where usd.schoolId=? and u.roleId=2";
+    
+    ds.connector.query(sql, [id], function (err, User) {
+      if (err) console.error(err);
+      cb(err, User);
+    });
+  }
+
   User.updateUser = function (id, user, options, cb) {
     var updateUser = {
       roleId: user.roleId,
@@ -273,6 +283,21 @@ module.exports = function (User) {
     }],
     http: { path: '/updateUser/:id', verb: 'put' },
     returns: { arg: 'user', type: 'user' }
+  });
+
+  User.remoteMethod('getEmails', {
+    accepts: [{
+        arg: 'id',
+        type: 'string'
+      }, 
+    ],
+    http: {
+      verb: 'get'
+    },
+    returns: {
+      arg: 'user',
+      type: 'user'
+    }
   });
 
   User.validatePassword = function (plain) {

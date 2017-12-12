@@ -15,6 +15,7 @@ var i18next = require('i18next');
 var permissionHelper = require('../../common/shared/permissionsHelper');
 var utilities = require('../../common/shared/utilities');
 var apiHelperObject = require('../../common/shared/apiHelper');
+var invoiceHelper = require('../../common/shared/invoiceHelper');
 
 module.exports = function (app) {
   var User = app.models.user;
@@ -30,6 +31,13 @@ module.exports = function (app) {
     rootlogger.info('hi');
     rootlogger.warn({ lang: 'fr' }, 'au revoir');
     res.render('verified');
+  });
+
+  app.get('/registerStudents', function (req, res) {
+    var invHelper = invoiceHelper(app);
+    invHelper.registerStudents();
+    res.status(200);
+    res.json({'Message': 'Student Registration in progress...'});
   });
 
   app.post('/api/paymentAdvice', function (req, res) {
@@ -100,13 +108,13 @@ module.exports = function (app) {
     }
 
     var findInvoiceQuery = {
-      invoicenumber: req.body.invoiceNo,
+      invoiceNumber: req.body.invoiceNo,
       merchantId: req.body.merchantId,
-      aggregatorID: req.body.aggregatorID,
+      aggregatorId: req.body.aggregatorID,
     };
 
     if (req.body.userID) {
-      findInvoiceQuery.userid = req.body.userID;
+      findInvoiceQuery.userId = req.body.userID;
     }
 
     Invoice.find({
@@ -123,20 +131,144 @@ module.exports = function (app) {
         }
 
         var foundInvoice = invoiceList[0];
+
+        if (foundInvoice.status != 'Processed') {
+          res.status(400);
+          res.json({'Message': i18next.t('api_validation_invoiceNotInProcessedStatus')});
+          return;
+        }
+
+        if (foundInvoice.status == 'Paid') {
+          res.status(400);
+          res.json({'Message': i18next.t('api_validation_invoiceAlreadyPaid')});
+          return;
+        }
+
         var updatedInvoice = {
-          'totalchargeamountpaid': req.body.chargeAmount,
-          'transactionid': req.body.txnID,
-          'paymentid': req.body.paymentID,
-          'paymentdate': req.body.paymentDateTime,
-          'calculatedlatefees': req.body.calculatedLateFees,
+          'totalChargeAmountPaid': req.body.chargeAmount,
+          'transactionId': req.body.txnID,
+          'paymentId': req.body.paymentID,
+          'paymentDate': req.body.paymentDateTime,
+          'calculatedLateFees': req.body.calculatedLateFees,
+          'status': 'Paid',
+          'updatedBy': 1,
+          'updatedOn': new Date(),
         };
         Invoice.updateAll({id: foundInvoice.id}, updatedInvoice, function (err, updatedUser) {
           if (err) {
             res.status(500);
             res.json(err);
           } else {
-            res.status(400);
+            res.status(200);
             res.json({'Message': i18next.t('api_paymentAdviceSuccess')});
+          }
+        });
+      }
+    });
+  });
+
+  app.post('/api/paymentSettlement', function (req, res) {
+    var apiHelper = apiHelperObject(app);
+    var errorMessages = '';
+    var userParams = [];
+    if (req.body.aggregatorID) {
+      userParams.push(['aggregatorId', req.body.aggregatorID]);
+    } else {
+      errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'aggregatorId' });
+    }
+    if (req.body.merchantId) {
+      userParams.push(['merchantId', req.body.merchantId]);
+    } else {
+      errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'merchantId' });
+    }
+    if (req.body.invoiceNo) {
+      userParams.push(['invoiceNo', req.body.invoiceNo]);
+    } else {
+      errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'invoiceNo' });
+    }
+    if (req.body.userID) {
+      userParams.push(['userID', req.body.userID]);
+    }
+    if (req.body.settlementID) {
+      userParams.push(['settlementID', req.body.settlementID]);
+    } else {
+      errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'settlementID' });
+    }
+    if (req.body.settlementDate) {
+      userParams.push(['settlementDate', req.body.settlementDate]);
+    } else {
+      errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'settlementDate' });
+    }
+    if (!req.body.secureHash) {
+      errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'secureHash' });
+    }
+
+    if (errorMessages != '') {
+      res.status(400);
+      res.json({'Message': errorMessages});
+      return;
+    }
+
+    var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
+    var hashedKey = apiHelper.getHashedKey(concatenatedParams);
+
+    if (req.body.secureHash !== hashedKey) {
+      res.status(400);
+      res.json({'Message': i18next.t('api_validation_adviceInvalidSecureHash')});
+      return;
+    }
+
+    var findInvoiceQuery = {
+      invoiceNumber: req.body.invoiceNo,
+      merchantId: req.body.merchantId,
+      aggregatorId: req.body.aggregatorID,
+    };
+
+    if (req.body.userID) {
+      findInvoiceQuery.userId = req.body.userID;
+    }
+
+    Invoice.find({
+      where: findInvoiceQuery,
+    }, function(err, invoiceList) {
+      if (err) {
+        res.status(500);
+        res.json(err);
+      } else {
+        if (!invoiceList || invoiceList.length == 0) {
+          res.status(400);
+          res.json({'Message': i18next.t('api_validation_noMatchingInvoiceFound')});
+          return;
+        }
+
+        var foundInvoice = invoiceList[0];
+
+        if (foundInvoice.status != 'Paid') {
+          res.status(400);
+          res.json({'Message': i18next.t('api_validation_invoiceNotInPaidStatus')});
+          return;
+        }
+
+        if (foundInvoice.status == 'Settled') {
+          res.status(400);
+          res.json({'Message': i18next.t('api_validation_invoiceAlreadySettled')});
+          return;
+        }
+
+        var updatedInvoice = {
+          'settlementID': req.body.settlementID,
+          'settlementDate': req.body.settlementDate,
+          'status': 'Settled',
+          'updatedBy': 1,
+          'updatedOn': new Date(),
+        };
+        Invoice.updateAll({id: foundInvoice.id}, updatedInvoice, function (err, updatedUser) {
+          if (err) {
+            res.status(500);
+            res.json(err);
+          } else {
+            res.status(200);
+            res.json({'Message': i18next.t('api_paymentSettlementSuccess')});
           }
         });
       }
@@ -191,6 +323,13 @@ module.exports = function (app) {
                 },
               }, function (err, catLists) {
                 callback(null, catLists);
+              });
+            },
+            function (callback) {
+              UserModel.getEmails(req.body.schoolId, function(err, user) {
+                if(err) callback(err);
+                else
+                callback(null, user);
               });
             },
           ],
@@ -354,6 +493,7 @@ module.exports = function (app) {
                     }
 
                     var dateOfBirth = data[5] == '' ? '2000/01/01' : data[5];
+                    var studentTitle = '';
                     if (!Date.parse(dateOfBirth)) {
                       validationErrors += i18next.t('csv_validation_invalidDateOfBirth', { birthDate: dateOfBirth });
                     } else if (dateOfBirth) {
@@ -361,6 +501,18 @@ module.exports = function (app) {
                       var cur = new Date();
                       var diff = cur - birthdate;
                       var age = Math.floor(diff / 31557600000);
+                      switch (matchingGender) {
+                        case 'Male':
+                          if (age < 16) {
+                            studentTitle = 'Mast';
+                          } else {
+                            studentTitle = 'Mr';
+                          }
+                          break;
+                        case 'Female':
+                          studentTitle = 'Miss';
+                          break;
+                      }
                     }
 
                     if (validationErrors != '') {
@@ -396,7 +548,7 @@ module.exports = function (app) {
                       studentDateOfBirth: dateOfBirth,
                       dateOfJoining: data[6] == currentDay ? null : data[6],
                       address: data[8],
-                      title: 'Mr',
+                      title: studentTitle,
                       city: '',  // TODO:
                       state: data[11],
                       country: data[10],
@@ -445,9 +597,9 @@ module.exports = function (app) {
                         html: html,
                       }, function (err) {
                         if (err) {
-                          rootlogger.log('Error sending upload report to email=\'' + user.toJSON().email + '\',\n Error=' + err);
+                          rootlogger.info('Error sending upload report to email=\'' + user.toJSON().email + '\',\n Error=' + err);
                         }
-                        rootlogger.log('Upload report mail sent successfully to ' + user.toJSON().email);
+                        rootlogger.info('Upload report mail sent successfully to ' + user.toJSON().email);
                       });
                     } else {
                       app.models.Email.send({
@@ -462,7 +614,7 @@ module.exports = function (app) {
                           }],
                       }, function (err) {
                         if (err) {
-                          rootlogger.log('Error sending upload report to email=\'' + user.toJSON().email + '\',\n Error=' + err);
+                          rootlogger.info('Error sending upload report to email=\'' + user.toJSON().email + '\',\n Error=' + err);
                         }
                         console.log('> upload report mail sent successfully');
                       });
@@ -690,64 +842,6 @@ module.exports = function (app) {
       });
     });
   });
-  // app.post('/login', function(req, res) {
-  //   User.login({
-  //     username: req.body.username,
-  //     password: req.body.password,
-  //   }, 'user', function(err, token) {
-  // if (err) {
-  //   res.status(err.statusCode);
-  //   res.json({
-  //     'Error': 'Failed',
-  //     'Code': err.code,
-  //     'Message': err.message,
-  //   });
-  // }
-  // if (token != undefined) {
-  //   var RoleMapping = app.models.RoleMapping;
-  //   var Role = app.models.Role;
-  //   RoleMapping.find({where: {principalId: token.userId}}, function(err, roleMappings) {
-  //     if (roleMappings && roleMappings.length > 0) {
-  //       var roleIds = _.uniq(roleMappings
-  //         .map(function(roleMapping) {
-  //           return roleMapping.roleId;
-  //         }));
-  //       var conditions = roleIds.map(function(roleId) {
-  //         return {id: roleId};
-  //       });
-  //       Role.find({where: {or: conditions}}, function(err, roles) {
-  //         if (err) throw err;
-  //         token.roles = roles;
-  //         permissionHelper.setPermissions(token, roles, function(token) {
-  //           res.status(200);
-  //           res.json(token);
-  //         });
-  //       });
-  //     } else {
-  //       res.status(200);
-  //       res.json(token);
-  //     }
-  //   });
-
-  //   // var isPasswordChanged = token.toJSON().user.isPasswordChanged;
-  //   // if (isPasswordChanged) {
-  //   //   res.status(200);
-  //   //   res.send({
-  //   //     'token': token.id,
-  //   //     'ttl': token.ttl,
-  //   //     'created': token.created,
-  //   //     'userId': token.userId,
-  //   //   });
-  //   // } else {
-  //   //   res.status(401);
-  //   //   res.send({
-  //   //     'Error': 'ChangeTemporaryPassword',
-  //   //     'Message': 'Please change password first.',
-  //   //   });
-  //   // }
-  // }
-  //   });
-  // });
 
   app.get('/logout', function (req, res, next) {
     if (!req.accessToken) return res.sendStatus(401); // return 401:unauthorized if accessToken is not present
@@ -757,7 +851,7 @@ module.exports = function (app) {
     });
   });
 
-  //send an email with instructions to reset an existing user's password
+  // send an email with instructions to reset an existing user's password
   app.post('/request-password-reset', function (req, res, next) {
     User.resetPassword({
       email: req.body.email
@@ -776,7 +870,7 @@ module.exports = function (app) {
     });
   });
 
-  //show password reset form
+  // show password reset form
   app.get('/reset-password', function (req, res, next) {
     if (!req.accessToken) return res.sendStatus(401);
     res.render('password-reset', {
@@ -817,5 +911,5 @@ module.exports = function (app) {
         }
       }
     });
-  }
+  };
 };

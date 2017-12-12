@@ -3,6 +3,7 @@
 var schedule = require('node-schedule');
 var fileHelper = require('./fileHelper');
 var invoiceHelper = require('./invoiceHelper');
+var csvHelper = require('./csvHelper');
 var apiHelperObject = require('./apiHelper');
 var configFilePath = process.env.NODE_ENV == undefined ?
 '' : '.' + process.env.NODE_ENV;
@@ -35,7 +36,12 @@ utilities.registerUser = function(app) {
   var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
   var hashedKey = apiHelper.getHashedKey(concatenatedParams);
   var userForm = apiHelper.getForm(userParams, hashedKey);
-  apiHelper.registerOrUpdateUser(userForm);
+  apiHelper.registerOrUpdateUser(userForm, function(error) {
+    if (error) {
+      var errorMessage = 'Failed to register student with id =' + student.id +'. Error ='+ error;
+      console.log(errorMessage);
+    }
+  });
 };
 
 utilities.updateUser = function(app, userID) {
@@ -51,7 +57,12 @@ utilities.updateUser = function(app, userID) {
   var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
   var hashedKey = apiHelper.getHashedKey(concatenatedParams);
   var userForm = apiHelper.getForm(userParams, hashedKey);
-  apiHelper.registerOrUpdateUser(userForm);
+  apiHelper.registerOrUpdateUser(userForm, function(error) {
+    if (error) {
+      var errorMessage = 'Failed to register student with id =' + student.id +'. Error ='+ error;
+      console.log(errorMessage);
+    }
+  });
 };
 
 utilities.createInvoice = function(app) {
@@ -100,26 +111,23 @@ utilities.init = function(app) {
   // this.registerUser(app);
   // this.updateUser(app, 'espl1281020171745');
   // this.createInvoice(app);
+  // csvHelper.generateStudentRegistrationCSV('StudentRegistration.csv');
 
   // Execute a cron job when the minute is 10 (e.g. 19:10, 20:10, etc.).
   var clearFileScheduler = schedule.scheduleJob(config.fileCleanerSchedulerTime, function() {
     fileHelper.clearUploadsDirectory();
   });
 
-  // // Execute a cron job at 1.30 am every day
-  // var invoiceScheduler = schedule.scheduleJob(config.invoiceSchedulerTime, function() {
-  //   var invHelper = invoiceHelper(app);
-  //   invHelper.generateTodaysInvoice();
-  // });
+  // Execute a cron job at 1.30 am every day
+  var invoiceScheduler = schedule.scheduleJob(config.invoiceSchedulerTime, function() {
+    var invHelper = invoiceHelper(app);
+    invHelper.generateTodaysInvoice();
+  });
 
   // var registerStudentScheduler = schedule.scheduleJob(config.registerStudentSchedulerTime, function() {
   //   var invHelper = invoiceHelper(app);
   //   invHelper.registerStudents();
   // });
-
-  // var myInt = setInterval(function() {
-  //   console.log('Hello');
-  // }, config.clearUploadTimeout);
 };
 
 module.exports = utilities;

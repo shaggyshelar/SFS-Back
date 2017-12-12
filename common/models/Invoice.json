@@ -17,6 +17,11 @@
         "type": "hasOne",
         "foreignKey": "id",
         "primaryKey": "studentId"
+      },
+      "InvoiceSchool": {
+        "model": "School",
+        "type": "belongsTo",
+        "foreignKey": "schoolId"
       }
     }
   },
@@ -49,6 +54,21 @@
         "dataLength": 32,
         "dataPrecision": null,
         "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "schoolId": {
+      "type": "Number",
+      "required": true,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
+      "mysql": {
+        "columnName": "schoolId",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
         "nullable": "N"
       }
     },
@@ -99,7 +119,7 @@
     },
     "studentId": {
       "type": "Number",
-      "required": false,
+      "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
@@ -109,7 +129,7 @@
         "dataLength": null,
         "dataPrecision": 19,
         "dataScale": 0,
-        "nullable": "Y"
+        "nullable": "N"
       }
     },
     "desc": {
@@ -135,6 +155,21 @@
       "scale": null,
       "mysql": {
         "columnName": "dueDate",
+        "dataType": "date",
+        "dataLength": null,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "feeDate": {
+      "type": "Date",
+      "required": true,
+      "length": null,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "feeDate",
         "dataType": "date",
         "dataLength": null,
         "dataPrecision": null,
@@ -280,11 +315,26 @@
     "type": {
       "type": "String",
       "required": true,
-      "length": 20,
+      "length": 3,
       "precision": null,
       "scale": null,
       "mysql": {
         "columnName": "type",
+        "dataType": "varchar",
+        "dataLength": 3,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "status": {
+      "type": "String",
+      "required": true,
+      "length": 20,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "status",
         "dataType": "varchar",
         "dataLength": 20,
         "dataPrecision": null,
@@ -292,34 +342,19 @@
         "nullable": "N"
       }
     },
-    "secureHash": {
+    "statusDesc": {
       "type": "String",
-      "required": true,
-      "length": 64,
+      "required": false,
+      "length": 500,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "secureHash",
+        "columnName": "statusDesc",
         "dataType": "varchar",
-        "dataLength": 64,
+        "dataLength": 500,
         "dataPrecision": null,
         "dataScale": null,
-        "nullable": "N"
-      }
-    },
-    "invoiceStatus": {
-      "type": "Boolean",
-      "required": true,
-      "length": 1,
-      "precision": null,
-      "scale": null,
-      "mysql": {
-        "columnName": "invoiceStatus",
-        "dataType": "char",
-        "dataLength": 1,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "N"
+        "nullable": "Y"
       }
     },
     "currencyCode": {
@@ -377,6 +412,66 @@
         "columnName": "responceDescription",
         "dataType": "varchar",
         "dataLength": 45,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "createdBy": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
+      "mysql": {
+        "columnName": "createdBy",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
+        "nullable": "N"
+      }
+    },
+    "createdOn": {
+      "type": "Date",
+      "required": false,
+      "length": null,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "createdOn",
+        "dataType": "datetime",
+        "dataLength": null,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "updatedBy": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "updatedBy",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "updatedOn": {
+      "type": "Date",
+      "required": false,
+      "length": null,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "updatedOn",
+        "dataType": "datetime",
+        "dataLength": null,
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "Y"
