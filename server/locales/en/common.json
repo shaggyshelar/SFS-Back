@@ -26,6 +26,8 @@
     "csv_validation_studentGenderRequired": "Required value for 'Gender'. ",
     "csv_validation_invalidDateOfBirth": "Invalid birth date '{{birthDate}}'. Format for birth date is 'YYYY/MM/DD'. ",
     "api_validation_adviceParameterRequired": "Parameter required {{parameterType}}. ",
+    "api_validation_adviceInvalidDate": "Invalid date format passed for 'paymentDateTime'. It should be 'YYYYMMDDHHMMSS'. ",
+    "api_validation_settlementInvalidDate": "Invalid date format passed for 'settlementDate'. It should be 'YYYYMMDD'. ",
     "api_validation_invalidMerchantId": "Invalid merchant ID '{{merchantId}}'. ",
     "api_validation_invalidInvoiceId": "Invalid invoice ID '{{invoiceId}}'. ",
     "api_validation_invalidUserId": "Invalid user ID '{{userID}}'. ",

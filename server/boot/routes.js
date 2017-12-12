@@ -16,6 +16,7 @@ var permissionHelper = require('../../common/shared/permissionsHelper');
 var utilities = require('../../common/shared/utilities');
 var apiHelperObject = require('../../common/shared/apiHelper');
 var invoiceHelper = require('../../common/shared/invoiceHelper');
+var moment = require('moment');
 
 module.exports = function (app) {
   var User = app.models.user;
@@ -79,6 +80,9 @@ module.exports = function (app) {
     }
     if (req.body.paymentDateTime) {
       userParams.push(['paymentDateTime', req.body.paymentDateTime]);
+      if (!moment(req.body.paymentDateTime, 'YYYYMMDDhhmmss', true).isValid()) {
+        errorMessages += i18next.t('api_validation_adviceInvalidDate');
+      }
     } else {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'paymentDateTime' });
     }
@@ -148,7 +152,7 @@ module.exports = function (app) {
           'totalChargeAmountPaid': req.body.chargeAmount,
           'transactionId': req.body.txnID,
           'paymentId': req.body.paymentID,
-          'paymentDate': req.body.paymentDateTime,
+          'paymentDate': moment(req.body.paymentDateTime, 'YYYYMMDDhhmmss', true).format('YYYY-MM-DD HH:mm:ss'),
           'calculatedLateFees': req.body.calculatedLateFees,
           'status': 'Paid',
           'updatedBy': 1,
@@ -196,6 +200,9 @@ module.exports = function (app) {
     }
     if (req.body.settlementDate) {
       userParams.push(['settlementDate', req.body.settlementDate]);
+      if (!moment(req.body.settlementDate, 'YYYYMMDD', true).isValid()) {
+        errorMessages += i18next.t('api_validation_settlementInvalidDate');
+      }
     } else {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'settlementDate' });
     }
@@ -257,7 +264,7 @@ module.exports = function (app) {
 
         var updatedInvoice = {
           'settlementID': req.body.settlementID,
-          'settlementDate': req.body.settlementDate,
+          'settlementDate': moment(req.body.settlementDate, 'YYYYMMDD', true).format('YYYY-MM-DD'),
           'status': 'Settled',
           'updatedBy': 1,
           'updatedOn': new Date(),
