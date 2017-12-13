@@ -34,7 +34,7 @@
   "payPhiMerchantID" : "T_00078",
   "payPhiHashKey" : "442b2091ed744bfb8ee82814c6698fdd",
   "invoiceGeneratorSP1" : "spGenrateAcademicInovice",
-  "invoiceGeneratorSP2" : "spGenrateAdhocInovice",
-  "invoiceGeneratorSP3" : "spGenrateTransportInovice",
+  "invoiceGeneratorSP2" : "spGenrateTransportInovice",
+  "invoiceGeneratorSP3" : "spGenrateAdhocInovice",
   "invoiceGeneratorSP4" : "spSelectInovice"
 }
