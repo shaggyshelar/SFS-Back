@@ -11,6 +11,7 @@ var crypto = require('crypto');
 var configFilePath = process.env.NODE_ENV == undefined ?
 '' : '.' + process.env.NODE_ENV;
 var config = require('../../server/config' + configFilePath + '.json');
+var dateHelper = require("../../common/shared/dateHelper");
 
 module.exports = function(app) {
   var Student = app.models.Student;
@@ -30,7 +31,7 @@ module.exports = function(app) {
                 isProcessed: 1,
                 updatedBy: 1,
                 status: 'Processed',
-                updatedOn: new Date(),
+                updatedOn: dateHelper.getUTCManagedDateTime(),
               };
               InvoiceModel.updateAll({'invoiceNumber': postInvoiceForm.invoiceNo}, updateInvoiceModelQuery,
               function(err, updatedUser) {
@@ -74,7 +75,7 @@ module.exports = function(app) {
           if (!error) {
             var responseData = JSON.parse(body);
             if (responseData.responseCode == '0000') {
-              var updateStudentQuery = {isRegistered: 1, updatedBy: 1, updatedOn: new Date()};
+              var updateStudentQuery = {isRegistered: 1, updatedBy: 1, updatedOn: dateHelper.getUTCManagedDateTime()};
               Student.updateAll({'studentCode': userForm.studentCode}, updateStudentQuery,
               function(err, updatedUser) {
                 if (err) {

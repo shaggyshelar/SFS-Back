@@ -171,7 +171,7 @@ module.exports = function (app) {
           'calculatedLateFees': req.body.calculatedLateFees,
           'status': 'Paid',
           'updatedBy': 1,
-          'updatedOn': new Date(),
+          'updatedOn': dateHelper.getUTCManagedDateTime(),
         };
         Invoice.updateAll({id: foundInvoice.id}, updatedInvoice, function (err, updatedUser) {
           if (err) {
@@ -282,7 +282,7 @@ module.exports = function (app) {
           'settlementDate': moment(req.body.settlementDate, 'YYYYMMDD', true).format('YYYY-MM-DD'),
           'status': 'Settled',
           'updatedBy': 1,
-          'updatedOn': new Date(),
+          'updatedOn': dateHelper.getUTCManagedDateTime(),
         };
         Invoice.updateAll({id: foundInvoice.id}, updatedInvoice, function (err, updatedUser) {
           if (err) {
