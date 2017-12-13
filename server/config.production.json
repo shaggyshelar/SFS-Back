@@ -14,6 +14,10 @@
     "payPhiAggregatorID" : "",
     "payPhiMerchantID" : "",
     "payPhiHashKey" : "",
+    "invoiceGeneratorSP1" : "spGenrateAcademicInovice",
+    "invoiceGeneratorSP2" : "spGenrateTransportInovice",
+    "invoiceGeneratorSP3" : "spGenrateAdhocInovice",
+    "invoiceGeneratorSP4" : "spSelectInovice",
     "hourDifferenceUTC": 5,
     "minutesDifferenceUTC": 30
 }
