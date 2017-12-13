@@ -105,6 +105,10 @@ module.exports = function(app) {
         invoiceParams.push(['additionalChargeHeadDetails', invoiceDetails.AdditionalChargeHeadDetails]);
       }
 
+      if (!invoiceDetails.ChargeHead1 || invoiceDetails.ChargeHead1 == 0) {
+        invoiceParams.push(['chargeHead1', 0]);
+      }
+
       var concatenatedParams = apiHelper.getConcatenatedParams(invoiceParams);
       var hashedKey = apiHelper.getHashedKey(concatenatedParams);
       var userForm = apiHelper.getForm(invoiceParams, hashedKey);
