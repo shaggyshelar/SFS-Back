@@ -102,7 +102,7 @@
       "scale": null,
       "mysql": {
         "columnName": "dueDate",
-        "dataType": "datetime",
+        "dataType": "date",
         "dataLength": null,
         "dataPrecision": null,
         "dataScale": null,
