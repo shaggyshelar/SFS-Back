@@ -13,5 +13,7 @@
     "sessionTimoutIntervalInSeconds" : 60,
     "payPhiAggregatorID" : "",
     "payPhiMerchantID" : "",
-    "payPhiHashKey" : ""
+    "payPhiHashKey" : "",
+    "hourDifferenceUTC": 5,
+    "minutesDifferenceUTC": 30
 }
