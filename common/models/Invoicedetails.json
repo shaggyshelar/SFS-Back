@@ -21,6 +21,11 @@
         "model": "Zone",
         "type": "belongsTo",
         "foreignKey": "zoneid"
+      },
+      "InvoicedetailFeeHead": {
+        "model": "Feehead",
+        "type": "belongsTo",
+        "foreignKey": "feeHeadId"
       }
     }
   },
@@ -99,6 +104,21 @@
       "scale": 0,
       "mysql": {
         "columnName": "zoneId",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "feeHeadId": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
+      "mysql": {
+        "columnName": "feeHeadId",
         "dataType": "bigint",
         "dataLength": null,
         "dataPrecision": 19,
