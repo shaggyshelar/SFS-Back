@@ -14,17 +14,43 @@ var config = require('../../server/config' + configFilePath + '.json');
 
 module.exports = function(app) {
   var Student = app.models.Student;
+  var InvoiceModel = app.models.Invoice;
 
   return {
-    paymentInvoiceRequest: (postInvoiceForm) => {
+    paymentInvoiceRequest: (postInvoiceForm, callback) => {
       request.post({
         url: config.payPhiServerRoot + config.payPhiPostInvoiceURL,
         form: postInvoiceForm,
       },
         function(error, response, body) {
-          console.log('error:', error);
-          console.log('statusCode:', response && response.statusCode);
-          console.log('body:', body);
+          if (!error) {
+            var responseData = JSON.parse(body);
+            if (responseData.responseCode == '0000') {
+              var updateInvoiceModelQuery = {
+                isProcessed: 1,
+                updatedBy: 1,
+                status: 'Processed',
+                updatedOn: new Date(),
+              };
+              InvoiceModel.updateAll({'invoiceNumber': postInvoiceForm.invoiceNo}, updateInvoiceModelQuery,
+              function(err, updatedUser) {
+                if (err) {
+                  rootlogger.error(responseData);
+                  callback(responseData);
+                }
+                rootlogger.info('Invoice registered successfully', responseData);
+                callback();
+              });
+            } else {
+              rootlogger.error(responseData);
+              callback(responseData);
+            }
+          } else {
+            rootlogger.error('Error while registering invoice into PayPhi system.');
+            callback({
+              'respDescription': 'Error while registering invoice into PayPhi system.',
+            });
+          }
         });
     },
     paymentInvoiceUpdate: (updateInvoiceForm) => {

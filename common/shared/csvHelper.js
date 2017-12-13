@@ -21,6 +21,39 @@ csvHelper.getCSVHeader = function(student) {
   };
 };
 
+csvHelper.getInvoiceCSVHeader = function(student) {
+  return {
+    'Registered': 'Is Registered',
+    'InvoiceNumber': 'Invoice Number',
+    'UserID': 'User ID',
+    'ChargeAmount': 'Charge Amount',
+    'DueDate': 'Due Date',
+    'Response Description': 'Response Description',
+  };
+};
+
+csvHelper.getRegisteredInvoiceFormat = function(invoice) {
+  return {
+    'Registered': 'Yes',
+    'InvoiceNumber': invoice.invoiceNo,
+    'UserID': invoice.userId,
+    'ChargeAmount': invoice.totalChargeAmount,
+    'DueDate': invoice.dueDate,
+    'Response Description': invoice.ErrorMessage,
+  };
+};
+
+csvHelper.getFailedInvoiceFormat = function(invoice) {
+  return {
+    'Registered': 'No',
+    'InvoiceNumber': invoice.invoiceNo,
+    'UserID': invoice.userId,
+    'ChargeAmount': invoice.totalChargeAmount,
+    'DueDate': invoice.dueDate,
+    'Response Description': invoice.ErrorMessage,
+  };
+};
+
 csvHelper.getRegisteredStudentCSVFormat = function(student) {
   return {
     'Registered': 'Yes',
@@ -62,6 +95,25 @@ csvHelper.generateStudentRegistrationCSV = function(filepath, registeredStudents
 
   _.each(failedStudents, function(studentDetails) {
     fastCsv.write(csvHelper.getFailedStudentCSVFormat(studentDetails));
+  });
+  fastCsv.end();
+};
+
+csvHelper.generateInvoiceRegistrationCSV = function(filepath, registeredInvoices, failedInvoices) {
+  var fastCsv = csv.createWriteStream();
+  var writeStream = fs.createWriteStream(filepath);
+  writeStream.on('finish', function() {
+    console.log('DONE!');
+  });
+  fastCsv.pipe(writeStream);
+  fastCsv.write(csvHelper.getInvoiceCSVHeader());
+
+  _.each(registeredInvoices, function(invoiceDetails) {
+    fastCsv.write(csvHelper.getRegisteredInvoiceFormat(invoiceDetails));
+  });
+
+  _.each(failedInvoices, function(invoiceDetails) {
+    fastCsv.write(csvHelper.getFailedInvoiceFormat(invoiceDetails));
   });
   fastCsv.end();
 };
