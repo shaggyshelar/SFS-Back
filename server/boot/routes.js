@@ -41,6 +41,20 @@ module.exports = function (app) {
     res.json({'Message': 'Student Registration in progress...'});
   });
 
+  app.get('/registerInvoices', function (req, res) {
+    var invHelper = invoiceHelper(app);
+    invHelper.registerInvoices();
+    res.status(200);
+    res.json({'Message': 'Invoice registration in progress...'});
+  });
+
+  app.get('/generateTodaysInvoice', function (req, res) {
+    var invHelper = invoiceHelper(app);
+    invHelper.generateTodaysInvoice();
+    res.status(200);
+    res.json({'Message': 'Invoice generation in progress...'});
+  });
+
   app.post('/api/paymentAdvice', function (req, res) {
     var apiHelper = apiHelperObject(app);
     var errorMessages = '';
