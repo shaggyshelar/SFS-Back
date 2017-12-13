@@ -59,9 +59,11 @@ module.exports = function(app) {
         form: updateInvoiceForm,
       },
         function(error, response, body) {
-          console.log('error:', error);
-          console.log('statusCode:', response && response.statusCode);
-          console.log('body:', body);
+          if (!error) {
+
+          } else {
+            rootlogger.error('Error while registering invoice into PayPhi system.');
+          }
         });
     },
     registerOrUpdateUser: (userForm, callback) => {
