@@ -221,7 +221,7 @@ module.exports = function(app) {
               var superAdminEmails = '';
 
               var fileName = schoolName + ' Invoice Registration Report.csv';
-              csvHelper.generateStudentRegistrationCSV(fileName, registeredInvoices, failedInvoices);
+              csvHelper.generateInvoiceRegistrationCSV(fileName, registeredInvoices, failedInvoices);
 
               _.each(results[1], function(schoolAdminEmail) {
                 if (schoolAdminEmails == '') {
@@ -237,7 +237,7 @@ module.exports = function(app) {
                   superAdminEmails += (', ' + superAdminEmail.email);
                 }
               });
-              var html = i18next.t('csv_registerInvoiceEmailReportHTMLContent', {savedInvoices: registeredInvoices.length, failedInvoices: failedInvoices.length});
+              var html = i18next.t('csv_registerInvoiceEmailReportHTMLContent', {savedInvoices: registeredInvoices.length, failedInvoices: failedInvoices.length, schoolName: schoolName});
               app.models.Email.send({
                 to: schoolAdminEmails,
                 cc: superAdminEmails,
@@ -400,7 +400,7 @@ module.exports = function(app) {
                   superAdminEmails += (', ' + superAdminEmail.email);
                 }
               });
-              var html = i18next.t('csv_registerStudentEmailReportHTMLContent', {savedStudents: registeredStudents.length, failedStudents: failedStudents.length});
+              var html = i18next.t('csv_registerStudentEmailReportHTMLContent', {savedStudents: registeredStudents.length, failedStudents: failedStudents.length, schoolName: schoolName});
               app.models.Email.send({
                 to: schoolAdminEmails,
                 cc: superAdminEmails,
