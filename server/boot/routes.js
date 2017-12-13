@@ -17,6 +17,7 @@ var utilities = require('../../common/shared/utilities');
 var apiHelperObject = require('../../common/shared/apiHelper');
 var invoiceHelper = require('../../common/shared/invoiceHelper');
 var moment = require('moment');
+var dateHelper = require("../../common/shared/dateHelper");
 
 module.exports = function (app) {
   var User = app.models.user;
@@ -839,7 +840,8 @@ module.exports = function (app) {
           }
           else if (token) {
             // if (loggedInUser.failedPasswordAttemptCount > 0) {
-            app.models.user.updateAll({ id: token.userId }, { failedPasswordAttemptCount: 0, lastLogin: new Date() }, function (err, updatedUser) {
+            var lastLoginDate = dateHelper.getUTCManagedDateTime();
+            app.models.user.updateAll({ id: token.userId }, { failedPasswordAttemptCount: 0, lastLogin: lastLoginDate }, function (err, updatedUser) {
               if (err) {
                 res.status(err.statusCode);
                 res.json(err);
