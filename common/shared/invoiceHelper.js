@@ -60,29 +60,65 @@ module.exports = function(app) {
       invoiceParams.push(['merchantId', config.payPhiMerchantID]);
       invoiceParams.push(['aggregatorId', config.payPhiAggregatorID]);
       invoiceParams.push(['userID', invoiceDetails.userId]);
-      invoiceParams.push(['invoiceNo', invoiceDetails.invoiceNumber]);
+      invoiceParams.push(['invoiceNo', invoiceDetails.invoiceNo]);
       invoiceParams.push(['desc', invoiceDetails.desc]);
       invoiceParams.push(['chargeAmount', invoiceDetails.totalChargeAmount]);
       invoiceParams.push(['currencyCode', '356']); // TO CHECK
       invoiceParams.push(['dueDate', invoiceDetails.dueDate]);
-      invoiceParams.push(['chargeHead1', '3000.00']);
-      invoiceParams.push(['chargeHead2', '3000.00']);
-      invoiceParams.push(['chargeHead3', '4000.00']);
+      if (invoiceDetails.ChargeHead1) {
+        invoiceParams.push(['chargeHead1', invoiceDetails.ChargeHead1]);
+      }
+      if (invoiceDetails.ChargeHead2) {
+        invoiceParams.push(['chargeHead2', invoiceDetails.ChargeHead2]);
+      }
+      if (invoiceDetails.ChargeHead3) {
+        invoiceParams.push(['chargeHead3', invoiceDetails.ChargeHead3]);
+      }
+      if (invoiceDetails.ChargeHead4) {
+        invoiceParams.push(['chargeHead4', invoiceDetails.ChargeHead4]);
+      }
+      if (invoiceDetails.ChargeHead5) {
+        invoiceParams.push(['chargeHead5', invoiceDetails.ChargeHead5]);
+      }
+      if (invoiceDetails.ChargeHead6) {
+        invoiceParams.push(['chargeHead6', invoiceDetails.ChargeHead6]);
+      }
+      if (invoiceDetails.ChargeHead7) {
+        invoiceParams.push(['chargeHead7', invoiceDetails.ChargeHead7]);
+      }
+      if (invoiceDetails.ChargeHead8) {
+        invoiceParams.push(['chargeHead8', invoiceDetails.ChargeHead8]);
+      }
+      if (invoiceDetails.ChargeHead9) {
+        invoiceParams.push(['chargeHead9', invoiceDetails.ChargeHead9]);
+      }
+      if (invoiceDetails.ChargeHead10) {
+        invoiceParams.push(['chargeHead10', invoiceDetails.ChargeHead10]);
+      }
+      if (invoiceDetails.ChargeHead11) {
+        invoiceParams.push(['chargeHead11', invoiceDetails.ChargeHead11]);
+      }
+      if (invoiceDetails.ChargeHead12) {
+        invoiceParams.push(['chargeHead12', invoiceDetails.ChargeHead12]);
+      }
+      if (invoiceDetails.AdditionalChargeHeadDetails) {
+        invoiceParams.push(['additionalChargeHeadDetails', invoiceDetails.AdditionalChargeHeadDetails]);
+      }
 
       var concatenatedParams = apiHelper.getConcatenatedParams(invoiceParams);
       var hashedKey = apiHelper.getHashedKey(concatenatedParams);
       var userForm = apiHelper.getForm(invoiceParams, hashedKey);
-      // apiHelper.paymentInvoiceRequest(userForm);
+      apiHelper.paymentInvoiceRequest(userForm);
     },
     parseInvoiceDetails: (invoiceDetails, callback) => {
       var firstInvoice = invoiceDetails.values[0];
       var invoiceData = {
         'merchantId': config.payPhiMerchantID,
         'aggregatorId': config.payPhiAggregatorID,
-        'userID': firstInvoice.userId,
+        'userId': firstInvoice.userId,
         'invoiceNo': firstInvoice.invoiceNumber,
         'desc': firstInvoice.desc,
-        'chargeAmount': firstInvoice.totalChargeAmount,
+        'totalChargeAmount': firstInvoice.totalChargeAmount,
         'currencyCode': '356',
         'dueDate': firstInvoice.dueDate,
       };
@@ -92,7 +128,7 @@ module.exports = function(app) {
             invoiceData[invoiceRow.chargeHeadName] = invoiceRow.chargeAmount;
             break;
           case 'ADH':
-            invoiceData['additionalChargeHeadDetails'] = invoiceRow.feeHeadName + ': ' + invoiceRow.chargeAmount;
+            invoiceData['AdditionalChargeHeadDetails'] = invoiceRow.feeHeadName + ': ' + invoiceRow.chargeAmount;
             break;
         }
       });
@@ -133,31 +169,26 @@ module.exports = function(app) {
           }
         });
         _.each(invoiceListBySchool, function(schoolDetail) {
-          _.each(schoolDetail.invoices, function(invoiceDetail) {
-            var invoiceData = invoiceHelper.parseInvoiceDetails(invoiceDetail);
-            console.log(invoiceData);
-          });
-        });
-
-        return;
-        _.each(invoiceListBySchool, function(schoolDetail) {
           var waterfallFunctions = [];
           var failedInvoices = [];
           var registeredInvoices = [];
-          _.each(schoolDetail.invoices, function(invoice) {
+
+          _.each(schoolDetail.invoices, function(invoiceDetail) {
+            var invoiceData = invoiceHelper.parseInvoiceDetails(invoiceDetail);
             waterfallFunctions.push(function(next) {
-              invoiceHelper.registerInvoice(invoice, function(error) {
+              invoiceHelper.registerInvoice(invoiceData, function(error) {
                 if (error) {
-                  invoice['ErrorMessage'] = error.respDescription;
-                  failedInvoices.push(invoice);
+                  invoiceData['ErrorMessage'] = error.respDescription;
+                  failedInvoices.push(invoiceData);
                 } else {
-                  invoice['ErrorMessage'] = 'Invoice created successfully';
-                  registeredInvoices.push(invoice);
+                  invoiceData['ErrorMessage'] = 'Invoice created successfully';
+                  registeredInvoices.push(invoiceData);
                 }
                 next();
               });
             });
           });
+
           async.waterfall(waterfallFunctions, function(err) {
             async.series([
               function(callback) {
