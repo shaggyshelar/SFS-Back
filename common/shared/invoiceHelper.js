@@ -108,9 +108,9 @@ module.exports = function(app) {
       var concatenatedParams = apiHelper.getConcatenatedParams(invoiceParams);
       var hashedKey = apiHelper.getHashedKey(concatenatedParams);
       var userForm = apiHelper.getForm(invoiceParams, hashedKey);
-      apiHelper.paymentInvoiceRequest(userForm);
+      apiHelper.paymentInvoiceRequest(userForm, callback);
     },
-    parseInvoiceDetails: (invoiceDetails, callback) => {
+    parseInvoiceDetails: (invoiceDetails) => {
       var firstInvoice = invoiceDetails.values[0];
       var invoiceData = {
         'merchantId': config.payPhiMerchantID,
