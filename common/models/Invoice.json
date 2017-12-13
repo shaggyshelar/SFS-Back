@@ -387,14 +387,14 @@
         "nullable": "Y"
       }
     },
-    "responceCdoe": {
+    "responseCode": {
       "type": "String",
       "required": false,
       "length": 4,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "responceCdoe",
+        "columnName": "responseCode",
         "dataType": "varchar",
         "dataLength": 4,
         "dataPrecision": null,
@@ -402,14 +402,14 @@
         "nullable": "Y"
       }
     },
-    "responceDescription": {
+    "responseDescription": {
       "type": "String",
       "required": false,
       "length": 45,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "responceDescription",
+        "columnName": "responseDescription",
         "dataType": "varchar",
         "dataLength": 45,
         "dataPrecision": null,
