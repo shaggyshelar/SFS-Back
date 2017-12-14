@@ -121,13 +121,20 @@ utilities.init = function(app) {
   // Execute a cron job at 1.30 am every day
   var invoiceScheduler = schedule.scheduleJob(config.invoiceSchedulerTime, function() {
     var invHelper = invoiceHelper(app);
-    invHelper.generateTodaysInvoice();
+    invHelper.generateTodaysInvoice(function(error) {
+      invHelper.registerInvoices();
+    });
   });
 
-  // var registerStudentScheduler = schedule.scheduleJob(config.registerStudentSchedulerTime, function() {
-  //   var invHelper = invoiceHelper(app);
-  //   invHelper.registerStudents();
-  // });
+  var updateInvoiceScheduler = schedule.scheduleJob(config.updateInvoiceSchedulerTime, function() {
+    var invHelper = invoiceHelper(app);
+    invHelper.updateInvoices();
+  });
+
+  var registerStudentScheduler = schedule.scheduleJob(config.registerStudentSchedulerTime, function() {
+    var invHelper = invoiceHelper(app);
+    invHelper.registerStudents();
+  });
 };
 
 module.exports = utilities;
