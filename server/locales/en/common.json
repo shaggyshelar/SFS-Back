@@ -69,5 +69,6 @@
     "error_schoolIdIsRequired": "School Id is required",
     "error_noCurrentAcademicYear": "At least one academic year should be set as curent.",
     "error_academicDateOverlap": "Start date and end date overlap with previously saved academic year.",
-    "error_noRecordFound": "No record was found."
+    "error_noRecordFound": "No record was found.",
+    "error_cannotUpdateFeeHead": "Fee Head cannot be updated for processed invoice"
 }
