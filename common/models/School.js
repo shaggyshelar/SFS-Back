@@ -53,7 +53,7 @@ module.exports = function (School) {
 
   School.updateZoneAcademicYear = function (schoolId, academicYearObj, options, cb) {
     if (options.accessToken) {
-      app.models.Zone.updateAll({ schoolId: schoolId }, { academicyear: academicYearObj.academicYear }, function (err, _zones) {
+      app.models.Zone.updateAll({ schoolId: schoolId }, { frequencyId: academicYearObj.frequencyId, academicyear: academicYearObj.academicYear }, function (err, _zones) {
         if (err) {
           cb(err);
         }
