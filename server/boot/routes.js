@@ -17,7 +17,8 @@ var utilities = require('../../common/shared/utilities');
 var apiHelperObject = require('../../common/shared/apiHelper');
 var invoiceHelper = require('../../common/shared/invoiceHelper');
 var moment = require('moment');
-var dateHelper = require("../../common/shared/dateHelper");
+var dateHelper = require('../../common/shared/dateHelper');
+var validator = require('validator');
 
 module.exports = function (app) {
   var ds = app.dataSources.mysql;
@@ -447,7 +448,7 @@ module.exports = function (app) {
                   counter++;
                   if (counter > 1) {
                     var validationErrors = '';
-                    if (data.length < 30) {
+                    if (data.length < 31) {
                       validationErrors += i18next.t('csv_validation_invalidNumberOfColumns');
                       failedStudents.push({ 'Row': data, 'Error': validationErrors });
                       data.push(validationErrors);
@@ -486,77 +487,84 @@ module.exports = function (app) {
                       validationErrors += i18next.t('csv_validation_studentGenderRequired');
                     }
 
-                    if (data[25] != '') {
+                    var emailId = data[25].trim();
+                    if (emailId == '') {
+                      validationErrors += i18next.t('csv_validation_studentEmailRequired');
+                    } else if (!validator.isEmail(emailId)) {
+                      validationErrors += i18next.t('csv_validation_studentInvalidEmail', {emailId: emailId});
+                    }
+
+                    if (data[26] != '') {
                       var filteredClass = schoolDetails.SchoolClass.filter(function (studentClass) {
-                        if (studentClass.className == data[25]) {
+                        if (studentClass.className == data[26]) {
                           return studentClass;
                         }
                       });
                       var matchingClass = filteredClass && filteredClass.length ? filteredClass[0] : null;
                       if (!matchingClass) {
-                        validationErrors += i18next.t('csv_validation_invalidClass', { className: data[25] });
+                        validationErrors += i18next.t('csv_validation_invalidClass', { className: data[26] });
                       }
                     } else {
                       validationErrors += i18next.t('csv_validation_classRequired');
                     }
 
-                    if (data[26] != '') {
+                    if (data[27] != '') {
                       var filteredDivision = schoolDetails.SchoolDivision.filter(function (division) {
-                        if (division.divisionName == data[26]) {
+                        if (division.divisionName == data[27]) {
                           return division;
                         }
                       });
                       var matchingDivision = filteredDivision && filteredDivision.length ? filteredDivision[0] : null;
                       if (!matchingDivision) {
-                        validationErrors += i18next.t('csv_validation_invalidDivision', { divisionName: data[26] });
+                        validationErrors += i18next.t('csv_validation_invalidDivision', { divisionName: data[27] });
                       }
                     } else {
                       validationErrors += i18next.t('csv_validation_divisionRequired');
                     }
 
-                    if (data[27] != '') {
+                    if (data[28] != '') {
                       var filteredCategory = categoryList.filter(function (category) {
-                        if (category.categoryName == data[27]) {
+                        if (category.categoryName == data[28]) {
                           return category;
                         }
                       });
                       var matchingCategory = filteredCategory && filteredCategory.length ? filteredCategory[0] : null;
                       if (!matchingCategory) {
-                        validationErrors += i18next.t('csv_validation_invalidCategory', { categoryName: data[27] });
+                        validationErrors += i18next.t('csv_validation_invalidCategory', { categoryName: data[28] });
                       }
                     } else {
                       validationErrors += i18next.t('csv_validation_categoryRequired');
                     }
 
-                    if (data[28] != '') {
+                    if (data[29] != '') {
                       var filteredYear = schoolDetails.SchoolYear.filter(function (studentYear) {
-                        if (studentYear.academicYear == data[28]) {
+                        if (studentYear.academicYear == data[29]) {
                           return studentYear;
                         }
                       });
                       var matchingYear = filteredYear && filteredYear.length ? filteredYear[0] : null;
                       if (!matchingYear) {
-                        validationErrors += i18next.t('csv_validation_invalidYear', { acadYear: data[28] });
+                        validationErrors += i18next.t('csv_validation_invalidYear', { acadYear: data[29] });
                       }
                     } else {
                       validationErrors += i18next.t('csv_validation_yearRequired');
                     }
 
-                    if (data[29] == '') {
+                    if (data[30] == '') {
                       validationErrors += i18next.t('csv_validation_studentCodeRequired');
                     }
-                    if (data[30] != '') {
+                    if (data[31] != '') {
                       if (!schoolDetails.zones || schoolDetails.zones.length == 0) {
-                        validationErrors += i18next.t('csv_validation_invalidZone', { zoneName: data[30] });
+                        validationErrors += i18next.t('csv_validation_invalidZone', { zoneName: data[31] });
                       } else {
                         var filteredZone = schoolDetails.zones.filter(function (zoneDetails) {
-                          if (zoneDetails.zoneCode == data[30]) {
+                          if (zoneDetails.zoneCode == data[31]) {
                             return zoneDetails;
                           }
                         });
                         var matchingZone = filteredZone && filteredZone.length ? filteredZone[0] : null;
                         if (!matchingZone) {
-                          validationErrors += i18next.t('csv_validation_invalidZone', { zoneName: data[30] });
+                          validationErrors += i18next.t('csv_validation_invalidZone', { zoneName: data[31] });
                         }
                       }
                     }

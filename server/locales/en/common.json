@@ -23,6 +23,8 @@
     "csv_validation_studentFirstNameRequired": "Required value for 'First Name'. ",
     "csv_validation_studentMiddleNameRequired": "Required value for 'Middle Name'. ",
     "csv_validation_studentLastNameRequired": "Required value for 'Last Name'. ",
+    "csv_validation_studentEmailRequired": "Required value for 'Email'. ",
+    "csv_validation_studentInvalidEmail": "Invalid email '{{emailId}}'. ",
     "csv_validation_studentGenderRequired": "Required value for 'Gender'. ",
     "csv_validation_invalidDateOfBirth": "Invalid birth date '{{birthDate}}'. Format for birth date is 'YYYY/MM/DD'. ",
     "api_validation_adviceParameterRequired": "Parameter required {{parameterType}}. ",
