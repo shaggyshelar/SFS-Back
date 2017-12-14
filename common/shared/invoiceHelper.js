@@ -19,7 +19,7 @@ module.exports = function(app) {
   var Schools = app.models.School;
 
   var invoiceHelper =  {
-    generateTodaysInvoice: () => {
+    generateTodaysInvoice: (methodCallback) => {
       rootlogger.info('Starting invoice generation process');
       async.series([
         function(callback) {
@@ -51,6 +51,7 @@ module.exports = function(app) {
         },
       ],
       function(err, results) {
+        methodCallback();
         rootlogger.info('Completed invoice generation process.');
       });
     },
@@ -137,6 +138,23 @@ module.exports = function(app) {
         }
       });
       return invoiceData;
+    },
+    updateInvoices: () => {
+      rootlogger.info('Starting update invoice process');
+      async.series([
+        function(callback) {
+          app.models.Invoice.find({
+            where: {
+              'isUpdated': 1,
+            },
+          }, function(err, lists) {
+            callback(null, lists);
+          });
+        },
+      ],
+      function(err, results) {
+        rootlogger.info('Completed invoice generation process.');
+      });
     },
     registerInvoices: () => {
       rootlogger.info('Starting invoice registration process');
