@@ -265,6 +265,29 @@ module.exports = function(app) {
         rootlogger.info('Completed invoice generation process.');
       });
     },
+    updateInvoice: (invoice) => {
+      var apiHelper = apiHelperObject(app);
+      var invoiceParams = [];
+      invoiceParams.push(['merchantId', config.payPhiMerchantID]);
+      invoiceParams.push(['aggregatorId', config.payPhiAggregatorID]);
+      invoiceParams.push(['userID', invoice.userId]);
+      invoiceParams.push(['invoiceNo', invoice.invoiceNo]);
+      invoiceParams.push(['invoiceStatus', invoice.status]);
+      if (invoice.desc) {
+        invoiceParams.push(['desc', invoice.desc]);
+      }
+      if (invoice.dueDate) {
+        invoiceParams.push(['dueDate', invoice.dueDate]);
+      }
+      if (invoice.additionalFee) {
+        invoiceParams.push(['additionalFee', invoice.additionalFee]);
+      }
+
+      var concatenatedParams = apiHelper.getConcatenatedParams(invoiceParams);
+      var hashedKey = apiHelper.getHashedKey(concatenatedParams);
+      var userForm = apiHelper.getForm(invoiceParams, hashedKey);
+      apiHelper.paymentInvoiceUpdate(userForm);
+    },
     convertGender: (gender) => {
       switch (gender) {
         case 'Male':

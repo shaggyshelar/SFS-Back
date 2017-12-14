@@ -60,9 +60,11 @@ module.exports = function(app) {
         form: updateInvoiceForm,
       },
         function(error, response, body) {
-          console.log('error:', error);
-          console.log('statusCode:', response && response.statusCode);
-          console.log('body:', body);
+          if (!error) {
+
+          } else {
+            rootlogger.error('Error while registering invoice into PayPhi system.');
+          }
         });
     },
     registerOrUpdateUser: (userForm, callback) => {
@@ -97,6 +99,23 @@ module.exports = function(app) {
             });
           }
         });
+    },
+    getSortedParams: function(params) {
+      if (!params) {
+        return [];
+      }
+      var sortedParams = params.sort(function(a, b) {
+        var a1 = a[0];
+        var b1 = b[0];
+        return a1 == b1 ? 0 : (a1 < b1 ? -1 : 1);
+      });
+
+      var concatenatedValues = '';
+      _.each(sortedParams, function(param) {
+        concatenatedValues += param[1];
+      });
+
+      return {'sortedParams': sortedParams, 'concatenatedString': concatenatedValues};
     },
     getConcatenatedParams: function(params) {
       if (!params) {

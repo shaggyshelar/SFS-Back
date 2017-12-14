@@ -42,6 +42,29 @@ module.exports = function (app) {
     res.json({'Message': 'Student Registration in progress...'});
   });
 
+  app.post('/apiParamsHelper', function (req, res) {
+    var keys = Object.keys(req.body);
+    var params = [];
+    _.each(keys, function(key) {
+      if (req.body[key]) {
+        params.push([key, req.body[key]]);
+      }
+    });
+
+    var apiHelper = apiHelperObject(app);
+    var concatenatedParams = apiHelper.getSortedParams(params);
+    var hashedKey = apiHelper.getHashedKey(concatenatedParams.concatenatedString);
+    var userForm = apiHelper.getForm(params, hashedKey);
+    var toReturnObject = {
+      'sortedParams': concatenatedParams.sortedParams,
+      'concatenatedParams': concatenatedParams.concatenatedString,
+      'hashedKey': hashedKey,
+      'form': userForm,
+    };
+    res.status(200);
+    res.json(toReturnObject);
+  });
+
   app.get('/registerInvoices', function (req, res) {
     var invHelper = invoiceHelper(app);
     invHelper.registerInvoices();
