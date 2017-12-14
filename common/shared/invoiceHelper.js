@@ -145,7 +145,7 @@ module.exports = function(app) {
         function(callback) {
           app.models.Invoice.find({
             where: {
-              'isUpdated': 1,
+              'updateField': '',
             },
           }, function(err, lists) {
             callback(null, lists);

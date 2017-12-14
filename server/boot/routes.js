@@ -20,6 +20,7 @@ var moment = require('moment');
 var dateHelper = require("../../common/shared/dateHelper");
 
 module.exports = function (app) {
+  var ds = app.dataSources.mysql;
   var User = app.models.user;
   var Schools = app.models.School;
   var Categories = app.models.Category;
@@ -149,63 +150,86 @@ module.exports = function (app) {
       return;
     }
 
-    var findInvoiceQuery = {
-      invoiceNumber: req.body.invoiceNo,
-      merchantId: req.body.merchantId,
-      aggregatorId: req.body.aggregatorID,
-    };
-
-    if (req.body.userID) {
-      findInvoiceQuery.userId = req.body.userID;
-    }
-
-    Invoice.find({
-      where: findInvoiceQuery,
-    }, function(err, invoiceList) {
-      if (err) {
-        res.status(500);
-        res.json(err);
-      } else {
-        if (!invoiceList || invoiceList.length == 0) {
-          res.status(400);
-          res.json({'Message': i18next.t('api_validation_noMatchingInvoiceFound')});
-          return;
-        }
-
-        var foundInvoice = invoiceList[0];
-
-        if (foundInvoice.status != 'Processed') {
-          res.status(400);
-          res.json({'Message': i18next.t('api_validation_invoiceNotInProcessedStatus')});
-          return;
-        }
-
-        if (foundInvoice.status == 'Paid') {
-          res.status(400);
-          res.json({'Message': i18next.t('api_validation_invoiceAlreadyPaid')});
-          return;
-        }
-
-        var updatedInvoice = {
-          'totalChargeAmountPaid': req.body.chargeAmount,
-          'transactionId': req.body.txnID,
-          'paymentId': req.body.paymentID,
-          'paymentDate': moment(req.body.paymentDateTime, 'YYYYMMDDhhmmss', true).format('YYYY-MM-DD HH:mm:ss'),
-          'calculatedLateFees': req.body.calculatedLateFees,
-          'status': 'Paid',
-          'updatedBy': 1,
-          'updatedOn': dateHelper.getUTCManagedDateTime(),
-        };
-        Invoice.updateAll({id: foundInvoice.id}, updatedInvoice, function (err, updatedUser) {
+    async.series([
+      function(callback) {
+        // merchantId, aggregatorId, userId, invoiceNumber
+        var sql = "CALL `spSelectInvoiceByParameter`('" + req.body.merchantId + "','" + req.body.aggregatorID + "','" + req.body.userID + "','" + req.body.invoiceNo + "');";
+        ds.connector.query(sql, function(err, data) {
           if (err) {
-            res.status(500);
-            res.json(err);
+            console.log('Error:', err);
+            callback(null, [[]]);
           } else {
-            res.status(200);
-            res.json({'Message': i18next.t('api_paymentAdviceSuccess')});
+            callback(null, data);
           }
         });
+      },
+    ],
+    function(err, results) {
+      var data = results[0][0].length > 0 ? results[0][0][0] : {'errorMessage': i18next.t('api_validation_noMatchingInvoiceFound')};
+      if (data.errorMessage) {
+        res.status(400);
+        res.json({'Message': data.errorMessage});
+        return;
       }
+
+      var findInvoiceQuery = {
+        invoiceNumber: req.body.invoiceNo,
+        merchantId: req.body.merchantId,
+        aggregatorId: req.body.aggregatorID,
+      };
+
+      if (req.body.userID) {
+        findInvoiceQuery.userId = req.body.userID;
+      }
+
+      Invoice.find({
+        where: findInvoiceQuery,
+      }, function(err, invoiceList) {
+        if (err) {
+          res.status(500);
+          res.json(err);
+        } else {
+          if (!invoiceList || invoiceList.length == 0) {
+            res.status(400);
+            res.json({'Message': i18next.t('api_validation_noMatchingInvoiceFound')});
+            return;
+          }
+
+          var foundInvoice = invoiceList[0];
+
+          if (foundInvoice.status != 'Processed') {
+            res.status(400);
+            res.json({'Message': i18next.t('api_validation_invoiceNotInProcessedStatus')});
+            return;
+          }
+
+          if (foundInvoice.status == 'Paid') {
+            res.status(400);
+            res.json({'Message': i18next.t('api_validation_invoiceAlreadyPaid')});
+            return;
+          }
+
+          var updatedInvoice = {
+            'totalChargeAmountPaid': req.body.chargeAmount,
+            'transactionId': req.body.txnID,
+            'paymentId': req.body.paymentID,
+            'paymentDate': moment(req.body.paymentDateTime, 'YYYYMMDDhhmmss', true).format('YYYY-MM-DD HH:mm:ss'),
+            'calculatedLateFees': req.body.calculatedLateFees,
+            'status': 'Paid',
+            'updatedBy': 1,
+            'updatedOn': dateHelper.getUTCManagedDateTime(),
+          };
+          Invoice.updateAll({id: foundInvoice.id}, updatedInvoice, function (err, updatedUser) {
+            if (err) {
+              res.status(500);
+              res.json(err);
+            } else {
+              res.status(200);
+              res.json({'Message': i18next.t('api_paymentAdviceSuccess')});
+            }
+          });
+        }
+      });
     });
   });
 
