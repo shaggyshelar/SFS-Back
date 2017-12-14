@@ -3,6 +3,7 @@
     "supportEmailID": "support@sfs.com",
     "fileCleanerSchedulerTime": "10 * * * *",
     "invoiceSchedulerTime": "30 1 * * *",
+    "updateInvoiceSchedulerTime": "0 2 * * *",
     "registerStudentSchedulerTime": "30 1 * * *",
     "payPhiServerRoot": "https://qa.phicommerce.com/pg/portal",
     "payPhiPostInvoiceURL": "/pay/paymentInvoiceService",
