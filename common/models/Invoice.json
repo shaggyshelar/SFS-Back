@@ -417,6 +417,21 @@
         "nullable": "Y"
       }
     },
+    "updateField": {
+      "type": "String",
+      "required": false,
+      "length": 1,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "updateField",
+        "dataType": "varchar",
+        "dataLength": 1,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
     "createdBy": {
       "type": "Number",
       "required": false,
