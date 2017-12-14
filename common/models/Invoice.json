@@ -89,7 +89,7 @@
     },
     "aggregatorId": {
       "type": "String",
-      "required": false,
+      "required": true,
       "length": 12,
       "precision": null,
       "scale": null,
@@ -99,7 +99,7 @@
         "dataLength": 12,
         "dataPrecision": null,
         "dataScale": null,
-        "nullable": "Y"
+        "nullable": "N"
       }
     },
     "userId": {
