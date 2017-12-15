@@ -288,60 +288,83 @@ module.exports = function (app) {
       return;
     }
 
-    var findInvoiceQuery = {
-      invoiceNumber: req.body.invoiceNo,
-      merchantId: req.body.merchantId,
-      aggregatorId: req.body.aggregatorID,
-    };
-
-    if (req.body.userID) {
-      findInvoiceQuery.userId = req.body.userID;
-    }
-
-    Invoice.find({
-      where: findInvoiceQuery,
-    }, function(err, invoiceList) {
-      if (err) {
-        res.status(500);
-        res.json(err);
-      } else {
-        if (!invoiceList || invoiceList.length == 0) {
-          res.status(400);
-          res.json({'Message': i18next.t('api_validation_noMatchingInvoiceFound')});
-          return;
-        }
-
-        var foundInvoice = invoiceList[0];
-
-        if (foundInvoice.status != 'Paid') {
-          res.status(400);
-          res.json({'Message': i18next.t('api_validation_invoiceNotInPaidStatus')});
-          return;
-        }
-
-        if (foundInvoice.status == 'Settled') {
-          res.status(400);
-          res.json({'Message': i18next.t('api_validation_invoiceAlreadySettled')});
-          return;
-        }
-
-        var updatedInvoice = {
-          'settlementID': req.body.settlementID,
-          'settlementDate': moment(req.body.settlementDate, 'YYYYMMDD', true).format('YYYY-MM-DD'),
-          'status': 'Settled',
-          'updatedBy': 1,
-          'updatedOn': dateHelper.getUTCManagedDateTime(),
-        };
-        Invoice.updateAll({id: foundInvoice.id}, updatedInvoice, function (err, updatedUser) {
+    async.series([
+      function(callback) {
+        // merchantId, aggregatorId, userId, invoiceNumber
+        var sql = "CALL `spSelectInvoiceByParameter`('" + req.body.merchantId + "','" + req.body.aggregatorID + "','" + req.body.userID + "','" + req.body.invoiceNo + "');";
+        ds.connector.query(sql, function(err, data) {
           if (err) {
-            res.status(500);
-            res.json(err);
+            console.log('Error:', err);
+            callback(null, [[]]);
           } else {
-            res.status(200);
-            res.json({'Message': i18next.t('api_paymentSettlementSuccess')});
+            callback(null, data);
           }
         });
+      },
+    ],
+    function(err, results) {
+      var data = results[0][0].length > 0 ? results[0][0][0] : {'errorMessage': i18next.t('api_validation_noMatchingInvoiceFound')};
+      if (data.errorMessage) {
+        res.status(400);
+        res.json({'Message': data.errorMessage});
+        return;
       }
+
+      var findInvoiceQuery = {
+        invoiceNumber: req.body.invoiceNo,
+        merchantId: req.body.merchantId,
+        aggregatorId: req.body.aggregatorID,
+      };
+
+      if (req.body.userID) {
+        findInvoiceQuery.userId = req.body.userID;
+      }
+
+      Invoice.find({
+        where: findInvoiceQuery,
+      }, function(err, invoiceList) {
+        if (err) {
+          res.status(500);
+          res.json(err);
+        } else {
+          if (!invoiceList || invoiceList.length == 0) {
+            res.status(400);
+            res.json({'Message': i18next.t('api_validation_noMatchingInvoiceFound')});
+            return;
+          }
+
+          var foundInvoice = invoiceList[0];
+
+          if (foundInvoice.status != 'Paid') {
+            res.status(400);
+            res.json({'Message': i18next.t('api_validation_invoiceNotInPaidStatus')});
+            return;
+          }
+
+          if (foundInvoice.status == 'Settled') {
+            res.status(400);
+            res.json({'Message': i18next.t('api_validation_invoiceAlreadySettled')});
+            return;
+          }
+
+          var updatedInvoice = {
+            'settlementID': req.body.settlementID,
+            'settlementDate': moment(req.body.settlementDate, 'YYYYMMDD', true).format('YYYY-MM-DD'),
+            'status': 'Settled',
+            'updatedBy': 1,
+            'updatedOn': dateHelper.getUTCManagedDateTime(),
+          };
+          Invoice.updateAll({id: foundInvoice.id}, updatedInvoice, function (err, updatedUser) {
+            if (err) {
+              res.status(500);
+              res.json(err);
+            } else {
+              res.status(200);
+              res.json({'Message': i18next.t('api_paymentSettlementSuccess')});
+            }
+          });
+        }
+      });
     });
   });
 
@@ -636,8 +659,8 @@ module.exports = function (app) {
                       address: data[8],
                       title: studentTitle,
                       city: '',  // TODO:
-                      state: data[11],
-                      country: data[10],
+                      state: data[11].trim(),
+                      country: data[10].trim(),
                       phone: studentPhone,
                       email: emailId,
                       religion: data[12].trim(),
