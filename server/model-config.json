@@ -155,5 +155,9 @@
   "Sfsconfiguration":{
     "dataSource": "mysql",
     "public": true
+  },
+  "Vwinvoicereport":{
+    "dataSource": "mysql",
+    "public": true
   }
 }
