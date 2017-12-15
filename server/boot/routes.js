@@ -17,8 +17,11 @@ var utilities = require('../../common/shared/utilities');
 var apiHelperObject = require('../../common/shared/apiHelper');
 var invoiceHelper = require('../../common/shared/invoiceHelper');
 var moment = require('moment');
+var dateHelper = require('../../common/shared/dateHelper');
+var validator = require('validator');
 
 module.exports = function (app) {
+  var ds = app.dataSources.mysql;
   var User = app.models.user;
   var Schools = app.models.School;
   var Categories = app.models.Category;
@@ -39,6 +42,29 @@ module.exports = function (app) {
     invHelper.registerStudents();
     res.status(200);
     res.json({'Message': 'Student Registration in progress...'});
+  });
+
+  app.post('/apiParamsHelper', function (req, res) {
+    var keys = Object.keys(req.body);
+    var params = [];
+    _.each(keys, function(key) {
+      if (req.body[key]) {
+        params.push([key, req.body[key]]);
+      }
+    });
+
+    var apiHelper = apiHelperObject(app);
+    var concatenatedParams = apiHelper.getSortedParams(params);
+    var hashedKey = apiHelper.getHashedKey(concatenatedParams.concatenatedString);
+    var userForm = apiHelper.getForm(params, hashedKey);
+    var toReturnObject = {
+      'sortedParams': concatenatedParams.sortedParams,
+      'concatenatedParams': concatenatedParams.concatenatedString,
+      'hashedKey': hashedKey,
+      'form': userForm,
+    };
+    res.status(200);
+    res.json(toReturnObject);
   });
 
   app.get('/registerInvoices', function (req, res) {
@@ -125,63 +151,86 @@ module.exports = function (app) {
       return;
     }
 
-    var findInvoiceQuery = {
-      invoiceNumber: req.body.invoiceNo,
-      merchantId: req.body.merchantId,
-      aggregatorId: req.body.aggregatorID,
-    };
-
-    if (req.body.userID) {
-      findInvoiceQuery.userId = req.body.userID;
-    }
-
-    Invoice.find({
-      where: findInvoiceQuery,
-    }, function(err, invoiceList) {
-      if (err) {
-        res.status(500);
-        res.json(err);
-      } else {
-        if (!invoiceList || invoiceList.length == 0) {
-          res.status(400);
-          res.json({'Message': i18next.t('api_validation_noMatchingInvoiceFound')});
-          return;
-        }
-
-        var foundInvoice = invoiceList[0];
-
-        if (foundInvoice.status != 'Processed') {
-          res.status(400);
-          res.json({'Message': i18next.t('api_validation_invoiceNotInProcessedStatus')});
-          return;
-        }
-
-        if (foundInvoice.status == 'Paid') {
-          res.status(400);
-          res.json({'Message': i18next.t('api_validation_invoiceAlreadyPaid')});
-          return;
-        }
-
-        var updatedInvoice = {
-          'totalChargeAmountPaid': req.body.chargeAmount,
-          'transactionId': req.body.txnID,
-          'paymentId': req.body.paymentID,
-          'paymentDate': moment(req.body.paymentDateTime, 'YYYYMMDDhhmmss', true).format('YYYY-MM-DD HH:mm:ss'),
-          'calculatedLateFees': req.body.calculatedLateFees,
-          'status': 'Paid',
-          'updatedBy': 1,
-          'updatedOn': new Date(),
-        };
-        Invoice.updateAll({id: foundInvoice.id}, updatedInvoice, function (err, updatedUser) {
+    async.series([
+      function(callback) {
+        // merchantId, aggregatorId, userId, invoiceNumber
+        var sql = "CALL `spSelectInvoiceByParameter`('" + req.body.merchantId + "','" + req.body.aggregatorID + "','" + req.body.userID + "','" + req.body.invoiceNo + "');";
+        ds.connector.query(sql, function(err, data) {
           if (err) {
-            res.status(500);
-            res.json(err);
+            console.log('Error:', err);
+            callback(null, [[]]);
           } else {
-            res.status(200);
-            res.json({'Message': i18next.t('api_paymentAdviceSuccess')});
+            callback(null, data);
           }
         });
+      },
+    ],
+    function(err, results) {
+      var data = results[0][0].length > 0 ? results[0][0][0] : {'errorMessage': i18next.t('api_validation_noMatchingInvoiceFound')};
+      if (data.errorMessage) {
+        res.status(400);
+        res.json({'Message': data.errorMessage});
+        return;
       }
+
+      var findInvoiceQuery = {
+        invoiceNumber: req.body.invoiceNo,
+        merchantId: req.body.merchantId,
+        aggregatorId: req.body.aggregatorID,
+      };
+
+      if (req.body.userID) {
+        findInvoiceQuery.userId = req.body.userID;
+      }
+
+      Invoice.find({
+        where: findInvoiceQuery,
+      }, function(err, invoiceList) {
+        if (err) {
+          res.status(500);
+          res.json(err);
+        } else {
+          if (!invoiceList || invoiceList.length == 0) {
+            res.status(400);
+            res.json({'Message': i18next.t('api_validation_noMatchingInvoiceFound')});
+            return;
+          }
+
+          var foundInvoice = invoiceList[0];
+
+          if (foundInvoice.status != 'Processed') {
+            res.status(400);
+            res.json({'Message': i18next.t('api_validation_invoiceNotInProcessedStatus')});
+            return;
+          }
+
+          if (foundInvoice.status == 'Paid') {
+            res.status(400);
+            res.json({'Message': i18next.t('api_validation_invoiceAlreadyPaid')});
+            return;
+          }
+
+          var updatedInvoice = {
+            'totalChargeAmountPaid': req.body.chargeAmount,
+            'transactionId': req.body.txnID,
+            'paymentId': req.body.paymentID,
+            'paymentDate': moment(req.body.paymentDateTime, 'YYYYMMDDhhmmss', true).format('YYYY-MM-DD HH:mm:ss'),
+            'calculatedLateFees': req.body.calculatedLateFees,
+            'status': 'Paid',
+            'updatedBy': 1,
+            'updatedOn': dateHelper.getUTCManagedDateTime(),
+          };
+          Invoice.updateAll({id: foundInvoice.id}, updatedInvoice, function (err, updatedUser) {
+            if (err) {
+              res.status(500);
+              res.json(err);
+            } else {
+              res.status(200);
+              res.json({'Message': i18next.t('api_paymentAdviceSuccess')});
+            }
+          });
+        }
+      });
     });
   });
 
@@ -239,60 +288,83 @@ module.exports = function (app) {
       return;
     }
 
-    var findInvoiceQuery = {
-      invoiceNumber: req.body.invoiceNo,
-      merchantId: req.body.merchantId,
-      aggregatorId: req.body.aggregatorID,
-    };
-
-    if (req.body.userID) {
-      findInvoiceQuery.userId = req.body.userID;
-    }
-
-    Invoice.find({
-      where: findInvoiceQuery,
-    }, function(err, invoiceList) {
-      if (err) {
-        res.status(500);
-        res.json(err);
-      } else {
-        if (!invoiceList || invoiceList.length == 0) {
-          res.status(400);
-          res.json({'Message': i18next.t('api_validation_noMatchingInvoiceFound')});
-          return;
-        }
-
-        var foundInvoice = invoiceList[0];
-
-        if (foundInvoice.status != 'Paid') {
-          res.status(400);
-          res.json({'Message': i18next.t('api_validation_invoiceNotInPaidStatus')});
-          return;
-        }
-
-        if (foundInvoice.status == 'Settled') {
-          res.status(400);
-          res.json({'Message': i18next.t('api_validation_invoiceAlreadySettled')});
-          return;
-        }
-
-        var updatedInvoice = {
-          'settlementID': req.body.settlementID,
-          'settlementDate': moment(req.body.settlementDate, 'YYYYMMDD', true).format('YYYY-MM-DD'),
-          'status': 'Settled',
-          'updatedBy': 1,
-          'updatedOn': new Date(),
-        };
-        Invoice.updateAll({id: foundInvoice.id}, updatedInvoice, function (err, updatedUser) {
+    async.series([
+      function(callback) {
+        // merchantId, aggregatorId, userId, invoiceNumber
+        var sql = "CALL `spSelectInvoiceByParameter`('" + req.body.merchantId + "','" + req.body.aggregatorID + "','" + req.body.userID + "','" + req.body.invoiceNo + "');";
+        ds.connector.query(sql, function(err, data) {
           if (err) {
-            res.status(500);
-            res.json(err);
+            console.log('Error:', err);
+            callback(null, [[]]);
           } else {
-            res.status(200);
-            res.json({'Message': i18next.t('api_paymentSettlementSuccess')});
+            callback(null, data);
           }
         });
+      },
+    ],
+    function(err, results) {
+      var data = results[0][0].length > 0 ? results[0][0][0] : {'errorMessage': i18next.t('api_validation_noMatchingInvoiceFound')};
+      if (data.errorMessage) {
+        res.status(400);
+        res.json({'Message': data.errorMessage});
+        return;
       }
+
+      var findInvoiceQuery = {
+        invoiceNumber: req.body.invoiceNo,
+        merchantId: req.body.merchantId,
+        aggregatorId: req.body.aggregatorID,
+      };
+
+      if (req.body.userID) {
+        findInvoiceQuery.userId = req.body.userID;
+      }
+
+      Invoice.find({
+        where: findInvoiceQuery,
+      }, function(err, invoiceList) {
+        if (err) {
+          res.status(500);
+          res.json(err);
+        } else {
+          if (!invoiceList || invoiceList.length == 0) {
+            res.status(400);
+            res.json({'Message': i18next.t('api_validation_noMatchingInvoiceFound')});
+            return;
+          }
+
+          var foundInvoice = invoiceList[0];
+
+          if (foundInvoice.status != 'Paid') {
+            res.status(400);
+            res.json({'Message': i18next.t('api_validation_invoiceNotInPaidStatus')});
+            return;
+          }
+
+          if (foundInvoice.status == 'Settled') {
+            res.status(400);
+            res.json({'Message': i18next.t('api_validation_invoiceAlreadySettled')});
+            return;
+          }
+
+          var updatedInvoice = {
+            'settlementID': req.body.settlementID,
+            'settlementDate': moment(req.body.settlementDate, 'YYYYMMDD', true).format('YYYY-MM-DD'),
+            'status': 'Settled',
+            'updatedBy': 1,
+            'updatedOn': dateHelper.getUTCManagedDateTime(),
+          };
+          Invoice.updateAll({id: foundInvoice.id}, updatedInvoice, function (err, updatedUser) {
+            if (err) {
+              res.status(500);
+              res.json(err);
+            } else {
+              res.status(200);
+              res.json({'Message': i18next.t('api_paymentSettlementSuccess')});
+            }
+          });
+        }
+      });
     });
   });
 
@@ -399,7 +471,7 @@ module.exports = function (app) {
                   counter++;
                   if (counter > 1) {
                     var validationErrors = '';
-                    if (data.length < 30) {
+                    if (data.length < 31) {
                       validationErrors += i18next.t('csv_validation_invalidNumberOfColumns');
                       failedStudents.push({ 'Row': data, 'Error': validationErrors });
                       data.push(validationErrors);
@@ -438,77 +510,93 @@ module.exports = function (app) {
                       validationErrors += i18next.t('csv_validation_studentGenderRequired');
                     }
 
-                    if (data[25] != '') {
+                    var studentPhone = data[9].trim();
+                    var fathersPhone = data[17].trim();
+                    var mothersPhone = data[20].trim();
+                    var gaurdianPhone = data[24].trim();
+
+                    if (!studentPhone && !fathersPhone && !mothersPhone && !gaurdianPhone) {
+                      validationErrors += i18next.t('csv_validation_studentPhoneRequired');
+                    }
+
+                    var emailId = data[25].trim();
+                    if (emailId == '') {
+                      validationErrors += i18next.t('csv_validation_studentEmailRequired');
+                    } else if (!validator.isEmail(emailId)) {
+                      validationErrors += i18next.t('csv_validation_studentInvalidEmail', {emailId: emailId});
+                    }
+
+                    if (data[26] != '') {
                       var filteredClass = schoolDetails.SchoolClass.filter(function (studentClass) {
-                        if (studentClass.className == data[25]) {
+                        if (studentClass.className == data[26]) {
                           return studentClass;
                         }
                       });
                       var matchingClass = filteredClass && filteredClass.length ? filteredClass[0] : null;
                       if (!matchingClass) {
-                        validationErrors += i18next.t('csv_validation_invalidClass', { className: data[25] });
+                        validationErrors += i18next.t('csv_validation_invalidClass', { className: data[26] });
                       }
                     } else {
                       validationErrors += i18next.t('csv_validation_classRequired');
                     }
 
-                    if (data[26] != '') {
+                    if (data[27] != '') {
                       var filteredDivision = schoolDetails.SchoolDivision.filter(function (division) {
-                        if (division.divisionName == data[26]) {
+                        if (division.divisionName == data[27]) {
                           return division;
                         }
                       });
                       var matchingDivision = filteredDivision && filteredDivision.length ? filteredDivision[0] : null;
                       if (!matchingDivision) {
-                        validationErrors += i18next.t('csv_validation_invalidDivision', { divisionName: data[26] });
+                        validationErrors += i18next.t('csv_validation_invalidDivision', { divisionName: data[27] });
                       }
                     } else {
                       validationErrors += i18next.t('csv_validation_divisionRequired');
                     }
 
-                    if (data[27] != '') {
+                    if (data[28] != '') {
                       var filteredCategory = categoryList.filter(function (category) {
-                        if (category.categoryName == data[27]) {
+                        if (category.categoryName == data[28]) {
                           return category;
                         }
                       });
                       var matchingCategory = filteredCategory && filteredCategory.length ? filteredCategory[0] : null;
                       if (!matchingCategory) {
-                        validationErrors += i18next.t('csv_validation_invalidCategory', { categoryName: data[27] });
+                        validationErrors += i18next.t('csv_validation_invalidCategory', { categoryName: data[28] });
                       }
                     } else {
                       validationErrors += i18next.t('csv_validation_categoryRequired');
                     }
 
-                    if (data[28] != '') {
+                    if (data[29] != '') {
                       var filteredYear = schoolDetails.SchoolYear.filter(function (studentYear) {
-                        if (studentYear.academicYear == data[28]) {
+                        if (studentYear.academicYear == data[29]) {
                           return studentYear;
                         }
                       });
                       var matchingYear = filteredYear && filteredYear.length ? filteredYear[0] : null;
                       if (!matchingYear) {
-                        validationErrors += i18next.t('csv_validation_invalidYear', { acadYear: data[28] });
+                        validationErrors += i18next.t('csv_validation_invalidYear', { acadYear: data[29] });
                       }
                     } else {
                       validationErrors += i18next.t('csv_validation_yearRequired');
                     }
 
-                    if (data[29] == '') {
+                    if (data[30] == '') {
                       validationErrors += i18next.t('csv_validation_studentCodeRequired');
                     }
-                    if (data[30] != '') {
+                    if (data[31] != '') {
                       if (!schoolDetails.zones || schoolDetails.zones.length == 0) {
-                        validationErrors += i18next.t('csv_validation_invalidZone', { zoneName: data[30] });
+                        validationErrors += i18next.t('csv_validation_invalidZone', { zoneName: data[31] });
                       } else {
                         var filteredZone = schoolDetails.zones.filter(function (zoneDetails) {
-                          if (zoneDetails.zoneCode == data[30]) {
+                          if (zoneDetails.zoneCode == data[31]) {
                             return zoneDetails;
                           }
                         });
                         var matchingZone = filteredZone && filteredZone.length ? filteredZone[0] : null;
                         if (!matchingZone) {
-                          validationErrors += i18next.t('csv_validation_invalidZone', { zoneName: data[30] });
+                          validationErrors += i18next.t('csv_validation_invalidZone', { zoneName: data[31] });
                         }
                       }
                     }
@@ -559,22 +647,22 @@ module.exports = function (app) {
                       studentGender: data[4].trim(),
                       fatherFirstName: data[15].trim(),
                       fatherLastName: data[16].trim(),
-                      fatherMobile: data[17].trim(),
+                      fatherMobile: fathersPhone,
                       motherFirstName: data[18].trim(),
                       motherLastName: data[19].trim(),
-                      motherMobile: data[20].trim(),
+                      motherMobile: mothersPhone,
                       guardianFirstName: data[22].trim(),
                       guardianLastName: data[23].trim(),
-                      guardianMobile: data[24].trim(),
+                      guardianMobile: gaurdianPhone,
                       studentDateOfBirth: dateOfBirth,
                       dateOfJoining: data[6] == currentDay ? null : data[6],
                       address: data[8],
                       title: studentTitle,
                       city: '',  // TODO:
-                      state: data[11],
-                      country: data[10],
-                      phone: data[9],
-                      email: '', // TODO:
+                      state: data[11].trim(),
+                      country: data[10].trim(),
+                      phone: studentPhone,
+                      email: emailId,
                       religion: data[12].trim(),
                       cast: data[13].trim(),
                       bloodGroup: data[14].trim(),
@@ -839,7 +927,8 @@ module.exports = function (app) {
           }
           else if (token) {
             // if (loggedInUser.failedPasswordAttemptCount > 0) {
-            app.models.user.updateAll({ id: token.userId }, { failedPasswordAttemptCount: 0, lastLogin: new Date() }, function (err, updatedUser) {
+            var lastLoginDate = dateHelper.getUTCManagedDateTime();
+            app.models.user.updateAll({ id: token.userId }, { failedPasswordAttemptCount: 0, lastLogin: lastLoginDate }, function (err, updatedUser) {
               if (err) {
                 res.status(err.statusCode);
                 res.json(err);

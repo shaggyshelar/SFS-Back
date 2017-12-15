@@ -3,6 +3,7 @@
     "supportEmailID": "support@sfs.com",
     "fileCleanerSchedulerTime": "10 * * * *",
     "invoiceSchedulerTime": "30 1 * * *",
+    "updateInvoiceSchedulerTime": "0 2 * * *",
     "registerStudentSchedulerTime": "30 1 * * *",
     "payPhiServerRoot": "https://qa.phicommerce.com/pg/portal",
     "payPhiPostInvoiceURL": "/pay/paymentInvoiceService",
@@ -13,5 +14,11 @@
     "sessionTimoutIntervalInSeconds" : 60,
     "payPhiAggregatorID" : "",
     "payPhiMerchantID" : "",
-    "payPhiHashKey" : ""
+    "payPhiHashKey" : "",
+    "invoiceGeneratorSP1" : "spGenrateAcademicInovice",
+    "invoiceGeneratorSP2" : "spGenrateTransportInovice",
+    "invoiceGeneratorSP3" : "spGenrateAdhocInovice",
+    "invoiceGeneratorSP4" : "spSelectInovice",
+    "hourDifferenceUTC": 5,
+    "minutesDifferenceUTC": 30
 }

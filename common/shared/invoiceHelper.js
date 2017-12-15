@@ -19,7 +19,7 @@ module.exports = function(app) {
   var Schools = app.models.School;
 
   var invoiceHelper =  {
-    generateTodaysInvoice: () => {
+    generateTodaysInvoice: (methodCallback) => {
       rootlogger.info('Starting invoice generation process');
       async.series([
         function(callback) {
@@ -51,6 +51,7 @@ module.exports = function(app) {
         },
       ],
       function(err, results) {
+        // methodCallback();
         rootlogger.info('Completed invoice generation process.');
       });
     },
@@ -131,12 +132,32 @@ module.exports = function(app) {
           case 'ACD':
             invoiceData[invoiceRow.chargeHeadName] = invoiceRow.chargeAmount;
             break;
+          case 'TRN':
+            invoiceData['ChargeHead12'] = invoiceRow.chargeAmount;
+            break;
           case 'ADH':
             invoiceData['AdditionalChargeHeadDetails'] = invoiceRow.feeHeadName + ': ' + invoiceRow.chargeAmount;
             break;
         }
       });
       return invoiceData;
+    },
+    updateInvoices: () => {
+      rootlogger.info('Starting update invoice process');
+      async.series([
+        function(callback) {
+          app.models.Invoice.find({
+            where: {
+              'updateField': '',
+            },
+          }, function(err, lists) {
+            callback(null, lists);
+          });
+        },
+      ],
+      function(err, results) {
+        rootlogger.info('Completed invoice generation process.');
+      });
     },
     registerInvoices: () => {
       rootlogger.info('Starting invoice registration process');
@@ -265,6 +286,29 @@ module.exports = function(app) {
         rootlogger.info('Completed invoice generation process.');
       });
     },
+    updateInvoice: (invoice) => {
+      var apiHelper = apiHelperObject(app);
+      var invoiceParams = [];
+      invoiceParams.push(['merchantId', config.payPhiMerchantID]);
+      invoiceParams.push(['aggregatorId', config.payPhiAggregatorID]);
+      invoiceParams.push(['userID', invoice.userId]);
+      invoiceParams.push(['invoiceNo', invoice.invoiceNo]);
+      invoiceParams.push(['invoiceStatus', invoice.status]);
+      if (invoice.desc) {
+        invoiceParams.push(['desc', invoice.desc]);
+      }
+      if (invoice.dueDate) {
+        invoiceParams.push(['dueDate', invoice.dueDate]);
+      }
+      if (invoice.additionalFee) {
+        invoiceParams.push(['additionalFee', invoice.additionalFee]);
+      }
+
+      var concatenatedParams = apiHelper.getConcatenatedParams(invoiceParams);
+      var hashedKey = apiHelper.getHashedKey(concatenatedParams);
+      var userForm = apiHelper.getForm(invoiceParams, hashedKey);
+      apiHelper.paymentInvoiceUpdate(userForm);
+    },
     convertGender: (gender) => {
       switch (gender) {
         case 'Male':
@@ -275,10 +319,19 @@ module.exports = function(app) {
       return 'N';
     },
     convertDOB: (dob) => {
+      if (!dob) {
+        return '2000/01/01';
+      }
       return dob.getDate() + '/' + dob.getMonth() + '/' + dob.getFullYear();
     },
     convertParentName: (name) => {
       return name != '' ? name : 'NA';
+    },
+    getStudentMobileNumber: (student) => {
+      if (student.fatherMobile) return student.fatherMobile;
+      if (student.motherMobile) return student.motherMobile;
+      if (student.guardianMobile) return student.guardianMobile;
+      return student.phone;
     },
     registerStudent: (studentDetails, callback) => {
       var apiHelper = apiHelperObject(app);
@@ -294,7 +347,7 @@ module.exports = function(app) {
       userParams.push(['dob', invoiceHelper.convertDOB(studentDetails.studentDateOfBirth)]);
       userParams.push(['fatherName', invoiceHelper.convertParentName(studentDetails.fatherFirstName)]);
       userParams.push(['motherName', invoiceHelper.convertParentName(studentDetails.motherFirstName)]);
-      userParams.push(['mobileNo', studentDetails.phone]);
+      userParams.push(['mobileNo', invoiceHelper.getStudentMobileNumber(studentDetails)]);
       userParams.push(['emailID', studentDetails.email]);
       if (studentDetails.address) {
         userParams.push(['addrLine1', studentDetails.address]);
