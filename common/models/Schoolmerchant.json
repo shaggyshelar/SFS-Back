@@ -71,21 +71,6 @@
         "nullable": "N"
       }
     },
-    "securityKey": {
-      "type": "String",
-      "required": true,
-      "length": 64,
-      "precision": null,
-      "scale": null,
-      "mysql": {
-        "columnName": "securityKey",
-        "dataType": "varchar",
-        "dataLength": 64,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "N"
-      }
-    },
     "isDefault": {
       "type": "boolean",
       "required": false,
