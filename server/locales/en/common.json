@@ -24,6 +24,7 @@
     "csv_validation_studentMiddleNameRequired": "Required value for 'Middle Name'. ",
     "csv_validation_studentLastNameRequired": "Required value for 'Last Name'. ",
     "csv_validation_studentGenderRequired": "Required value for 'Gender'. ",
+    "csv_validation_studentPhoneRequired": "Required at least one mobile number. ",
     "csv_validation_invalidDateOfBirth": "Invalid birth date '{{birthDate}}'. Format for birth date is 'YYYY/MM/DD'. ",
     "api_validation_adviceParameterRequired": "Parameter required {{parameterType}}. ",
     "api_validation_adviceInvalidDate": "Invalid date format passed for 'paymentDateTime'. It should be 'YYYYMMDDHHMMSS'. ",
