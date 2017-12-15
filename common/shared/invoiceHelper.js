@@ -316,6 +316,9 @@ module.exports = function(app) {
       return 'N';
     },
     convertDOB: (dob) => {
+      if (!dob) {
+        return '2000/01/01';
+      }
       return dob.getDate() + '/' + dob.getMonth() + '/' + dob.getFullYear();
     },
     convertParentName: (name) => {
