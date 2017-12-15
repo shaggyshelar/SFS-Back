@@ -76,9 +76,10 @@ module.exports = function (app) {
 
   app.get('/generateTodaysInvoice', function (req, res) {
     var invHelper = invoiceHelper(app);
-    invHelper.generateTodaysInvoice();
-    res.status(200);
-    res.json({'Message': 'Invoice generation in progress...'});
+    invHelper.generateTodaysInvoice(function(error) {
+      res.status(200);
+      res.json({'Message': 'Invoice generation completed.'});
+    });
   });
 
   app.post('/api/paymentAdvice', function (req, res) {
