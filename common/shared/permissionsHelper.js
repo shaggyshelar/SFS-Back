@@ -304,6 +304,14 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
                 propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
             });
         }
+        else if (selectedModel.toLowerCase() == "vwinvoicereport") {
+            var propertyArr = [
+                { property: "__get__invoiceReports", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
         propertyAccess.push({ model: selectedModel, property: "find", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
         propertyAccess.push({ model: selectedModel, property: "findById", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
         propertyAccess.push({ model: selectedModel, property: "count", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
