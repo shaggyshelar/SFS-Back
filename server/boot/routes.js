@@ -74,6 +74,13 @@ module.exports = function (app) {
     res.json({'Message': 'Invoice registration in progress...'});
   });
 
+  app.get('/updateInvoices', function (req, res) {
+    var invHelper = invoiceHelper(app);
+    invHelper.updateInvoices();
+    res.status(200);
+    res.json({'Message': 'Invoice updation in progress...'});
+  });
+
   app.get('/generateTodaysInvoice', function (req, res) {
     var invHelper = invoiceHelper(app);
     invHelper.generateTodaysInvoice(function(error) {
