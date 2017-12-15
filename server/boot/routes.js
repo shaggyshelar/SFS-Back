@@ -639,7 +639,7 @@ module.exports = function (app) {
                       state: data[11],
                       country: data[10],
                       phone: studentPhone,
-                      email: '', // TODO:
+                      email: emailId,
                       religion: data[12].trim(),
                       cast: data[13].trim(),
                       bloodGroup: data[14].trim(),
