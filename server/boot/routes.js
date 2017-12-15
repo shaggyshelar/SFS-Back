@@ -487,6 +487,15 @@ module.exports = function (app) {
                       validationErrors += i18next.t('csv_validation_studentGenderRequired');
                     }
 
+                    var studentPhone = data[9].trim();
+                    var fathersPhone = data[17].trim();
+                    var mothersPhone = data[20].trim();
+                    var gaurdianPhone = data[24].trim();
+
+                    if (!studentPhone && !fathersPhone && !mothersPhone && !gaurdianPhone) {
+                      validationErrors += i18next.t('csv_validation_studentPhoneRequired');
+                    }
+
                     var emailId = data[25].trim();
                     if (emailId == '') {
                       validationErrors += i18next.t('csv_validation_studentEmailRequired');
@@ -615,13 +624,13 @@ module.exports = function (app) {
                       studentGender: data[4].trim(),
                       fatherFirstName: data[15].trim(),
                       fatherLastName: data[16].trim(),
-                      fatherMobile: data[17].trim(),
+                      fatherMobile: fathersPhone,
                       motherFirstName: data[18].trim(),
                       motherLastName: data[19].trim(),
-                      motherMobile: data[20].trim(),
+                      motherMobile: mothersPhone,
                       guardianFirstName: data[22].trim(),
                       guardianLastName: data[23].trim(),
-                      guardianMobile: data[24].trim(),
+                      guardianMobile: gaurdianPhone,
                       studentDateOfBirth: dateOfBirth,
                       dateOfJoining: data[6] == currentDay ? null : data[6],
                       address: data[8],
@@ -629,7 +638,7 @@ module.exports = function (app) {
                       city: '',  // TODO:
                       state: data[11],
                       country: data[10],
-                      phone: data[9],
+                      phone: studentPhone,
                       email: '', // TODO:
                       religion: data[12].trim(),
                       cast: data[13].trim(),

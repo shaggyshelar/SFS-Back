@@ -51,7 +51,7 @@ module.exports = function(app) {
         },
       ],
       function(err, results) {
-        methodCallback();
+        // methodCallback();
         rootlogger.info('Completed invoice generation process.');
       });
     },
@@ -316,10 +316,19 @@ module.exports = function(app) {
       return 'N';
     },
     convertDOB: (dob) => {
+      if (!dob) {
+        return '2000/01/01';
+      }
       return dob.getDate() + '/' + dob.getMonth() + '/' + dob.getFullYear();
     },
     convertParentName: (name) => {
       return name != '' ? name : 'NA';
+    },
+    getStudentMobileNumber: (student) => {
+      if (student.fatherMobile) return student.fatherMobile;
+      if (student.motherMobile) return student.motherMobile;
+      if (student.guardianMobile) return student.guardianMobile;
+      return student.phone;
     },
     registerStudent: (studentDetails, callback) => {
       var apiHelper = apiHelperObject(app);
@@ -335,7 +344,7 @@ module.exports = function(app) {
       userParams.push(['dob', invoiceHelper.convertDOB(studentDetails.studentDateOfBirth)]);
       userParams.push(['fatherName', invoiceHelper.convertParentName(studentDetails.fatherFirstName)]);
       userParams.push(['motherName', invoiceHelper.convertParentName(studentDetails.motherFirstName)]);
-      userParams.push(['mobileNo', studentDetails.phone]);
+      userParams.push(['mobileNo', invoiceHelper.getStudentMobileNumber(studentDetails)]);
       userParams.push(['emailID', studentDetails.email]);
       if (studentDetails.address) {
         userParams.push(['addrLine1', studentDetails.address]);
