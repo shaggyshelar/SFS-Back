@@ -34,7 +34,8 @@
     "socket.io": "^2.0.4",
     "socketio-auth": "^0.1.0",
     "strong-error-handler": "^2.0.0",
-    "underscore": "^1.8.3"
+    "underscore": "^1.8.3",
+    "validator": "^9.2.0"
   },
   "devDependencies": {
     "eslint": "^3.17.1",
