@@ -132,6 +132,9 @@ module.exports = function(app) {
           case 'ACD':
             invoiceData[invoiceRow.chargeHeadName] = invoiceRow.chargeAmount;
             break;
+          case 'TRN':
+            invoiceData['ChargeHead12'] = invoiceRow.chargeAmount;
+            break;
           case 'ADH':
             invoiceData['AdditionalChargeHeadDetails'] = invoiceRow.feeHeadName + ': ' + invoiceRow.chargeAmount;
             break;
