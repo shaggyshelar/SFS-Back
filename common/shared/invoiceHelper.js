@@ -51,7 +51,7 @@ module.exports = function(app) {
         },
       ],
       function(err, results) {
-        methodCallback();
+        // methodCallback();
         rootlogger.info('Completed invoice generation process.');
       });
     },
