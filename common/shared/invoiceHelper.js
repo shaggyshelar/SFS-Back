@@ -8,6 +8,7 @@ var async = require('async');
 var _ = require('underscore');
 var apiHelperObject = require('./apiHelper');
 var csvHelper = require('./csvHelper');
+var moment = require('moment');
 var configFilePath = process.env.NODE_ENV == undefined ?
 '' : '.' + process.env.NODE_ENV;
 var config = require('../../server/config' + configFilePath + '.json');
@@ -65,7 +66,7 @@ module.exports = function(app) {
       invoiceParams.push(['desc', invoiceDetails.desc]);
       invoiceParams.push(['chargeAmount', invoiceDetails.totalChargeAmount]);
       invoiceParams.push(['currencyCode', '356']); // TO CHECK
-      invoiceParams.push(['dueDate', invoiceDetails.dueDate]);
+      invoiceParams.push(['dueDate', moment(invoiceDetails.dueDate).format('DD/MM/YYYY')]);
       if (invoiceDetails.ChargeHead1) {
         invoiceParams.push(['chargeHead1', invoiceDetails.ChargeHead1]);
       }
@@ -182,7 +183,7 @@ module.exports = function(app) {
                   invoiceDetail['ErrorMessage'] = error.respDescription;
                   failedInvoices.push(invoiceDetail);
                 } else {
-                  invoiceDetail['ErrorMessage'] = 'Invoice created successfully';
+                  invoiceDetail['ErrorMessage'] = 'Invoice updated successfully';
                   registeredInvoices.push(invoiceDetail);
                 }
                 next();
@@ -221,8 +222,8 @@ module.exports = function(app) {
               var schoolAdminEmails = '';
               var superAdminEmails = '';
 
-              var fileName = schoolName + ' Invoice Registration Report.csv';
-              csvHelper.generateInvoiceRegistrationCSV(fileName, registeredInvoices, failedInvoices);
+              var fileName = schoolName + ' Invoice Update Report.csv';
+              csvHelper.generateInvoiceUpdateCSV(fileName, registeredInvoices, failedInvoices);
 
               _.each(results[1], function(schoolAdminEmail) {
                 if (schoolAdminEmails == '') {
@@ -238,12 +239,12 @@ module.exports = function(app) {
                   superAdminEmails += (', ' + superAdminEmail.email);
                 }
               });
-              var html = i18next.t('csv_registerInvoiceEmailReportHTMLContent', {savedInvoices: registeredInvoices.length, failedInvoices: failedInvoices.length, schoolName: schoolName});
+              var html = i18next.t('csv_updateInvoiceEmailReportHTMLContent', {savedInvoices: registeredInvoices.length, failedInvoices: failedInvoices.length, schoolName: schoolName});
               app.models.Email.send({
                 to: schoolAdminEmails,
                 cc: superAdminEmails,
                 from: config.supportEmailID,
-                subject: i18next.t('csv_invoiceRegistrationEmailSubject', {schoolName: schoolName}),
+                subject: i18next.t('csv_invoiceUpdationEmailSubject', {schoolName: schoolName}),
                 html: html,
                 attachments: [
                   {
@@ -394,7 +395,7 @@ module.exports = function(app) {
       invoiceParams.push(['merchantId', config.payPhiMerchantID]);
       invoiceParams.push(['aggregatorId', config.payPhiAggregatorID]);
       invoiceParams.push(['userID', invoice.userId]);
-      invoiceParams.push(['invoiceNo', invoice.invoiceNo]);
+      invoiceParams.push(['invoiceNo', invoice.invoiceNumber]);
       if (invoice.status == 'Paid') {
         invoiceParams.push(['invoiceStatus', 'P']);
       } else if (invoice.status == 'Closed') {
@@ -409,14 +410,14 @@ module.exports = function(app) {
         }
       } else if (invoice.updateField == 'D') {
         if (invoice.dueDate) {
-          invoiceParams.push(['dueDate', invoice.dueDate]);
+          invoiceParams.push(['dueDate', moment(invoice.dueDate).format('DD/MM/YYYY')]);
         }
       }
 
       var concatenatedParams = apiHelper.getConcatenatedParams(invoiceParams);
       var hashedKey = apiHelper.getHashedKey(concatenatedParams);
       var userForm = apiHelper.getForm(invoiceParams, hashedKey);
-      // apiHelper.paymentInvoiceUpdate(userForm);
+      apiHelper.paymentInvoiceUpdate(userForm, callback);
     },
     convertGender: (gender) => {
       switch (gender) {

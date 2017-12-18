@@ -54,16 +54,39 @@ module.exports = function(app) {
           }
         });
     },
-    paymentInvoiceUpdate: (updateInvoiceForm) => {
+    paymentInvoiceUpdate: (updateInvoiceForm, callback) => {
       request.post({
         url: config.payPhiServerRoot + config.payPhiUpdateInvoiceURL,
         form: updateInvoiceForm,
       },
         function(error, response, body) {
           if (!error) {
-
+            var responseData = JSON.parse(body);
+            if (responseData.responseCode == '0000') {
+              var updateInvoiceModelQuery = {
+                isProcessed: 1,
+                updatedBy: 1,
+                updateField: '',
+                updatedOn: dateHelper.getUTCManagedDateTime(),
+              };
+              InvoiceModel.updateAll({'invoiceNumber': updateInvoiceForm.invoiceNo}, updateInvoiceModelQuery,
+              function(err, updatedUser) {
+                if (err) {
+                  rootlogger.error(responseData);
+                  callback(responseData);
+                }
+                rootlogger.info('Invoice updating successfully', responseData);
+                callback();
+              });
+            } else {
+              rootlogger.error(responseData);
+              callback(responseData);
+            }
           } else {
-            rootlogger.error('Error while registering invoice into PayPhi system.');
+            rootlogger.error('Error while updating invoice into PayPhi system.');
+            callback({
+              'respDescription': 'Error while updating invoice into PayPhi system.',
+            });
           }
         });
     },
