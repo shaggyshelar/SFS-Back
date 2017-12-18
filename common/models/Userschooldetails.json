@@ -26,7 +26,8 @@
   },
   "mixins": {
     "TimestampMixin": true,
-    "DuplicateErrorHandler": true
+    "DuplicateErrorHandler": true,
+    "SearchFilterMixin":true
   },
   "properties": {
     "id": {
