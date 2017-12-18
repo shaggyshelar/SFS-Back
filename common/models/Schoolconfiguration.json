@@ -17,7 +17,8 @@
   "mixins": {
     "TimestampMixin": true,
     "DeleteOverrideMixin": true,
-    "DuplicateErrorHandler": true
+    "DuplicateErrorHandler": true,
+    "SearchFilterMixin":true
   },
   "properties": {
     "id": {
