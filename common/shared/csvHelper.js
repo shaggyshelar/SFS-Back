@@ -46,7 +46,7 @@ csvHelper.getInvoiceUpdateCSVHeader = function(student) {
 csvHelper.getUpdateInvoiceFormat = function(invoice) {
   return {
     'Updated': 'Yes',
-    'InvoiceNumber': invoice.invoiceNo,
+    'InvoiceNumber': invoice.invoiceNumber,
     'UserID': invoice.userId,
     'ChargeAmount': invoice.totalChargeAmount,
     'DueDate': invoice.dueDate,
@@ -57,7 +57,7 @@ csvHelper.getUpdateInvoiceFormat = function(invoice) {
 csvHelper.getFailedToUpdateInvoiceFormat = function(invoice) {
   return {
     'Updated': 'No',
-    'InvoiceNumber': invoice.invoiceNo,
+    'InvoiceNumber': invoice.invoiceNumber,
     'UserID': invoice.userId,
     'ChargeAmount': invoice.totalChargeAmount,
     'DueDate': invoice.dueDate,
