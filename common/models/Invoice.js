@@ -13,15 +13,17 @@ module.exports = function(Invoice) {
     }
 
     var isUpdateRequired = false;
+    if (ctx.data.dueDate) {
+      if (currentInstance.dueDate != ctx.data.dueDate) {
+        ctx.data['updateField'] = 'D';
+      }
+    }
+
     if (ctx.data.status) {
       if (currentInstance.status != ctx.data.status) {
         if (ctx.data.status == 'Paid' || ctx.data.status == 'Closed') {
           ctx.data['updateField'] = 'S';
         }
-      }
-    } else if (ctx.data.dueDate) {
-      if (currentInstance.dueDate != ctx.data.dueDate) {
-        ctx.data['updateField'] = 'D';
       }
     }
     next();
