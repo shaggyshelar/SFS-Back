@@ -7,6 +7,11 @@
       "table": "invoicedetails"
     },
     "relations": {
+      "InvoicedetailInvoice": {
+        "model": "Invoice",
+        "type": "belongsTo",
+        "foreignKey": "invoiceid"
+      },
       "InvoicedetailFeeplan": {
         "model": "Feeplan",
         "type": "belongsTo",
@@ -53,7 +58,7 @@
     },
     "invoiceId": {
       "type": "Number",
-      "required": false,
+      "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
@@ -63,7 +68,7 @@
         "dataLength": null,
         "dataPrecision": 19,
         "dataScale": 0,
-        "nullable": "Y"
+        "nullable": "N"
       }
     },
     "feePlanId": {
