@@ -32,6 +32,39 @@ csvHelper.getInvoiceCSVHeader = function(student) {
   };
 };
 
+csvHelper.getInvoiceUpdateCSVHeader = function(student) {
+  return {
+    'Updated': 'Is Updated',
+    'InvoiceNumber': 'Invoice Number',
+    'UserID': 'User ID',
+    'ChargeAmount': 'Charge Amount',
+    'DueDate': 'Due Date',
+    'Response Description': 'Response Description',
+  };
+};
+
+csvHelper.getUpdateInvoiceFormat = function(invoice) {
+  return {
+    'Updated': 'Yes',
+    'InvoiceNumber': invoice.invoiceNo,
+    'UserID': invoice.userId,
+    'ChargeAmount': invoice.totalChargeAmount,
+    'DueDate': invoice.dueDate,
+    'Response Description': invoice.ErrorMessage,
+  };
+};
+
+csvHelper.getFailedToUpdateInvoiceFormat = function(invoice) {
+  return {
+    'Updated': 'No',
+    'InvoiceNumber': invoice.invoiceNo,
+    'UserID': invoice.userId,
+    'ChargeAmount': invoice.totalChargeAmount,
+    'DueDate': invoice.dueDate,
+    'Response Description': invoice.ErrorMessage,
+  };
+};
+
 csvHelper.getRegisteredInvoiceFormat = function(invoice) {
   return {
     'Registered': 'Yes',
@@ -114,6 +147,25 @@ csvHelper.generateInvoiceRegistrationCSV = function(filepath, registeredInvoices
 
   _.each(failedInvoices, function(invoiceDetails) {
     fastCsv.write(csvHelper.getFailedInvoiceFormat(invoiceDetails));
+  });
+  fastCsv.end();
+};
+
+csvHelper.generateInvoiceUpdateCSV = function(filepath, registeredInvoices, failedInvoices) {
+  var fastCsv = csv.createWriteStream();
+  var writeStream = fs.createWriteStream(filepath);
+  writeStream.on('finish', function() {
+    console.log('DONE!');
+  });
+  fastCsv.pipe(writeStream);
+  fastCsv.write(csvHelper.getInvoiceUpdateCSVHeader());
+
+  _.each(registeredInvoices, function(invoiceDetails) {
+    fastCsv.write(csvHelper.getUpdateInvoiceFormat(invoiceDetails));
+  });
+
+  _.each(failedInvoices, function(invoiceDetails) {
+    fastCsv.write(csvHelper.getFailedToUpdateInvoiceFormat(invoiceDetails));
   });
   fastCsv.end();
 };

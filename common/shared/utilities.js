@@ -121,10 +121,9 @@ utilities.init = function(app) {
   // Execute a cron job at 1.30 am every day
   var invoiceScheduler = schedule.scheduleJob(config.invoiceSchedulerTime, function() {
     var invHelper = invoiceHelper(app);
-    invHelper.generateTodaysInvoice();
-    // invHelper.generateTodaysInvoice(function(error) {
-    //   invHelper.registerInvoices();
-    // });
+    invHelper.generateTodaysInvoice(function(error) {
+      invHelper.registerInvoices();
+    });
   });
 
   var updateInvoiceScheduler = schedule.scheduleJob(config.updateInvoiceSchedulerTime, function() {
