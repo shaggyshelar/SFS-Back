@@ -6,12 +6,12 @@ module.exports = function(Invoice) {
       return;
     }
 
+    var currentInstance = ctx.currentInstance;
     if (currentInstance.status != 'Processed') {
       next();
       return;
     }
 
-    var currentInstance = ctx.currentInstance;
     var isUpdateRequired = false;
     if (ctx.data.status) {
       if (currentInstance.status != ctx.data.status) {
