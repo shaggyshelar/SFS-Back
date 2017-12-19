@@ -404,7 +404,6 @@ module.exports = function(app) {
         invoiceParams.push(['invoiceStatus', 'O']);
       }
       if (invoice.updateField == 'S') {
-        invoiceParams.push(['invoiceStatus', invoice.status]);
         if (invoice.desc) {
           invoiceParams.push(['desc', invoice.desc]);
         }
