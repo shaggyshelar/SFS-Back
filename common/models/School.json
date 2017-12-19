@@ -83,6 +83,11 @@
             "studentData"
           ]
         }
+      },
+      "invoiceReports": {
+        "type": "hasMany",
+        "model": "Vwinvoicereport",
+        "foreignKey": "schoolId"
       }
     }
   },
@@ -94,7 +99,8 @@
   "mixins": {
     "TimestampMixin": true,
     "DeleteOverrideMixin": true,
-    "DuplicateErrorHandler": true
+    "DuplicateErrorHandler": true,
+    "SearchFilterMixin":true
   },
   "properties": {
     "id": {
