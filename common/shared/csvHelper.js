@@ -113,11 +113,12 @@ csvHelper.getFailedStudentCSVFormat = function(student) {
   };
 };
 
-csvHelper.generateStudentRegistrationCSV = function(filepath, registeredStudents, failedStudents) {
+csvHelper.generateStudentRegistrationCSV = function(filepath, registeredStudents, failedStudents, callback) {
   var fastCsv = csv.createWriteStream();
   var writeStream = fs.createWriteStream(filepath);
   writeStream.on('finish', function() {
-    console.log('DONE!');
+    console.log('Completed generating student registration CSV report generation.');
+    callback();
   });
   fastCsv.pipe(writeStream);
   fastCsv.write(csvHelper.getCSVHeader());
@@ -132,11 +133,12 @@ csvHelper.generateStudentRegistrationCSV = function(filepath, registeredStudents
   fastCsv.end();
 };
 
-csvHelper.generateInvoiceRegistrationCSV = function(filepath, registeredInvoices, failedInvoices) {
+csvHelper.generateInvoiceRegistrationCSV = function(filepath, registeredInvoices, failedInvoices, callback) {
   var fastCsv = csv.createWriteStream();
   var writeStream = fs.createWriteStream(filepath);
   writeStream.on('finish', function() {
-    console.log('DONE!');
+    console.log('Completed invoice CSV report generation.');
+    callback();
   });
   fastCsv.pipe(writeStream);
   fastCsv.write(csvHelper.getInvoiceCSVHeader());
@@ -151,11 +153,12 @@ csvHelper.generateInvoiceRegistrationCSV = function(filepath, registeredInvoices
   fastCsv.end();
 };
 
-csvHelper.generateInvoiceUpdateCSV = function(filepath, registeredInvoices, failedInvoices) {
+csvHelper.generateInvoiceUpdateCSV = function(filepath, registeredInvoices, failedInvoices, callback) {
   var fastCsv = csv.createWriteStream();
   var writeStream = fs.createWriteStream(filepath);
   writeStream.on('finish', function() {
-    console.log('DONE!');
+    console.log('Completed invoice update CSV report generation.');
+    callback();
   });
   fastCsv.pipe(writeStream);
   fastCsv.write(csvHelper.getInvoiceUpdateCSVHeader());
