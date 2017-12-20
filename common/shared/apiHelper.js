@@ -60,15 +60,16 @@ module.exports = function(app) {
         form: updateInvoiceForm,
       },
         function(error, response, body) {
+          var updateInvoiceModelQuery = {
+            isProcessed: 1,
+            updatedBy: 1,
+            updateField: '',
+            updatedOn: dateHelper.getUTCManagedDateTime(),
+          };
           if (!error) {
             var responseData = JSON.parse(body);
             if (responseData.responseCode == '0000') {
-              var updateInvoiceModelQuery = {
-                isProcessed: 1,
-                updatedBy: 1,
-                updateField: '',
-                updatedOn: dateHelper.getUTCManagedDateTime(),
-              };
+              updateInvoiceModelQuery.updateField = 'P';
               InvoiceModel.updateAll({'invoiceNumber': updateInvoiceForm.invoiceNo}, updateInvoiceModelQuery,
               function(err, updatedUser) {
                 if (err) {
@@ -80,9 +81,29 @@ module.exports = function(app) {
               });
             } else {
               rootlogger.error(responseData);
+              updateInvoiceModelQuery.updateField = 'E';
+              InvoiceModel.updateAll({'invoiceNumber': updateInvoiceForm.invoiceNo}, updateInvoiceModelQuery,
+              function(err, updatedUser) {
+                if (err) {
+                  rootlogger.error(responseData);
+                  callback(responseData);
+                }
+                rootlogger.info('Invoice updating successfully', responseData);
+                callback();
+              });
               callback(responseData);
             }
           } else {
+            updateInvoiceModelQuery.updateField = 'E';
+            InvoiceModel.updateAll({'invoiceNumber': updateInvoiceForm.invoiceNo}, updateInvoiceModelQuery,
+            function(err, updatedUser) {
+              if (err) {
+                rootlogger.error(responseData);
+                callback(responseData);
+              }
+              rootlogger.info('Invoice updating successfully', responseData);
+              callback();
+            });
             rootlogger.error('Error while updating invoice into PayPhi system.');
             callback({
               'respDescription': 'Error while updating invoice into PayPhi system.',
