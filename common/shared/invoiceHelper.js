@@ -157,7 +157,6 @@ module.exports = function(app) {
         },
       ],
       function(err, results) {
-        rootlogger.info('Completed invoice generation process.');
         var invoices = results[0];
         var invoiceListBySchool = [];
         _.each(invoices, function(invoiceDetails) {
@@ -222,40 +221,43 @@ module.exports = function(app) {
               var schoolAdminEmails = '';
               var superAdminEmails = '';
 
+              rootlogger.info('Completed invoice updation process for school:' + schoolName);
               var fileName = schoolName + ' Invoice Update Report.csv';
-              csvHelper.generateInvoiceUpdateCSV(fileName, registeredInvoices, failedInvoices);
+              csvHelper.generateInvoiceUpdateCSV(fileName, registeredInvoices, failedInvoices, function() {
+                _.each(results[1], function(schoolAdminEmail) {
+                  if (schoolAdminEmails == '') {
+                    schoolAdminEmails += schoolAdminEmail.email;
+                  } else {
+                    schoolAdminEmails += (', ' + schoolAdminEmail.email);
+                  }
+                });
+                _.each(results[2], function(superAdminEmail) {
+                  if (superAdminEmails == '') {
+                    superAdminEmails += superAdminEmail.email;
+                  } else {
+                    superAdminEmails += (', ' + superAdminEmail.email);
+                  }
+                });
 
-              _.each(results[1], function(schoolAdminEmail) {
-                if (schoolAdminEmails == '') {
-                  schoolAdminEmails += schoolAdminEmail.email;
-                } else {
-                  schoolAdminEmails += (', ' + schoolAdminEmail.email);
-                }
-              });
-              _.each(results[2], function(superAdminEmail) {
-                if (superAdminEmails == '') {
-                  superAdminEmails += superAdminEmail.email;
-                } else {
-                  superAdminEmails += (', ' + superAdminEmail.email);
-                }
-              });
-              var html = i18next.t('csv_updateInvoiceEmailReportHTMLContent', {savedInvoices: registeredInvoices.length, failedInvoices: failedInvoices.length, schoolName: schoolName});
-              app.models.Email.send({
-                to: schoolAdminEmails,
-                cc: superAdminEmails,
-                from: config.supportEmailID,
-                subject: i18next.t('csv_invoiceUpdationEmailSubject', {schoolName: schoolName}),
-                html: html,
-                attachments: [
-                  {
-                    filename: fileName,
-                    content: fs.createReadStream(fileName),
-                  }],
-              }, function(err) {
-                if (err) {
-                  rootlogger.info('Error sending upload report to email=\'' + schoolAdminEmails + '\',\n Error=' + err);
-                }
-                console.log('> upload report mail sent successfully');
+                rootlogger.info('Sending email for invoice of school: ' + schoolName);
+                var html = i18next.t('csv_updateInvoiceEmailReportHTMLContent', {savedInvoices: registeredInvoices.length, failedInvoices: failedInvoices.length, schoolName: schoolName});
+                app.models.Email.send({
+                  to: schoolAdminEmails,
+                  cc: superAdminEmails,
+                  from: config.supportEmailID,
+                  subject: i18next.t('csv_invoiceUpdationEmailSubject', {schoolName: schoolName}),
+                  html: html,
+                  attachments: [
+                    {
+                      filename: fileName,
+                      content: fs.createReadStream(fileName),
+                    }],
+                }, function(err) {
+                  if (err) {
+                    rootlogger.info('Error sending email for invoice for school: ' + schoolName);
+                  }
+                  rootlogger.info('Sent email for invoice of school: ' + schoolName);
+                });
               });
             });
           });
@@ -347,41 +349,43 @@ module.exports = function(app) {
               var schoolName = results[0].length > 0 ? results[0][0].schoolName : '';
               var schoolAdminEmails = '';
               var superAdminEmails = '';
+              rootlogger.info('Completed invoice registration process for school:' + schoolName);
 
               var fileName = schoolName + ' Invoice Registration Report.csv';
-              csvHelper.generateInvoiceRegistrationCSV(fileName, registeredInvoices, failedInvoices);
-
-              _.each(results[1], function(schoolAdminEmail) {
-                if (schoolAdminEmails == '') {
-                  schoolAdminEmails += schoolAdminEmail.email;
-                } else {
-                  schoolAdminEmails += (', ' + schoolAdminEmail.email);
-                }
-              });
-              _.each(results[2], function(superAdminEmail) {
-                if (superAdminEmails == '') {
-                  superAdminEmails += superAdminEmail.email;
-                } else {
-                  superAdminEmails += (', ' + superAdminEmail.email);
-                }
-              });
-              var html = i18next.t('csv_registerInvoiceEmailReportHTMLContent', {savedInvoices: registeredInvoices.length, failedInvoices: failedInvoices.length, schoolName: schoolName});
-              app.models.Email.send({
-                to: schoolAdminEmails,
-                cc: superAdminEmails,
-                from: config.supportEmailID,
-                subject: i18next.t('csv_invoiceRegistrationEmailSubject', {schoolName: schoolName}),
-                html: html,
-                attachments: [
-                  {
-                    filename: fileName,
-                    content: fs.createReadStream(fileName),
-                  }],
-              }, function(err) {
-                if (err) {
-                  rootlogger.info('Error sending upload report to email=\'' + schoolAdminEmails + '\',\n Error=' + err);
-                }
-                console.log('> upload report mail sent successfully');
+              csvHelper.generateInvoiceRegistrationCSV(fileName, registeredInvoices, failedInvoices, function() {
+                _.each(results[1], function(schoolAdminEmail) {
+                  if (schoolAdminEmails == '') {
+                    schoolAdminEmails += schoolAdminEmail.email;
+                  } else {
+                    schoolAdminEmails += (', ' + schoolAdminEmail.email);
+                  }
+                });
+                _.each(results[2], function(superAdminEmail) {
+                  if (superAdminEmails == '') {
+                    superAdminEmails += superAdminEmail.email;
+                  } else {
+                    superAdminEmails += (', ' + superAdminEmail.email);
+                  }
+                });
+                rootlogger.info('Sending email for invoice of school: ' + schoolName);
+                var html = i18next.t('csv_registerInvoiceEmailReportHTMLContent', {savedInvoices: registeredInvoices.length, failedInvoices: failedInvoices.length, schoolName: schoolName});
+                app.models.Email.send({
+                  to: schoolAdminEmails,
+                  cc: superAdminEmails,
+                  from: config.supportEmailID,
+                  subject: i18next.t('csv_invoiceRegistrationEmailSubject', {schoolName: schoolName}),
+                  html: html,
+                  attachments: [
+                    {
+                      filename: fileName,
+                      content: fs.createReadStream(fileName),
+                    }],
+                }, function(err) {
+                  if (err) {
+                    rootlogger.info('Error sending email for invoice for school: ' + schoolName);
+                  }
+                  rootlogger.info('Sent email for invoice of school: ' + schoolName);
+                });
               });
             });
           });
@@ -549,40 +553,43 @@ module.exports = function(app) {
               var schoolAdminEmails = '';
               var superAdminEmails = '';
 
+              rootlogger.info('Completed student registration process for school:' + schoolName);
               var fileName = schoolName + 'Registration Report.csv';
-              csvHelper.generateStudentRegistrationCSV(fileName, registeredStudents, failedStudents);
+              csvHelper.generateStudentRegistrationCSV(fileName, registeredStudents, failedStudents, function() {
+                _.each(results[1], function(schoolAdminEmail) {
+                  if (schoolAdminEmails == '') {
+                    schoolAdminEmails += schoolAdminEmail.email;
+                  } else {
+                    schoolAdminEmails += (', ' + schoolAdminEmail.email);
+                  }
+                });
+                _.each(results[2], function(superAdminEmail) {
+                  if (superAdminEmails == '') {
+                    superAdminEmails += superAdminEmail.email;
+                  } else {
+                    superAdminEmails += (', ' + superAdminEmail.email);
+                  }
+                });
 
-              _.each(results[1], function(schoolAdminEmail) {
-                if (schoolAdminEmails == '') {
-                  schoolAdminEmails += schoolAdminEmail.email;
-                } else {
-                  schoolAdminEmails += (', ' + schoolAdminEmail.email);
-                }
-              });
-              _.each(results[2], function(superAdminEmail) {
-                if (superAdminEmails == '') {
-                  superAdminEmails += superAdminEmail.email;
-                } else {
-                  superAdminEmails += (', ' + superAdminEmail.email);
-                }
-              });
-              var html = i18next.t('csv_registerStudentEmailReportHTMLContent', {savedStudents: registeredStudents.length, failedStudents: failedStudents.length, schoolName: schoolName});
-              app.models.Email.send({
-                to: schoolAdminEmails,
-                cc: superAdminEmails,
-                from: config.supportEmailID,
-                subject: i18next.t('csv_studentRegistrationEmailSubject', {schoolName: schoolName}),
-                html: html,
-                attachments: [
-                  {
-                    filename: fileName,
-                    content: fs.createReadStream(fileName),
-                  }],
-              }, function(err) {
-                if (err) {
-                  rootlogger.info('Error sending upload report to email=\'' + schoolAdminEmails + '\',\n Error=' + err);
-                }
-                console.log('> upload report mail sent successfully');
+                rootlogger.info('Sending email for student registration of school: ' + schoolName);
+                var html = i18next.t('csv_registerStudentEmailReportHTMLContent', {savedStudents: registeredStudents.length, failedStudents: failedStudents.length, schoolName: schoolName});
+                app.models.Email.send({
+                  to: schoolAdminEmails,
+                  cc: superAdminEmails,
+                  from: config.supportEmailID,
+                  subject: i18next.t('csv_studentRegistrationEmailSubject', {schoolName: schoolName}),
+                  html: html,
+                  attachments: [
+                    {
+                      filename: fileName,
+                      content: fs.createReadStream(fileName),
+                    }],
+                }, function(err) {
+                  if (err) {
+                    rootlogger.info('Error sending student registration report to email=\'' + schoolAdminEmails + '\',\n Error=' + err);
+                  }
+                  rootlogger.info('Sent email for student registration of school: ' + schoolName);
+                });
               });
             });
           });
