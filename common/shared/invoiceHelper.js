@@ -66,7 +66,7 @@ module.exports = function(app) {
       invoiceParams.push(['desc', invoiceDetails.desc]);
       invoiceParams.push(['chargeAmount', invoiceDetails.totalChargeAmount]);
       invoiceParams.push(['currencyCode', '356']); // TO CHECK
-      invoiceParams.push(['dueDate', moment(invoiceDetails.dueDate).format('DD/MM/YYYY')]);
+      invoiceParams.push(['dueDate', invoiceDetails.dueDate]);
       if (invoiceDetails.ChargeHead1) {
         invoiceParams.push(['chargeHead1', invoiceDetails.ChargeHead1]);
       }
