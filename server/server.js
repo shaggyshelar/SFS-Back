@@ -7,6 +7,10 @@ var bodyParser = require('body-parser');
 var i18next = require('i18next');
 var Backend = require('i18next-node-fs-backend');
 
+var configFilePath = process.env.NODE_ENV == undefined ?
+                          '' : '.' + process.env.NODE_ENV;
+var config = require('./config' + configFilePath + '.json');
+
 var app = module.exports = loopback();
 
 // configure view handler
@@ -14,8 +18,23 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.json());
 process.env.NODE_ENV = 'production';
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(loopback.token());
+app.use(function(req, res, next) {
+  var token = req.accessToken;
+  if (!token) {
+    return next();
+  }
+  var now = new Date();
+  if (now.getTime() - token.created.getTime() < 1000) {
+    return next();
+  }
+  // Sliding Window Token Implementation
+  req.accessToken.created = now;
+  req.accessToken.ttl = config.sessionTimoutIntervalInSeconds;
+  req.accessToken.save(next);
+});
 
 app.start = function() {
   // start the web server

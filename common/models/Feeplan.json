@@ -7,32 +7,34 @@
       "table": "feeplan"
     },
     "relations": {
-      "FeeplanCategory": {
-        "model": "Category",
-        "type": "belongsTo",
-        "foreignKey": "categoryId"
-      },
-      "FeeplanClass": {
-        "model": "Class",
-        "type": "belongsTo",
-        "foreignKey": "classId"
-      },
       "FeeplanSchool": {
         "model": "School",
         "type": "belongsTo",
         "foreignKey": "schoolId"
+      },
+      "associations": {
+        "type": "hasMany",
+        "model": "Feeplanassociation",
+        "foreignKey": "feeplanId"
+      },
+      "FeePlanDetails": {
+        "type":"hasMany",
+        "model":"Feeplanheaddetails",
+        "foreignKey":"feePlanId"
       }
     }
   },
   "scope": {
     "where": {
       "isDelete": 0
-    }
+    },
+    "include": ["associations","FeePlanDetails"]
   },
   "mixins": {
     "TimestampMixin": true,
     "DeleteOverrideMixin": true,
-    "DuplicateErrorHandler": true
+    "DuplicateErrorHandler": true,
+    "SearchFilterMixin":true
   },
   "properties": {
     "id": {
@@ -59,36 +61,6 @@
       "scale": 0,
       "mysql": {
         "columnName": "schoolId",
-        "dataType": "bigint",
-        "dataLength": null,
-        "dataPrecision": 19,
-        "dataScale": 0,
-        "nullable": "N"
-      }
-    },
-    "classId": {
-      "type": "Number",
-      "required": true,
-      "length": null,
-      "precision": 19,
-      "scale": 0,
-      "mysql": {
-        "columnName": "classId",
-        "dataType": "bigint",
-        "dataLength": null,
-        "dataPrecision": 19,
-        "dataScale": 0,
-        "nullable": "N"
-      }
-    },
-    "categoryId": {
-      "type": "Number",
-      "required": true,
-      "length": null,
-      "precision": 19,
-      "scale": 0,
-      "mysql": {
-        "columnName": "categoryId",
         "dataType": "bigint",
         "dataLength": null,
         "dataPrecision": 19,
@@ -126,49 +98,34 @@
         "nullable": "Y"
       }
     },
-    "effectiveFrom": {
-      "type": "Date",
-      "required": true,
-      "length": null,
-      "precision": null,
-      "scale": null,
-      "mysql": {
-        "columnName": "effectiveFrom",
-        "dataType": "datetime",
-        "dataLength": null,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "N"
-      }
-    },
-    "effectiveTo": {
-      "type": "Date",
-      "required": true,
-      "length": null,
-      "precision": null,
-      "scale": null,
-      "mysql": {
-        "columnName": "effectiveTo",
-        "dataType": "datetime",
-        "dataLength": null,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "N"
-      }
-    },
     "academicYear": {
       "type": "string",
       "required": true,
-      "length": 50,
+      "length": 20,
       "precision": null,
       "scale": 0,
       "mysql": {
         "columnName": "academicYear",
         "dataType": "varchar",
-        "dataLength": 50,
+        "dataLength": 20,
         "dataPrecision": null,
         "dataScale": 0,
         "nullable": "N"
+      }
+    },
+    "isTransactionProcessed": {
+      "type": "boolean",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "isTransactionProcessed",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "Y"
       }
     },
     "isDelete": {

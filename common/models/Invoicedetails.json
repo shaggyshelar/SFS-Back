@@ -1,51 +1,52 @@
 {
-  "name": "Addhocfeedetails",
+  "name": "Invoicedetails",
   "options": {
     "idInjection": false,
     "mysql": {
       "schema": "schoolfeesystem",
-      "table": "addhocfeedetails"
+      "table": "invoicedetails"
     },
     "relations": {
-      "AddhockfeedetailsAddhocfee": {
-        "model": "Addhocfee",
+      "InvoicedetailInvoice": {
+        "model": "Invoice",
         "type": "belongsTo",
-        "foreignKey": "addhocfeeId"
+        "foreignKey": "invoiceid"
       },
-      "AddhockfeedetailsCategory": {
-        "model": "Category",
+      "InvoicedetailFeeplan": {
+        "model": "Feeplan",
         "type": "belongsTo",
-        "foreignKey": "categoryId"
+        "foreignKey": "feeplanid"
       },
-      "AddhockfeedetailsClass": {
-        "model": "Class",
+      "InvoicedetailFeeplanAdhocfee": {
+        "model": "Adhocfee",
         "type": "belongsTo",
-        "foreignKey": "classId"
+        "foreignKey": "adhocfeeid"
       },
-      "AddhockfeedetailsDvision": {
-        "model": "Division",
+      "InvoicedetailZone": {
+        "model": "Zone",
         "type": "belongsTo",
-        "foreignKey": "divisionId"
+        "foreignKey": "zoneid"
+      },
+      "InvoicedetailFeeHead": {
+        "model": "Feehead",
+        "type": "belongsTo",
+        "foreignKey": "feeHeadId"
       }
     }
   },
   "scope": {
-    "where": {
-      "isDelete": 0
-    }
-  },
-  "mixins": {
-    "TimestampMixin": true,
-    "DuplicateErrorHandler": true
+    "include": [
+      "InvoicedetailFeeplanAdhocfee"
+    ]
   },
   "properties": {
     "id": {
       "type": "Number",
-      "id": 1,
-      "required": false,
+      "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
+      "id": 1,
       "mysql": {
         "columnName": "id",
         "dataType": "bigint",
@@ -55,14 +56,14 @@
         "nullable": "N"
       }
     },
-    "addhocFeeId": {
+    "invoiceId": {
       "type": "Number",
       "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
       "mysql": {
-        "columnName": "addhocFeeId",
+        "columnName": "invoiceId",
         "dataType": "bigint",
         "dataLength": null,
         "dataPrecision": 19,
@@ -70,44 +71,14 @@
         "nullable": "N"
       }
     },
-    "categoryId": {
-      "type": "Number",
-      "required": true,
-      "length": null,
-      "precision": 19,
-      "scale": 0,
-      "mysql": {
-        "columnName": "categoryId",
-        "dataType": "bigint",
-        "dataLength": null,
-        "dataPrecision": 19,
-        "dataScale": 0,
-        "nullable": "N"
-      }
-    },
-    "classId": {
-      "type": "Number",
-      "required": true,
-      "length": null,
-      "precision": 19,
-      "scale": 0,
-      "mysql": {
-        "columnName": "classId",
-        "dataType": "bigint",
-        "dataLength": null,
-        "dataPrecision": 19,
-        "dataScale": 0,
-        "nullable": "N"
-      }
-    },
-    "divisionId": {
+    "feePlanId": {
       "type": "Number",
       "required": false,
       "length": null,
       "precision": 19,
       "scale": 0,
       "mysql": {
-        "columnName": "divisionId",
+        "columnName": "feePlanId",
         "dataType": "bigint",
         "dataLength": null,
         "dataPrecision": 19,
@@ -115,17 +86,107 @@
         "nullable": "Y"
       }
     },
-    "addhocFeeCharges": {
+    "adhocFeeId": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
+      "mysql": {
+        "columnName": "adhocFeeId",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "zoneId": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
+      "mysql": {
+        "columnName": "zoneId",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "feeHeadId": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
+      "mysql": {
+        "columnName": "feeHeadId",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "invoiceNumber": {
+      "type": "String",
+      "required": true,
+      "length": 32,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "invoiceNumber",
+        "dataType": "varchar",
+        "dataLength": 32,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "feeHeadName": {
+      "type": "String",
+      "required": false,
+      "length": 50,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "feeHeadName",
+        "dataType": "varchar",
+        "dataLength": 50,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "chargeHeadName": {
+      "type": "String",
+      "required": false,
+      "length": 20,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "chargeHeadName",
+        "dataType": "varchar",
+        "dataLength": 20,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "chargeAmount": {
       "type": "Number",
       "required": true,
       "length": null,
-      "precision": 18,
+      "precision": 9,
       "scale": 2,
       "mysql": {
-        "columnName": "addhocFeeCharges",
+        "columnName": "chargeAmount",
         "dataType": "decimal",
         "dataLength": null,
-        "dataPrecision": 18,
+        "dataPrecision": 9,
         "dataScale": 2,
         "nullable": "N"
       }

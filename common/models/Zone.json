@@ -22,12 +22,16 @@
   "scope": {
     "where": {
       "isDelete": 0
+    },
+    "include": {
+      "relation": "ZoneFrequency"
     }
   },
   "mixins": {
     "TimestampMixin": true,
     "DeleteOverrideMixin": true,
-    "DuplicateErrorHandler": true
+    "DuplicateErrorHandler": true,
+    "SearchFilterMixin":true
   },
   "properties": {
     "id": {
@@ -98,7 +102,7 @@
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "zoneName",
+        "columnName": "zoneDescription",
         "dataType": "varchar",
         "dataLength": 100,
         "dataPrecision": null,
@@ -121,16 +125,16 @@
         "nullable": "N"
       }
     },
-    "dueDate": {
-      "type": "Date",
+    "academicyear": {
+      "type": "String",
       "required": true,
-      "length": null,
+      "length": 20,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "dueDate",
-        "dataType": "date",
-        "dataLength": null,
+        "columnName": "academicYear",
+        "dataType": "varchar",
+        "dataLength": 20,
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "N"

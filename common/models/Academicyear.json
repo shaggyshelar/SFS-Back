@@ -22,7 +22,8 @@
   "mixins": {
     "TimestampMixin": true,
     "DeleteOverrideMixin": true,
-    "DuplicateErrorHandler": true
+    "DuplicateErrorHandler": true,
+    "SearchFilterMixin":true
   },
   "properties": {
     "id": {
@@ -99,6 +100,21 @@
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "N"
+      }
+    },
+    "isCurrent": {
+      "type": "boolean",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "isCurrent",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "Y"
       }
     },
     "isDelete": {

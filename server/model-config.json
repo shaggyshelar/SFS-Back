@@ -48,11 +48,11 @@
     "dataSource": "mysql",
     "public": true
   },
-  "Addhocfee": {
+  "Adhocfee": {
     "dataSource": "mysql",
     "public": true
   },
-  "Addhocfeedetails": {
+  "Adhocfeedetails": {
     "dataSource": "mysql",
     "public": true
   },
@@ -77,6 +77,10 @@
     "public": true
   },
   "Feeplan": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Feeplanassociation": {
     "dataSource": "mysql",
     "public": true
   },
@@ -112,6 +116,10 @@
     "dataSource": "mysql",
     "public": true
   },
+  "Schoolmerchant": {
+    "dataSource": "mysql",
+    "public": true
+  },
   "Student": {
     "dataSource": "mysql",
     "public": true
@@ -126,6 +134,30 @@
   },
   "container": {
     "dataSource": "storage",
+    "public": true
+  },
+  "Zonedetails": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Invoice": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Invoicedetails": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Schoolconfiguration":{
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Sfsconfiguration":{
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Vwinvoicereport":{
+    "dataSource": "mysql",
     "public": true
   }
 }

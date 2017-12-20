@@ -16,7 +16,8 @@
   "mixins": {
     "TimestampMixin": true,
     "DeleteOverrideMixin": true,
-    "DuplicateErrorHandler": true
+    "DuplicateErrorHandler": true,
+    "SearchFilterMixin":true
   },
   "properties": {
     "id": {
@@ -28,6 +29,21 @@
       "scale": 0,
       "mysql": {
         "columnName": "id",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
+        "nullable": "N"
+      }
+    },
+    "schoolId": {
+      "type": "Number",
+      "required": true,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
+      "mysql": {
+        "columnName": "schoolId",
         "dataType": "bigint",
         "dataLength": null,
         "dataPrecision": 19,

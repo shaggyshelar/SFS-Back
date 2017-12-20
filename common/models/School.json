@@ -22,31 +22,72 @@
         "type": "hasMany",
         "foreignKey": "schoolId"
       },
-      "Roles":{
-        "model":"role",
-        "type":"hasMany",
-        "foreignKey":"schoolId"
-      },
-      "SchoolUsers":{
-        "type":"hasMany",
-        "model":"user",
-        "foreignKey":"schoolId",
-        "through":"Userschooldetails"
-      },
-      "SchoolClass":{
+      "Roles": {
+        "model": "role",
         "type": "hasMany",
-        "model":"Class",
-        "foreignKey":"schoolId"
+        "foreignKey": "schoolId"
       },
-      "SchoolDivision":{
+      "SchoolUsers": {
         "type": "hasMany",
-        "model":"Division",
-        "foreignKey":"schoolId"
+        "model": "user",
+        "foreignKey": "schoolId",
+        "through": "Userschooldetails"
       },
-      "SchoolYear":{
+      "SchoolClass": {
         "type": "hasMany",
-        "model":"Academicyear",
-        "foreignKey":"schoolId"
+        "model": "Class",
+        "foreignKey": "schoolId"
+      },
+      "SchoolDivision": {
+        "type": "hasMany",
+        "model": "Division",
+        "foreignKey": "schoolId"
+      },
+      "SchoolYear": {
+        "type": "hasMany",
+        "model": "Academicyear",
+        "foreignKey": "schoolId"
+      },
+      "FeePlans": {
+        "type": "hasMany",
+        "model": "Feeplan",
+        "foreignKey": "schoolId"
+      },
+      "Adhocfees": {
+        "type": "hasMany",
+        "model": "Adhocfee",
+        "foreignKey": "schoolId"
+      },
+      "zones": {
+        "type": "hasMany",
+        "model": "Zone",
+        "foreignKey": "schoolId"
+      },
+      "Schoolcategories": {
+        "type": "hasMany",
+        "model": "Category",
+        "foreignKey": "schoolId"
+      },
+      "SchoolConfiguration": {
+        "type": "hasMany",
+        "model": "Schoolconfiguration",
+        "foreignKey": "schoolId"
+      },
+      "SchoolInvoices": {
+        "type": "hasMany",
+        "model": "Invoice",
+        "foreignKey": "schoolId",
+        "scope": {
+          "include": [
+            "invoiceDetails",
+            "studentData"
+          ]
+        }
+      },
+      "invoiceReports": {
+        "type": "hasMany",
+        "model": "Vwinvoicereport",
+        "foreignKey": "schoolId"
       }
     }
   },
@@ -58,7 +99,8 @@
   "mixins": {
     "TimestampMixin": true,
     "DeleteOverrideMixin": true,
-    "DuplicateErrorHandler": true
+    "DuplicateErrorHandler": true,
+    "SearchFilterMixin":true
   },
   "properties": {
     "id": {
@@ -140,13 +182,13 @@
     "schoolEmail": {
       "type": "String",
       "required": false,
-      "length": 20,
+      "length": 254,
       "precision": null,
       "scale": null,
       "mysql": {
         "columnName": "schoolEmail",
         "dataType": "varchar",
-        "dataLength": 20,
+        "dataLength": 254,
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "Y"
@@ -255,6 +297,66 @@
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "N"
+      }
+    },
+    "processingDate": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 10,
+      "scale": 0,
+      "mysql": {
+        "columnName": "processingDate",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 10,
+        "dataScale": 0,
+        "nullable": "N"
+      }
+    },
+    "graceDays": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 10,
+      "scale": 0,
+      "mysql": {
+        "columnName": "graceDays",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 10,
+        "dataScale": 0,
+        "nullable": "N"
+      }
+    },
+    "invoiceMnemonic": {
+      "type": "String",
+      "required": true,
+      "length": 7,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "invoiceMnemonic",
+        "dataType": "varchar",
+        "dataLength": 7,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "invoiceSequenceNumber": {
+      "type": "Number",
+      "required": true,
+      "length": null,
+      "precision": 5,
+      "scale": 0,
+      "mysql": {
+        "columnName": "invoiceSequenceNumber",
+        "dataType": "int",
+        "dataLength": null,
+        "dataPrecision": 5,
+        "dataScale": 0,
+        "nullable": "Y"
       }
     },
     "isDelete": {

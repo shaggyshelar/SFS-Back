@@ -1,0 +1,103 @@
+{
+	"variables": [],
+	"info": {
+		"name": "SFS-QA",
+		"_postman_id": "5ebab2bb-5fe1-d666-2647-eb6665b72f04",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Payment Advice",
+			"request": {
+				"url": "http://localhost:3000/api/paymentAdvice",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "aggregatorID",
+							"value": "1123",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "calculatedLateFees",
+							"value": "11",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "chargeAmount",
+							"value": "11",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "invoiceNo",
+							"value": "111111111",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "merchantId",
+							"value": "22",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "optionalChargeHeadsPaid",
+							"value": "11",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "paymentDateTime",
+							"value": "11",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "paymentID",
+							"value": "11",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "txnID",
+							"value": "11",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "userID",
+							"value": "111111",
+							"type": "text",
+							"description": ""
+						},
+						{
+							"key": "secureHash",
+							"value": "09eddaf542b14fc76b7531f192fa1146283a59d38617a1249c806f7b47f75919",
+							"type": "text",
+							"description": ""
+						}
+					]
+				},
+				"description": "You will need to generate concatenated parameters string as mentioned in document. Use the parameters in current sequence.\nTo generate a secure hash using HMAC (SHA256), use below website.\nhttps://www.freeformatter.com/hmac-generator.html"
+			},
+			"response": []
+		}
+	]
+}

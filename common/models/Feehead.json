@@ -16,18 +16,20 @@
         "model": "School",
         "type": "belongsTo",
         "foreignKey": "schoolId"
-      }
+      }      
     }
   },
   "scope": {
     "where": {
       "isDelete": 0
-    }
+    },
+    "include":"FeeheadsFrequency"
   },
   "mixins": {
     "TimestampMixin": true,
     "DeleteOverrideMixin": true,
-    "DuplicateErrorHandler": true
+    "DuplicateErrorHandler": true,
+    "SearchFilterMixin":true
   },
   "properties": {
     "id": {
@@ -104,6 +106,21 @@
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "Y"
+      }
+    },
+    "chargeHeadName": {
+      "type": "String",
+      "required": true,
+      "length": 20,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "chargeHeadName",
+        "dataType": "varchar",
+        "dataLength": 20,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
       }
     },
     "isDelete": {
