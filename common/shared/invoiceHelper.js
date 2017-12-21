@@ -59,8 +59,8 @@ module.exports = function(app) {
     registerInvoice: (invoiceDetails, callback) => {
       var apiHelper = apiHelperObject(app);
       var invoiceParams = [];
-      invoiceParams.push(['merchantId', config.payPhiMerchantID]);
-      invoiceParams.push(['aggregatorId', config.payPhiAggregatorID]);
+      invoiceParams.push(['merchantId', invoiceDetails.merchantId]);
+      invoiceParams.push(['aggregatorId', invoiceDetails.aggregatorId]);
       invoiceParams.push(['userID', invoiceDetails.userId]);
       invoiceParams.push(['invoiceNo', invoiceDetails.invoiceNo]);
       invoiceParams.push(['desc', invoiceDetails.desc]);
@@ -127,6 +127,8 @@ module.exports = function(app) {
         'totalChargeAmount': firstInvoice.totalChargeAmount,
         'currencyCode': '356',
         'dueDate': firstInvoice.dueDate,
+        'merchantId': firstInvoice.merchantId,
+        'aggregatorId': firstInvoice.aggregatorId,
       };
       _.each(invoiceDetails.values, function(invoiceRow) {
         switch (invoiceRow.invoiceType) {
