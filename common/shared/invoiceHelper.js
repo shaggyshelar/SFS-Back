@@ -398,8 +398,8 @@ module.exports = function(app) {
     updateInvoice: (invoice, callback) => {
       var apiHelper = apiHelperObject(app);
       var invoiceParams = [];
-      invoiceParams.push(['merchantId', config.payPhiMerchantID]);
-      invoiceParams.push(['aggregatorId', config.payPhiAggregatorID]);
+      invoiceParams.push(['merchantId', invoice.merchantId]);
+      invoiceParams.push(['aggregatorId', invoice.aggregatorId]);
       invoiceParams.push(['userID', invoice.userId]);
       invoiceParams.push(['invoiceNo', invoice.invoiceNumber]);
       if (invoice.status == 'Paid') {
