@@ -796,7 +796,7 @@ module.exports = function (app) {
               updateUserObj.failedPasswordAttemptCount = 3;
               updateUserObj.isBolocked = true;
             }
-            else {
+            else if(loggedInUser.roleId !=1 ) {
               updateUserObj.failedPasswordAttemptCount = loggedInUser.failedPasswordAttemptCount + 1;
             }
 
