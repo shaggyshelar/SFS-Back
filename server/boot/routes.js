@@ -798,7 +798,7 @@ module.exports = function (app) {
               updateUserObj.failedPasswordAttemptCount = 3;
               updateUserObj.isBolocked = true;
             }
-            else if(loggedInUser.roleId !=1 ) {
+            else if(loggedInUser.__data && loggedInUser.__data.role && loggedInUser.__data.role.__data.name !='SuperAdmin' ) {
               updateUserObj.failedPasswordAttemptCount = loggedInUser.failedPasswordAttemptCount + 1;
             }
 
