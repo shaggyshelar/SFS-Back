@@ -19,7 +19,7 @@ module.exports = function (User) {
       type: 'email',
       to: user.email,
       from: 'noreply@loopback.com',
-      subject: 'SFS: Thanks for registering.',
+      subject: i18next.t('email_userRegistrationSubject'),
       template: path.resolve(__dirname, '../../server/views/verify.ejs'),
       redirect: '/verified',
       user: user,
