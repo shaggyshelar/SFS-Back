@@ -12,7 +12,7 @@ authHelper.sendVerificationEmail = function (user, plainPassword, isUpdate, next
         to: user.email,
         from: 'noreply@loopback.com',
         subject: i18next.t('email_userRegistrationSubject'),
-        template: path.resolve(__dirname, '../../templates/verify.html'),
+        template: path.resolve(__dirname, '../../templates/email/verify.html'),
         redirect: '/verified',
         user: user,
         text: '{href}',
