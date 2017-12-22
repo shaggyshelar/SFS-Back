@@ -706,37 +706,38 @@ module.exports = function (app) {
                 .on('end', function () {
                   async.waterfall(waterfallFunctions, function (err) {
                     fastCsv.end();
-                    var html = i18next.t('csv_emailReportHTMLContent', { savedStudents: savedStudents.length, failedStudents: failedStudents.length });
-                    if (failedStudents.length == 0) {
-                      app.models.Email.send({
-                        to: user.toJSON().email,
-                        from: config.supportEmailID,
-                        subject: i18next.t('csv_emailReportSubject'),
-                        html: html,
-                      }, function (err) {
-                        if (err) {
-                          rootlogger.info('Error sending upload report to email=\'' + user.toJSON().email + '\',\n Error=' + err);
-                        }
-                        rootlogger.info('Upload report mail sent successfully to ' + user.toJSON().email);
-                      });
-                    } else {
-                      app.models.Email.send({
-                        to: user.toJSON().email,
-                        from: config.supportEmailID,
-                        subject: i18next.t('csv_emailReportSubject'),
-                        html: html,
-                        attachments: [
-                          {
-                            filename: 'outputfile.csv',
-                            content: fs.createReadStream('outputfile.csv'),
-                          }],
-                      }, function (err) {
-                        if (err) {
-                          rootlogger.info('Error sending upload report to email=\'' + user.toJSON().email + '\',\n Error=' + err);
-                        }
-                        console.log('> upload report mail sent successfully');
-                      });
-                    }
+                    emailHelper.getEmailText('csv_emailReport', {savedStudents: savedStudents.length, failedStudents: failedStudents.length}, function(error, html) {
+                      if (failedStudents.length == 0) {
+                        app.models.Email.send({
+                          to: user.toJSON().email,
+                          from: config.supportEmailID,
+                          subject: i18next.t('csv_emailReportSubject'),
+                          html: html,
+                        }, function (err) {
+                          if (err) {
+                            rootlogger.info('Error sending upload report to email=\'' + user.toJSON().email + '\',\n Error=' + err);
+                          }
+                          rootlogger.info('Upload report mail sent successfully to ' + user.toJSON().email);
+                        });
+                      } else {
+                        app.models.Email.send({
+                          to: user.toJSON().email,
+                          from: config.supportEmailID,
+                          subject: i18next.t('csv_emailReportSubject'),
+                          html: html,
+                          attachments: [
+                            {
+                              filename: 'outputfile.csv',
+                              content: fs.createReadStream('outputfile.csv'),
+                            }],
+                        }, function (err) {
+                          if (err) {
+                            rootlogger.info('Error sending upload report to email=\'' + user.toJSON().email + '\',\n Error=' + err);
+                          }
+                          console.log('> upload report mail sent successfully');
+                        });
+                      }
+                    });
 
                     res.status(200);
                     res.json({
@@ -834,10 +835,10 @@ module.exports = function (app) {
                             });
                           });
 
-                          emailHelper.sendEmails('authenticationUserLocked', 
+                          emailHelper.sendEmails('authenticationUserLocked',
                               loggedInUser.email,
                               i18next.t('email_subject_authenticationUserLocked'),
-                              { username: loggedInUser.username }, 
+                              { username: loggedInUser.username },
                               function(err, emailData){
                                 if(err){
                                   res.status(501);
@@ -858,11 +859,11 @@ module.exports = function (app) {
                     });
                   }
                   else if (loggedInUser.roleId == i18next.t('super_admin_role_Id')) {
-                    
-                    emailHelper.sendEmails('authenticationUserLocked', 
+
+                    emailHelper.sendEmails('authenticationUserLocked',
                         loggedInUser.email,
                     		i18next.t('email_subject_authenticationUserLocked'),
-                    		{ username: loggedInUser.username }, 
+                    		{ username: loggedInUser.username },
                       function(err, emailData){
                         if(err){
                           res.status(501);
@@ -903,11 +904,11 @@ module.exports = function (app) {
                               else {
                                 var adminUsers = _userSchoolDetails.filter(function (data) { if (data.__data.UserschoolUser) return data.__data.UserschoolUser.roleId == 2 });
                                 adminUsers.map(function (userMapping, index) {
-                                  
-                                  emailHelper.sendEmails('authenticationUserLocked', 
+
+                                  emailHelper.sendEmails('authenticationUserLocked',
                                       userMapping.UserschoolUser().email,
                                   		i18next.t('email_subject_authenticationUserLocked'),
-                                  		{ username: loggedInUser.username }, 
+                                  		{ username: loggedInUser.username },
                                     function(err, emailData){
                                       if(err){
                                         res.status(501);
@@ -918,11 +919,11 @@ module.exports = function (app) {
                                       }
                                   });
                                 });
-                                
-                                emailHelper.sendEmails('authenticationUserLocked', 
+
+                                emailHelper.sendEmails('authenticationUserLocked',
                                       loggedInUser.email,
                                   		i18next.t('email_subject_authenticationUserLocked'),
-                                  		{ username: loggedInUser.username }, 
+                                  		{ username: loggedInUser.username },
                                     function(err, emailData){
                                       if(err){
                                         res.status(501);
