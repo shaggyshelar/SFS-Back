@@ -12,6 +12,8 @@ var authHelper = require('../shared/authHelper');
 var randomize = require('randomatic');
 var app = require('../../server/server');
 var g = require('loopback/lib/globalize');
+var i18next = require('i18next');
+var emailHelper = require('../shared/emailHelper');
 module.exports = function (User) {
   // send verification email after registration
   User.afterRemote('create', function (context, user, next) {
@@ -70,9 +72,9 @@ module.exports = function (User) {
       else {
         if (_user.isBolocked) {
           subject = i18next.t('email_unblockAccountSubject');
-          html = 'userLocked';
+          template = 'userLocked';
         }
-        emailHelper.sendEmails(html, info.email, subject,
+        emailHelper.sendEmails(template, info.email, subject,
           { url: url, tokenId: info.accessToken.id }, function (err, emailData) {
             if (err) {
               res.status(501);
