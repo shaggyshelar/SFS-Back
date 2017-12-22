@@ -19,6 +19,7 @@ var invoiceHelper = require('../../common/shared/invoiceHelper');
 var moment = require('moment');
 var dateHelper = require('../../common/shared/dateHelper');
 var validator = require('validator');
+var emailHelper=require('../../common/shared/emailHelper');
 
 module.exports = function (app) {
   var ds = app.dataSources.mysql;
@@ -705,37 +706,38 @@ module.exports = function (app) {
                 .on('end', function () {
                   async.waterfall(waterfallFunctions, function (err) {
                     fastCsv.end();
-                    var html = i18next.t('csv_emailReportHTMLContent', { savedStudents: savedStudents.length, failedStudents: failedStudents.length });
-                    if (failedStudents.length == 0) {
-                      app.models.Email.send({
-                        to: user.toJSON().email,
-                        from: config.supportEmailID,
-                        subject: i18next.t('csv_emailReportSubject'),
-                        html: html,
-                      }, function (err) {
-                        if (err) {
-                          rootlogger.info('Error sending upload report to email=\'' + user.toJSON().email + '\',\n Error=' + err);
-                        }
-                        rootlogger.info('Upload report mail sent successfully to ' + user.toJSON().email);
-                      });
-                    } else {
-                      app.models.Email.send({
-                        to: user.toJSON().email,
-                        from: config.supportEmailID,
-                        subject: i18next.t('csv_emailReportSubject'),
-                        html: html,
-                        attachments: [
-                          {
-                            filename: 'outputfile.csv',
-                            content: fs.createReadStream('outputfile.csv'),
-                          }],
-                      }, function (err) {
-                        if (err) {
-                          rootlogger.info('Error sending upload report to email=\'' + user.toJSON().email + '\',\n Error=' + err);
-                        }
-                        console.log('> upload report mail sent successfully');
-                      });
-                    }
+                    emailHelper.getEmailText('csv_emailReport', {savedStudents: savedStudents.length, failedStudents: failedStudents.length}, function(error, html) {
+                      if (failedStudents.length == 0) {
+                        app.models.Email.send({
+                          to: user.toJSON().email,
+                          from: config.supportEmailID,
+                          subject: i18next.t('csv_emailReportSubject'),
+                          html: html,
+                        }, function (err) {
+                          if (err) {
+                            rootlogger.info('Error sending upload report to email=\'' + user.toJSON().email + '\',\n Error=' + err);
+                          }
+                          rootlogger.info('Upload report mail sent successfully to ' + user.toJSON().email);
+                        });
+                      } else {
+                        app.models.Email.send({
+                          to: user.toJSON().email,
+                          from: config.supportEmailID,
+                          subject: i18next.t('csv_emailReportSubject'),
+                          html: html,
+                          attachments: [
+                            {
+                              filename: 'outputfile.csv',
+                              content: fs.createReadStream('outputfile.csv'),
+                            }],
+                        }, function (err) {
+                          if (err) {
+                            rootlogger.info('Error sending upload report to email=\'' + user.toJSON().email + '\',\n Error=' + err);
+                          }
+                          console.log('> upload report mail sent successfully');
+                        });
+                      }
+                    });
 
                     res.status(200);
                     res.json({
@@ -820,25 +822,32 @@ module.exports = function (app) {
                       else {
                         if (superAdminUsers && superAdminUsers.length > 0) {
                           superAdminUsers.map(function (superadmin, index) {
-                            User.app.models.Email.send({
-                              to: superadmin.email,
-                              from: superadmin.email,
-                              subject: i18next.t('email_subject_authenticationUserLocked'),
-                              html: i18next.t('email_authenticationUserLockedAdmin', { username: loggedInUser.username }),
-                            }, function (err) {
-                              if (err) return console.log('> error sending user locked email');
-                              console.log('> sending user locked email to:', superadmin.email);
+
+                            emailHelper.sendEmails('authenticationUserLockedAdmin', superadmin.email,i18next.t('email_subject_authenticationUserLocked'),
+                              { username: loggedInUser.username }, function(err, emailData){
+                              if(err){
+                                res.status(501);
+                                res.json(err);
+                              }
+                              else{
+                                console.log('email sent');
+                              }
                             });
                           });
-                          User.app.models.Email.send({
-                            to: loggedInUser.email,
-                            from: loggedInUser.email,
-                            subject: i18next.t('email_subject_authenticationUserLocked'),
-                            html: i18next.t('email_authenticationUserLocked', { username: loggedInUser.username }),
-                          }, function (err) {
-                            if (err) return console.log('> error sending user locked email');
-                            console.log('> sending user locked email to:', loggedInUser.email);
-                          });
+
+                          emailHelper.sendEmails('authenticationUserLocked',
+                              loggedInUser.email,
+                              i18next.t('email_subject_authenticationUserLocked'),
+                              { username: loggedInUser.username },
+                              function(err, emailData){
+                                if(err){
+                                  res.status(501);
+                                  res.json(err);
+                                }
+                                else{
+                                  console.log('email sent');
+                                }
+                            });
                         }
                         res.status(401);
                         res.json({
@@ -850,14 +859,19 @@ module.exports = function (app) {
                     });
                   }
                   else if (loggedInUser.roleId == i18next.t('super_admin_role_Id')) {
-                    User.app.models.Email.send({
-                      to: loggedInUser.email,
-                      from: loggedInUser.email,
-                      subject: i18next.t('email_subject_authenticationUserLocked'),
-                      html: i18next.t('email_authenticationSuperadminLocked', { username: loggedInUser.username }),
-                    }, function (err) {
-                      if (err) return console.log('> error sending user locked email');
-                      console.log('> sending user locked email to:', loggedInUser.email);
+
+                    emailHelper.sendEmails('authenticationUserLocked',
+                        loggedInUser.email,
+                    		i18next.t('email_subject_authenticationUserLocked'),
+                    		{ username: loggedInUser.username },
+                      function(err, emailData){
+                        if(err){
+                          res.status(501);
+                          res.json(err);
+                        }
+                        else{
+                          console.log('email sent');
+                        }
                     });
                     res.status(401);
                     res.json({
@@ -890,25 +904,35 @@ module.exports = function (app) {
                               else {
                                 var adminUsers = _userSchoolDetails.filter(function (data) { if (data.__data.UserschoolUser) return data.__data.UserschoolUser.roleId == 2 });
                                 adminUsers.map(function (userMapping, index) {
-                                  User.app.models.Email.send({
-                                    to: userMapping.UserschoolUser().email,
-                                    from: userMapping.UserschoolUser().email,
-                                    subject: i18next.t('email_subject_authenticationUserLocked'),
-                                    html: i18next.t('email_authenticationUserLocked', { username: loggedInUser.username }),
-                                  }, function (err) {
-                                    if (err) return console.log('> error sending user locked email');
-                                    console.log('> sending user locked email to:', userMapping.UserschoolUser().email);
+
+                                  emailHelper.sendEmails('authenticationUserLocked',
+                                      userMapping.UserschoolUser().email,
+                                  		i18next.t('email_subject_authenticationUserLocked'),
+                                  		{ username: loggedInUser.username },
+                                    function(err, emailData){
+                                      if(err){
+                                        res.status(501);
+                                        res.json(err);
+                                      }
+                                      else{
+                                        console.log('email sent');
+                                      }
                                   });
                                 });
-                                User.app.models.Email.send({
-                                  to: loggedInUser.email,
-                                  from: loggedInUser.email,
-                                  subject: i18next.t('email_subject_authenticationUserLocked'),
-                                  html: i18next.t('email_authenticationUserLocked', { username: loggedInUser.username }),
-                                }, function (err) {
-                                  if (err) return console.log('> error sending user locked email');
-                                  console.log('> sending user locked email to:', loggedInUser.email);
-                                });
+
+                                emailHelper.sendEmails('authenticationUserLocked',
+                                      loggedInUser.email,
+                                  		i18next.t('email_subject_authenticationUserLocked'),
+                                  		{ username: loggedInUser.username },
+                                    function(err, emailData){
+                                      if(err){
+                                        res.status(501);
+                                        res.json(err);
+                                      }
+                                      else{
+                                        console.log('email sent');
+                                      }
+                                  });
                                 res.status(401);
                                 res.json({
                                   'Error': i18next.t('error_authenticationFailed'),
