@@ -236,7 +236,9 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
         else if (selectedModel.toLowerCase() == "school") {
             var propertyArr = [
                 { property: "__get__StudentSchool", model: "Student" },
-                { property: "__get__ClassSchool", model: "Class" }
+                { property: "__get__ClassSchool", model: "Class" },
+                { property: "__get__getUserForSchoolAdmin", model: "School", accessType: "EXECUTE" },
+                { property: "__get__getUserCountForSchoolAdmin", model: "School" }
             ];
             propertyArr.map(function (p, i) {
                 propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });

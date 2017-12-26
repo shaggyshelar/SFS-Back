@@ -75,5 +75,8 @@
     "error_noCurrentAcademicYear": "At least one academic year should be set as curent.",
     "error_academicDateOverlap": "Start date and end date overlap with previously saved academic year.",
     "error_noRecordFound": "No record was found.",
-    "error_cannotUpdateFeeHead": "Fee Head cannot be updated for processed invoice"
+    "error_cannotUpdateFeeHead": "Fee Head cannot be updated for processed invoice",
+    "email_userRegistrationSubject":"SFS: Thanks for registering.",
+    "email_unblockAccountSubject":"SFS: Unlock account",
+    "email_passwordResetSubject":"SFS: Password reset"
 }
