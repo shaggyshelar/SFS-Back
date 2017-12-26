@@ -65,6 +65,54 @@ module.exports = function (School) {
     }
   }
 
+
+  School.getUserForSchoolAdmin = function (schoolId, options, cb) {
+    if (options.accessToken) {
+      app.models.Userschooldetails.find({ where: { schoolId: schoolId } }, function (err, _users) {
+        if (err) {
+          cb(err);
+        }
+        else {
+          var condition = _users.map(function (s, i) {
+            return  s.userId;
+          });
+          app.models.User.find({ where:{ and:[ {id: {inq: condition}}, {roleId:{gt:2}}]}}, function (err, _assUserRole) {
+            if (err) {
+              cb(err);
+            }
+            else {
+              cb(null, _assUserRole);
+            }
+          });
+        }
+      });
+    }
+  }
+
+
+  School.getUserCountForSchoolAdmin= function (schoolId, options, cb) {
+    if (options.accessToken) {
+      app.models.Userschooldetails.find({ where: { schoolId: schoolId } }, function (err, _users) {
+        if (err) {
+          cb(err);
+        }
+        else {
+          var condition = _users.map(function (s, i) {
+            return  s.userId;
+          });
+          app.models.User.find({ where:{ and:[ {id: {inq: condition}}, {roleId:{gt:2}}]}}, function (err, _assUserRole) {
+            if (err) {
+              cb(err);
+            }
+            else {
+              cb(null, _assUserRole.length );
+            }
+          });
+        }
+      });
+    }
+  }
+
   School.remoteMethod('updateZoneAcademicYear', {
     accepts: [{
       arg: 'schoolId',
@@ -84,4 +132,35 @@ module.exports = function (School) {
     http: { path: '/:schoolId/updateZoneAcademicYear', verb: 'put' },
     returns: { arg: 'zones', type: 'Zone' }
   });
+
+  School.remoteMethod('getUserForSchoolAdmin', {
+    accepts: [{
+      arg: 'schoolId',
+      type: 'Number'
+    }, 
+    {
+      arg: "options",
+      type: "object",
+      http: "optionsFromRequest"
+    }],
+    http: { path: '/:schoolId/getUserForSchoolAdmin', verb: 'get' },
+    returns: { arg: 'users', type: 'User' }
+  });
+
+
+  School.remoteMethod('getUserCountForSchoolAdmin', {
+    accepts: [{
+      arg: 'schoolId',
+      type: 'Number'
+    }, 
+    {
+      arg: "options",
+      type: "object",
+      http: "optionsFromRequest"
+    }],
+    http: { path: '/:schoolId/getUserCountForSchoolAdmin', verb: 'get' },
+    returns: { arg: 'users', type: 'User' }
+  });
+
+
 };
