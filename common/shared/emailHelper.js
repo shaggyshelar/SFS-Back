@@ -11,7 +11,13 @@ emailHelper.sendEmails = function (templateName, toEmailId, subject, valueObject
       next(err);
     }
     if (valueObject) {
-      data = i18next.t(data, valueObject)
+
+      // added as i18next.t was removing first html tag and emails without styles were sent.  
+      var keyNames = Object.keys(valueObject);
+      for (var i in keyNames) {
+           data=data.replace('{{'+keyNames[i]+'}}',valueObject[keyNames[i]]);
+      }
+      // data = i18next.t(data, valueObject)
 
       app.models.User.app.models.Email.send({
         to: toEmailId,
@@ -34,7 +40,13 @@ emailHelper.getEmailText = function (templateName, valueObject, next) {
       next(err);
     }
     if (valueObject) {
-      data = i18next.t(data, valueObject)
+      // data = i18next.t(data, valueObject)
+      // added as i18next.t was removing first html tag and emails without styles were sent.  
+      var keyNames = Object.keys(valueObject);
+      for (var i in keyNames) {
+           data=data.replace('{{'+keyNames[i]+'}}',valueObject[keyNames[i]]);
+      }
+
       next(null, data);
     }
   });
