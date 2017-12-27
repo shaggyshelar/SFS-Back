@@ -264,6 +264,24 @@ module.exports = function (app) {
 
   app.post('/api/paymentSettlement', function (req, res) {
     var apiHelper = apiHelperObject(app);
+
+    var keys = Object.keys(req.body);
+    var params = [];
+    _.each(keys, function(key) {
+      if (key != "secureHash") {
+        params.push([key, req.body[key]]);
+      }
+    });
+
+    var concatenatedParams = apiHelper.getConcatenatedParams(params);
+    var hashedKey = apiHelper.getHashedKey(concatenatedParams);
+
+    if (req.body.secureHash !== hashedKey) {
+      res.status(400);
+      res.json({'Message': i18next.t('api_validation_adviceInvalidSecureHash')});
+      return;
+    }
+
     var errorMessages = '';
     var userParams = [];
     if (req.body.aggregatorID) {
@@ -307,14 +325,14 @@ module.exports = function (app) {
       return;
     }
 
-    var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
-    var hashedKey = apiHelper.getHashedKey(concatenatedParams);
+    // var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
+    // var hashedKey = apiHelper.getHashedKey(concatenatedParams);
 
-    if (req.body.secureHash !== hashedKey) {
-      res.status(400);
-      res.json({'Message': i18next.t('api_validation_adviceInvalidSecureHash')});
-      return;
-    }
+    // if (req.body.secureHash !== hashedKey) {
+    //   res.status(400);
+    //   res.json({'Message': i18next.t('api_validation_adviceInvalidSecureHash')});
+    //   return;
+    // }
 
     async.series([
       function(callback) {
