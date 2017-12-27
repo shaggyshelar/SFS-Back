@@ -159,5 +159,13 @@
   "Vwinvoicereport":{
     "dataSource": "mysql",
     "public": true
+  },
+  "FeeHeadPaymentReport": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "CategoryClassPaymentReport": {
+    "dataSource": "mysql",
+    "public": true
   }
 }

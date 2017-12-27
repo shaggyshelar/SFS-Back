@@ -1,0 +1,17 @@
+{
+    "name": "FeeHeadPaymentReport",
+    "options": {
+      "idInjection": false
+    },
+    "mixins": {
+      "TimestampMixin": true,
+      "SearchFilterMixin":true
+    },
+    "properties": {
+    },
+    "validations": [],
+    "relations": {},
+    "acls": [],
+    "methods": {}
+  }
+  
