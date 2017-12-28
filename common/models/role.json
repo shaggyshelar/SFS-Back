@@ -145,14 +145,14 @@
         "nullable": "N"
       }
     },
-    "created": {
+    "createdOn": {
       "type": "Date",
       "required": false,
       "length": null,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "created",
+        "columnName": "createdOn",
         "dataType": "datetime",
         "dataLength": null,
         "dataPrecision": null,
@@ -175,14 +175,14 @@
         "nullable": "Y"
       }
     },
-    "modified": {
+    "updatedOn": {
       "type": "Date",
       "required": false,
       "length": null,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "modified",
+        "columnName": "updatedOn",
         "dataType": "datetime",
         "dataLength": null,
         "dataPrecision": null,
