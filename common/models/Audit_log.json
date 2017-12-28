@@ -1,44 +1,21 @@
 {
-  "name": "Category",
+  "name": "AuditLog",
   "options": {
     "idInjection": false,
     "mysql": {
       "schema": "schoolfeesystem",
-      "table": "category"
+      "table": "audit_log"
     },
     "relations": {}
-  },
-  "scope": {
-    "where": {
-      "isDelete": 0
-    }
-  },
-  "mixins": {
-    "TimestampMixin": true,
-    "DeleteOverrideMixin": true,
-    "DuplicateErrorHandler": true,
-    "SearchFilterMixin":true,
-    "Auditz" : {
-      "createdAt": "createdOn",
-      "updatedAt": "updatedOn",
-      "schoolId":"schoolId",
-      "softDelete": false,
-      "revisions": {
-        "name": "AuditLog",
-        "idType": "Number",
-        "dataSource": "mysql",
-        "autoUpdate": false
-      }
-    }
   },
   "properties": {
     "id": {
       "type": "Number",
-      "id": 1,
       "required": false,
       "length": null,
       "precision": 19,
       "scale": 0,
+      "id": 1,
       "mysql": {
         "columnName": "id",
         "dataType": "bigint",
@@ -50,7 +27,7 @@
     },
     "schoolId": {
       "type": "Number",
-      "required": true,
+      "required": false,
       "length": null,
       "precision": 19,
       "scale": 0,
@@ -60,107 +37,92 @@
         "dataLength": null,
         "dataPrecision": 19,
         "dataScale": 0,
-        "nullable": "N"
-      }
-    },
-    "categoryName": {
-      "type": "String",
-      "required": true,
-      "length": 50,
-      "precision": null,
-      "scale": null,
-      "mysql": {
-        "columnName": "categoryName",
-        "dataType": "varchar",
-        "dataLength": 50,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "N"
-      }
-    },
-    "categoryDescription": {
-      "type": "String",
-      "required": false,
-      "length": 50,
-      "precision": null,
-      "scale": null,
-      "mysql": {
-        "columnName": "categoryDescription",
-        "dataType": "varchar",
-        "dataLength": 50,
-        "dataPrecision": null,
-        "dataScale": null,
         "nullable": "Y"
       }
     },
-    "categoryCode": {
+    "action": {
       "type": "String",
       "required": true,
-      "length": 24,
+      "length": 45,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "categoryCode",
+        "columnName": "action",
         "dataType": "varchar",
-        "dataLength": 24,
+        "dataLength": 45,
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "N"
       }
     },
-    "isDelete": {
+    "table_name": {
+      "type": "String",
+      "required": true,
+      "length": 45,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "table_name",
+        "dataType": "varchar",
+        "dataLength": 45,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "row_id": {
       "type": "Number",
-      "required": false,
+      "required": true,
       "length": null,
-      "precision": 3,
+      "precision": 19,
       "scale": 0,
       "mysql": {
-        "columnName": "isDelete",
-        "dataType": "tinyint",
+        "columnName": "row_id",
+        "dataType": "bigint",
         "dataLength": null,
-        "dataPrecision": 3,
+        "dataPrecision": 19,
         "dataScale": 0,
+        "nullable": "N"
+      }
+    },
+    "old": {
+      "type": "Any",
+      "required": false,
+      "length": 65535,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "old",
+        "dataType": "text",
+        "dataLength": 65535,
+        "dataPrecision": null,
+        "dataScale": null,
         "nullable": "Y"
       }
     },
-    "createdBy": {
+    "new": {
+      "type": "Any",
+      "required": false,
+      "length": 65535,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "new",
+        "dataType": "text",
+        "dataLength": 65535,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "user": {
       "type": "Number",
       "required": false,
       "length": null,
       "precision": 19,
       "scale": 0,
       "mysql": {
-        "columnName": "createdBy",
-        "dataType": "bigint",
-        "dataLength": null,
-        "dataPrecision": 19,
-        "dataScale": 0,
-        "nullable": "N"
-      }
-    },
-    "createdOn": {
-      "type": "Date",
-      "required": false,
-      "length": null,
-      "precision": null,
-      "scale": null,
-      "mysql": {
-        "columnName": "createdOn",
-        "dataType": "datetime",
-        "dataLength": null,
-        "dataPrecision": null,
-        "dataScale": null,
-        "nullable": "N"
-      }
-    },
-    "updatedBy": {
-      "type": "Number",
-      "required": false,
-      "length": null,
-      "precision": 3,
-      "scale": 0,
-      "mysql": {
-        "columnName": "updatedBy",
+        "columnName": "user",
         "dataType": "bigint",
         "dataLength": null,
         "dataPrecision": 19,
@@ -168,24 +130,51 @@
         "nullable": "Y"
       }
     },
-    "updatedOn": {
-      "type": "Date",
+    "ip": {
+      "type": "String",
       "required": false,
-      "length": null,
+      "length": 45,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "updatedOn",
+        "columnName": "ip",
+        "dataType": "varchar",
+        "dataLength": 45,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "ip_forwarded": {
+      "type": "String",
+      "required": false,
+      "length": 45,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "ip_forwarded",
+        "dataType": "varchar",
+        "dataLength": 45,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "created_at": {
+      "type": "Date",
+      "required": true,
+      "length": null,
+      "precision": null,
+      "scale": null,
+      "defaultFn": "now",
+      "mysql": {
+        "columnName": "created_at",
         "dataType": "datetime",
         "dataLength": null,
         "dataPrecision": null,
         "dataScale": null,
-        "nullable": "Y"
+        "nullable": "N"
       }
     }
-  },
-  "validations": [],
-  "relations": {},
-  "acls": [],
-  "methods": {}
+  }
 }
