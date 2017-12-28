@@ -1,5 +1,7 @@
 'use strict';
 var _ = require("lodash");
+var app = require('../../server/server');
+var i18next = require('i18next');
 module.exports = function (Feeplanassociation) {
 
     Feeplanassociation.updateFeeplanAssociation = function (feeplanassociations, options, cb) {
@@ -60,6 +62,51 @@ module.exports = function (Feeplanassociation) {
             cb(null);
         }
     }
+
+    Feeplanassociation.deleteFeeplanAssociation = function (feePlanId, academicYear, cb) {
+        if (academicYear && feePlanId) {
+            app.models.Feeplan.find({ where: { and: [{ id: feePlanId }, { academicYear: academicYear }] } },
+                function (err, feeplanObj) {
+                    var Id=feePlanId;
+                    var acyear=academicYear;
+                    if (feeplanObj && feeplanObj.length > 0 && !feeplanObj[0].isTransactionProcessed) {
+                        Feeplanassociation.destroyAll({feeplanId:Id,academicYear:acyear }, function (err, info) {
+                            if (err) {
+                                cb(err);
+                            }
+                            else {
+                                cb(null, true);
+                            }
+                        });
+                    }
+                    else {
+                        var error = new Error();
+                        error.status = 422;
+                        error.message = i18next.t('error_feePlanProcessedAssociationDelete');
+                        cb(error);
+                    }
+                });
+        }
+        else {
+            var error = new Error();
+            error.status = 422;
+            error.message = i18next.t('error_feePlanProcessedAssociationDeleteParameterMissing');
+            cb(error);
+        }
+    }
+
+    Feeplanassociation.remoteMethod('deleteFeeplanAssociation', {
+        accepts: [{
+            arg: 'feePlanId',
+            type: 'int'
+        }, {
+            arg: 'academicYear',
+            type: 'string'
+        }],
+        http: { path: '/deleteFeeplanheaddetails/:feePlanId/:academicYear', verb: 'delete' },
+        returns: { arg: 'result', type: 'object' }
+    });
+
 
     Feeplanassociation.remoteMethod('updateFeeplanAssociation', {
         accepts: [{

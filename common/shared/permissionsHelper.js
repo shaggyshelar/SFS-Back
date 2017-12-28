@@ -468,6 +468,9 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
             propertyAccess.push({ model: selectedModel, property: "destroyById", accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
 
         }
+        else if(selectedModel.toLowerCase() == "feeplanassociation"){
+            propertyAccess.push({ model: selectedModel, property: "deleteFeeplanAssociation", accessType: "EXECUTE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+        }
         else {
             propertyAccess.push({ model: selectedModel, property: "deleteRecord", accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
         }
