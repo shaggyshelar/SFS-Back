@@ -31,7 +31,19 @@
     "TimestampMixin": true,
     "DeleteOverrideMixin": true,
     "DuplicateErrorHandler": true,
-    "SearchFilterMixin":true
+    "SearchFilterMixin":true,
+    "Auditz" : {
+      "createdAt": "createdOn",
+      "updatedAt": "updatedOn",
+      "schoolId":"schoolId",
+      "softDelete": false,
+      "revisions": {
+        "name": "AuditLog",
+        "idType": "Number",
+        "dataSource": "mysql",
+        "autoUpdate": false
+      }
+    }
   },
   "properties": {
     "id": {
