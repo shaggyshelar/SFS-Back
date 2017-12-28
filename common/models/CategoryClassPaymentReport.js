@@ -4,6 +4,7 @@ var ds = app.dataSources.mysql;
 module.exports = function (CategoryClassPaymentReport) {
     CategoryClassPaymentReport.getCategoryClassPaymentReport = function (schoolId, fromDate, toDate, classIds, categoryIds, statuses, cb) {
 
+
         var sql = "CALL `spRptPaymentDetailsByClassAndCategory`(" + schoolId + ",'" + fromDate + "','" + toDate;
         if (classIds)
             sql = sql + "','" + classIds;
@@ -19,11 +20,14 @@ module.exports = function (CategoryClassPaymentReport) {
         else
             sql = sql + "','";
 
-            sql = sql + "');";
+        sql = sql + "');";
 
         ds.connector.query(sql, function (err, data) {
             if (err) {
                 console.log("Error:", err);
+            }
+            if (data.length > 0) {
+                data = data[0];
             }
             cb(null, data);
             console.log("data:", data);
