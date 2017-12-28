@@ -21,6 +21,9 @@ module.exports = function (FeeheadPaymentReport) {
             if (err) {
                 console.log("Error:", err);
             }
+            if (data.length > 0) {
+                data = data[0];
+            }
             cb(null, data);
             console.log("data:", data);
         });
