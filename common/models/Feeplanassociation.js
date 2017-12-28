@@ -67,8 +67,10 @@ module.exports = function (Feeplanassociation) {
         if (academicYear && feePlanId) {
             app.models.Feeplan.find({ where: { and: [{ id: feePlanId }, { academicYear: academicYear }] } },
                 function (err, feeplanObj) {
+                    var Id=feePlanId;
+                    var acyear=academicYear;
                     if (feeplanObj && feeplanObj.length > 0 && !feeplanObj[0].isTransactionProcessed) {
-                        Feeplanassociation.destroyAll({ where: { and: [{ id: feePlanId }, { academicYear: academicYear }] } }, function (err, info) {
+                        Feeplanassociation.destroyAll({feeplanId:Id,academicYear:acyear }, function (err, info) {
                             if (err) {
                                 cb(err);
                             }
@@ -101,7 +103,7 @@ module.exports = function (Feeplanassociation) {
             arg: 'academicYear',
             type: 'string'
         }],
-        http: { path: '/deleteFeeplanheaddetails', verb: 'delete' },
+        http: { path: '/deleteFeeplanheaddetails/:feePlanId/:academicYear', verb: 'delete' },
         returns: { arg: 'result', type: 'object' }
     });
 
