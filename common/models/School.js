@@ -1,5 +1,6 @@
 'use strict';
 var app = require('../../server/server');
+var ds = app.dataSources.mysql;
 module.exports = function (School) {
   School.validatesPresenceOf(
     'instituteId',
@@ -66,6 +67,35 @@ module.exports = function (School) {
   }
 
 
+
+  School.getDashboardDetails = function (schoolId, cb) {
+    var sql = "CALL `spDashboard`(" + schoolId + ");";
+
+    ds.connector.query(sql, function (err, data) {
+      if (err) {
+        console.log("Error:", err);
+      }
+      if (data.length > 0) {
+        data = data[0];
+      }
+      cb(null, data);
+      console.log("data:", data);
+    });
+  }
+
+  School.remoteMethod(
+    'getDashboardDetails', {
+      accepts: [{
+        arg: 'schoolId',
+        type: 'int'
+      }],
+      http: { path: '/:schoolId/getDashboardDetails', verb: 'get' },
+      returns: { arg: 'result', type: 'object' }
+    }
+  );
+
+
+
   School.getUserForSchoolAdmin = function (schoolId, options, cb) {
     if (options.accessToken) {
       app.models.Userschooldetails.find({ where: { schoolId: schoolId } }, function (err, _users) {
@@ -74,9 +104,9 @@ module.exports = function (School) {
         }
         else {
           var condition = _users.map(function (s, i) {
-            return  s.userId;
+            return s.userId;
           });
-          app.models.User.find({ where:{ and:[ {id: {inq: condition}}, {roleId:{gt:2}}]}}, function (err, _assUserRole) {
+          app.models.User.find({ where: { and: [{ id: { inq: condition } }, { roleId: { gt: 2 } }] } }, function (err, _assUserRole) {
             if (err) {
               cb(err);
             }
@@ -90,7 +120,7 @@ module.exports = function (School) {
   }
 
 
-  School.getUserCountForSchoolAdmin= function (schoolId, options, cb) {
+  School.getUserCountForSchoolAdmin = function (schoolId, options, cb) {
     if (options.accessToken) {
       app.models.Userschooldetails.find({ where: { schoolId: schoolId } }, function (err, _users) {
         if (err) {
@@ -98,14 +128,14 @@ module.exports = function (School) {
         }
         else {
           var condition = _users.map(function (s, i) {
-            return  s.userId;
+            return s.userId;
           });
-          app.models.User.find({ where:{ and:[ {id: {inq: condition}}, {roleId:{gt:2}}]}}, function (err, _assUserRole) {
+          app.models.User.find({ where: { and: [{ id: { inq: condition } }, { roleId: { gt: 2 } }] } }, function (err, _assUserRole) {
             if (err) {
               cb(err);
             }
             else {
-              cb(null, _assUserRole.length );
+              cb(null, _assUserRole.length);
             }
           });
         }
@@ -137,7 +167,7 @@ module.exports = function (School) {
     accepts: [{
       arg: 'schoolId',
       type: 'Number'
-    }, 
+    },
     {
       arg: "options",
       type: "object",
@@ -152,7 +182,7 @@ module.exports = function (School) {
     accepts: [{
       arg: 'schoolId',
       type: 'Number'
-    }, 
+    },
     {
       arg: "options",
       type: "object",
