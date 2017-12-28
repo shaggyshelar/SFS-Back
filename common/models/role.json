@@ -42,8 +42,8 @@
     "DuplicateErrorHandler": true,
     "SearchFilterMixin":true,
     "Auditz" : {
-      "createdAt": "createdOn",
-      "updatedAt": "updatedOn",
+      "createdAt": "created",
+      "updatedAt": "modified",
       "schoolId":"schoolId",
       "softDelete": false,
       "revisions": {
@@ -145,14 +145,14 @@
         "nullable": "N"
       }
     },
-    "createdOn": {
+    "created": {
       "type": "Date",
       "required": false,
       "length": null,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "createdOn",
+        "columnName": "created",
         "dataType": "datetime",
         "dataLength": null,
         "dataPrecision": null,
@@ -175,14 +175,14 @@
         "nullable": "Y"
       }
     },
-    "updatedOn": {
+    "modified": {
       "type": "Date",
       "required": false,
       "length": null,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "updatedOn",
+        "columnName": "modified",
         "dataType": "datetime",
         "dataLength": null,
         "dataPrecision": null,
