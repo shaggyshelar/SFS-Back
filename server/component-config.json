@@ -3,6 +3,11 @@
     "mountPath": "/explorer",
     "generateOperationScopedModels": true
   },
+  "loopback-component-remote-ctx": {
+    "enabled": true,
+    "argName": "remoteCtx",
+    "blackList": ["User"]
+  },
   "loopback-component-log": {
     "enabled": true,
     "name": "logger",
