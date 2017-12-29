@@ -6,7 +6,7 @@ module.exports = function (FeeheadPaymentReport) {
 
         var sql = "CALL `spRptPaymentDetailsByFeeHeads`(" + schoolId + ",'" + fromDate + "','" + toDate;
         if (feeHeadNames)
-            sql = sql + "','" + classIds;
+            sql = sql + "','" + feeHeadNames;
         else
             sql = sql + "','";
 
