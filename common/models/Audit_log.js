@@ -38,6 +38,8 @@ module.exports = function (AuditLog) {
           next();
         }
       });
+    } else {
+      next();
     }
   });
 };
