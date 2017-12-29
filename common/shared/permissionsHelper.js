@@ -317,6 +317,47 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
             return callback(propertyAccess);
             
         }
+        else if (selectedModel.toLowerCase() == "Vwauditlog") {
+            var propertyArr = [
+                { property: "__get__getAuditDetails", model: "Vwauditlog" },
+                { property: "__get__getAuditDetailsCount", model: "Vwauditlog" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+            return callback(propertyAccess);
+        }
+        else if (selectedModel.toLowerCase() == "FeeHeadPaymentReport") {
+            var propertyArr = [
+                { property: "__get__getFeeHeadPaymentReport", model: "FeeHeadPaymentReport" },
+                { property: "__get__getFeeheadListReport", model: "FeeHeadPaymentReport" }
+                
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+            return callback(propertyAccess);
+            
+        }
+        else if (selectedModel.toLowerCase() == "CategoryClassPaymentReport") {
+            var propertyArr = [
+                { property: "__get__getCategoryClassPaymentReport", model: "CategoryClassPaymentReport" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+            return callback(propertyAccess);
+        }
+        if (selectedModel.toLowerCase() == "StudentCategoryReport") {
+            var propertyArr = [
+                { property: "__count__Students", model: "School" },
+                { property: "__get__Students", model: "School" },
+                { property: "__findById__Students", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
         propertyAccess.push({ model: selectedModel, property: "find", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
         propertyAccess.push({ model: selectedModel, property: "findById", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
         propertyAccess.push({ model: selectedModel, property: "count", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
@@ -445,6 +486,9 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
             selectedModel.toLowerCase() == "userschooldetails") {
             propertyAccess.push({ model: selectedModel, property: "destroyById", accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
 
+        }
+        else if(selectedModel.toLowerCase() == "feeplanassociation"){
+            propertyAccess.push({ model: selectedModel, property: "deleteFeeplanAssociation", accessType: "EXECUTE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
         }
         else {
             propertyAccess.push({ model: selectedModel, property: "deleteRecord", accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
