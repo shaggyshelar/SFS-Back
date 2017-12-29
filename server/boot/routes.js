@@ -851,7 +851,7 @@ module.exports = function (app) {
 
                   if (loggedInUser.roleId == i18next.t('school_admin_role_Id')) {
 
-                    app.models.user.find({ where: { roleId: i18next.t('super_admin_role_Id') }, include: { relation: 'role' } }, function (err, superAdminUsers) {
+                    app.models.user.find({ where: { roleId: i18next.t('super_admin_role_Id'), isActivate :true, emailVerified: true }, include: { relation: 'role' } }, function (err, superAdminUsers) {
                       if (err) {
                         res.status(err.statusCode);
                         res.json(err);
@@ -939,7 +939,12 @@ module.exports = function (app) {
                                 res.json(err);
                               }
                               else {
-                                var adminUsers = _userSchoolDetails.filter(function (data) { if (data.__data.UserschoolUser) return data.__data.UserschoolUser.roleId == 2 });
+                                var adminUsers = _userSchoolDetails.filter(function (data) { 
+                                  if (data.__data.UserschoolUser) 
+                                    return (
+                                        data.__data.UserschoolUser.roleId == 2 
+                                        && data.__data.UserschoolUser.isActivate 
+                                        && data.__data.UserschoolUser.emailVerified) });
                                 adminUsers.map(function (userMapping, index) {
 
                                   emailHelper.sendEmails('authenticationUserLocked',
