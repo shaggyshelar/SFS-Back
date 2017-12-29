@@ -317,6 +317,16 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
             return callback(propertyAccess);
             
         }
+        else if (selectedModel.toLowerCase() == "Vwauditlog") {
+            var propertyArr = [
+                { property: "__get__getAuditDetails", model: "Vwauditlog" },
+                { property: "__get__getAuditDetailsCount", model: "Vwauditlog" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+            return callback(propertyAccess);
+        }
         else if (selectedModel.toLowerCase() == "FeeHeadPaymentReport") {
             var propertyArr = [
                 { property: "__get__getFeeHeadPaymentReport", model: "FeeHeadPaymentReport" },
