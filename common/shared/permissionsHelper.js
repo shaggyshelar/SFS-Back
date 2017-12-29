@@ -338,7 +338,16 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
             });
             return callback(propertyAccess);
         }
-
+        if (selectedModel.toLowerCase() == "StudentCategoryReport") {
+            var propertyArr = [
+                { property: "__count__Students", model: "School" },
+                { property: "__get__Students", model: "School" },
+                { property: "__findById__Students", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+        }
         propertyAccess.push({ model: selectedModel, property: "find", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
         propertyAccess.push({ model: selectedModel, property: "findById", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
         propertyAccess.push({ model: selectedModel, property: "count", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
