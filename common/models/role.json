@@ -42,9 +42,8 @@
     "DuplicateErrorHandler": true,
     "SearchFilterMixin":true,
     "Auditz" : {
-      "createdAt": "created",
-      "updatedAt": "modified",
-      "schoolId":"schoolId",
+      "createdAt": false,
+      "updatedAt": false,
       "softDelete": false,
       "revisions": {
         "name": "AuditLog",

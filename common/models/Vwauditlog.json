@@ -1,21 +1,20 @@
 {
-  "name": "AuditLog",
+  "name": "Vwauditlog",
   "options": {
     "idInjection": false,
     "mysql": {
       "schema": "schoolfeesystem",
-      "table": "audit_log"
+      "table": "vwauditlog"
     },
     "relations": {}
   },
   "properties": {
     "id": {
       "type": "Number",
-      "required": false,
+      "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
-      "id": 1,
       "mysql": {
         "columnName": "id",
         "dataType": "bigint",
@@ -40,6 +39,21 @@
         "nullable": "Y"
       }
     },
+    "schoolName": {
+      "type": "String",
+      "required": false,
+      "length": 100,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "schoolName",
+        "dataType": "varchar",
+        "dataLength": 100,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
     "action": {
       "type": "String",
       "required": true,
@@ -55,14 +69,14 @@
         "nullable": "N"
       }
     },
-    "table_name": {
+    "tableName": {
       "type": "String",
       "required": true,
       "length": 45,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "table_name",
+        "columnName": "tableName",
         "dataType": "varchar",
         "dataLength": 45,
         "dataPrecision": null,
@@ -70,14 +84,14 @@
         "nullable": "N"
       }
     },
-    "row_id": {
+    "rowId": {
       "type": "Number",
       "required": true,
       "length": null,
       "precision": 19,
       "scale": 0,
       "mysql": {
-        "columnName": "row_id",
+        "columnName": "rowId",
         "dataType": "bigint",
         "dataLength": null,
         "dataPrecision": 19,
@@ -86,7 +100,7 @@
       }
     },
     "old": {
-      "type": "Any",
+      "type": "String",
       "required": false,
       "length": 65535,
       "precision": null,
@@ -101,7 +115,7 @@
       }
     },
     "new": {
-      "type": "Any",
+      "type": "String",
       "required": false,
       "length": 65535,
       "precision": null,
@@ -115,18 +129,33 @@
         "nullable": "Y"
       }
     },
-    "user": {
+    "userId": {
       "type": "Number",
       "required": false,
       "length": null,
       "precision": 19,
       "scale": 0,
       "mysql": {
-        "columnName": "user",
+        "columnName": "userId",
         "dataType": "bigint",
         "dataLength": null,
         "dataPrecision": 19,
         "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "userName": {
+      "type": "String",
+      "required": false,
+      "length": 50,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "userName",
+        "dataType": "varchar",
+        "dataLength": 50,
+        "dataPrecision": null,
+        "dataScale": null,
         "nullable": "Y"
       }
     },
@@ -145,14 +174,14 @@
         "nullable": "Y"
       }
     },
-    "ip_forwarded": {
+    "ipForwarded": {
       "type": "String",
       "required": false,
       "length": 45,
       "precision": null,
       "scale": null,
       "mysql": {
-        "columnName": "ip_forwarded",
+        "columnName": "ipForwarded",
         "dataType": "varchar",
         "dataLength": 45,
         "dataPrecision": null,
@@ -160,15 +189,14 @@
         "nullable": "Y"
       }
     },
-    "created_at": {
+    "createdOn": {
       "type": "Date",
       "required": true,
       "length": null,
       "precision": null,
       "scale": null,
-      "defaultFn": "now",
       "mysql": {
-        "columnName": "created_at",
+        "columnName": "createdOn",
         "dataType": "datetime",
         "dataLength": null,
         "dataPrecision": null,
@@ -176,6 +204,5 @@
         "nullable": "N"
       }
     }
-  },
-  "acls": []
+  }
 }
