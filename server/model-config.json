@@ -161,6 +161,10 @@
     "dataSource": "mysql",
     "public": true
   },
+  "Vwauditlog":{
+    "dataSource": "mysql",
+    "public": true
+  },
   "FeeHeadPaymentReport": {
     "dataSource": "mysql",
     "public": true
