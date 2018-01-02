@@ -9,14 +9,15 @@ module.exports = function (AuditLog) {
     var ctx1 = LoopBackContext.getCurrentContext();
     var accessToken = ctx1 && ctx1.get('accessToken');
 
+    // sets userId in user
+    ctx.instance.user = accessToken.userId;
+
     // Get the model name that is created/updated/deleted
     var modelName = ctx.instance.table_name;
 
     if (ctx.instance.new && ctx.instance.new.schoolId) {
       // sets schoolId
       ctx.instance.schoolId = ctx.instance.new.schoolId;
-      // sets userId in user
-      ctx.instance.user = accessToken.userId;
 
       app.models[modelName].find({
         "where": {
@@ -34,8 +35,6 @@ module.exports = function (AuditLog) {
       
       // sets schoolId
       ctx.instance.schoolId = ctx.instance.old.schoolId;
-      // sets userId in user
-      ctx.instance.user = accessToken.userId;
 
       app.models[modelName].find({
         "where": {
