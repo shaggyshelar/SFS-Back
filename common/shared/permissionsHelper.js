@@ -329,8 +329,8 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
         }
         else if (selectedModel.toLowerCase() == "FeeHeadPaymentReport") {
             var propertyArr = [
-                { property: "__get__getFeeHeadPaymentReport", model: "FeeHeadPaymentReport" },
-                { property: "__get__getFeeheadListReport", model: "FeeHeadPaymentReport" }
+                { property: "getFeeHeadPaymentReport", model: "FeeHeadPaymentReport" },
+                { property: "getFeeheadListReport", model: "FeeHeadPaymentReport" }
                 
             ];
             propertyArr.map(function (p, i) {
@@ -341,7 +341,7 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
         }
         else if (selectedModel.toLowerCase() == "CategoryClassPaymentReport") {
             var propertyArr = [
-                { property: "__get__getCategoryClassPaymentReport", model: "CategoryClassPaymentReport" }
+                { property: "getCategoryClassPaymentReport", model: "CategoryClassPaymentReport" }
             ];
             propertyArr.map(function (p, i) {
                 propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
