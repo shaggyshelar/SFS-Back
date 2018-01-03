@@ -329,7 +329,7 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
         }
         else if (selectedModel.toLowerCase() == "feeheadpaymentreport") {
             var propertyArr = [
-                { property: "getFeeHeadPaymentReport", model: "FeeHeadPaymentReport" },
+                { property: "getFeeheadPaymentReport", model: "FeeHeadPaymentReport" },
                 { property: "getFeeheadListReport", model: "FeeHeadPaymentReport" }
                 
             ];
