@@ -9,8 +9,10 @@ module.exports = function (AuditLog) {
     var ctx1 = LoopBackContext.getCurrentContext();
     var accessToken = ctx1 && ctx1.get('accessToken');
 
-    // sets userId in user
-    ctx.instance.user = accessToken.userId;
+    // Checkes if userId is not null, sets userId in user
+    if(accessToken) {
+      ctx.instance.user = accessToken.userId;
+    }
 
     // Get the model name that is created/updated/deleted
     var modelName = ctx.instance.table_name;
