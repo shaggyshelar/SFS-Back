@@ -317,7 +317,7 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
             return callback(propertyAccess);
             
         }
-        else if (selectedModel.toLowerCase() == "Vwauditlog") {
+        else if (selectedModel.toLowerCase() == "vwauditlog") {
             var propertyArr = [
                 { property: "__get__getAuditDetails", model: "Vwauditlog" },
                 { property: "__get__getAuditDetailsCount", model: "Vwauditlog" }
@@ -327,7 +327,7 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
             });
             return callback(propertyAccess);
         }
-        else if (selectedModel.toLowerCase() == "FeeHeadPaymentReport") {
+        else if (selectedModel.toLowerCase() == "feeheadpaymentreport") {
             var propertyArr = [
                 { property: "getFeeHeadPaymentReport", model: "FeeHeadPaymentReport" },
                 { property: "getFeeheadListReport", model: "FeeHeadPaymentReport" }
@@ -339,7 +339,7 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
             return callback(propertyAccess);
             
         }
-        else if (selectedModel.toLowerCase() == "CategoryClassPaymentReport") {
+        else if (selectedModel.toLowerCase() == "categoryclasspaymentreport") {
             var propertyArr = [
                 { property: "getCategoryClassPaymentReport", model: "CategoryClassPaymentReport" }
             ];
@@ -348,7 +348,7 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
             });
             return callback(propertyAccess);
         }
-        if (selectedModel.toLowerCase() == "StudentCategoryReport") {
+        if (selectedModel.toLowerCase() == "studentcategoryreport") {
             var propertyArr = [
                 { property: "__count__Students", model: "School" },
                 { property: "__get__Students", model: "School" },
@@ -357,6 +357,7 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
             propertyArr.map(function (p, i) {
                 propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
             });
+            return callback(propertyAccess);
         }
         propertyAccess.push({ model: selectedModel, property: "find", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
         propertyAccess.push({ model: selectedModel, property: "findById", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
