@@ -147,7 +147,7 @@ module.exports = function (app) {
     }
     if (req.body.paymentDateTime) {
       userParams.push(['paymentDateTime', req.body.paymentDateTime]);
-      if (!moment(req.body.paymentDateTime, 'YYYYMMDDhhmmss', true).isValid()) {
+      if (!moment(req.body.paymentDateTime, 'YYYYMMDDHHmmss', true).isValid()) {
         errorMessages += i18next.t('api_validation_adviceInvalidDate');
       }
     } else {
@@ -939,11 +939,11 @@ module.exports = function (app) {
                                 res.json(err);
                               }
                               else {
-                                var adminUsers = _userSchoolDetails.filter(function (data) { 
-                                  if (data.__data.UserschoolUser) 
+                                var adminUsers = _userSchoolDetails.filter(function (data) {
+                                  if (data.__data.UserschoolUser)
                                     return (
-                                        data.__data.UserschoolUser.roleId == 2 
-                                        && data.__data.UserschoolUser.isActivate 
+                                        data.__data.UserschoolUser.roleId == 2
+                                        && data.__data.UserschoolUser.isActivate
                                         && data.__data.UserschoolUser.emailVerified) });
                                 adminUsers.map(function (userMapping, index) {
 
