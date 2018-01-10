@@ -236,7 +236,9 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
         else if (selectedModel.toLowerCase() == "school") {
             var propertyArr = [
                 { property: "__get__StudentSchool", model: "Student" },
-                { property: "__get__ClassSchool", model: "Class" }
+                { property: "__get__ClassSchool", model: "Class" },
+                { property: "__get__getUserForSchoolAdmin", model: "School", accessType: "EXECUTE" },
+                { property: "__get__getUserCountForSchoolAdmin", model: "School" }
             ];
             propertyArr.map(function (p, i) {
                 propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
@@ -314,6 +316,48 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
             });
             return callback(propertyAccess);
             
+        }
+        else if (selectedModel.toLowerCase() == "vwauditlog") {
+            var propertyArr = [
+                { property: "__get__getAuditDetails", model: "Vwauditlog" },
+                { property: "__get__getAuditDetailsCount", model: "Vwauditlog" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+            return callback(propertyAccess);
+        }
+        else if (selectedModel.toLowerCase() == "feeheadpaymentreport") {
+            var propertyArr = [
+                { property: "getFeeheadPaymentReport", model: "FeeHeadPaymentReport" },
+                { property: "getFeeheadListReport", model: "FeeHeadPaymentReport" }
+                
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+            return callback(propertyAccess);
+            
+        }
+        else if (selectedModel.toLowerCase() == "categoryclasspaymentreport") {
+            var propertyArr = [
+                { property: "getCategoryClassPaymentReport", model: "CategoryClassPaymentReport" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+            return callback(propertyAccess);
+        }
+        if (selectedModel.toLowerCase() == "studentcategoryreport") {
+            var propertyArr = [
+                { property: "__count__Students", model: "School" },
+                { property: "__get__Students", model: "School" },
+                { property: "__findById__Students", model: "School" }
+            ];
+            propertyArr.map(function (p, i) {
+                propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
+            });
+            return callback(propertyAccess);
         }
         propertyAccess.push({ model: selectedModel, property: "find", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
         propertyAccess.push({ model: selectedModel, property: "findById", accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
@@ -443,6 +487,9 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
             selectedModel.toLowerCase() == "userschooldetails") {
             propertyAccess.push({ model: selectedModel, property: "destroyById", accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
 
+        }
+        else if(selectedModel.toLowerCase() == "feeplanassociation"){
+            propertyAccess.push({ model: selectedModel, property: "deleteFeeplanAssociation", accessType: "EXECUTE", permission: "ALLOW", principalId: role, principalType: "ROLE" });
         }
         else {
             propertyAccess.push({ model: selectedModel, property: "deleteRecord", accessType: "WRITE", permission: "ALLOW", principalId: role, principalType: "ROLE" });

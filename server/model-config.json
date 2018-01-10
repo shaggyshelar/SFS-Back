@@ -10,7 +10,8 @@
       "loopback/common/mixins",
       "loopback/server/mixins",
       "../common/mixins",
-      "./mixins"
+      "./mixins",
+      "../node_modules/loopback-auditz"
     ]
   },
   "User": {
@@ -157,6 +158,22 @@
     "public": true
   },
   "Vwinvoicereport":{
+    "dataSource": "mysql",
+    "public": true
+  },
+  "Vwauditlog":{
+    "dataSource": "mysql",
+    "public": true
+  },
+  "FeeHeadPaymentReport": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "CategoryClassPaymentReport": {
+    "dataSource": "mysql",
+    "public": true
+  },
+  "AuditLog":{
     "dataSource": "mysql",
     "public": true
   }

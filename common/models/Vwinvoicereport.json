@@ -264,6 +264,21 @@
         "nullable": "N"
       }
     },
+    "grNumber": {
+      "type": "String",
+      "required": true,
+      "length": 50,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "grNumber",
+        "dataType": "varchar",
+        "dataLength": 50,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
     "classId": {
       "type": "Number",
       "required": true,

@@ -3,6 +3,7 @@
     "mountPath": "/explorer",
     "generateOperationScopedModels": true
   },
+  
   "loopback-component-log": {
     "enabled": true,
     "name": "logger",

@@ -12,6 +12,8 @@ var authHelper = require('../shared/authHelper');
 var randomize = require('randomatic');
 var app = require('../../server/server');
 var g = require('loopback/lib/globalize');
+var i18next = require('i18next');
+var emailHelper = require('../shared/emailHelper');
 module.exports = function (User) {
   // send verification email after registration
   User.afterRemote('create', function (context, user, next) {
@@ -19,7 +21,7 @@ module.exports = function (User) {
       type: 'email',
       to: user.email,
       from: 'noreply@loopback.com',
-      subject: 'SFS: Thanks for registering.',
+      subject: i18next.t('email_userRegistrationSubject'),
       template: path.resolve(__dirname, '../../server/views/verify.ejs'),
       redirect: '/verified',
       user: user,
@@ -33,7 +35,7 @@ module.exports = function (User) {
       context.res.render('response', {
         title: 'Signed up successfully',
         content: 'Please check your email and click on the verification link ' +
-        'before logging in.',
+          'before logging in.',
         redirectTo: '/',
         redirectToLinkText: 'Log in',
       });
@@ -44,9 +46,9 @@ module.exports = function (User) {
   User.afterRemote('prototype.verify', function (context, user, next) {
     context.res.render('response', {
       title: 'A Link to reverify your identity has been sent ' +
-      'to your email successfully',
+        'to your email successfully',
       content: 'Please check your email and click on the verification link ' +
-      'before logging in',
+        'before logging in',
       redirectTo: '/',
       redirectToLinkText: 'Log in',
     });
@@ -57,9 +59,11 @@ module.exports = function (User) {
     var host = app.get("host"); //config.host
     var port = app.get("port"); // config.port
     var url = 'http://' + host + ':' + port + '/reset-password';
-    var html = 'Click <a href="' + url + '?access_token=' +
-      info.accessToken.id + '">here</a> to reset your password';
-    var subject = "SFS: Password reset";
+    // var html = 'Click <a href="' + url + '?access_token=' +
+    //   info.accessToken.id + '">here</a> to reset your password';
+    // var subject = "SFS: Password reset";
+    var subject = i18next.t('email_passwordResetSubject');
+    var template = 'passwordReset';
 
     app.models.user.findOne({ where: { email: info.email } }, function (err, _user) {
       if (err) {
@@ -67,20 +71,35 @@ module.exports = function (User) {
       }
       else {
         if (_user.isBolocked) {
-          html = 'Click <a href="' + url + '?access_token=' +
-            info.accessToken.id + '">here</a> to reset your password and unlock your account.';
-          subject = "SFS: Unlock account";
+          subject = i18next.t('email_unblockAccountSubject');
+          template = 'userLocked';
         }
+        emailHelper.sendEmails(template, info.email, subject,
+          { url: url, tokenId: info.accessToken.id }, function (err, emailData) {
+            if (err) {
+              res.status(501);
+              res.json(err);
+            }
+            else {
+              console.log('email sent');
+            }
+          });
 
-        User.app.models.Email.send({
-          to: info.email,
-          from: info.email,
-          subject: subject,
-          html: html,
-        }, function (err) {
-          if (err) return console.log('> error sending password reset email');
-          console.log('> sending password reset email to:', info.email);
-        });
+        // if (_user.isBolocked) {
+        //   html = 'Click <a href="' + url + '?access_token=' +
+        //     info.accessToken.id + '">here</a> to reset your password and unlock your account.';
+        //   subject = "SFS: Unlock account";
+        // }
+
+        // User.app.models.Email.send({
+        //   to: info.email,
+        //   from: info.email,
+        //   subject: subject,
+        //   html: html,
+        // }, function (err) {
+        //   if (err) return console.log('> error sending password reset email');
+        //   console.log('> sending password reset email to:', info.email);
+        // });
       }
     });
   });
@@ -175,8 +194,9 @@ module.exports = function (User) {
 
   User.getEmails = function (id, cb) {
     var ds = User.dataSource;
-    var sql = "select u.id,u.email from user u left join userschooldetails usd on u.id = usd.userId where usd.schoolId=? and u.roleId=2";
-    
+    //var sql = "select u.id,u.email from user u left join userschooldetails usd on u.id = usd.userId where usd.schoolId=? and u.roleId=2";
+    var sql = "select u.id,u.email from user u left join userschooldetails usd on u.id = usd.userId where usd.schoolId=? and u.roleId=2 and and u.emailVerified=true and isActivate=true and u.isDelete=false";
+
     ds.connector.query(sql, [id], function (err, User) {
       if (err) console.error(err);
       cb(err, User);
@@ -287,9 +307,9 @@ module.exports = function (User) {
 
   User.remoteMethod('getEmails', {
     accepts: [{
-        arg: 'id',
-        type: 'string'
-      }, 
+      arg: 'id',
+      type: 'string'
+    },
     ],
     http: {
       verb: 'get'

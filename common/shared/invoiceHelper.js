@@ -12,6 +12,7 @@ var moment = require('moment');
 var configFilePath = process.env.NODE_ENV == undefined ?
 '' : '.' + process.env.NODE_ENV;
 var config = require('../../server/config' + configFilePath + '.json');
+var emailHelper = require('./emailHelper');
 
 module.exports = function(app) {
   var ds = app.dataSources.mysql;
@@ -59,8 +60,8 @@ module.exports = function(app) {
     registerInvoice: (invoiceDetails, callback) => {
       var apiHelper = apiHelperObject(app);
       var invoiceParams = [];
-      invoiceParams.push(['merchantId', config.payPhiMerchantID]);
-      invoiceParams.push(['aggregatorId', config.payPhiAggregatorID]);
+      invoiceParams.push(['merchantId', invoiceDetails.merchantId]);
+      invoiceParams.push(['aggregatorId', invoiceDetails.aggregatorId]);
       invoiceParams.push(['userID', invoiceDetails.userId]);
       invoiceParams.push(['invoiceNo', invoiceDetails.invoiceNo]);
       invoiceParams.push(['desc', invoiceDetails.desc]);
@@ -127,6 +128,8 @@ module.exports = function(app) {
         'totalChargeAmount': firstInvoice.totalChargeAmount,
         'currencyCode': '356',
         'dueDate': firstInvoice.dueDate,
+        'merchantId': firstInvoice.merchantId,
+        'aggregatorId': firstInvoice.aggregatorId,
       };
       _.each(invoiceDetails.values, function(invoiceRow) {
         switch (invoiceRow.invoiceType) {
@@ -240,23 +243,24 @@ module.exports = function(app) {
                 });
 
                 rootlogger.info('Sending email for invoice of school: ' + schoolName);
-                var html = i18next.t('csv_updateInvoiceEmailReportHTMLContent', {savedInvoices: registeredInvoices.length, failedInvoices: failedInvoices.length, schoolName: schoolName});
-                app.models.Email.send({
-                  to: schoolAdminEmails,
-                  cc: superAdminEmails,
-                  from: config.supportEmailID,
-                  subject: i18next.t('csv_invoiceUpdationEmailSubject', {schoolName: schoolName}),
-                  html: html,
-                  attachments: [
-                    {
-                      filename: fileName,
-                      content: fs.createReadStream(fileName),
-                    }],
-                }, function(err) {
-                  if (err) {
-                    rootlogger.info('Error sending email for invoice for school: ' + schoolName);
-                  }
-                  rootlogger.info('Sent email for invoice of school: ' + schoolName);
+                emailHelper.getEmailText('csv_updateInvoiceEmailReport', {savedInvoices: registeredInvoices.length, failedInvoices: failedInvoices.length, schoolName: schoolName}, function(error, html) {
+                  app.models.Email.send({
+                    to: schoolAdminEmails,
+                    cc: superAdminEmails,
+                    from: config.supportEmailID,
+                    subject: i18next.t('csv_invoiceUpdationEmailSubject', {schoolName: schoolName}),
+                    html: html,
+                    attachments: [
+                      {
+                        filename: fileName,
+                        content: fs.createReadStream(fileName),
+                      }],
+                  }, function(err) {
+                    if (err) {
+                      rootlogger.info('Error sending email for invoice for school: ' + schoolName);
+                    }
+                    rootlogger.info('Sent email for invoice of school: ' + schoolName);
+                  });
                 });
               });
             });
@@ -368,23 +372,24 @@ module.exports = function(app) {
                   }
                 });
                 rootlogger.info('Sending email for invoice of school: ' + schoolName);
-                var html = i18next.t('csv_registerInvoiceEmailReportHTMLContent', {savedInvoices: registeredInvoices.length, failedInvoices: failedInvoices.length, schoolName: schoolName});
-                app.models.Email.send({
-                  to: schoolAdminEmails,
-                  cc: superAdminEmails,
-                  from: config.supportEmailID,
-                  subject: i18next.t('csv_invoiceRegistrationEmailSubject', {schoolName: schoolName}),
-                  html: html,
-                  attachments: [
-                    {
-                      filename: fileName,
-                      content: fs.createReadStream(fileName),
-                    }],
-                }, function(err) {
-                  if (err) {
-                    rootlogger.info('Error sending email for invoice for school: ' + schoolName);
-                  }
-                  rootlogger.info('Sent email for invoice of school: ' + schoolName);
+                emailHelper.getEmailText('csv_registerInvoiceEmailReport', {savedInvoices: registeredInvoices.length, failedInvoices: failedInvoices.length, schoolName: schoolName}, function(error, html) {
+                  app.models.Email.send({
+                    to: schoolAdminEmails,
+                    cc: superAdminEmails,
+                    from: config.supportEmailID,
+                    subject: i18next.t('csv_invoiceRegistrationEmailSubject', {schoolName: schoolName}),
+                    html: html,
+                    attachments: [
+                      {
+                        filename: fileName,
+                        content: fs.createReadStream(fileName),
+                      }],
+                  }, function(err) {
+                    if (err) {
+                      rootlogger.info('Error sending email for invoice for school: ' + schoolName);
+                    }
+                    rootlogger.info('Sent email for invoice of school: ' + schoolName);
+                  });
                 });
               });
             });
@@ -396,8 +401,8 @@ module.exports = function(app) {
     updateInvoice: (invoice, callback) => {
       var apiHelper = apiHelperObject(app);
       var invoiceParams = [];
-      invoiceParams.push(['merchantId', config.payPhiMerchantID]);
-      invoiceParams.push(['aggregatorId', config.payPhiAggregatorID]);
+      invoiceParams.push(['merchantId', invoice.merchantId]);
+      invoiceParams.push(['aggregatorId', invoice.aggregatorId]);
       invoiceParams.push(['userID', invoice.userId]);
       invoiceParams.push(['invoiceNo', invoice.invoiceNumber]);
       if (invoice.status == 'Paid') {
@@ -572,23 +577,24 @@ module.exports = function(app) {
                 });
 
                 rootlogger.info('Sending email for student registration of school: ' + schoolName);
-                var html = i18next.t('csv_registerStudentEmailReportHTMLContent', {savedStudents: registeredStudents.length, failedStudents: failedStudents.length, schoolName: schoolName});
-                app.models.Email.send({
-                  to: schoolAdminEmails,
-                  cc: superAdminEmails,
-                  from: config.supportEmailID,
-                  subject: i18next.t('csv_studentRegistrationEmailSubject', {schoolName: schoolName}),
-                  html: html,
-                  attachments: [
-                    {
-                      filename: fileName,
-                      content: fs.createReadStream(fileName),
-                    }],
-                }, function(err) {
-                  if (err) {
-                    rootlogger.info('Error sending student registration report to email=\'' + schoolAdminEmails + '\',\n Error=' + err);
-                  }
-                  rootlogger.info('Sent email for student registration of school: ' + schoolName);
+                emailHelper.getEmailText('csv_registerStudentEmailReport', {savedStudents: registeredStudents.length, failedStudents: failedStudents.length, schoolName: schoolName}, function(error, html) {
+                  app.models.Email.send({
+                    to: schoolAdminEmails,
+                    cc: superAdminEmails,
+                    from: config.supportEmailID,
+                    subject: i18next.t('csv_studentRegistrationEmailSubject', {schoolName: schoolName}),
+                    html: html,
+                    attachments: [
+                      {
+                        filename: fileName,
+                        content: fs.createReadStream(fileName),
+                      }],
+                  }, function(err) {
+                    if (err) {
+                      rootlogger.info('Error sending student registration report to email=\'' + schoolAdminEmails + '\',\n Error=' + err);
+                    }
+                    rootlogger.info('Sent email for student registration of school: ' + schoolName);
+                  });
                 });
               });
             });
