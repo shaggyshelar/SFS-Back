@@ -242,12 +242,14 @@ module.exports = function (app) {
             'totalChargeAmountPaid': req.body.chargeAmount,
             'transactionId': req.body.txnID,
             'paymentId': req.body.paymentID,
-            'paymentDate': moment(req.body.paymentDateTime, 'YYYYMMDDhhmmss', true).format('YYYY-MM-DD HH:mm:ss'),
-            'calculatedLateFees': req.body.calculatedLateFees,
+            'paymentDate': moment(req.body.paymentDateTime, 'YYYYMMDDHHmmss', true).format('YYYY-MM-DD HH:mm:ss'),
             'status': 'Paid',
             'updatedBy': 1,
             'updatedOn': dateHelper.getUTCManagedDateTime(),
           };
+          if (req.body.calculatedLateFees) {
+            updatedInvoice.calculatedLateFees = req.body.calculatedLateFees;
+          }
           Invoice.updateAll({id: foundInvoice.id}, updatedInvoice, function (err, updatedUser) {
             if (err) {
               res.status(500);
