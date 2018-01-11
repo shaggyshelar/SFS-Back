@@ -20,6 +20,7 @@ var moment = require('moment');
 var dateHelper = require('../../common/shared/dateHelper');
 var validator = require('validator');
 var emailHelper=require('../../common/shared/emailHelper');
+var bodyParser = require('body-parser');
 
 module.exports = function (app) {
   var ds = app.dataSources.mysql;
@@ -92,19 +93,19 @@ module.exports = function (app) {
 
   app.post('/api/paymentAdvice', function (req, res) {
     var apiHelper = apiHelperObject(app);
-
-    var keys = Object.keys(req.body);
+    var requestBody = JSON.parse(req.body);
+    var keys = Object.keys(requestBody);
     var params = [];
     _.each(keys, function(key) {
       if (key != "secureHash") {
-        params.push([key, req.body[key]]);
+        params.push([key, requestBody[key]]);
       }
     });
 
     var concatenatedParams = apiHelper.getConcatenatedParams(params);
     var hashedKey = apiHelper.getHashedKey(concatenatedParams);
 
-    if (req.body.secureHash !== hashedKey) {
+    if (requestBody.secureHash !== hashedKey) {
       res.status(400);
       res.json({'Message': i18next.t('api_validation_adviceInvalidSecureHash')});
       return;
@@ -112,54 +113,54 @@ module.exports = function (app) {
 
     var errorMessages = '';
     var userParams = [];
-    if (req.body.aggregatorID) {
-      userParams.push(['aggregatorId', req.body.aggregatorID]);
+    if (requestBody.aggregatorID) {
+      userParams.push(['aggregatorId', requestBody.aggregatorID]);
     } else {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'aggregatorId' });
     }
-    if (req.body.merchantId) {
-      userParams.push(['merchantId', req.body.merchantId]);
+    if (requestBody.merchantId) {
+      userParams.push(['merchantId', requestBody.merchantId]);
     } else {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'merchantId' });
     }
-    if (req.body.invoiceNo) {
-      userParams.push(['invoiceNo', req.body.invoiceNo]);
+    if (requestBody.invoiceNo) {
+      userParams.push(['invoiceNo', requestBody.invoiceNo]);
     } else {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'invoiceNo' });
     }
-    if (req.body.userID) {
-      userParams.push(['userID', req.body.userID]);
+    if (requestBody.userID) {
+      userParams.push(['userID', requestBody.userID]);
     }
-    if (req.body.chargeAmount) {
-      userParams.push(['chargeAmount', req.body.chargeAmount]);
+    if (requestBody.chargeAmount) {
+      userParams.push(['chargeAmount', requestBody.chargeAmount]);
     } else {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'chargeAmount' });
     }
-    if (req.body.txnID) {
-      userParams.push(['txnID', req.body.txnID]);
+    if (requestBody.txnID) {
+      userParams.push(['txnID', requestBody.txnID]);
     } else {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'txnID' });
     }
-    if (req.body.paymentID) {
-      userParams.push(['paymentID', req.body.paymentID]);
+    if (requestBody.paymentID) {
+      userParams.push(['paymentID', requestBody.paymentID]);
     } else {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'paymentID' });
     }
-    if (req.body.paymentDateTime) {
-      userParams.push(['paymentDateTime', req.body.paymentDateTime]);
-      if (!moment(req.body.paymentDateTime, 'YYYYMMDDHHmmss', true).isValid()) {
+    if (requestBody.paymentDateTime) {
+      userParams.push(['paymentDateTime', requestBody.paymentDateTime]);
+      if (!moment(requestBody.paymentDateTime, 'YYYYMMDDHHmmss', true).isValid()) {
         errorMessages += i18next.t('api_validation_adviceInvalidDate');
       }
     } else {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'paymentDateTime' });
     }
-    if (req.body.optionalChargeHeadsPaid) {
-      userParams.push(['optionalChargeHeadsPaid', req.body.optionalChargeHeadsPaid]);
+    if (requestBody.optionalChargeHeadsPaid) {
+      userParams.push(['optionalChargeHeadsPaid', requestBody.optionalChargeHeadsPaid]);
     }
-    if (req.body.calculatedLateFees) {
-      userParams.push(['calculatedLateFees', req.body.calculatedLateFees]);
+    if (requestBody.calculatedLateFees) {
+      userParams.push(['calculatedLateFees', requestBody.calculatedLateFees]);
     }
-    if (!req.body.secureHash) {
+    if (!requestBody.secureHash) {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'secureHash' });
     }
 
@@ -173,7 +174,7 @@ module.exports = function (app) {
     // var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
     // var hashedKey = apiHelper.getHashedKey(concatenatedParams);
 
-    // if (req.body.secureHash !== hashedKey) {
+    // if (requestBody.secureHash !== hashedKey) {
     //   res.status(400);
     //   res.json({'Message': i18next.t('api_validation_adviceInvalidSecureHash')});
     //   return;
@@ -182,7 +183,7 @@ module.exports = function (app) {
     async.series([
       function(callback) {
         // merchantId, aggregatorId, userId, invoiceNumber
-        var sql = "CALL `spSelectInvoiceByParameter`('" + req.body.merchantId + "','" + req.body.aggregatorID + "','" + req.body.userID + "','" + req.body.invoiceNo + "');";
+        var sql = "CALL `spSelectInvoiceByParameter`('" + requestBody.merchantId + "','" + requestBody.aggregatorID + "','" + requestBody.userID + "','" + requestBody.invoiceNo + "');";
         ds.connector.query(sql, function(err, data) {
           if (err) {
             console.log('Error:', err);
@@ -202,13 +203,13 @@ module.exports = function (app) {
       }
 
       var findInvoiceQuery = {
-        invoiceNumber: req.body.invoiceNo,
-        merchantId: req.body.merchantId,
-        aggregatorId: req.body.aggregatorID,
+        invoiceNumber: requestBody.invoiceNo,
+        merchantId: requestBody.merchantId,
+        aggregatorId: requestBody.aggregatorID,
       };
 
-      if (req.body.userID) {
-        findInvoiceQuery.userId = req.body.userID;
+      if (requestBody.userID) {
+        findInvoiceQuery.userId = requestBody.userID;
       }
 
       Invoice.find({
@@ -239,16 +240,16 @@ module.exports = function (app) {
           }
 
           var updatedInvoice = {
-            'totalChargeAmountPaid': req.body.chargeAmount,
-            'transactionId': req.body.txnID,
-            'paymentId': req.body.paymentID,
-            'paymentDate': moment(req.body.paymentDateTime, 'YYYYMMDDHHmmss', true).format('YYYY-MM-DD HH:mm:ss'),
+            'totalChargeAmountPaid': requestBody.chargeAmount,
+            'transactionId': requestBody.txnID,
+            'paymentId': requestBody.paymentID,
+            'paymentDate': moment(requestBody.paymentDateTime, 'YYYYMMDDHHmmss', true).format('YYYY-MM-DD HH:mm:ss'),
             'status': 'Paid',
             'updatedBy': 1,
             'updatedOn': dateHelper.getUTCManagedDateTime(),
           };
-          if (req.body.calculatedLateFees) {
-            updatedInvoice.calculatedLateFees = req.body.calculatedLateFees;
+          if (requestBody.calculatedLateFees) {
+            updatedInvoice.calculatedLateFees = requestBody.calculatedLateFees;
           }
           Invoice.updateAll({id: foundInvoice.id}, updatedInvoice, function (err, updatedUser) {
             if (err) {
