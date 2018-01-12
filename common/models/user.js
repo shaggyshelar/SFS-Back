@@ -195,7 +195,7 @@ module.exports = function (User) {
   User.getEmails = function (id, cb) {
     var ds = User.dataSource;
     //var sql = "select u.id,u.email from user u left join userschooldetails usd on u.id = usd.userId where usd.schoolId=? and u.roleId=2";
-    var sql = "select u.id,u.email from user u left join userschooldetails usd on u.id = usd.userId where usd.schoolId=? and u.roleId=2 and and u.emailVerified=true and isActivate=true and u.isDelete=false";
+    var sql = "select u.id,u.email from user u left join userschooldetails usd on u.id = usd.userId where usd.schoolId=? and u.roleId=2 and u.emailVerified=true and isActivate=true and u.isDelete=false";
 
     ds.connector.query(sql, [id], function (err, User) {
       if (err) console.error(err);
