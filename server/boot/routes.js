@@ -93,7 +93,16 @@ module.exports = function (app) {
 
   app.post('/api/paymentAdvice', function (req, res) {
     var apiHelper = apiHelperObject(app);
-    var requestBody = JSON.parse(req.body);
+    var requestBody = {};
+
+    try {
+      requestBody = JSON.parse(req.body);
+    } catch (Exception) {
+      res.status(400);
+      res.json({'Message': i18next.t('api_validation_adviceInvalidJSONData')});
+      return;
+    }
+
     var keys = Object.keys(requestBody);
     var params = [];
     _.each(keys, function(key) {
@@ -267,19 +276,28 @@ module.exports = function (app) {
 
   app.post('/api/paymentSettlement', function (req, res) {
     var apiHelper = apiHelperObject(app);
+    var requestBody = {};
 
-    var keys = Object.keys(req.body);
+    try {
+      requestBody = JSON.parse(req.body);
+    } catch (Exception) {
+      res.status(400);
+      res.json({'Message': i18next.t('api_validation_adviceInvalidJSONData')});
+      return;
+    }
+
+    var keys = Object.keys(requestBody);
     var params = [];
     _.each(keys, function(key) {
       if (key != "secureHash") {
-        params.push([key, req.body[key]]);
+        params.push([key, requestBody[key]]);
       }
     });
 
     var concatenatedParams = apiHelper.getConcatenatedParams(params);
     var hashedKey = apiHelper.getHashedKey(concatenatedParams);
 
-    if (req.body.secureHash !== hashedKey) {
+    if (requestBody.secureHash !== hashedKey) {
       res.status(400);
       res.json({'Message': i18next.t('api_validation_adviceInvalidSecureHash')});
       return;
@@ -287,38 +305,38 @@ module.exports = function (app) {
 
     var errorMessages = '';
     var userParams = [];
-    if (req.body.aggregatorID) {
-      userParams.push(['aggregatorId', req.body.aggregatorID]);
+    if (requestBody.aggregatorID) {
+      userParams.push(['aggregatorId', requestBody.aggregatorID]);
     } else {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'aggregatorId' });
     }
-    if (req.body.merchantId) {
-      userParams.push(['merchantId', req.body.merchantId]);
+    if (requestBody.merchantId) {
+      userParams.push(['merchantId', requestBody.merchantId]);
     } else {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'merchantId' });
     }
-    if (req.body.invoiceNo) {
-      userParams.push(['invoiceNo', req.body.invoiceNo]);
+    if (requestBody.invoiceNo) {
+      userParams.push(['invoiceNo', requestBody.invoiceNo]);
     } else {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'invoiceNo' });
     }
-    if (req.body.userID) {
-      userParams.push(['userID', req.body.userID]);
+    if (requestBody.userID) {
+      userParams.push(['userID', requestBody.userID]);
     }
-    if (req.body.settlementID) {
-      userParams.push(['settlementID', req.body.settlementID]);
+    if (requestBody.settlementID) {
+      userParams.push(['settlementID', requestBody.settlementID]);
     } else {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'settlementID' });
     }
-    if (req.body.settlementDate) {
-      userParams.push(['settlementDate', req.body.settlementDate]);
-      if (!moment(req.body.settlementDate, 'YYYYMMDD', true).isValid()) {
+    if (requestBody.settlementDate) {
+      userParams.push(['settlementDate', requestBody.settlementDate]);
+      if (!moment(requestBody.settlementDate, 'YYYYMMDD', true).isValid()) {
         errorMessages += i18next.t('api_validation_settlementInvalidDate');
       }
     } else {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'settlementDate' });
     }
-    if (!req.body.secureHash) {
+    if (!requestBody.secureHash) {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'secureHash' });
     }
 
@@ -331,7 +349,7 @@ module.exports = function (app) {
     // var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
     // var hashedKey = apiHelper.getHashedKey(concatenatedParams);
 
-    // if (req.body.secureHash !== hashedKey) {
+    // if (requestBody.secureHash !== hashedKey) {
     //   res.status(400);
     //   res.json({'Message': i18next.t('api_validation_adviceInvalidSecureHash')});
     //   return;
@@ -340,7 +358,7 @@ module.exports = function (app) {
     async.series([
       function(callback) {
         // merchantId, aggregatorId, userId, invoiceNumber
-        var sql = "CALL `spSelectInvoiceByParameter`('" + req.body.merchantId + "','" + req.body.aggregatorID + "','" + req.body.userID + "','" + req.body.invoiceNo + "');";
+        var sql = "CALL `spSelectInvoiceByParameter`('" + requestBody.merchantId + "','" + requestBody.aggregatorID + "','" + requestBody.userID + "','" + requestBody.invoiceNo + "');";
         ds.connector.query(sql, function(err, data) {
           if (err) {
             console.log('Error:', err);
@@ -360,13 +378,13 @@ module.exports = function (app) {
       }
 
       var findInvoiceQuery = {
-        invoiceNumber: req.body.invoiceNo,
-        merchantId: req.body.merchantId,
-        aggregatorId: req.body.aggregatorID,
+        invoiceNumber: requestBody.invoiceNo,
+        merchantId: requestBody.merchantId,
+        aggregatorId: requestBody.aggregatorID,
       };
 
-      if (req.body.userID) {
-        findInvoiceQuery.userId = req.body.userID;
+      if (requestBody.userID) {
+        findInvoiceQuery.userId = requestBody.userID;
       }
 
       Invoice.find({
@@ -397,8 +415,8 @@ module.exports = function (app) {
           }
 
           var updatedInvoice = {
-            'settlementID': req.body.settlementID,
-            'settlementDate': moment(req.body.settlementDate, 'YYYYMMDD', true).format('YYYY-MM-DD'),
+            'settlementID': requestBody.settlementID,
+            'settlementDate': moment(requestBody.settlementDate, 'YYYYMMDD', true).format('YYYY-MM-DD'),
             'status': 'Settled',
             'updatedBy': 1,
             'updatedOn': dateHelper.getUTCManagedDateTime(),
