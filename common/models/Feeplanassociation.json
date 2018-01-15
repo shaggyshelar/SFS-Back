@@ -35,7 +35,18 @@
   "mixins": {
     "TimestampMixin": true,
     "DuplicateErrorHandler": true,
-    "SearchFilterMixin":true
+    "SearchFilterMixin":true,
+    "Auditz" : {
+      "createdAt": false,
+      "updatedAt": false,
+      "softDelete": false,
+      "revisions": {
+        "name": "AuditLog",
+        "idType": "Number",
+        "dataSource": "mysql",
+        "autoUpdate": false
+      }
+    }
   },
   "properties": {
     "id": {
