@@ -17,7 +17,6 @@ var app = module.exports = loopback();
 // configure view handler
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-app.use(bodyParser.text());
 app.use(bodyParser.json());
 process.env.NODE_ENV = 'staging';
 app.use(bodyParser.urlencoded({ extended: true }));
