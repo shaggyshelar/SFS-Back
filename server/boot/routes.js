@@ -718,7 +718,7 @@ module.exports = function (app) {
                       isDelete: false,
                       isRegistered: 0,
                       createdBy: user.id,
-                      createdOn: currentDay,
+                      createdOn: dateHelper.getUTCManagedDateTime(),
                     };
                     waterfallFunctions.push(function (next) {
                       studentModel.create(studentToAdd, function (err, post) {
