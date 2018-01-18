@@ -534,10 +534,11 @@ module.exports = function (app) {
                       validationErrors += i18next.t('csv_validation_studentFirstNameRequired');
                     }
 
-                    var middleName = data[2].trim();
-                    if (middleName == '') {
-                      validationErrors += i18next.t('csv_validation_studentMiddleNameRequired');
-                    }
+                    // Commented as requested by client team
+                    // var middleName = data[2].trim();
+                    // if (middleName == '') {
+                    //   validationErrors += i18next.t('csv_validation_studentMiddleNameRequired');
+                    // }
 
                     var lastName = data[3].trim();
                     if (lastName == '') {
@@ -690,7 +691,7 @@ module.exports = function (app) {
                       gRNumber: data[7].trim(),
                       studentCode: data[30].trim(),
                       studentFirstName: firstName,
-                      studentMiddleName: middleName,
+                      studentMiddleName: data[2].trim(),
                       studentLastName: lastName,
                       studentGender: data[4].trim(),
                       fatherFirstName: data[15].trim(),
