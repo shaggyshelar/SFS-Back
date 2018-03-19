@@ -297,11 +297,22 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
             });
         }
         else if (selectedModel.toLowerCase() == "invoice") {
-            var propertyArr = [
+            /**
+             * Changed on 3/19/2018 to add filters to view invoice screen start. 
+             */
+            /*var propertyArr = [
                 { property: "__get__SchoolInvoices", model: "School" },
                 { property: "__findById__SchoolInvoices", model: "School" },
                 { property: "__count__SchoolInvoices", model: "School" }
+            ];*/
+            var propertyArr = [
+                { property: "__get__invoiceReports", model: "School" },
+                { property: "__findById__SchoolInvoices", model: "School" },
+                { property: "__count__invoiceReports", model: "School" }
             ];
+            /**
+             * Changes made on 3/19/2018 to add filters to view invoice screen ends.
+             */
             propertyArr.map(function (p, i) {
                 propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
             });
