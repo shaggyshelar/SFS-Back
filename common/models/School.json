@@ -104,6 +104,8 @@
     "Auditz" : {
       "createdAt": false,
       "updatedAt": false,
+      "createdBy":  false,
+      "updatedBy":  false,
       "softDelete": false,
       "revisions": {
         "name": "AuditLog",
