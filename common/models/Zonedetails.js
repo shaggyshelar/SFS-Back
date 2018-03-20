@@ -1,5 +1,6 @@
 'use strict';
-var dateHelper = require("../shared/dateHelper");
+// var dateHelper = require("../shared/dateHelper");
+var auditLogHelper = require("../shared/auditLogHelper");
 
 module.exports = function (Zonedetails) {
     Zonedetails.updateZonedetails = function (_zonedetails, options, cb) {
@@ -14,7 +15,22 @@ module.exports = function (Zonedetails) {
                     cb(err);
                 }
                 else {
-                  var accessToken = options.accessToken; 
+                    var accessToken = options.accessToken; 
+                    auditLogHelper.setCreatedBy(_zonedetails, accessToken.userId, function(err, _zoneDetailsUpdated) {
+                        if(err) {
+                            cb(err);
+                        }
+                        else {
+                            Zonedetails.create(_zoneDetailsUpdated, function (err, savedZonedetails) {
+                                if (err)
+                                    cb(err);
+                                else
+                                    cb(null, savedZonedetails);
+                            });
+                        }
+                    });
+                    /*
+                    var accessToken = options.accessToken; 
                     var localeDate = dateHelper.getUTCManagedDateTime();
                     _zonedetails.map(function(_zoneItem, index){
                     	if(!_zoneItem.createdOn && !_zoneItem.createdBy) {
@@ -36,6 +52,7 @@ module.exports = function (Zonedetails) {
                         else
                             cb(null, savedZonedetails);
                     });
+                    */
                 }
             });
         }

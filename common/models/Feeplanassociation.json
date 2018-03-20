@@ -33,7 +33,6 @@
     "include": "FeeplanassociationCategory"
   },
   "mixins": {
-    "TimestampMixin": true,
     "DuplicateErrorHandler": true,
     "SearchFilterMixin":true,
     "Auditz" : {

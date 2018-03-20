@@ -2,6 +2,8 @@
 var _ = require("lodash");
 var app = require('../../server/server');
 var i18next = require('i18next');
+var auditLogHelper = require("../shared/auditLogHelper");
+
 module.exports = function (Feeplanassociation) {
 
     Feeplanassociation.updateFeeplanAssociation = function (feeplanassociations, options, cb) {
@@ -47,12 +49,27 @@ module.exports = function (Feeplanassociation) {
                             cb(err);
                         }
                         else {
-                            Feeplanassociation.create(feeplanassociations, function (err, savedAssociations) {
+                            var accessToken = options.accessToken; 
+                            auditLogHelper.setCreatedBy(feeplanassociations, accessToken.userId, function(err, feeplanassociationsUpdated) {
+                                if(err) {
+                                    cb(err);
+                                }
+                                else {
+                                    Feeplanassociation.create(feeplanassociationsUpdated, function (err, savedAssociations) {
+                                        if (err)
+                                            cb(err);
+                                        else
+                                            cb(null, savedAssociations);
+                                    });
+                                }
+                            });
+
+                            /*Feeplanassociation.create(feeplanassociations, function (err, savedAssociations) {
                                 if (err)
                                     cb(err);
                                 else
                                     cb(null, savedAssociations);
-                            });
+                            });*/
                         }
                     });
                 }
