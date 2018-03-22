@@ -151,7 +151,8 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
         if (selectedModel.toLowerCase() == "student") {
             var propertyArr = [
                 { property: "__count__Students", model: "School" },
-                { property: "__get__Students", model: "School" },
+                // { property: "__get__Students", model: "School" },
+                { property: "getStudentDetails", model: "Student" },
                 { property: "__findById__Students", model: "School" }
             ];
             propertyArr.map(function (p, i) {
@@ -252,7 +253,7 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
                 propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
             });
         }
-        else if (selectedModel.toLowerCase() == "feeplan") {
+        else if (selectedModel.toLowerCase() == "feeplan" || selectedModel.toLowerCase() == "verifyfeeplan") {
             var propertyArr = [
                 { property: "__get__FeePlans", model: "School" },
                 { property: "__findById__FeePlans", model: "School" },
@@ -282,7 +283,7 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
                 propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
             });
         }
-        else if (selectedModel.toLowerCase() == "zone") {
+        else if (selectedModel.toLowerCase() == "zone" || selectedModel.toLowerCase() == "verifytransport") {
             var propertyArr = [
                 { property: "__get__zones", model: "School" },
                 { property: "__findById__zones", model: "School" },
@@ -362,7 +363,8 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
         if (selectedModel.toLowerCase() == "studentcategoryreport") {
             var propertyArr = [
                 { property: "__count__Students", model: "School" },
-                { property: "__get__Students", model: "School" },
+                // { property: "__get__Students", model: "School" },
+                { property: "getStudentDetails", model: "Student" },
                 { property: "__findById__Students", model: "School" }
             ];
             propertyArr.map(function (p, i) {
@@ -457,7 +459,7 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
                 propertyAccess.push({ model: p.model, property: p.property, accessType: p.accessType, permission: "ALLOW", principalId: role, principalType: "ROLE" });
             });
         }
-        else if (selectedModel.toLowerCase() == "feeplan") {
+        else if (selectedModel.toLowerCase() == "feeplan" || selectedModel.toLowerCase() == "VerifyFeePlan") {
             var propertyArr = [
                 { property: "__updateById__FeePlans", model: "School", accessType: "WRITE" },
                 { property: "findById", model: "School", accessType: "READ" },
@@ -467,7 +469,7 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
                 propertyAccess.push({ model: p.model, property: p.property, accessType: p.accessType, permission: "ALLOW", principalId: role, principalType: "ROLE" });
             });
         }
-        else if (selectedModel.toLowerCase() == "zone") {
+        else if (selectedModel.toLowerCase() == "zone" || selectedModel.toLowerCase() == "VerifyTransport") {
             var propertyArr = [
                 { property: "__updateById__zones", model: "School", accessType: "WRITE" },
                 { property: "updateZonedetails", model: "Zonedetails", accessType: "EXECUTE" },
