@@ -151,7 +151,8 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
         if (selectedModel.toLowerCase() == "student") {
             var propertyArr = [
                 { property: "__count__Students", model: "School" },
-                { property: "__get__Students", model: "School" },
+                // { property: "__get__Students", model: "School" },
+                { property: "getStudentDetails", model: "Student" },
                 { property: "__findById__Students", model: "School" }
             ];
             propertyArr.map(function (p, i) {
@@ -362,7 +363,8 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
         if (selectedModel.toLowerCase() == "studentcategoryreport") {
             var propertyArr = [
                 { property: "__count__Students", model: "School" },
-                { property: "__get__Students", model: "School" },
+                // { property: "__get__Students", model: "School" },
+                { property: "getStudentDetails", model: "Student" },
                 { property: "__findById__Students", model: "School" }
             ];
             propertyArr.map(function (p, i) {
