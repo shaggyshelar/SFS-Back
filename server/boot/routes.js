@@ -45,6 +45,25 @@ module.exports = function (app) {
     res.json({'Message': 'Student Registration in progress...'});
   });
 
+  app.post('/registerStudent', function (req, res) {
+    if (!req.body.studentId) {
+      res.status(400);
+      res.json({ 'Message': i18next.t('csv_registerStudentInvalidStudentId') });
+      return;
+    }
+
+    if (!req.body.schoolId) {
+      res.status(400);
+      res.json({ 'Message': i18next.t('csv_registerStudentInvalidSchoolId') });
+      return;
+    }
+
+    var invHelper = invoiceHelper(app);
+    invHelper.registerNewlyCreatedStudent({id: req.body.studentId, schoolId: req.body.schoolId});
+    res.status(200);
+    res.json({'Message': 'Student Registration in progress...'});
+  });
+
   app.post('/apiParamsHelper', function (req, res) {
     var keys = Object.keys(req.body);
     var params = [];
