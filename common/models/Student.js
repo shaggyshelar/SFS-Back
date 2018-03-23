@@ -47,7 +47,7 @@ module.exports = function (Student) {
                 if (mapping.__data && mapping.__data.FeeplanassociationFeeplan) {
                   _students.map(function (s, i) {
                     if (s.classId == mapping.classId && s.categoryId == mapping.categoryId && s.academicYear == mapping.academicYear) {
-                      s.isVerified = mapping.__data.FeeplanassociationFeeplan.isVerified;
+                      s.isFeePlanVerified = mapping.__data.FeeplanassociationFeeplan.isVerified;
                     }
                   });
                 }
@@ -109,7 +109,7 @@ module.exports = function (Student) {
                     s.feePlan.createdOn = mapping.__data.FeeplanassociationFeeplan.createdOn;
                     s.feePlan.updatedBy = mapping.__data.FeeplanassociationFeeplan.updatedBy;
                     s.feePlan.updatedOn = mapping.__data.FeeplanassociationFeeplan.updatedOn;
-                    s.feePlan.isVerified = mapping.__data.FeeplanassociationFeeplan.isVerified;
+                    s.feePlan.isFeePlanVerified = mapping.__data.FeeplanassociationFeeplan.isVerified;
                   }
                 });
               }
