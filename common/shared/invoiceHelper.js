@@ -602,6 +602,186 @@ module.exports = function(app) {
         });
       });
     },
+    generateInvoiceForStudent: (studentDetails, methodCallback) => {
+      rootlogger.info('Starting invoice generation process for student ' + studentDetails.id);
+      async.series([
+        function(callback) {
+          var sql = 'CALL `' + config.invoiceGeneratorForSingleStudent + '`();';
+          callback(null, null);
+          // ds.connector.query(sql, function(err, data) {
+          //   if (err) {
+          //     console.log('Error:', err);
+          //   }
+          //   callback(null, data);
+          // });
+        },
+      ],
+      function(err, results) {
+        methodCallback();
+        rootlogger.info('Completed invoice generation process for student ' + studentDetails.id);
+      });
+    },
+    registerNewlyCreatedStudent: (studentDetails, callback) => {
+      async.series([
+        function(callback) {
+          Student.find({
+            where: {
+              'isRegistered': 0,
+              'id': studentDetails.id
+            },
+          }, function(err, lists) {
+            callback(null, lists);
+          });
+        },
+      ],
+      function(err, results) {
+        var students = results[0];
+        _.each(students, function(studentDetail) {
+          console.log('studentDetail:', studentDetail);
+          
+          invoiceHelper.registerStudent(studentDetail, function(error) {
+            if (error) {
+              studentDetail['ErrorMessage'] = error.respDescription;
+            } else {
+              invoiceHelper.generateInvoiceForStudent(studentDetails, function(error){
+                invoiceHelper.registerInvoicesForSingleStudent(studentDetail.id);
+              })
+              studentDetail['ErrorMessage'] = 'User created successfully';
+            }
+          });
+        });
+      });
+    },
+    registerInvoicesForSingleStudent: (studentId) => {
+      rootlogger.info('Starting invoice registration process');
+      async.series([
+        function(callback) {
+          var sql = "CALL `spSelectInoviceForStudent`(" + studentId + ");";
+          ds.connector.query(sql, function(err, data) {
+            if (err) {
+              console.log('Error:', err);
+              callback(null, [[]]);
+            } else {
+              callback(null, data);
+            }
+          });
+        },
+      ],
+      function(err, results) {
+        var invoices = results[0][0];
+        var invoiceListBySchool = [];
+        _.each(invoices, function(invoiceDetails) {
+          var invoiceIndex = invoiceListBySchool.findIndex(x => x.schoolId == invoiceDetails.schoolId);
+          if (invoiceIndex != -1) {
+            var invoiceArrayIndex = invoiceListBySchool[invoiceIndex].invoices.findIndex(x => x.invoiceNumber == invoiceDetails.invoiceNumber);
+            if (invoiceArrayIndex != -1) {
+              invoiceListBySchool[invoiceIndex].invoices[invoiceArrayIndex].values.push(invoiceDetails);
+            } else {
+              invoiceListBySchool[invoiceIndex].invoices.push({'invoiceNumber': invoiceDetails.invoiceNumber, 'values': [invoiceDetails]});
+            }
+          } else {
+            invoiceListBySchool.push({
+              'schoolId': invoiceDetails.schoolId,
+              'invoices': [{'invoiceNumber': invoiceDetails.invoiceNumber, 'values': [invoiceDetails]}],
+            });
+          }
+        });
+        _.each(invoiceListBySchool, function(schoolDetail) {
+          var waterfallFunctions = [];
+          var failedInvoices = [];
+          var registeredInvoices = [];
+
+          _.each(schoolDetail.invoices, function(invoiceDetail) {
+            var invoiceData = invoiceHelper.parseInvoiceDetails(invoiceDetail);
+            waterfallFunctions.push(function(next) {
+              invoiceHelper.registerInvoice(invoiceData, function(error) {
+                if (error) {
+                  invoiceData['ErrorMessage'] = error.respDescription;
+                  failedInvoices.push(invoiceData);
+                } else {
+                  invoiceData['ErrorMessage'] = 'Invoice created successfully';
+                  registeredInvoices.push(invoiceData);
+                }
+                next();
+              });
+            });
+          });
+
+          async.waterfall(waterfallFunctions, function(err) {
+            async.series([
+              function(callback) {
+                Schools.find({
+                  where: {
+                    id: schoolDetail.schoolId,
+                  },
+                }, function(err, schoolsList) {
+                  callback(null, schoolsList);
+                });
+              },
+              function(callback) {
+                UserModel.getEmails(schoolDetail.schoolId, function(err, emailsList) {
+                  callback(null, emailsList);
+                });
+              },
+              function(callback) {
+                UserModel.find({
+                  where: {
+                    roleId: 1,
+                  },
+                }, function(err, schoolsList) {
+                  callback(null, schoolsList);
+                });
+              },
+            ],
+            function(err, results) {
+              var schoolName = results[0].length > 0 ? results[0][0].schoolName : '';
+              var schoolAdminEmails = '';
+              var superAdminEmails = '';
+              rootlogger.info('Completed invoice registration process for school:' + schoolName);
+
+              var fileName = schoolName + ' Invoice Registration Report.csv';
+              csvHelper.generateInvoiceRegistrationCSV(fileName, registeredInvoices, failedInvoices, function() {
+                _.each(results[1], function(schoolAdminEmail) {
+                  if (schoolAdminEmails == '') {
+                    schoolAdminEmails += schoolAdminEmail.email;
+                  } else {
+                    schoolAdminEmails += (', ' + schoolAdminEmail.email);
+                  }
+                });
+                _.each(results[2], function(superAdminEmail) {
+                  if (superAdminEmails == '') {
+                    superAdminEmails += superAdminEmail.email;
+                  } else {
+                    superAdminEmails += (', ' + superAdminEmail.email);
+                  }
+                });
+                rootlogger.info('Sending email for invoice of school: ' + schoolName);
+                emailHelper.getEmailText('csv_registerInvoiceEmailReport', {savedInvoices: registeredInvoices.length, failedInvoices: failedInvoices.length, schoolName: schoolName}, function(error, html) {
+                  app.models.Email.send({
+                    to: schoolAdminEmails,
+                    cc: superAdminEmails,
+                    from: config.supportEmailID,
+                    subject: i18next.t('csv_invoiceRegistrationEmailSubject', {schoolName: schoolName}),
+                    html: html,
+                    attachments: [
+                      {
+                        filename: fileName,
+                        content: fs.createReadStream(fileName),
+                      }],
+                  }, function(err) {
+                    if (err) {
+                      rootlogger.info('Error sending email for invoice for school: ' + schoolName);
+                    }
+                    rootlogger.info('Sent email for invoice of school: ' + schoolName);
+                  });
+                });
+              });
+            });
+          });
+        });
+        rootlogger.info('Completed invoice generation process.');
+      });
+    },
   };
 
   return invoiceHelper;

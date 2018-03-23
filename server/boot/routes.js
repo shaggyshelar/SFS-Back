@@ -45,6 +45,25 @@ module.exports = function (app) {
     res.json({'Message': 'Student Registration in progress...'});
   });
 
+  app.post('/registerStudent', function (req, res) {
+    if (!req.body.studentId) {
+      res.status(400);
+      res.json({ 'Message': i18next.t('csv_registerStudentInvalidStudentId') });
+      return;
+    }
+
+    if (!req.body.schoolId) {
+      res.status(400);
+      res.json({ 'Message': i18next.t('csv_registerStudentInvalidSchoolId') });
+      return;
+    }
+
+    var invHelper = invoiceHelper(app);
+    invHelper.registerNewlyCreatedStudent({id: req.body.studentId, schoolId: req.body.schoolId});
+    res.status(200);
+    res.json({'Message': 'Student Registration in progress...'});
+  });
+
   app.post('/apiParamsHelper', function (req, res) {
     var keys = Object.keys(req.body);
     var params = [];
@@ -534,10 +553,11 @@ module.exports = function (app) {
                       validationErrors += i18next.t('csv_validation_studentFirstNameRequired');
                     }
 
-                    var middleName = data[2].trim();
-                    if (middleName == '') {
-                      validationErrors += i18next.t('csv_validation_studentMiddleNameRequired');
-                    }
+                    // Commented as requested by client team
+                    // var middleName = data[2].trim();
+                    // if (middleName == '') {
+                    //   validationErrors += i18next.t('csv_validation_studentMiddleNameRequired');
+                    // }
 
                     var lastName = data[3].trim();
                     if (lastName == '') {
@@ -690,7 +710,7 @@ module.exports = function (app) {
                       gRNumber: data[7].trim(),
                       studentCode: data[30].trim(),
                       studentFirstName: firstName,
-                      studentMiddleName: middleName,
+                      studentMiddleName: data[2].trim(),
                       studentLastName: lastName,
                       studentGender: data[4].trim(),
                       fatherFirstName: data[15].trim(),
@@ -718,7 +738,7 @@ module.exports = function (app) {
                       isDelete: false,
                       isRegistered: 0,
                       createdBy: user.id,
-                      createdOn: currentDay,
+                      createdOn: dateHelper.getUTCManagedDateTime(),
                     };
                     waterfallFunctions.push(function (next) {
                       studentModel.create(studentToAdd, function (err, post) {

@@ -35,6 +35,8 @@
     "Auditz" : {
       "createdAt": false,
       "updatedAt": false,
+      "createdBy":  false,
+      "updatedBy":  false,
       "softDelete": false,
       "revisions": {
         "name": "AuditLog",
@@ -149,6 +151,51 @@
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "N"
+      }
+    },
+    "isVerified": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "isVerified",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "verifiedBy": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 19,
+      "scale": 0,
+      "mysql": {
+        "columnName": "verifiedBy",
+        "dataType": "bigint",
+        "dataLength": null,
+        "dataPrecision": 19,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "verifiedOn": {
+      "type": "Date",
+      "required": false,
+      "length": null,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "verifiedOn",
+        "dataType": "datetime",
+        "dataLength": null,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
       }
     },
     "isDelete": {
