@@ -36,6 +36,7 @@ module.exports = function (Student) {
         }
         else {
           var condition = _students.map(function (s, i) {
+            s.isFeePlanVerified=false;
             return { classId: s.classId, categoryId: s.categoryId, academicYear: s.academicYear };
           });
           app.models.Feeplanassociation.find({ where: { or: condition }, include: "FeeplanassociationFeeplan" }, function (err, _assoc) {
