@@ -59,9 +59,16 @@ module.exports = function (app) {
     }
 
     var invHelper = invoiceHelper(app);
-    invHelper.registerNewlyCreatedStudent({id: req.body.studentId, schoolId: req.body.schoolId});
-    res.status(200);
-    res.json({'Message': 'Student Registration in progress...'});
+    invHelper.registerNewlyCreatedStudent({id: req.body.studentId, schoolId: req.body.schoolId}, 
+      function(err, responseData){
+        if(err) {
+          res.status(err.responseCode);
+          res.json({'Message': err.respDescription});  
+        } else {
+          res.status(200);
+          res.json({'Message': 'Student Registration in progress...'});
+        }
+      });    
   });
 
   app.post('/apiParamsHelper', function (req, res) {
