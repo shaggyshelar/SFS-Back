@@ -88,6 +88,11 @@
         "type": "hasMany",
         "model": "Vwinvoicereport",
         "foreignKey": "schoolId"
+      }, 
+      "Vwauditlogs":{
+        "type": "hasMany",
+        "model": "Vwauditlog",
+        "foreignKey": "schoolId"
       }
     }
   },
