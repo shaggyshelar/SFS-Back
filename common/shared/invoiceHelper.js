@@ -467,6 +467,7 @@ module.exports = function(app) {
       userParams.push(['motherName', invoiceHelper.convertParentName(studentDetails.motherFirstName)]);
       userParams.push(['mobileNo', invoiceHelper.getStudentMobileNumber(studentDetails)]);
       userParams.push(['emailID', studentDetails.email]);
+      userParams.push(['studentCode', studentDetails.studentCode]);
       if (studentDetails.address) {
         userParams.push(['addrLine1', studentDetails.address]);
       }
@@ -606,14 +607,17 @@ module.exports = function(app) {
       rootlogger.info('Starting invoice generation process for student ' + studentDetails.id);
       async.series([
         function(callback) {
-          var sql = 'CALL `' + config.invoiceGeneratorForSingleStudent + '`();';
-          callback(null, null);
-          // ds.connector.query(sql, function(err, data) {
-          //   if (err) {
-          //     console.log('Error:', err);
-          //   }
-          //   callback(null, data);
-          // });
+          var sql = 'CALL `' + config.invoiceGeneratorForSingleStudent + '`("'+studentDetails.schoolId +'","'+studentDetails.id +'");';
+         // callback(null, null);
+
+          //Uncommented By manish
+          ds.connector.query(sql, function(err, data) {
+            if (err) {
+              console.log('Error:', err);
+              callback(err);
+            }
+            callback(null, data);
+          });
         },
       ],
       function(err, results) {
@@ -642,9 +646,22 @@ module.exports = function(app) {
           invoiceHelper.registerStudent(studentDetail, function(error) {
             if (error) {
               studentDetail['ErrorMessage'] = error.respDescription;
+              callback(error, null);
             } else {
               invoiceHelper.generateInvoiceForStudent(studentDetails, function(error){
-                invoiceHelper.registerInvoicesForSingleStudent(studentDetail.id);
+                if(error) {
+                  callback(error);
+                }
+                else {
+                  invoiceHelper.registerInvoicesForSingleStudent(studentDetail.id, function(err, data){
+                    if(err) {
+                      callback(err, null);
+                    }
+                    else {
+                      callback(data);
+                    }
+                  });
+                }
               })
               studentDetail['ErrorMessage'] = 'User created successfully';
             }
@@ -652,7 +669,7 @@ module.exports = function(app) {
         });
       });
     },
-    registerInvoicesForSingleStudent: (studentId) => {
+    registerInvoicesForSingleStudent: (studentId, callback) => {
       rootlogger.info('Starting invoice registration process');
       async.series([
         function(callback) {
@@ -771,8 +788,10 @@ module.exports = function(app) {
                   }, function(err) {
                     if (err) {
                       rootlogger.info('Error sending email for invoice for school: ' + schoolName);
+                      callback(err, null);
                     }
                     rootlogger.info('Sent email for invoice of school: ' + schoolName);
+                    callback();
                   });
                 });
               });
