@@ -106,16 +106,16 @@ module.exports = function(app) {
                 if (err) {
                   // TODO: Set Proper Error Message
                   rootlogger.error(responseData);
-                  callback(responseData);
+                  callback(err.message);
+                } else {
+                  rootlogger.info('User registered successfully', responseData);
+                  callback();
                 }
-                rootlogger.info('User registered successfully', responseData);
-                callback();
               });
             } else {
               rootlogger.error(responseData);
-              // callback(responseData);
-              // TODO Remove this Line
-              callback();
+              // TODO: Uncomment this line
+              callback(responseData.respDescription);
             }
           } else {
             rootlogger.error('Error while registering student into PayPhi system.');
