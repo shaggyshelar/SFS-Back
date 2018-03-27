@@ -805,10 +805,8 @@ module.exports = function(app) {
                   }, function(err) {
                     if (err) {
                       rootlogger.info('Error sending email for invoice for school: ' + schoolName);
-                      methodCallback('Error sending email for invoice for school: ' + schoolName, null);
                     }
                     rootlogger.info('Sent email for invoice of school: ' + schoolName);
-                    methodCallback();
                   });
                 });
               });
