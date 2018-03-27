@@ -467,6 +467,7 @@ module.exports = function(app) {
       userParams.push(['motherName', invoiceHelper.convertParentName(studentDetails.motherFirstName)]);
       userParams.push(['mobileNo', invoiceHelper.getStudentMobileNumber(studentDetails)]);
       userParams.push(['emailID', studentDetails.email]);
+      userParams.push(['studentCode', studentDetails.studentCode]);
       if (studentDetails.address) {
         userParams.push(['addrLine1', studentDetails.address]);
       }
@@ -527,7 +528,6 @@ module.exports = function(app) {
             });
           });
           async.waterfall(waterfallFunctions, function(err) {
-
             async.series([
               function(callback) {
                 Schools.find({
@@ -606,14 +606,14 @@ module.exports = function(app) {
       rootlogger.info('Starting invoice generation process for student ' + studentDetails.id);
       async.series([
         function(callback) {
-          var sql = 'CALL `' + config.invoiceGeneratorForSingleStudent + '`();';
-          callback(null, null);
-          // ds.connector.query(sql, function(err, data) {
-          //   if (err) {
-          //     console.log('Error:', err);
-          //   }
-          //   callback(null, data);
-          // });
+          var sql = 'CALL `' + config.invoiceGeneratorForSingleStudent + '`("' + studentDetails.schoolId + '","' + studentDetails.id + '");';
+          ds.connector.query(sql, function(err, data) {
+            if (err) {
+              console.log('Error:', err);
+              callback(err);
+            }
+            callback(null);
+          });
         },
       ],
       function(err, results) {
@@ -626,8 +626,8 @@ module.exports = function(app) {
         function(callback) {
           Student.find({
             where: {
-              'isRegistered': 0,
-              'id': studentDetails.id
+              // 'isRegistered': 0,
+              'id': studentDetails.id,
             },
           }, function(err, lists) {
             callback(null, lists);
@@ -636,27 +636,57 @@ module.exports = function(app) {
       ],
       function(err, results) {
         var students = results[0];
+        if (students.length == 0) {
+          callback('No matching student found.');
+          return;
+        }
+
         _.each(students, function(studentDetail) {
           console.log('studentDetail:', studentDetail);
-          
-          invoiceHelper.registerStudent(studentDetail, function(error) {
-            if (error) {
-              studentDetail['ErrorMessage'] = error.respDescription;
-            } else {
-              invoiceHelper.generateInvoiceForStudent(studentDetails, function(error){
-                invoiceHelper.registerInvoicesForSingleStudent(studentDetail.id);
-              })
-              studentDetail['ErrorMessage'] = 'User created successfully';
-            }
-          });
+
+          if (studentDetail.isRegistered == 0) {
+            invoiceHelper.registerStudent(studentDetail, function(error) {
+              if (error) {
+                callback(error.respDescription);
+              } else {
+                invoiceHelper.generateInvoiceForStudent(studentDetails, function(error) {
+                  if (error) {
+                    callback(error);
+                  } else {
+                    invoiceHelper.registerInvoicesForSingleStudent(studentDetail.id, function(err, data) {
+                      if (err) {
+                        callback(err);
+                      } else {
+                        callback(null);
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          } else {
+            invoiceHelper.generateInvoiceForStudent(studentDetails, function(error) {
+              if (error) {
+                callback(error);
+              } else {
+                invoiceHelper.registerInvoicesForSingleStudent(studentDetail.id, function(err, data) {
+                  if (err) {
+                    callback(err);
+                  } else {
+                    callback(null);
+                  }
+                });
+              }
+            });
+          }
         });
       });
     },
-    registerInvoicesForSingleStudent: (studentId) => {
+    registerInvoicesForSingleStudent: (studentId, methodCallback) => {
       rootlogger.info('Starting invoice registration process');
       async.series([
         function(callback) {
-          var sql = "CALL `spSelectInoviceForStudent`(" + studentId + ");";
+          var sql = 'CALL `spSelectInoviceForStudent`(' + studentId + ');';
           ds.connector.query(sql, function(err, data) {
             if (err) {
               console.log('Error:', err);
@@ -670,6 +700,10 @@ module.exports = function(app) {
       function(err, results) {
         var invoices = results[0][0];
         var invoiceListBySchool = [];
+        if (invoices.length == 0) {
+          methodCallback('No invoices found for student.');
+          return;
+        }
         _.each(invoices, function(invoiceDetails) {
           var invoiceIndex = invoiceListBySchool.findIndex(x => x.schoolId == invoiceDetails.schoolId);
           if (invoiceIndex != -1) {
@@ -771,14 +805,17 @@ module.exports = function(app) {
                   }, function(err) {
                     if (err) {
                       rootlogger.info('Error sending email for invoice for school: ' + schoolName);
+                      methodCallback('Error sending email for invoice for school: ' + schoolName, null);
                     }
                     rootlogger.info('Sent email for invoice of school: ' + schoolName);
+                    methodCallback();
                   });
                 });
               });
             });
           });
         });
+        methodCallback();
         rootlogger.info('Completed invoice generation process.');
       });
     },

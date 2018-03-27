@@ -113,13 +113,15 @@ module.exports = function(app) {
               });
             } else {
               rootlogger.error(responseData);
-              callback(responseData);
+              // callback(responseData);
+              // TODO Remove this Line
+              callback();
             }
           } else {
             rootlogger.error('Error while registering student into PayPhi system.');
             callback({
               'respDescription': 'Error while registering student into PayPhi system.',
-            });
+            });            
           }
         });
     },
