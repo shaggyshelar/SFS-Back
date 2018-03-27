@@ -45,10 +45,10 @@ module.exports = function (app) {
     res.json({'Message': 'Student Registration in progress...'});
   });
 
-  app.post('/registerStudent', function (req, res) {
+  app.post('/registerStudent', function(req, res) {
     if (!req.body.studentId) {
       res.status(400);
-      res.json({ 'Message': i18next.t('csv_registerStudentInvalidStudentId') });
+      res.json({'Message': i18next.t('csv_registerStudentInvalidStudentId')});
       return;
     }
 
@@ -66,7 +66,7 @@ module.exports = function (app) {
           res.json({'Message': err});
         } else {
           res.status(200);
-          res.json({'Message': 'Student Registration completed.'});
+          res.json({'Message': 'Student Registration completed. Please check your email for more details.'});
         }
       });
   });

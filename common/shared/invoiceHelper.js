@@ -644,29 +644,45 @@ module.exports = function(app) {
         _.each(students, function(studentDetail) {
           console.log('studentDetail:', studentDetail);
 
-          invoiceHelper.registerStudent(studentDetail, function(error) {
-            if (error) {
-              callback(error.respDescription);
-            } else {
-              invoiceHelper.generateInvoiceForStudent(studentDetails, function(error) {
-                if (error) {
-                  callback(error);
-                } else {
-                  invoiceHelper.registerInvoicesForSingleStudent(studentDetail.id, function(err, data) {
-                    if (err) {
-                      callback(err);
-                    } else {
-                      callback(null);
-                    }
-                  });
-                }
-              });
-            }
-          });
+          if (studentDetail.isRegistered == 0) {
+            invoiceHelper.registerStudent(studentDetail, function(error) {
+              if (error) {
+                callback(error.respDescription);
+              } else {
+                invoiceHelper.generateInvoiceForStudent(studentDetails, function(error) {
+                  if (error) {
+                    callback(error);
+                  } else {
+                    invoiceHelper.registerInvoicesForSingleStudent(studentDetail.id, function(err, data) {
+                      if (err) {
+                        callback(err);
+                      } else {
+                        callback(null);
+                      }
+                    });
+                  }
+                });
+              }
+            });
+          } else {
+            invoiceHelper.generateInvoiceForStudent(studentDetails, function(error) {
+              if (error) {
+                callback(error);
+              } else {
+                invoiceHelper.registerInvoicesForSingleStudent(studentDetail.id, function(err, data) {
+                  if (err) {
+                    callback(err);
+                  } else {
+                    callback(null);
+                  }
+                });
+              }
+            });
+          }
         });
       });
     },
-    registerInvoicesForSingleStudent: (studentId, callback) => {
+    registerInvoicesForSingleStudent: (studentId, methodCallback) => {
       rootlogger.info('Starting invoice registration process');
       async.series([
         function(callback) {
@@ -684,6 +700,10 @@ module.exports = function(app) {
       function(err, results) {
         var invoices = results[0][0];
         var invoiceListBySchool = [];
+        if (invoices.length == 0) {
+          methodCallback('No invoices found for student.');
+          return;
+        }
         _.each(invoices, function(invoiceDetails) {
           var invoiceIndex = invoiceListBySchool.findIndex(x => x.schoolId == invoiceDetails.schoolId);
           if (invoiceIndex != -1) {
@@ -785,16 +805,17 @@ module.exports = function(app) {
                   }, function(err) {
                     if (err) {
                       rootlogger.info('Error sending email for invoice for school: ' + schoolName);
-                      callback(err, null);
+                      methodCallback('Error sending email for invoice for school: ' + schoolName, null);
                     }
                     rootlogger.info('Sent email for invoice of school: ' + schoolName);
-                    callback();
+                    methodCallback();
                   });
                 });
               });
             });
           });
         });
+        methodCallback();
         rootlogger.info('Completed invoice generation process.');
       });
     },
