@@ -649,7 +649,7 @@ module.exports = function(app) {
         _.each(students, function(studentDetail) {
           console.log('studentDetail:', studentDetail);
 
-          if (studentDetail.isRegistered == 1) {
+          if (studentDetail.isRegistered == 0) {
             invoiceHelper.registerStudent(studentDetail, function(error) {
               if (error) {
                 callback(error);
@@ -747,78 +747,24 @@ module.exports = function(app) {
                   }
                   next();
                 });
-              });
-            });
-  
-            async.waterfall(waterfallFunctions, function(err) {
-              async.series([
-                function(callback) {
-                  Schools.find({
-                    where: {
-                      id: schoolDetail.schoolId,
-                    },
-                  }, function(err, schoolsList) {
-                    callback(null, schoolsList);
-                  });
-                },
-                function(callback) {
-                  UserModel.getEmails(schoolDetail.schoolId, function(err, emailsList) {
-                    callback(null, emailsList);
-                  });
-                },
-                function(callback) {
-                  UserModel.find({
-                    where: {
-                      roleId: 1,
-                    },
-                  }, function(err, schoolsList) {
-                    callback(null, schoolsList);
-                  });
-                },
-              ],
-              function(err, results) {
-                var schoolName = results[0].length > 0 ? results[0][0].schoolName : '';
-                var schoolAdminEmails = '';
-                var superAdminEmails = '';
-                rootlogger.info('Completed invoice registration process for school:' + schoolName);
-  
-                var fileName = schoolName + ' Invoice Registration Report.csv';
-                csvHelper.generateInvoiceRegistrationCSV(fileName, registeredInvoices, failedInvoices, function() {
-                  _.each(results[1], function(schoolAdminEmail) {
-                    if (schoolAdminEmails == '') {
-                      schoolAdminEmails += schoolAdminEmail.email;
-                    } else {
-                      schoolAdminEmails += (', ' + schoolAdminEmail.email);
+                rootlogger.info('Sending email for invoice of school: ' + schoolName);
+                emailHelper.getEmailText('csv_registerInvoiceEmailReport', {savedInvoices: registeredInvoices.length, failedInvoices: failedInvoices.length, schoolName: schoolName}, function(error, html) {
+                  app.models.Email.send({
+                    to: schoolAdminEmails,
+                    cc: superAdminEmails,
+                    from: config.supportEmailID,
+                    subject: i18next.t('csv_invoiceRegistrationEmailSubject', {schoolName: schoolName}),
+                    html: html,
+                    attachments: [
+                      {
+                        filename: fileName,
+                        content: fs.createReadStream(fileName),
+                      }],
+                  }, function(err) {
+                    if (err) {
+                      rootlogger.info('Error sending email for invoice for school: ' + schoolName);
                     }
-                  });
-                  _.each(results[2], function(superAdminEmail) {
-                    if (superAdminEmails == '') {
-                      superAdminEmails += superAdminEmail.email;
-                    } else {
-                      superAdminEmails += (', ' + superAdminEmail.email);
-                    }
-                  });
-                  rootlogger.info('Sending email for invoice of school: ' + schoolName);
-                  emailHelper.getEmailText('csv_registerInvoiceEmailReport', {savedInvoices: registeredInvoices.length, failedInvoices: failedInvoices.length, schoolName: schoolName}, function(error, html) {
-                    app.models.Email.send({
-                      to: schoolAdminEmails,
-                      cc: superAdminEmails,
-                      from: config.supportEmailID,
-                      subject: i18next.t('csv_invoiceRegistrationEmailSubject', {schoolName: schoolName}),
-                      html: html,
-                      attachments: [
-                        {
-                          filename: fileName,
-                          content: fs.createReadStream(fileName),
-                        }],
-                    }, function(err) {
-                      if (err) {
-                        rootlogger.info('Error sending email for invoice for school: ' + schoolName);
-                        methodCallback('Error sending email for invoice for school: ' + schoolName, null);
-                      }
-                      rootlogger.info('Sent email for invoice of school: ' + schoolName);
-                      methodCallback();
-                    });
+                    rootlogger.info('Sent email for invoice of school: ' + schoolName);
                   });
                 });
               });
