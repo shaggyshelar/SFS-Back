@@ -333,8 +333,10 @@ permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermis
         }
         else if (selectedModel.toLowerCase() == "vwauditlog") {
             var propertyArr = [
-                { property: "__get__getAuditDetails", model: "Vwauditlog" },
-                { property: "__get__getAuditDetailsCount", model: "Vwauditlog" }
+                // { property: "__get__getAuditDetails", model: "Vwauditlog" },
+                // { property: "__get__getAuditDetailsCount", model: "Vwauditlog" }
+                { property: "__get__Vwauditlogs", model: "School" },
+                { property: "__count__Vwauditlogs", model: "School" }
             ];
             propertyArr.map(function (p, i) {
                 propertyAccess.push({ model: p.model, property: p.property, accessType: "READ", permission: "ALLOW", principalId: role, principalType: "ROLE" });
