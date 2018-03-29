@@ -8,6 +8,9 @@
     },
     "relations": {}
   },
+  "mixins": {
+    "SearchFilterMixin":true
+  },
   "properties": {
     "invoiceNumber": {
       "type": "String",
