@@ -43,7 +43,35 @@
     "where": {
       "isDelete": 0
     },
-    "include": ["associations","FeePlanDetails"]
+    "include": [{
+      "relation": "associations"
+      }, {
+        "relation": "FeePlanDetails"
+      }, {
+        "relation": "createdByUserDetails",
+        "scope": {
+          "fields": {
+            "username": true,
+            "id": true
+          }
+        }
+      }, {
+        "relation": "updatedByUserDetails",
+        "scope": {
+          "fields": {
+            "username": true,
+            "id": true
+          }
+        }
+      }, {
+        "relation": "verifiedByUserDetails",
+        "scope": {
+          "fields": {
+            "username": true,
+            "id": true
+          }
+        }
+      }]
   },
   "mixins": {
     "TimestampMixin": true,
