@@ -21,6 +21,21 @@
         "type":"hasMany",
         "model":"Feeplanheaddetails",
         "foreignKey":"feePlanId"
+      },
+      "createdByUserDetails":{
+        "model": "user",
+        "type": "belongsTo",
+        "foreignKey": "createdBy"
+      },
+      "updatedByUserDetails":{
+        "model": "user",
+        "type": "belongsTo",
+        "foreignKey": "updatedBy"
+      },
+      "verifiedByUserDetails":{
+        "model": "user",
+        "type": "belongsTo",
+        "foreignKey": "verifiedBy"
       }
     }
   },
