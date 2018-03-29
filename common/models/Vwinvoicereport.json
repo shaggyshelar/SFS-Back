@@ -264,6 +264,21 @@
         "nullable": "N"
       }
     },
+    "studentFullName": {
+      "type": "String",
+      "required": true,
+      "length": 120,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "studentFullName",
+        "dataType": "varchar",
+        "dataLength": 120,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
     "grNumber": {
       "type": "String",
       "required": true,
