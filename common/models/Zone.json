@@ -38,12 +38,33 @@
     "where": {
       "isDelete": 0
     },
-    "include": [
-        "ZoneFrequency",
-        "verifiedByUserDetails",
-        "updatedByUserDetails",
-        "createdByUserDetails"
-      ]
+    "include": [{
+        "relation": "ZoneFrequency"
+        }, {
+          "relation": "createdByUserDetails",
+          "scope": {
+            "fields": {
+              "username": true,
+              "id": true
+            }
+          }
+        }, {
+          "relation": "updatedByUserDetails",
+          "scope": {
+            "fields": {
+              "username": true,
+              "id": true
+            }
+          }
+        }, {
+          "relation": "verifiedByUserDetails",
+          "scope": {
+            "fields": {
+              "username": true,
+              "id": true
+            }
+          }
+      }]
   },
   "mixins": {
     "TimestampMixin": true,
