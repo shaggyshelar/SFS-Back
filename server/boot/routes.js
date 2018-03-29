@@ -617,7 +617,7 @@ module.exports = function (app) {
 
                     if (data[27] != '') {
                       var filteredDivision = schoolDetails.SchoolDivision.filter(function (division) {
-                        if (division.divisionName == data[27]) {
+                        if (division.divisionName == data[27] && division.classId == matchingClass.id) {
                           return division;
                         }
                       });
