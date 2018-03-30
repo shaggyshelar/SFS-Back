@@ -52,6 +52,8 @@
     "Auditz" : {
       "createdAt": false,
       "updatedAt": false,
+      "createdBy":  false,
+      "updatedBy":  false,
       "softDelete": false,
       "revisions": {
         "name": "AuditLog",
@@ -241,6 +243,21 @@
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "N"
+      }
+    },
+    "studentFullName": {
+      "type": "String",
+      "required": false,
+      "length": 120,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "studentFullName",
+        "dataType": "varchar",
+        "dataLength": 120,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
       }
     },
     "studentGender": {

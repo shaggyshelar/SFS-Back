@@ -20,7 +20,6 @@ var moment = require('moment');
 var dateHelper = require('../../common/shared/dateHelper');
 var validator = require('validator');
 var emailHelper=require('../../common/shared/emailHelper');
-var bodyParser = require('body-parser');
 
 module.exports = function (app) {
   var ds = app.dataSources.mysql;
@@ -44,6 +43,32 @@ module.exports = function (app) {
     invHelper.registerStudents();
     res.status(200);
     res.json({'Message': 'Student Registration in progress...'});
+  });
+
+  app.post('/registerStudent', function(req, res) {
+    if (!req.body.studentId) {
+      res.status(400);
+      res.json({'Message': i18next.t('csv_registerStudentInvalidStudentId')});
+      return;
+    }
+
+    if (!req.body.schoolId) {
+      res.status(400);
+      res.json({'Message': i18next.t('csv_registerStudentInvalidSchoolId')});
+      return;
+    }
+
+    var invHelper = invoiceHelper(app);
+    invHelper.registerNewlyCreatedStudent({id: req.body.studentId, schoolId: req.body.schoolId},
+      function(err) {
+        if (err) {
+          res.status(500);
+          res.json({'Message': err});
+        } else {
+          res.status(200);
+          res.json({'Message': 'Student Registration completed. Please check your email for more details.'});
+        }
+      });
   });
 
   app.post('/apiParamsHelper', function (req, res) {
@@ -93,19 +118,19 @@ module.exports = function (app) {
 
   app.post('/api/paymentAdvice', function (req, res) {
     var apiHelper = apiHelperObject(app);
-    var requestBody = JSON.parse(req.body);
-    var keys = Object.keys(requestBody);
+
+    var keys = Object.keys(req.body);
     var params = [];
     _.each(keys, function(key) {
       if (key != "secureHash") {
-        params.push([key, requestBody[key]]);
+        params.push([key, req.body[key]]);
       }
     });
 
     var concatenatedParams = apiHelper.getConcatenatedParams(params);
     var hashedKey = apiHelper.getHashedKey(concatenatedParams);
 
-    if (requestBody.secureHash !== hashedKey) {
+    if (req.body.secureHash !== hashedKey) {
       res.status(400);
       res.json({'Message': i18next.t('api_validation_adviceInvalidSecureHash')});
       return;
@@ -113,54 +138,54 @@ module.exports = function (app) {
 
     var errorMessages = '';
     var userParams = [];
-    if (requestBody.aggregatorID) {
-      userParams.push(['aggregatorId', requestBody.aggregatorID]);
+    if (req.body.aggregatorID) {
+      userParams.push(['aggregatorId', req.body.aggregatorID]);
     } else {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'aggregatorId' });
     }
-    if (requestBody.merchantId) {
-      userParams.push(['merchantId', requestBody.merchantId]);
+    if (req.body.merchantId) {
+      userParams.push(['merchantId', req.body.merchantId]);
     } else {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'merchantId' });
     }
-    if (requestBody.invoiceNo) {
-      userParams.push(['invoiceNo', requestBody.invoiceNo]);
+    if (req.body.invoiceNo) {
+      userParams.push(['invoiceNo', req.body.invoiceNo]);
     } else {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'invoiceNo' });
     }
-    if (requestBody.userID) {
-      userParams.push(['userID', requestBody.userID]);
+    if (req.body.userID) {
+      userParams.push(['userID', req.body.userID]);
     }
-    if (requestBody.chargeAmount) {
-      userParams.push(['chargeAmount', requestBody.chargeAmount]);
+    if (req.body.chargeAmount) {
+      userParams.push(['chargeAmount', req.body.chargeAmount]);
     } else {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'chargeAmount' });
     }
-    if (requestBody.txnID) {
-      userParams.push(['txnID', requestBody.txnID]);
+    if (req.body.txnID) {
+      userParams.push(['txnID', req.body.txnID]);
     } else {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'txnID' });
     }
-    if (requestBody.paymentID) {
-      userParams.push(['paymentID', requestBody.paymentID]);
+    if (req.body.paymentID) {
+      userParams.push(['paymentID', req.body.paymentID]);
     } else {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'paymentID' });
     }
-    if (requestBody.paymentDateTime) {
-      userParams.push(['paymentDateTime', requestBody.paymentDateTime]);
-      if (!moment(requestBody.paymentDateTime, 'YYYYMMDDHHmmss', true).isValid()) {
+    if (req.body.paymentDateTime) {
+      userParams.push(['paymentDateTime', req.body.paymentDateTime]);
+      if (!moment(req.body.paymentDateTime, 'YYYYMMDDHHmmss', true).isValid()) {
         errorMessages += i18next.t('api_validation_adviceInvalidDate');
       }
     } else {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'paymentDateTime' });
     }
-    if (requestBody.optionalChargeHeadsPaid) {
-      userParams.push(['optionalChargeHeadsPaid', requestBody.optionalChargeHeadsPaid]);
+    if (req.body.optionalChargeHeadsPaid) {
+      userParams.push(['optionalChargeHeadsPaid', req.body.optionalChargeHeadsPaid]);
     }
-    if (requestBody.calculatedLateFees) {
-      userParams.push(['calculatedLateFees', requestBody.calculatedLateFees]);
+    if (req.body.calculatedLateFees) {
+      userParams.push(['calculatedLateFees', req.body.calculatedLateFees]);
     }
-    if (!requestBody.secureHash) {
+    if (!req.body.secureHash) {
       errorMessages += i18next.t('api_validation_adviceParameterRequired', {parameterType: 'secureHash' });
     }
 
@@ -174,7 +199,7 @@ module.exports = function (app) {
     // var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
     // var hashedKey = apiHelper.getHashedKey(concatenatedParams);
 
-    // if (requestBody.secureHash !== hashedKey) {
+    // if (req.body.secureHash !== hashedKey) {
     //   res.status(400);
     //   res.json({'Message': i18next.t('api_validation_adviceInvalidSecureHash')});
     //   return;
@@ -183,7 +208,7 @@ module.exports = function (app) {
     async.series([
       function(callback) {
         // merchantId, aggregatorId, userId, invoiceNumber
-        var sql = "CALL `spSelectInvoiceByParameter`('" + requestBody.merchantId + "','" + requestBody.aggregatorID + "','" + requestBody.userID + "','" + requestBody.invoiceNo + "');";
+        var sql = "CALL `spSelectInvoiceByParameter`('" + req.body.merchantId + "','" + req.body.aggregatorID + "','" + req.body.userID + "','" + req.body.invoiceNo + "');";
         ds.connector.query(sql, function(err, data) {
           if (err) {
             console.log('Error:', err);
@@ -203,13 +228,13 @@ module.exports = function (app) {
       }
 
       var findInvoiceQuery = {
-        invoiceNumber: requestBody.invoiceNo,
-        merchantId: requestBody.merchantId,
-        aggregatorId: requestBody.aggregatorID,
+        invoiceNumber: req.body.invoiceNo,
+        merchantId: req.body.merchantId,
+        aggregatorId: req.body.aggregatorID,
       };
 
-      if (requestBody.userID) {
-        findInvoiceQuery.userId = requestBody.userID;
+      if (req.body.userID) {
+        findInvoiceQuery.userId = req.body.userID;
       }
 
       Invoice.find({
@@ -240,16 +265,16 @@ module.exports = function (app) {
           }
 
           var updatedInvoice = {
-            'totalChargeAmountPaid': requestBody.chargeAmount,
-            'transactionId': requestBody.txnID,
-            'paymentId': requestBody.paymentID,
-            'paymentDate': moment(requestBody.paymentDateTime, 'YYYYMMDDHHmmss', true).format('YYYY-MM-DD HH:mm:ss'),
+            'totalChargeAmountPaid': req.body.chargeAmount,
+            'transactionId': req.body.txnID,
+            'paymentId': req.body.paymentID,
+            'paymentDate': moment(req.body.paymentDateTime, 'YYYYMMDDHHmmss', true).format('YYYY-MM-DD HH:mm:ss'),
             'status': 'Paid',
             'updatedBy': 1,
             'updatedOn': dateHelper.getUTCManagedDateTime(),
           };
-          if (requestBody.calculatedLateFees) {
-            updatedInvoice.calculatedLateFees = requestBody.calculatedLateFees;
+          if (req.body.calculatedLateFees) {
+            updatedInvoice.calculatedLateFees = req.body.calculatedLateFees;
           }
           Invoice.updateAll({id: foundInvoice.id}, updatedInvoice, function (err, updatedUser) {
             if (err) {
@@ -535,10 +560,11 @@ module.exports = function (app) {
                       validationErrors += i18next.t('csv_validation_studentFirstNameRequired');
                     }
 
-                    var middleName = data[2].trim();
-                    if (middleName == '') {
-                      validationErrors += i18next.t('csv_validation_studentMiddleNameRequired');
-                    }
+                    // Commented as requested by client team
+                    // var middleName = data[2].trim();
+                    // if (middleName == '') {
+                    //   validationErrors += i18next.t('csv_validation_studentMiddleNameRequired');
+                    // }
 
                     var lastName = data[3].trim();
                     if (lastName == '') {
@@ -591,7 +617,7 @@ module.exports = function (app) {
 
                     if (data[27] != '') {
                       var filteredDivision = schoolDetails.SchoolDivision.filter(function (division) {
-                        if (division.divisionName == data[27]) {
+                        if (division.divisionName == data[27] && matchingClass != null && division.classId == matchingClass.id) {
                           return division;
                         }
                       });
@@ -691,7 +717,7 @@ module.exports = function (app) {
                       gRNumber: data[7].trim(),
                       studentCode: data[30].trim(),
                       studentFirstName: firstName,
-                      studentMiddleName: middleName,
+                      studentMiddleName: data[2].trim(),
                       studentLastName: lastName,
                       studentGender: data[4].trim(),
                       fatherFirstName: data[15].trim(),
@@ -719,7 +745,7 @@ module.exports = function (app) {
                       isDelete: false,
                       isRegistered: 0,
                       createdBy: user.id,
-                      createdOn: currentDay,
+                      createdOn: dateHelper.getUTCManagedDateTime(),
                     };
                     waterfallFunctions.push(function (next) {
                       studentModel.create(studentToAdd, function (err, post) {

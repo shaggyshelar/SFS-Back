@@ -33,12 +33,13 @@
     "include": "FeeplanassociationCategory"
   },
   "mixins": {
-    "TimestampMixin": true,
     "DuplicateErrorHandler": true,
     "SearchFilterMixin":true,
     "Auditz" : {
       "createdAt": false,
       "updatedAt": false,
+      "createdBy":  false,
+      "updatedBy":  false,
       "softDelete": false,
       "revisions": {
         "name": "AuditLog",
