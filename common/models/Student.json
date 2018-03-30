@@ -247,7 +247,7 @@
     },
     "studentFullName": {
       "type": "String",
-      "required": true,
+      "required": false,
       "length": 120,
       "precision": null,
       "scale": null,
@@ -257,7 +257,7 @@
         "dataLength": 120,
         "dataPrecision": null,
         "dataScale": null,
-        "nullable": "N"
+        "nullable": "Y"
       }
     },
     "studentGender": {
