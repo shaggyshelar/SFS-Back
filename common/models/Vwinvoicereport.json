@@ -8,6 +8,9 @@
     },
     "relations": {}
   },
+  "mixins": {
+    "SearchFilterMixin":true
+  },
   "properties": {
     "invoiceNumber": {
       "type": "String",
@@ -259,6 +262,21 @@
         "columnName": "studentLastName",
         "dataType": "varchar",
         "dataLength": 50,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "N"
+      }
+    },
+    "studentFullName": {
+      "type": "String",
+      "required": true,
+      "length": 120,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "studentFullName",
+        "dataType": "varchar",
+        "dataLength": 120,
         "dataPrecision": null,
         "dataScale": null,
         "nullable": "N"

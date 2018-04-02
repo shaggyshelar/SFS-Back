@@ -1,4 +1,6 @@
 'use strict';
+var auditLogHelper = require("../shared/auditLogHelper");
+
 module.exports = function (Feeplanheaddetails) {
     Feeplanheaddetails.updateFeeplanheaddetails = function (feeplanheaddetails, options, cb) {
 
@@ -12,12 +14,27 @@ module.exports = function (Feeplanheaddetails) {
                 if (err) {
                     cb(err);
                 } else {
-                    Feeplanheaddetails.create(feeplanheaddetails, function (err, savedAssociations) {
+                    var accessToken = options.accessToken; 
+                    auditLogHelper.setCreatedBy(feeplanheaddetails, accessToken.userId, function(err, feeplanheaddetailsUpdated) {
+                        if(err) {
+                            cb(err);
+                        }
+                        else {
+                            Feeplanheaddetails.create(feeplanheaddetailsUpdated, function (err, savedAssociations) {
+                                if (err)
+                                    cb(err);
+                                else
+                                    cb(null, savedAssociations);
+                            });
+                        }
+                    });
+
+                    /*Feeplanheaddetails.create(feeplanheaddetails, function (err, savedAssociations) {
                         if (err)
                             cb(err);
                         else
                             cb(null, savedAssociations);
-                    });
+                    });*/
                 }
             });
         }

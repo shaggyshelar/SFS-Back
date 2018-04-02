@@ -88,6 +88,11 @@
         "type": "hasMany",
         "model": "Vwinvoicereport",
         "foreignKey": "schoolId"
+      }, 
+      "Vwauditlogs":{
+        "type": "hasMany",
+        "model": "Vwauditlog",
+        "foreignKey": "schoolId"
       }
     }
   },
@@ -104,6 +109,8 @@
     "Auditz" : {
       "createdAt": false,
       "updatedAt": false,
+      "createdBy":  false,
+      "updatedBy":  false,
       "softDelete": false,
       "revisions": {
         "name": "AuditLog",
