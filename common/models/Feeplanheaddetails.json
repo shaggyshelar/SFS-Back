@@ -108,6 +108,36 @@
         "nullable": "N"
       }
     },
+    "isQuarterSkipped": {
+      "type": "boolean",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "isQuarterSkipped",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "numberOfQuarterSkipped": {
+      "type": "Number",
+      "required": false,
+      "length": null,
+      "precision": 10,
+      "scale": 0,
+      "mysql": {
+        "columnName": "numberOfQuarterSkipped",
+        "dataType": "int",
+        "dataLength": null,
+        "dataPrecision": 10,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },	
     "feeCharges": {
       "type": "Number",
       "required": true,
