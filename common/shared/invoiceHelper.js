@@ -517,7 +517,7 @@ module.exports = function(app) {
             waterfallFunctions.push(function(next) {
               invoiceHelper.registerStudent(student, function(error) {
                 if (error) {
-                  student['ErrorMessage'] = error.respDescription;
+                  student['ErrorMessage'] = error;
                   failedStudents.push(student);
                 } else {
                   student['ErrorMessage'] = 'User created successfully';
