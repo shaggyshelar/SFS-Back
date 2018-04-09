@@ -36,6 +36,27 @@ module.exports = function (School) {
         if (err) {
           return next(err);
         } else {
+          app.models.user.find({ where: { roleId: 1 } }, function(err, userData){
+            if (err) {
+              next(err);
+            } else {
+              if (userData && userData.length > 0) {
+                var _userSchoolDetails = userData.map(function(uData, index){
+                  return {
+                    'userId': uData.id,
+                    'schoolId': ctx.instance.id,
+                  };
+                });
+                app.models.Userschooldetails.create(_userSchoolDetails, function(err, schoolMapping) {
+                  if (err) return next(err);
+                  next();
+                });
+              }
+            }
+          });
+
+
+          /*
           var _userSchoolDetails = {
             "userId": ctx.options.accessToken.userId,
             "schoolId": ctx.instance.id
@@ -44,6 +65,7 @@ module.exports = function (School) {
             if (err) return next(err);
             next();
           });
+          */
 
         }
       });
