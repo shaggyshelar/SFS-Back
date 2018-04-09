@@ -22,7 +22,11 @@
   "scope": {
     "where": {
       "isDelete": 0
-    }
+    },
+    "include" : [
+      "DivisionClass",
+      "DivisionSchool"
+    ]
   },
   "mixins": {
     "TimestampMixin": true,
