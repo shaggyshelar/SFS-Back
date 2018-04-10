@@ -98,7 +98,12 @@ module.exports = function(app) {
       },
         function(error, response, body) {
           if (!error) {
-            var responseData = JSON.parse(body);
+            var responseData = {};
+            try {
+              responseData = JSON.parse(body);
+            } catch (Exception) {
+              responseData.respDescription = 'Error from server: ' + body;
+            }
             if (responseData.responseCode == '0000') {
               var updateStudentQuery = {isRegistered: 1, updatedBy: 1, updatedOn: dateHelper.getUTCManagedDateTime()};
               Student.updateAll({'studentCode': userForm.studentCode}, updateStudentQuery,
