@@ -245,6 +245,21 @@
         "nullable": "N"
       }
     },
+    "studentFullName": {
+      "type": "String",
+      "required": false,
+      "length": 120,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "studentFullName",
+        "dataType": "varchar",
+        "dataLength": 120,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
     "studentGender": {
       "type": "String",
       "required": true,
