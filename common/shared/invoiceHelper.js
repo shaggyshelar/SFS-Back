@@ -450,11 +450,11 @@ module.exports = function(app) {
       if (student.guardianMobile) return student.guardianMobile;
       return student.phone;
     },
-    registerStudent: (studentDetails, merchantId, callback) => {
+    registerStudent: (studentDetails, merchantId, aggregatorId, callback) => {
       var apiHelper = apiHelperObject(app);
       var userParams = [];
       userParams.push(['merchantId', merchantId]);
-      userParams.push(['aggregatorId', config.payPhiAggregatorID]);
+      userParams.push(['aggregatorId', aggregatorId]);
       userParams.push(['userID', studentDetails.studentCode]); // TODO: Confirm if it should be student code
       userParams.push(['actionCode', 'I']);
       userParams.push(['title', studentDetails.title]);
@@ -515,21 +515,23 @@ module.exports = function(app) {
 
           async.series([
             function(callback) {
-              Schoolmerchant.find({
-                where: {
-                  schoolId: schoolDetail.schoolId,
-                  isDefault: true,
-                },
-              }, function(err, schoolmerchantList) {
-                callback(null, schoolmerchantList);
+              var sql = 'CALL `spSelectMerchantAndAggregatorId`("' + schoolDetail.schoolId + '");';
+              ds.connector.query(sql, function(err, data) {
+                if (err) {
+                  console.log('Error:', err);
+                  callback(err, null);
+                } else {
+                  callback(null, data);
+                }
               });
             },
           ],
           function(err, results) {
-            var merchantId = results[0].length > 0 ? results[0][0].merchantId : '';
+            var merchantId = results[0].length > 0 ? results[0][0][0].merchantId : '';
+            var aggregatorId = results[0].length > 0 ? results[0][0][0].aggregatorId : '';
             _.each(schoolDetail.students, function(student) {
               waterfallFunctions.push(function(next) {
-                invoiceHelper.registerStudent(student, merchantId, function(error) {
+                invoiceHelper.registerStudent(student, merchantId, aggregatorId, function(error) {
                   if (error) {
                     student['ErrorMessage'] = error;
                     failedStudents.push(student);
@@ -571,7 +573,7 @@ module.exports = function(app) {
                 var schoolName = results[0].length > 0 ? results[0][0].schoolName : '';
                 var schoolAdminEmails = '';
                 var superAdminEmails = '';
-  
+
                 rootlogger.info('Completed student registration process for school:' + schoolName);
                 var fileName = schoolName + 'Registration Report.csv';
                 csvHelper.generateStudentRegistrationCSV(fileName, registeredStudents, failedStudents, function() {
@@ -654,19 +656,22 @@ module.exports = function(app) {
           });
         },
         function(callback) {
-          Schoolmerchant.find({
-            where: {
-              schoolId: studentDetails.schoolId,
-              isDefault: true,
-            },
-          }, function(err, schoolmerchantList) {
-            callback(null, schoolmerchantList);
+          var sql = 'CALL `spSelectMerchantAndAggregatorId`("' + studentDetails.schoolId + '");';
+          ds.connector.query(sql, function(err, data) {
+            if (err) {
+              console.log('Error:', err);
+              callback(err, null);
+            } else {
+              callback(null, data);
+            }
           });
         },
       ],
       function(err, results) {
         var students = results[0];
-        var merchantId = results[1].length > 0 ? results[1][0].merchantId : '';
+        var merchantId = results[1].length > 0 ? results[1][0][0].merchantId : '';
+        var aggregatorId = results[1].length > 0 ? results[1][0][0].aggregatorId : '';
+
         if (students.length == 0) {
           callback('No matching student found.');
           return;
@@ -676,7 +681,7 @@ module.exports = function(app) {
           console.log('studentDetail:', studentDetail);
 
           if (studentDetail.isRegistered == 0) {
-            invoiceHelper.registerStudent(studentDetail, merchantId, function(error) {
+            invoiceHelper.registerStudent(studentDetail, merchantId, aggregatorId, function(error) {
               if (error) {
                 callback(error);
               } else {

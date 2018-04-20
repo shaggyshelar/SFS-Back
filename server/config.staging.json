@@ -12,8 +12,6 @@
     "payPhiListInvoiceURL": "/api/listInvoice",
     "payPhiDownloadReceiptURL": "/api/downloadReceipt",
     "sessionTimoutIntervalInSeconds" : 600,
-    "payPhiAggregatorID" : "J_00009",
-    "payPhiMerchantID" : "T_00078",
     "payPhiHashKey" : "442b2091ed744bfb8ee82814c6698fdd",
     "invoiceGeneratorSP1" : "spGenrateAcademicInovice",
     "invoiceGeneratorForSingleStudent" : "spGenrateAcademicInoviceForStudent",
