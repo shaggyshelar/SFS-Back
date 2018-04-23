@@ -36,6 +36,27 @@ module.exports = function (School) {
         if (err) {
           return next(err);
         } else {
+          app.models.user.find({ where: { roleId: 1 } }, function(err, userData){
+            if (err) {
+              next(err);
+            } else {
+              if (userData && userData.length > 0) {
+                var _userSchoolDetails = userData.map(function(uData, index){
+                  return {
+                    'userId': uData.id,
+                    'schoolId': ctx.instance.id,
+                  };
+                });
+                app.models.Userschooldetails.create(_userSchoolDetails, function(err, schoolMapping) {
+                  if (err) return next(err);
+                  next();
+                });
+              }
+            }
+          });
+
+
+          /*
           var _userSchoolDetails = {
             "userId": ctx.options.accessToken.userId,
             "schoolId": ctx.instance.id
@@ -44,6 +65,7 @@ module.exports = function (School) {
             if (err) return next(err);
             next();
           });
+          */
 
         }
       });
@@ -96,7 +118,7 @@ module.exports = function (School) {
 
 
 
-  School.getUserForSchoolAdmin = function (schoolId, options, cb) {
+  School.getUserForSchoolAdmin = function (schoolId, filter, options, cb) {
     if (options.accessToken) {
       app.models.Userschooldetails.find({ where: { schoolId: schoolId } }, function (err, _users) {
         if (err) {
@@ -106,7 +128,11 @@ module.exports = function (School) {
           var condition = _users.map(function (s, i) {
             return s.userId;
           });
-          app.models.User.find({ where: { and: [{ id: { inq: condition } }, { roleId: { gt: 2 } }] } }, function (err, _assUserRole) {
+          var custFilter = { where: { and: [{ id: { inq: condition } }, { roleId: { gt: 2 } }] } };
+          if(filter&& filter.where) {
+            custFilter.where.and.push(filter.where);
+          }
+          app.models.User.find(custFilter, function (err, _assUserRole) {
             if (err) {
               cb(err);
             }
@@ -120,7 +146,7 @@ module.exports = function (School) {
   }
 
 
-  School.getUserCountForSchoolAdmin = function (schoolId, options, cb) {
+  School.getUserCountForSchoolAdmin = function (schoolId, filter, options, cb) {
     if (options.accessToken) {
       app.models.Userschooldetails.find({ where: { schoolId: schoolId } }, function (err, _users) {
         if (err) {
@@ -130,7 +156,11 @@ module.exports = function (School) {
           var condition = _users.map(function (s, i) {
             return s.userId;
           });
-          app.models.User.find({ where: { and: [{ id: { inq: condition } }, { roleId: { gt: 2 } }] } }, function (err, _assUserRole) {
+          var custFilter = { where: { and: [{ id: { inq: condition } }, { roleId: { gt: 2 } }] } };
+          if(filter&& filter.where) {
+            custFilter.where.and.push(filter.where);
+          }
+          app.models.User.find(custFilter, function (err, _assUserRole) {
             if (err) {
               cb(err);
             }
@@ -169,6 +199,11 @@ module.exports = function (School) {
       type: 'Number'
     },
     {
+      arg: 'filter',
+      type: 'object',
+      'http': { source: 'query' }
+    },
+    {
       arg: "options",
       type: "object",
       http: "optionsFromRequest"
@@ -182,6 +217,11 @@ module.exports = function (School) {
     accepts: [{
       arg: 'schoolId',
       type: 'Number'
+    },
+    {
+      arg: 'filter',
+      type: 'object',
+      'http': { source: 'query' }
     },
     {
       arg: "options",

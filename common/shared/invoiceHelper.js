@@ -19,6 +19,7 @@ module.exports = function(app) {
   var Student = app.models.Student;
   var UserModel = app.models.user;
   var Schools = app.models.School;
+  var Schoolmerchant = app.models.Schoolmerchant;
 
   var invoiceHelper =  {
     generateTodaysInvoice: (methodCallback) => {
@@ -120,8 +121,6 @@ module.exports = function(app) {
     parseInvoiceDetails: (invoiceDetails) => {
       var firstInvoice = invoiceDetails.values[0];
       var invoiceData = {
-        'merchantId': config.payPhiMerchantID,
-        'aggregatorId': config.payPhiAggregatorID,
         'userId': firstInvoice.userId,
         'invoiceNo': firstInvoice.invoiceNumber,
         'desc': firstInvoice.desc,
@@ -451,11 +450,11 @@ module.exports = function(app) {
       if (student.guardianMobile) return student.guardianMobile;
       return student.phone;
     },
-    registerStudent: (studentDetails, callback) => {
+    registerStudent: (studentDetails, merchantId, aggregatorId, callback) => {
       var apiHelper = apiHelperObject(app);
       var userParams = [];
-      userParams.push(['merchantId', config.payPhiMerchantID]);
-      userParams.push(['aggregatorId', config.payPhiAggregatorID]);
+      userParams.push(['merchantId', merchantId]);
+      userParams.push(['aggregatorId', aggregatorId]);
       userParams.push(['userID', studentDetails.studentCode]); // TODO: Confirm if it should be student code
       userParams.push(['actionCode', 'I']);
       userParams.push(['title', studentDetails.title]);
@@ -468,6 +467,16 @@ module.exports = function(app) {
       userParams.push(['mobileNo', invoiceHelper.getStudentMobileNumber(studentDetails)]);
       userParams.push(['emailID', studentDetails.email]);
       userParams.push(['studentCode', studentDetails.studentCode]);
+      let userFieldInfo = '';
+      if (studentDetails.__data) {
+        if (studentDetails.__data.StudentClass) {
+          userFieldInfo += studentDetails.__data.StudentClass.className;
+        }
+        if (studentDetails.__data.StudentDivision) {
+          userFieldInfo = (userFieldInfo + ' ' + studentDetails.__data.StudentDivision.divisionName);
+        }
+        userParams.push(['userField1', userFieldInfo]);
+      }
       if (studentDetails.address) {
         userParams.push(['addrLine1', studentDetails.address]);
       }
@@ -513,87 +522,105 @@ module.exports = function(app) {
           var waterfallFunctions = [];
           var failedStudents = [];
           var registeredStudents = [];
-          _.each(schoolDetail.students, function(student) {
-            waterfallFunctions.push(function(next) {
-              invoiceHelper.registerStudent(student, function(error) {
-                if (error) {
-                  student['ErrorMessage'] = error.respDescription;
-                  failedStudents.push(student);
+
+          async.series([
+            function(callback) {
+              var sql = 'CALL `spSelectMerchantAndAggregatorId`("' + schoolDetail.schoolId + '");';
+              ds.connector.query(sql, function(err, data) {
+                if (err) {
+                  console.log('Error:', err);
+                  callback(err, null);
                 } else {
-                  student['ErrorMessage'] = 'User created successfully';
-                  registeredStudents.push(student);
+                  callback(null, data);
                 }
-                next();
+              });
+            },
+          ],
+          function(err, results) {
+            var merchantId = results[0].length > 0 ? results[0][0][0].merchantId : '';
+            var aggregatorId = results[0].length > 0 ? results[0][0][0].aggregatorId : '';
+            _.each(schoolDetail.students, function(student) {
+              waterfallFunctions.push(function(next) {
+                invoiceHelper.registerStudent(student, merchantId, aggregatorId, function(error) {
+                  if (error) {
+                    student['ErrorMessage'] = error;
+                    failedStudents.push(student);
+                  } else {
+                    student['ErrorMessage'] = 'User created successfully';
+                    registeredStudents.push(student);
+                  }
+                  next();
+                });
               });
             });
-          });
-          async.waterfall(waterfallFunctions, function(err) {
-            async.series([
-              function(callback) {
-                Schools.find({
-                  where: {
-                    id: schoolDetail.schoolId,
-                  },
-                }, function(err, schoolsList) {
-                  callback(null, schoolsList);
-                });
-              },
-              function(callback) {
-                UserModel.getEmails(schoolDetail.schoolId, function(err, emailsList) {
-                  callback(null, emailsList);
-                });
-              },
-              function(callback) {
-                UserModel.find({
-                  where: {
-                    roleId: 1,
-                  },
-                }, function(err, schoolsList) {
-                  callback(null, schoolsList);
-                });
-              },
-            ],
-            function(err, results) {
-              var schoolName = results[0].length > 0 ? results[0][0].schoolName : '';
-              var schoolAdminEmails = '';
-              var superAdminEmails = '';
+            async.waterfall(waterfallFunctions, function(err) {
+              async.series([
+                function(callback) {
+                  Schools.find({
+                    where: {
+                      id: schoolDetail.schoolId,
+                    },
+                  }, function(err, schoolsList) {
+                    callback(null, schoolsList);
+                  });
+                },
+                function(callback) {
+                  UserModel.getEmails(schoolDetail.schoolId, function(err, emailsList) {
+                    callback(null, emailsList);
+                  });
+                },
+                function(callback) {
+                  UserModel.find({
+                    where: {
+                      roleId: 1,
+                    },
+                  }, function(err, schoolsList) {
+                    callback(null, schoolsList);
+                  });
+                },
+              ],
+              function(err, results) {
+                var schoolName = results[0].length > 0 ? results[0][0].schoolName : '';
+                var schoolAdminEmails = '';
+                var superAdminEmails = '';
 
-              rootlogger.info('Completed student registration process for school:' + schoolName);
-              var fileName = schoolName + 'Registration Report.csv';
-              csvHelper.generateStudentRegistrationCSV(fileName, registeredStudents, failedStudents, function() {
-                _.each(results[1], function(schoolAdminEmail) {
-                  if (schoolAdminEmails == '') {
-                    schoolAdminEmails += schoolAdminEmail.email;
-                  } else {
-                    schoolAdminEmails += (', ' + schoolAdminEmail.email);
-                  }
-                });
-                _.each(results[2], function(superAdminEmail) {
-                  if (superAdminEmails == '') {
-                    superAdminEmails += superAdminEmail.email;
-                  } else {
-                    superAdminEmails += (', ' + superAdminEmail.email);
-                  }
-                });
-
-                rootlogger.info('Sending email for student registration of school: ' + schoolName);
-                emailHelper.getEmailText('csv_registerStudentEmailReport', {savedStudents: registeredStudents.length, failedStudents: failedStudents.length, schoolName: schoolName}, function(error, html) {
-                  app.models.Email.send({
-                    to: schoolAdminEmails,
-                    cc: superAdminEmails,
-                    from: config.supportEmailID,
-                    subject: i18next.t('csv_studentRegistrationEmailSubject', {schoolName: schoolName}),
-                    html: html,
-                    attachments: [
-                      {
-                        filename: fileName,
-                        content: fs.createReadStream(fileName),
-                      }],
-                  }, function(err) {
-                    if (err) {
-                      rootlogger.info('Error sending student registration report to email=\'' + schoolAdminEmails + '\',\n Error=' + err);
+                rootlogger.info('Completed student registration process for school:' + schoolName);
+                var fileName = schoolName + 'Registration Report.csv';
+                csvHelper.generateStudentRegistrationCSV(fileName, registeredStudents, failedStudents, function() {
+                  _.each(results[1], function(schoolAdminEmail) {
+                    if (schoolAdminEmails == '') {
+                      schoolAdminEmails += schoolAdminEmail.email;
+                    } else {
+                      schoolAdminEmails += (', ' + schoolAdminEmail.email);
                     }
-                    rootlogger.info('Sent email for student registration of school: ' + schoolName);
+                  });
+                  _.each(results[2], function(superAdminEmail) {
+                    if (superAdminEmails == '') {
+                      superAdminEmails += superAdminEmail.email;
+                    } else {
+                      superAdminEmails += (', ' + superAdminEmail.email);
+                    }
+                  });
+
+                  rootlogger.info('Sending email for student registration of school: ' + schoolName);
+                  emailHelper.getEmailText('csv_registerStudentEmailReport', {savedStudents: registeredStudents.length, failedStudents: failedStudents.length, schoolName: schoolName}, function(error, html) {
+                    app.models.Email.send({
+                      to: schoolAdminEmails,
+                      cc: superAdminEmails,
+                      from: config.supportEmailID,
+                      subject: i18next.t('csv_studentRegistrationEmailSubject', {schoolName: schoolName}),
+                      html: html,
+                      attachments: [
+                        {
+                          filename: fileName,
+                          content: fs.createReadStream(fileName),
+                        }],
+                    }, function(err) {
+                      if (err) {
+                        rootlogger.info('Error sending student registration report to email=\'' + schoolAdminEmails + '\',\n Error=' + err);
+                      }
+                      rootlogger.info('Sent email for student registration of school: ' + schoolName);
+                    });
                   });
                 });
               });
@@ -638,9 +665,23 @@ module.exports = function(app) {
             callback(null, lists);
           });
         },
+        function(callback) {
+          var sql = 'CALL `spSelectMerchantAndAggregatorId`("' + studentDetails.schoolId + '");';
+          ds.connector.query(sql, function(err, data) {
+            if (err) {
+              console.log('Error:', err);
+              callback(err, null);
+            } else {
+              callback(null, data);
+            }
+          });
+        },
       ],
       function(err, results) {
         var students = results[0];
+        var merchantId = results[1].length > 0 ? results[1][0][0].merchantId : '';
+        var aggregatorId = results[1].length > 0 ? results[1][0][0].aggregatorId : '';
+
         if (students.length == 0) {
           callback('No matching student found.');
           return;
@@ -650,7 +691,7 @@ module.exports = function(app) {
           console.log('studentDetail:', studentDetail);
 
           if (studentDetail.isRegistered == 0) {
-            invoiceHelper.registerStudent(studentDetail, function(error) {
+            invoiceHelper.registerStudent(studentDetail, merchantId, aggregatorId, function(error) {
               if (error) {
                 callback(error);
               } else {
