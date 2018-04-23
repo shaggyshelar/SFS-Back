@@ -467,6 +467,16 @@ module.exports = function(app) {
       userParams.push(['mobileNo', invoiceHelper.getStudentMobileNumber(studentDetails)]);
       userParams.push(['emailID', studentDetails.email]);
       userParams.push(['studentCode', studentDetails.studentCode]);
+      let userFieldInfo = '';
+      if (studentDetails.__data) {
+        if (studentDetails.__data.StudentClass) {
+          userFieldInfo += studentDetails.__data.StudentClass.className;
+        }
+        if (studentDetails.__data.StudentDivision) {
+          userFieldInfo = (userFieldInfo + ' ' + studentDetails.__data.StudentDivision.divisionName);
+        }
+        userParams.push(['userField1', userFieldInfo]);
+      }
       if (studentDetails.address) {
         userParams.push(['addrLine1', studentDetails.address]);
       }
@@ -591,7 +601,7 @@ module.exports = function(app) {
                       superAdminEmails += (', ' + superAdminEmail.email);
                     }
                   });
-  
+
                   rootlogger.info('Sending email for student registration of school: ' + schoolName);
                   emailHelper.getEmailText('csv_registerStudentEmailReport', {savedStudents: registeredStudents.length, failedStudents: failedStudents.length, schoolName: schoolName}, function(error, html) {
                     app.models.Email.send({
