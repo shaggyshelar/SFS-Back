@@ -199,7 +199,7 @@ module.exports = function (app) {
       return concatenatedURL;
     },
     getHashedKey: function (concatenatedValues) {
-      // const secret = config.payPhiHashKey;
+      const secret = config.payPhiHashKey;
       const lowerCaseHash = crypto.createHmac('sha256', secret)
         .update(concatenatedValues)
         .digest('hex')

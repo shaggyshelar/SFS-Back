@@ -210,16 +210,6 @@ module.exports = function (app) {
         return;
       }
 
-      // Commented on 27 Dec 2017 - Moved the same functionality on top
-      // var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
-      // var hashedKey = apiHelper.getHashedKey(concatenatedParams);
-
-      // if (req.body.secureHash !== hashedKey) {
-      //   res.status(400);
-      //   res.json({'Message': i18next.t('api_validation_adviceInvalidSecureHash')});
-      //   return;
-      // }
-
       async.series([
         function (callback) {
           // merchantId, aggregatorId, userId, invoiceNumber
@@ -374,16 +364,6 @@ module.exports = function (app) {
         res.json({ 'Message': errorMessages });
         return;
       }
-
-      // var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
-      // var hashedKey = apiHelper.getHashedKey(concatenatedParams);
-
-      // if (req.body.secureHash !== hashedKey) {
-      //   res.status(400);
-      //   res.json({'Message': i18next.t('api_validation_adviceInvalidSecureHash')});
-      //   return;
-      // }
-
       async.series([
         function (callback) {
           // merchantId, aggregatorId, userId, invoiceNumber
