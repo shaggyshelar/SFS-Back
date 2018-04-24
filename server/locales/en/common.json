@@ -82,5 +82,6 @@
     "email_unblockAccountSubject":"SFS: Unlock account",
     "email_passwordResetSubject":"SFS: Password reset",
     "error_feePlanProcessedAssociationDelete":"Fee Plan Already Processed.Not Available For Association Delete.",
-    "error_feePlanProcessedAssociationDeleteParameterMissing":"Feepan Id and Academic Year is required."
+    "error_feePlanProcessedAssociationDeleteParameterMissing":"Feepan Id and Academic Year is required.",
+    "AggregatorKeyFieldName":"AggregatorKey"
 }
