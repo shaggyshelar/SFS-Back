@@ -499,18 +499,10 @@ module.exports = function (app) {
         userParams.push(['state', studentDetails.state]);
       }
 
-      var aggregatorKeyFieldName = i18next.t('AggregatorKeyFieldName');
-      app.models.Sfsconfiguration.findOne({
-        where: { keyName: aggregatorKeyFieldName }
-      }, function (err, _sfsconfiguration) {
-        var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
-        // var hashedKey = apiHelper.getHashedKeyWithSecret(concatenatedParams, aggregatorKey);
-        var hashedKey = apiHelper.getHashedKeyWithSecret(concatenatedParams, _sfsconfiguration.keyValue);
-        var userForm = apiHelper.getForm(userParams, hashedKey);
-        apiHelper.registerOrUpdateUser(userForm, callback);
-      });
-
-
+      var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
+      var hashedKey = apiHelper.getHashedKeyWithSecret(concatenatedParams, aggregatorKey);
+      var userForm = apiHelper.getForm(userParams, hashedKey);
+      apiHelper.registerOrUpdateUser(userForm, callback);
     },
     registerStudents: () => {
       async.series([
