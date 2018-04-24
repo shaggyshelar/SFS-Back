@@ -126,7 +126,7 @@ module.exports = function(app) {
             rootlogger.error('Error while registering student into PayPhi system.');
             callback({
               'respDescription': 'Error while registering student into PayPhi system.',
-            });            
+            });
           }
         });
     },
@@ -200,6 +200,13 @@ module.exports = function(app) {
     },
     getHashedKey: function(concatenatedValues) {
       const secret = config.payPhiHashKey;
+      const lowerCaseHash = crypto.createHmac('sha256', secret)
+                         .update(concatenatedValues)
+                         .digest('hex')
+                         .toLowerCase();
+      return lowerCaseHash;
+    },
+    getHashedKeyWithSecret: function(concatenatedValues, secret) {
       const lowerCaseHash = crypto.createHmac('sha256', secret)
                          .update(concatenatedValues)
                          .digest('hex')

@@ -450,7 +450,7 @@ module.exports = function(app) {
       if (student.guardianMobile) return student.guardianMobile;
       return student.phone;
     },
-    registerStudent: (studentDetails, merchantId, aggregatorId, callback) => {
+    registerStudent: (studentDetails, merchantId, aggregatorId, aggregatorKey, callback) => {
       var apiHelper = apiHelperObject(app);
       var userParams = [];
       userParams.push(['merchantId', merchantId]);
@@ -488,7 +488,7 @@ module.exports = function(app) {
       }
 
       var concatenatedParams = apiHelper.getConcatenatedParams(userParams);
-      var hashedKey = apiHelper.getHashedKey(concatenatedParams);
+      var hashedKey = apiHelper.getHashedKeyWithSecret(concatenatedParams, aggregatorKey);
       var userForm = apiHelper.getForm(userParams, hashedKey);
       apiHelper.registerOrUpdateUser(userForm, callback);
     },
@@ -539,9 +539,11 @@ module.exports = function(app) {
           function(err, results) {
             var merchantId = results[0].length > 0 ? results[0][0][0].merchantId : '';
             var aggregatorId = results[0].length > 0 ? results[0][0][0].aggregatorId : '';
+            var aggregatorKey = results[0].length > 0 ? results[0][0][0].aggregatoryKey : '';
+
             _.each(schoolDetail.students, function(student) {
               waterfallFunctions.push(function(next) {
-                invoiceHelper.registerStudent(student, merchantId, aggregatorId, function(error) {
+                invoiceHelper.registerStudent(student, merchantId, aggregatorId, aggregatorKey, function(error) {
                   if (error) {
                     student['ErrorMessage'] = error;
                     failedStudents.push(student);
@@ -681,6 +683,7 @@ module.exports = function(app) {
         var students = results[0];
         var merchantId = results[1].length > 0 ? results[1][0][0].merchantId : '';
         var aggregatorId = results[1].length > 0 ? results[1][0][0].aggregatorId : '';
+        var aggregatorKey = results[1].length > 0 ? results[1][0][0].aggregatoryKey : '';
 
         if (students.length == 0) {
           callback('No matching student found.');
@@ -691,7 +694,7 @@ module.exports = function(app) {
           console.log('studentDetail:', studentDetail);
 
           if (studentDetail.isRegistered == 0) {
-            invoiceHelper.registerStudent(studentDetail, merchantId, aggregatorId, function(error) {
+            invoiceHelper.registerStudent(studentDetail, merchantId, aggregatorId, aggregatorKey, function(error) {
               if (error) {
                 callback(error);
               } else {
