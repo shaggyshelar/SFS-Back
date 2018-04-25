@@ -54,7 +54,7 @@
     "csv_invoiceUpdationEmailSubject": "SFS: Invoice Update Status for {{schoolName}}",
     "error_authenticationFailed": "Failed",
     "error_code_authenticationUserLocked": "LOGIN_FAILED_ACCOUNT_LOCKED",
-    "error_authenticationUserLocked": "Account is locked due to multiple failed login attempts.",
+    "error_authenticationUserLocked": "Your account is been locked due to incorrect login attempts. Please check your mail",
     "email_subject_authenticationUserLocked": "SFS: Account has been locked",
     "email_authenticationUserLocked": "<h2>User has been locked</h2><br /> <b>{{username}}</b> has been locked due to multiple unsuccessful login attempts.",
     "resetpassword_response_title": "Password reset requested",
@@ -82,5 +82,6 @@
     "email_unblockAccountSubject":"SFS: Unlock account",
     "email_passwordResetSubject":"SFS: Password reset",
     "error_feePlanProcessedAssociationDelete":"Fee Plan Already Processed.Not Available For Association Delete.",
-    "error_feePlanProcessedAssociationDeleteParameterMissing":"Feepan Id and Academic Year is required."
+    "error_feePlanProcessedAssociationDeleteParameterMissing":"Feepan Id and Academic Year is required.",
+    "AggregatorKeyFieldName":"AggregatorKey"
 }
