@@ -13,13 +13,14 @@ authHelper.sendVerificationEmail = function (user, plainPassword, isUpdate, next
         from: 'noreply@loopback.com',
         subject: i18next.t('email_userRegistrationSubject'),
         template: path.resolve(__dirname, '../../templates/email/verify.html'),
-        redirect: '/verified',
+        redirect: '/SFS/verified',
         user: user,
         text: '{href}',
         validationUrl: '{href}',
         username: user.username,
         password: plainPassword,
-        isUpdate: isUpdate
+        isUpdate: isUpdate,
+        host: "qa.phicommerce.com/SFS"
     };
     if (isUpdate) {
         options.subject = i18next.t('email_verify_subject');
@@ -35,7 +36,7 @@ authHelper.sendVerificationEmail = function (user, plainPassword, isUpdate, next
             title: 'Signed up successfully',
             content: 'Please check your email and click on the verification link ' +
             'before logging in.',
-            redirectTo: '/',
+            redirectTo: '/SFS/',
             redirectToLinkText: 'Log in',
         });
     });

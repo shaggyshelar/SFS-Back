@@ -36,7 +36,7 @@ module.exports = function (User) {
         title: 'Signed up successfully',
         content: 'Please check your email and click on the verification link ' +
           'before logging in.',
-        redirectTo: '/',
+        redirectTo: '/SFS/',
         redirectToLinkText: 'Log in',
       });
     });
@@ -49,16 +49,16 @@ module.exports = function (User) {
         'to your email successfully',
       content: 'Please check your email and click on the verification link ' +
         'before logging in',
-      redirectTo: '/',
+      redirectTo: '/SFS/',
       redirectToLinkText: 'Log in',
     });
   });
 
   // send password reset link when requested
   User.on('resetPasswordRequest', function (info) {
-    var host = app.get("host"); //config.host
+    var host = "qa.phicommerce.com/SFS"; // app.get("host"); //config.host
     var port = app.get("port"); // config.port
-    var url = 'http://' + host + ':' + port + '/reset-password';
+    var url = 'https://' + host +'/reset-password';// ':' + port + 
     // var html = 'Click <a href="' + url + '?access_token=' +
     //   info.accessToken.id + '">here</a> to reset your password';
     // var subject = "SFS: Password reset";
@@ -113,7 +113,7 @@ module.exports = function (User) {
         context.res.render('response', {
           title: 'Password changed successfully',
           content: 'Please login again with new password',
-          redirectTo: '/',
+          redirectTo: '/SFS/',
           redirectToLinkText: 'Log in',
         });
       });
@@ -133,7 +133,7 @@ module.exports = function (User) {
       context.res.render('response', {
         title: 'Password reset success',
         content: 'Your password has been reset successfully',
-        redirectTo: '/',
+        redirectTo: '/SFS/',
         redirectToLinkText: 'Log in',
       });
     });
