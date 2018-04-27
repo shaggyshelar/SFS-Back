@@ -2,6 +2,7 @@
 var app = require('../../server/server');
 var path = require('path');
 var i18next = require('i18next');
+var productionConfig = require('../../server/config.production.json');
 
 var authHelper = function () {
 
@@ -20,7 +21,7 @@ authHelper.sendVerificationEmail = function (user, plainPassword, isUpdate, next
         username: user.username,
         password: plainPassword,
         isUpdate: isUpdate,
-        host: "qa.phicommerce.com/SFS"
+        host: productionConfig.productionURL,
     };
     if (isUpdate) {
         options.subject = i18next.t('email_verify_subject');

@@ -6,6 +6,7 @@
 'use strict';
 
 var config = require('../../server/config.json');
+var prodcutionConfig = require('../../server/config.production.json');
 var path = require('path');
 var permissionHelper = require('../shared/permissionsHelper');
 var authHelper = require('../shared/authHelper');
@@ -56,7 +57,7 @@ module.exports = function (User) {
 
   // send password reset link when requested
   User.on('resetPasswordRequest', function (info) {
-    var host = "qa.phicommerce.com/SFS"; // app.get("host"); //config.host
+    var host = prodcutionConfig.productionURL; // app.get("host"); //config.host
     var port = app.get("port"); // config.port
     var url = 'https://' + host +'/reset-password';// ':' + port + 
     // var html = 'Click <a href="' + url + '?access_token=' +
