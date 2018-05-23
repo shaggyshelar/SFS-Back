@@ -37,7 +37,7 @@ module.exports = function (User) {
         title: 'Signed up successfully',
         content: 'Please check your email and click on the verification link ' +
           'before logging in.',
-        redirectTo: '/SFS/',
+        redirectTo: prodcutionConfig.baseUrlAppend, //'/SFS/',
         redirectToLinkText: 'Log in',
       });
     });
@@ -50,7 +50,7 @@ module.exports = function (User) {
         'to your email successfully',
       content: 'Please check your email and click on the verification link ' +
         'before logging in',
-      redirectTo: '/SFS/',
+      redirectTo: prodcutionConfig.baseUrlAppend, //'/SFS/',
       redirectToLinkText: 'Log in',
     });
   });
@@ -114,7 +114,7 @@ module.exports = function (User) {
         context.res.render('response', {
           title: 'Password changed successfully',
           content: 'Please login again with new password',
-          redirectTo: '/SFS/',
+          redirectTo: prodcutionConfig.baseUrlAppend,//'/SFS/',
           redirectToLinkText: 'Log in',
         });
       });
@@ -134,7 +134,7 @@ module.exports = function (User) {
       context.res.render('response', {
         title: 'Password reset success',
         content: 'Your password has been reset successfully',
-        redirectTo: '/SFS/',
+        redirectTo: prodcutionConfig.baseUrlAppend,//'/SFS/',
         redirectToLinkText: 'Log in',
       });
     });

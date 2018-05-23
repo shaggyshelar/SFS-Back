@@ -14,7 +14,7 @@ authHelper.sendVerificationEmail = function (user, plainPassword, isUpdate, next
         from: 'noreply@loopback.com',
         subject: i18next.t('email_userRegistrationSubject'),
         template: path.resolve(__dirname, '../../templates/email/verify.html'),
-        redirect: '/SFS/verified',
+        redirect: productionConfig.baseUrlAppend + 'verified', //'/SFS/verified',
         user: user,
         text: '{href}',
         validationUrl: '{href}',
@@ -36,8 +36,8 @@ authHelper.sendVerificationEmail = function (user, plainPassword, isUpdate, next
         next(null, {
             title: 'Signed up successfully',
             content: 'Please check your email and click on the verification link ' +
-            'before logging in.',
-            redirectTo: '/SFS/',
+                'before logging in.',
+            redirectTo: productionConfig.baseUrlAppend, //'/SFS/',
             redirectToLinkText: 'Log in',
         });
     });

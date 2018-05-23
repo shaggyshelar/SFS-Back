@@ -21,5 +21,6 @@
     "invoiceGeneratorSP4" : "spSelectInovice",
     "selectInvoiceForStudent" : "spSelectInoviceForStudent",  
     "hourDifferenceUTC": 5,
-    "minutesDifferenceUTC": 30
+    "minutesDifferenceUTC": 30,
+    "baseUrlAppend":"/SFS/"
 }
