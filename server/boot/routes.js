@@ -1082,7 +1082,7 @@ module.exports = function (app) {
       res.status(200).send({
         title: i18next.t('resetpassword_response_title'),
         content: i18next.t('resetpassword_response_content'),
-        redirectTo: '/',
+        redirectTo: '/SFS/',
         redirectToLinkText: 'Log in'
       });
     });
@@ -1092,7 +1092,7 @@ module.exports = function (app) {
   app.get('/reset-password', function (req, res, next) {
     if (!req.accessToken) return res.sendStatus(401);
     res.render('password-reset', {
-      redirectUrl: '/api/users/reset-password?access_token=' +
+      redirectUrl: '/SFS/api/users/reset-password?access_token=' +
         req.accessToken.id
     });
   });

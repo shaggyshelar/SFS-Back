@@ -2,6 +2,7 @@
 var app = require('../../server/server');
 var path = require('path');
 var i18next = require('i18next');
+var productionConfig = require('../../server/config.production.json');
 
 var authHelper = function () {
 
@@ -13,13 +14,14 @@ authHelper.sendVerificationEmail = function (user, plainPassword, isUpdate, next
         from: 'noreply@loopback.com',
         subject: i18next.t('email_userRegistrationSubject'),
         template: path.resolve(__dirname, '../../templates/email/verify.html'),
-        redirect: '/verified',
+        redirect: '/SFS/verified',
         user: user,
         text: '{href}',
         validationUrl: '{href}',
         username: user.username,
         password: plainPassword,
-        isUpdate: isUpdate
+        isUpdate: isUpdate,
+        host: productionConfig.productionURL,
     };
     if (isUpdate) {
         options.subject = i18next.t('email_verify_subject');
@@ -35,7 +37,7 @@ authHelper.sendVerificationEmail = function (user, plainPassword, isUpdate, next
             title: 'Signed up successfully',
             content: 'Please check your email and click on the verification link ' +
             'before logging in.',
-            redirectTo: '/',
+            redirectTo: '/SFS/',
             redirectToLinkText: 'Log in',
         });
     });
