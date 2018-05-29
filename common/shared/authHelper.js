@@ -36,7 +36,7 @@ authHelper.sendVerificationEmail = function (user, plainPassword, isUpdate, next
         next(null, {
             title: 'Signed up successfully',
             content: 'Please check your email and click on the verification link ' +
-                'before logging in.',
+            'before logging in.',
             redirectTo: productionConfig.baseUrlAppend, //'/SFS/',
             redirectToLinkText: 'Log in',
         });

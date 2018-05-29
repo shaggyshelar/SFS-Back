@@ -15,6 +15,7 @@ var app = require('../../server/server');
 var g = require('loopback/lib/globalize');
 var i18next = require('i18next');
 var emailHelper = require('../shared/emailHelper');
+var productionConfig = require('../../server/config.production.json');
 module.exports = function (User) {
   // send verification email after registration
   User.afterRemote('create', function (context, user, next) {
@@ -37,7 +38,7 @@ module.exports = function (User) {
         title: 'Signed up successfully',
         content: 'Please check your email and click on the verification link ' +
           'before logging in.',
-        redirectTo: prodcutionConfig.baseUrlAppend, //'/SFS/',
+        redirectTo: productionConfig.baseUrlAppend, //'/SFS/',
         redirectToLinkText: 'Log in',
       });
     });
@@ -50,7 +51,7 @@ module.exports = function (User) {
         'to your email successfully',
       content: 'Please check your email and click on the verification link ' +
         'before logging in',
-      redirectTo: prodcutionConfig.baseUrlAppend, //'/SFS/',
+      redirectTo: productionConfig.baseUrlAppend, //'/SFS/',
       redirectToLinkText: 'Log in',
     });
   });
@@ -114,7 +115,7 @@ module.exports = function (User) {
         context.res.render('response', {
           title: 'Password changed successfully',
           content: 'Please login again with new password',
-          redirectTo: prodcutionConfig.baseUrlAppend,//'/SFS/',
+          redirectTo: productionConfig.baseUrlAppend, //'/SFS/',
           redirectToLinkText: 'Log in',
         });
       });
@@ -134,7 +135,7 @@ module.exports = function (User) {
       context.res.render('response', {
         title: 'Password reset success',
         content: 'Your password has been reset successfully',
-        redirectTo: prodcutionConfig.baseUrlAppend,//'/SFS/',
+        redirectTo: productionConfig.baseUrlAppend, //'/SFS/',
         redirectToLinkText: 'Log in',
       });
     });
