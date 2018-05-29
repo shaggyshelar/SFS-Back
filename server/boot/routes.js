@@ -20,6 +20,7 @@ var moment = require('moment');
 var dateHelper = require('../../common/shared/dateHelper');
 var validator = require('validator');
 var emailHelper = require('../../common/shared/emailHelper');
+var productionConfig = require('../config.production.json');
 
 module.exports = function (app) {
   var ds = app.dataSources.mysql;
@@ -1082,7 +1083,7 @@ module.exports = function (app) {
       res.status(200).send({
         title: i18next.t('resetpassword_response_title'),
         content: i18next.t('resetpassword_response_content'),
-        redirectTo: '/',
+        redirectTo: productionConfig.baseUrlAppend, // '/SFS/',
         redirectToLinkText: 'Log in'
       });
     });
@@ -1092,7 +1093,7 @@ module.exports = function (app) {
   app.get('/reset-password', function (req, res, next) {
     if (!req.accessToken) return res.sendStatus(401);
     res.render('password-reset', {
-      redirectUrl: '/api/users/reset-password?access_token=' +
+      redirectUrl: productionConfig.baseUrlAppend + 'api/users/reset-password?access_token=' + // '/SFS/api/users/reset-password?access_token=' +
         req.accessToken.id
     });
   });
