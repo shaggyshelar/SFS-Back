@@ -2,6 +2,12 @@
 var i18next = require('i18next');
 
 module.exports = function (Sfsconfiguration) {
+    /**
+     * Remote method to update SFSConfig.
+     * @param _sfsConfiguration - configuration which is to be updated.
+     * @param options - optionsFromRequest object to get authentication headers, etc.
+     * @param cb - Callback to be executed after this method is executed.
+     */
     Sfsconfiguration.updateSFSConfig = function (_sfsConfiguration, options, cb) {
         Sfsconfiguration.findOne({ where: { keyName: _sfsConfiguration.keyName } }, function (err, _config) {
             if (err) {

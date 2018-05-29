@@ -16,7 +16,9 @@ var i18next = require('i18next');
 var emailHelper = require('../shared/emailHelper');
 var productionConfig = require('../../server/config.production.json');
 module.exports = function (User) {
-  // send verification email after registration
+  /**
+   * Operational hook to send verification email after registration
+   */
   User.afterRemote('create', function (context, user, next) {
     var options = {
       type: 'email',
@@ -28,6 +30,9 @@ module.exports = function (User) {
       user: user,
     };
 
+    /**
+     * Overrided Remote method to verify the user after registering
+     */
     user.verify(options, function (err, response) {
       if (err) {
         User.deleteById(user.id);
@@ -43,7 +48,9 @@ module.exports = function (User) {
     });
   });
 
-  // Method to render
+  /**
+   * Overridden remote method to render the content
+   */
   User.afterRemote('prototype.verify', function (context, user, next) {
     context.res.render('response', {
       title: 'A Link to reverify your identity has been sent ' +
@@ -55,7 +62,9 @@ module.exports = function (User) {
     });
   });
 
-  // send password reset link when requested
+  /**
+   * Remote hook to send password reset link when requested
+   */
   User.on('resetPasswordRequest', function (info) {
     var host = app.get("host"); //config.host
     var port = app.get("port"); // config.port
@@ -105,7 +114,9 @@ module.exports = function (User) {
     });
   });
 
-  // render UI page after password change
+  /**
+   * Operational hook to render UI page after password change
+   */
   User.afterRemote('changePassword', function (context, user, next) {
     var userid = context.args.options.accessToken.userId;
     User.findById(userid, function (err, _user) {
@@ -121,7 +132,9 @@ module.exports = function (User) {
     });
   });
 
-  // render UI page after password reset
+  /**
+   * Operational hook to render UI page after password reset
+   */
   User.afterRemote('setPassword', function (context, user, next) {
 
     var _user = {};
@@ -140,6 +153,9 @@ module.exports = function (User) {
     });
   });
 
+  /**
+   * Operational hook to be called after confirm method to set isActive as true.
+   */
   User.afterRemote('confirm', function (context, user, next) {
     if (context.args) {
       User.updateAll({ id: context.args.uid }, { isActivate: true }, function (err, updatedUser) {
@@ -152,6 +168,12 @@ module.exports = function (User) {
     }
   });
 
+  /**
+   * Remote method to create a new user
+   * @param user - user which is to be created
+   * @param options - optionsFromRequest object to get authentication headers, etc.
+   * @param cb - Callback to be executed after this method is executed.
+   */
   User.createUser = function (user, options, cb) {
     if (options.accessToken) {
       var password = randomize('a', 6) + randomize('0', 4) + randomize('?', 2, { chars: '+-*/&^%$#@!' });
@@ -193,6 +215,11 @@ module.exports = function (User) {
     }
   }
 
+  /**
+   * Remote method to get school admin's emails for a particular schoolId
+   * @param id - SchoolId whose school admin's emails are required
+   * @param cb - Callback to be executed after this method is executed.
+   */
   User.getEmails = function (id, cb) {
     var ds = User.dataSource;
     //var sql = "select u.id,u.email from user u left join userschooldetails usd on u.id = usd.userId where usd.schoolId=? and u.roleId=2";
@@ -204,6 +231,13 @@ module.exports = function (User) {
     });
   }
 
+  /**
+   * Remote method to update a user
+   * @param {*} id - id of user which is to updated
+   * @param {*} user - data which is to be updated
+   * @param options - optionsFromRequest object to get authentication headers, etc.
+   * @param cb - Callback to be executed after this method is executed.
+   */
   User.updateUser = function (id, user, options, cb) {
     var updateUser = {
       roleId: user.roleId,
@@ -321,6 +355,10 @@ module.exports = function (User) {
     }
   });
 
+  /**
+   * Overridden method to validate a password. i.e. password validations
+   * @param {*} plain 
+   */
   User.validatePassword = function (plain) {
     var err,
       passwordProperties = User.definition.properties.password;

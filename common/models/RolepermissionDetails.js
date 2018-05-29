@@ -3,6 +3,9 @@ var app = require('../../server/server');
 var permissionsHelper = require("../shared/permissionsHelper");
 
 module.exports = function (RolepermissionDetails) {
+    /**
+     * Operational hook to add necessary ACLs after permissions are assigned to roles.
+     */
     RolepermissionDetails.afterRemote('create', function (context, permission, next) {
 
         app.models.role.findById(permission.roleId, function (err, srole) {
@@ -30,87 +33,11 @@ module.exports = function (RolepermissionDetails) {
             }
         });
 
-        // app.models.role.findById(permission.roleId, function (err, srole) {
-        //     if (err) return next(err);
-        //     var modelPermissionArray = permission.permissionName.split('.');
-        //     if (modelPermissionArray != undefined && modelPermissionArray.length == 2) {
-        //         var _model = modelPermissionArray[0];
-        //         var _permission = modelPermissionArray[1];
-        //         var _principalName = srole.name;
-        //         var options = {};
-        //         options.model = _model;
-        //         options.permission = "ALLOW";
-        //         options.principalId = _principalName;
-        //         options.principalType = "ROLE";
-        //         var roptions = [];
-        //         if (_permission == "Create") {
-        //             if (_model.toLowerCase() == "user") {
-        //                 options.property = "createUser";
-        //                 options.accessType = "EXECUTE";
-        //             }
-        //             else {
-        //                 options.property = "create";
-        //                 options.accessType = "WRITE";
-        //             }
-        //         }
-        //         else if (_permission == "Update") {
-        //             if (_model.toLowerCase() == "user") {
-        //                 options.property = "updateUser";
-        //                 options.accessType = "EXECUTE";
-        //             }
-        //             else {
-        //                 options.property = "updateAttributes";
-        //                 options.accessType = "WRITE";
-        //             }
-        //         }
-        //         else if (_permission == "Delete") {
-
-        //             if (_model.toLowerCase() == "addhocfeedetails" ||
-        //                 _model.toLowerCase() == "container" ||
-        //                 _model.toLowerCase() == "feeplanheaddetails" ||
-        //                 _model.toLowerCase() == "role" ||
-        //                 _model.toLowerCase() == "rolemenuDetails" ||
-        //                 _model.toLowerCase() == "rolepermissionDetails" ||
-        //                 _model.toLowerCase() == "userschooldetails") {
-        //                 options.property = "destroyById";
-        //                 options.accessType = "WRITE";
-        //             }
-        //             else {
-        //                 options.property = "deleteRecord";
-        //                 options.accessType = "EXECUTE";
-        //             }
-
-
-        //         }
-        //         else if (_permission == "Read") {
-        //             options.accessType = "READ";
-        //             options.property = "find";
-        //             var option1 = JSON.parse(JSON.stringify(options))
-        //             roptions.push(option1);
-        //             var option2 = JSON.parse(JSON.stringify(options))
-        //             option2.property = "findById";
-        //             roptions.push(option2);
-        //             var option3 = JSON.parse(JSON.stringify(options))
-        //             option3.property = "count";
-        //             roptions.push(option3);
-        //             options = roptions;
-        //         }
-        //         app.models.ACL.create(options, function (err, info) {
-        //             var modelInstance = app.models[options.model];
-        //             if (modelInstance && modelInstance != undefined) {
-        //                 modelInstance.settings.acls.push(options);
-        //             }
-        //             next();
-        //         });
-        //     } else {
-        //         next();
-        //     }
-        // });
-
-
-
     });
 
+    /**
+     * Operational hook to delete ACLs after permissions are deleted from roles.
+     */
     RolepermissionDetails.observe('before delete', function (ctx, next) {
 
         RolepermissionDetails.findById(ctx.where.and[0].id, function (err, permissionModel) {

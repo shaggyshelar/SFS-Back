@@ -5,7 +5,12 @@ var dateHelper = require("../shared/dateHelper");
 var auditLogHelper = function() {
 
 };
-
+/**
+ * 
+ * @param itemList - Array of elements whose changes need to be logged
+ * @param userId - Set userId as createdBy/updatedBy
+ * @param next - Callback function
+ */
 auditLogHelper.setCreatedBy = function(itemList, userId, next) {
     var localeDate = dateHelper.getUTCManagedDateTime();
     if(itemList && itemList.length > 0) {

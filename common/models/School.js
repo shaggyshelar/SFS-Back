@@ -2,6 +2,9 @@
 var app = require('../../server/server');
 var ds = app.dataSources.mysql;
 module.exports = function (School) {
+  /**
+  * Validate if mentioned properties exist while calling the APIs. 
+  */
   School.validatesPresenceOf(
     'instituteId',
     'schoolName',
@@ -9,6 +12,9 @@ module.exports = function (School) {
     'schoolHeader'
   );
 
+  /**
+   * Operational hook to set invoiceSequenceNumber before saving the School
+   */
   School.observe('before save', function (ctx, next) {
     if (ctx.isNewInstance) {
       ctx.instance.invoiceSequenceNumber = 0;
@@ -28,6 +34,9 @@ module.exports = function (School) {
     }
   });
 
+  /**
+   * Operational hook to assign newly created school to super admin
+   */
   School.observe('after save', function (ctx, next) {
     if (ctx.isNewInstance) {
       app.models.container.createContainer({
@@ -74,6 +83,13 @@ module.exports = function (School) {
     }
   });
 
+  /**
+   * Remote method to update zone's academic years 
+   * @param schoolId - School whose zone academic years are to be updated.
+   * @param academicYearObj - object with frequency and academic year to be updated
+   * @param options - optionsFromRequest object to get authentication headers, etc.
+   * @param cb - Callback to be executed after this method is executed.
+   */
   School.updateZoneAcademicYear = function (schoolId, academicYearObj, options, cb) {
     if (options.accessToken) {
       app.models.Zone.updateAll({ schoolId: schoolId }, { frequencyId: academicYearObj.frequencyId, academicyear: academicYearObj.academicYear }, function (err, _zones) {
@@ -89,7 +105,11 @@ module.exports = function (School) {
   }
 
 
-
+  /**
+   * Remote method to get dashboard data filtered by school Id
+   * @param schoolId - school whose dashboard data is required.
+   * @param cb - Callback to be executed after this method is executed.
+   */
   School.getDashboardDetails = function (schoolId, cb) {
     var sql = "CALL `spDashboard`(" + schoolId + ");";
 
@@ -116,8 +136,13 @@ module.exports = function (School) {
     }
   );
 
-
-
+  /**
+   * Remote method to get all users associated with a particular school.
+   * @param schoolId - School whose users are required.
+   * @param filter - Additional filter parameters.
+   * @param options - optionsFromRequest object to get authentication headers, etc.
+   * @param cb - Callback to be executed after this method is executed.
+   */
   School.getUserForSchoolAdmin = function (schoolId, filter, options, cb) {
     if (options.accessToken) {
       app.models.Userschooldetails.find({ where: { schoolId: schoolId } }, function (err, _users) {
@@ -145,7 +170,13 @@ module.exports = function (School) {
     }
   }
 
-
+  /**
+   * Remote method to get the count of all users associated with a particular school.
+   * @param schoolId - School whose users are required.
+   * @param filter - Additional filter parameters.
+   * @param options - optionsFromRequest object to get authentication headers, etc.
+   * @param cb - Callback to be executed after this method is executed.
+   */
   School.getUserCountForSchoolAdmin = function (schoolId, filter, options, cb) {
     if (options.accessToken) {
       app.models.Userschooldetails.find({ where: { schoolId: schoolId } }, function (err, _users) {

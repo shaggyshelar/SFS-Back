@@ -4,6 +4,12 @@ var app = require('../../server/server');
 var permissionsHelper = function () {
 
 }
+/**
+ * Method to assign permissions to role
+ * @param model - model to which permission is assigned
+ * @param roles - role to which permission is assigned
+ * @param callback - callback method
+ */
 permissionsHelper.setPermissions = function (model, roles, callback) {
     var conditions = roles.map(function (r) {
         return { roleId: r.id };
@@ -16,6 +22,12 @@ permissionsHelper.setPermissions = function (model, roles, callback) {
     });
 }
 
+/**
+ * Method to set permissions by role Id
+ * @param model - model to which permission is assigned
+ * @param roleId - Id of role to which permission is assigned
+ * @param callback - callback method
+ */
 permissionsHelper.setPermissionByRoleId = function (model, roleId, callback) {
     // var conditions = roles.map(function (r) {
     //     return { roleName: r.name };
@@ -28,6 +40,13 @@ permissionsHelper.setPermissionByRoleId = function (model, roleId, callback) {
     });
 }
 
+/**
+ * Method to get ACL object by modelname and permissions
+ * @param selectedModel - Model to which permission is to be assigned
+ * @param selectedPermission - Permission which is to be assigned
+ * @param role - role to which the permission is to be assigned
+ * @param callback - callback method
+ */
 permissionsHelper.getRelatedAclObjects = function (selectedModel, selectedPermission, role, callback) {
     var propertyAccess = [];
     if (selectedPermission == "Create") {

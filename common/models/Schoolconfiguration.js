@@ -2,6 +2,13 @@
 var i18next = require('i18next');
 
 module.exports = function (Schoolconfiguration) {
+    /**
+     * Remote method to update/create the school config. 
+     * Related record (if exists) is deleted and then created again.
+     * @param {*} _schoolconfiguration - new configuration which will be added/updated
+     * @param options - optionsFromRequest object to get authentication headers, etc.
+     * @param cb - Callback to be executed after this method is executed.
+     */
     Schoolconfiguration.updateSchoolConfig = function (_schoolconfiguration, options, cb) {
         Schoolconfiguration.findOne({ where: { schoolId: _schoolconfiguration.schoolId, keyName: _schoolconfiguration.keyName } }, function (err, _config) {
             if (err) {

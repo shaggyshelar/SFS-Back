@@ -1,5 +1,8 @@
 'use strict';
 module.exports = function(Invoice) {
+  /**
+   * Operational hook to set appropriate status to invoice.
+   */
   Invoice.observe('before save', function(ctx, next) {
     if (!ctx.currentInstance) {
       next();
