@@ -7,6 +7,13 @@ var productionConfig = require('../../server/config.production.json');
 var authHelper = function () {
 
 }
+/**
+ * Method to send a verification email after registration.
+ * @param user - User whom the email is to be sent.
+ * @param plainPassword - Password in plain text.
+ * @param isUpdate - boolean value to denote if the method is called after user updateion.
+ * @param next - Callback method
+ */
 authHelper.sendVerificationEmail = function (user, plainPassword, isUpdate, next) {
     var options = {
         type: 'email',

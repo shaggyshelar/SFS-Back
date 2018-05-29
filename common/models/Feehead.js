@@ -3,6 +3,9 @@ var app = require('../../server/server');
 var i18next = require('i18next');
 
 module.exports = function (Feehead) {
+    /**
+     * Operational hook to restrict updating fee heads whoose invoices are processed.
+     */
     Feehead.observe('before save', function updateTimestamp(ctx, next) {
         if (!ctx.isNewInstance) {
 

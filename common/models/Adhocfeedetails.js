@@ -1,11 +1,19 @@
 'use strict';
+
 module.exports = function (Adhocfeedetails) {
+  /**
+  * Validate if mentioned properties exist while calling the APIs. 
+  */
   Adhocfeedetails.validatesPresenceOf(
     'adhocFeeId',
     'categoryId',
     'classId'
   );
 
+  /**
+  * Remote method to update Adhocfeedetails.
+  * Related Adhocfeedetails are first deleted and then inserted again.
+  */
   Adhocfeedetails.updateAdhocfeedetails = function (adhocfeedetails, options, cb) {
 
     if (adhocfeedetails && adhocfeedetails.length > 0) {

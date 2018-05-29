@@ -2,7 +2,9 @@
 var i18next = require('i18next');
 
 module.exports = function (Schoolmerchant) {
-
+    /**
+     * Operational hook to update all school merchants related to a particular school
+     */
     Schoolmerchant.observe('before save', function updateTimestamp(ctx, next) {
         if (ctx.instance) {
             if (ctx.instance.isDefault && ctx.instance.schoolId != undefined) {

@@ -8,6 +8,9 @@ var _ = require('underscore');
 var csvHelper = function() {
 };
 
+/**
+ * Method to get CSV headers
+ */
 csvHelper.getCSVHeader = function(student) {
   return {
     'Registered': 'Is Registered',
@@ -21,6 +24,9 @@ csvHelper.getCSVHeader = function(student) {
   };
 };
 
+/**
+ * Method to get headers for CSV used for invoice
+ */
 csvHelper.getInvoiceCSVHeader = function(student) {
   return {
     'Registered': 'Is Registered',
@@ -32,6 +38,9 @@ csvHelper.getInvoiceCSVHeader = function(student) {
   };
 };
 
+/**
+ * Method to get CSV headers for invoice update
+ */
 csvHelper.getInvoiceUpdateCSVHeader = function(student) {
   return {
     'Updated': 'Is Updated',
@@ -43,6 +52,9 @@ csvHelper.getInvoiceUpdateCSVHeader = function(student) {
   };
 };
 
+/**
+ * Method to get invoice update format
+ */
 csvHelper.getUpdateInvoiceFormat = function(invoice) {
   return {
     'Updated': 'Yes',
@@ -54,6 +66,9 @@ csvHelper.getUpdateInvoiceFormat = function(invoice) {
   };
 };
 
+/**
+ * Get invoice format when invoice failed to update
+ */
 csvHelper.getFailedToUpdateInvoiceFormat = function(invoice) {
   return {
     'Updated': 'No',
@@ -65,6 +80,9 @@ csvHelper.getFailedToUpdateInvoiceFormat = function(invoice) {
   };
 };
 
+/**
+ * Method to get registered invoice format
+ */
 csvHelper.getRegisteredInvoiceFormat = function(invoice) {
   return {
     'Registered': 'Yes',
@@ -76,6 +94,9 @@ csvHelper.getRegisteredInvoiceFormat = function(invoice) {
   };
 };
 
+/**
+ * Method to get format for dailed invoices
+ */
 csvHelper.getFailedInvoiceFormat = function(invoice) {
   return {
     'Registered': 'No',
@@ -87,6 +108,9 @@ csvHelper.getFailedInvoiceFormat = function(invoice) {
   };
 };
 
+/**
+ * Method to get CSV format for registered students
+ */
 csvHelper.getRegisteredStudentCSVFormat = function(student) {
   return {
     'Registered': 'Yes',
@@ -100,6 +124,9 @@ csvHelper.getRegisteredStudentCSVFormat = function(student) {
   };
 };
 
+/**
+ * Method to get CSV format for failed student registration
+ */
 csvHelper.getFailedStudentCSVFormat = function(student) {
   return {
     'Registered': 'No',
@@ -113,6 +140,9 @@ csvHelper.getFailedStudentCSVFormat = function(student) {
   };
 };
 
+/**
+ * Method to generate CSV after student registration
+ */
 csvHelper.generateStudentRegistrationCSV = function(filepath, registeredStudents, failedStudents, callback) {
   var fastCsv = csv.createWriteStream();
   var writeStream = fs.createWriteStream(filepath);
@@ -133,6 +163,9 @@ csvHelper.generateStudentRegistrationCSV = function(filepath, registeredStudents
   fastCsv.end();
 };
 
+/**
+ * Method to generate CSV after invoice registration
+ */
 csvHelper.generateInvoiceRegistrationCSV = function(filepath, registeredInvoices, failedInvoices, callback) {
   var fastCsv = csv.createWriteStream();
   var writeStream = fs.createWriteStream(filepath);
@@ -153,6 +186,9 @@ csvHelper.generateInvoiceRegistrationCSV = function(filepath, registeredInvoices
   fastCsv.end();
 };
 
+/**
+ * Method to generate invoice update CSV
+ */
 csvHelper.generateInvoiceUpdateCSV = function(filepath, registeredInvoices, failedInvoices, callback) {
   var fastCsv = csv.createWriteStream();
   var writeStream = fs.createWriteStream(filepath);

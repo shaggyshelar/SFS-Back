@@ -1,8 +1,12 @@
 'use strict';
+
 var app = require('../../server/server');
 var LoopBackContext = require('loopback-context');
 
 module.exports = function (AuditLog) {
+  /**
+    * Before save operational hook to set old and new data to be saved in Audit log. 
+    */
   AuditLog.observe('before save', function (ctx, next) {
     
     // Get the current access token

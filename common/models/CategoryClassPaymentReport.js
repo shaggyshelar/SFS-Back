@@ -1,7 +1,18 @@
 'use strict';
+
 var app = require('../../server/server');
 var ds = app.dataSources.mysql;
 module.exports = function (CategoryClassPaymentReport) {
+    /**
+     * Remote method to fetch data from stored procedure for Category and Class Payment report.
+     * @param schoolId - schoolId to filter CategoryClassPaymentReport
+     * @param fromDate - fetch CategoryClassPaymentReport from this date
+     * @param toDate - fetch CategoryClassPaymentReport till this date
+     * @param classIds - classIds to filter CategoryClassPaymentReport
+     * @param categoryIds - categoryIds to filter CategoryClassPaymentReport
+     * @param statuses - status to filter CategoryClassPaymentReport.
+     * @param cb - callback to be executed after this method is executed.
+     */
     CategoryClassPaymentReport.getCategoryClassPaymentReport = function (schoolId, fromDate, toDate, classIds, categoryIds, statuses, cb) {
 
 

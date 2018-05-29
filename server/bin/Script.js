@@ -23,7 +23,9 @@ function jsFileString(modelName) {
       '\t\n' +
     '};';
 }
-
+/**
+ * Generate model files for tables in database.
+ */
 function autoGenerateModelFiles() {
   dataSource.discoverModelDefinitions({schema: db}, function(err, models) {
     models.forEach(function(model) {

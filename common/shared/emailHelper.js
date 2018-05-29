@@ -5,6 +5,14 @@ var app = require('../../server/server');
 
 var emailHelper = function () {};
 
+/**
+ * Method to send emails
+ * @param {*} templateName - Template name which needs to be used
+ * @param {*} toEmailId - email id to whom email needs to be sent
+ * @param {*} subject - subject of email
+ * @param {*} valueObject - values to be replaced in email template
+ * @param {*} next - callback method
+ */
 emailHelper.sendEmails = function (templateName, toEmailId, subject, valueObject, next) {
   fs.readFile(process.cwd() + '/templates/email/' + templateName + '.html', 'utf8', function (err, data) {
     if (err) {
@@ -34,6 +42,12 @@ emailHelper.sendEmails = function (templateName, toEmailId, subject, valueObject
   });
 }
 
+/**
+ * Method to get email text after assigning values in the template
+ * @param {*} templateName - template to be used to send emails
+ * @param {*} valueObject - values which needs to be replaced in the template
+ * @param {*} next - callback method
+ */
 emailHelper.getEmailText = function (templateName, valueObject, next) {
   fs.readFile(process.cwd() + '/templates/email/' + templateName + '.html', 'utf8', function (err, data) {
     if (err) {

@@ -1,5 +1,7 @@
 'use strict';
-
+/**
+ * Functionality to start the loopback application
+ */
 var loopback = require('loopback');
 var boot = require('loopback-boot');
 var path = require('path');

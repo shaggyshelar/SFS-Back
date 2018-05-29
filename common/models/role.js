@@ -2,6 +2,9 @@
 var app = require('../../server/server');
 
 module.exports = function (role) {
+    /**
+     * Operational hook to additionally fetch permissions and menus.
+     */
     role.afterRemote('findById', function (context, role, next) {
 
         app.models.RolepermissionDetails.find({ where: { roleId: role.id } }, function (err, permissionMap) {
@@ -45,6 +48,9 @@ module.exports = function (role) {
     //     next();
     // });
 
+    /**
+     * Operational hook to update rolenames with the Id of current role after creation.
+     */
     role.observe('after save', function updateTimestamp(ctx, next) {
         if (ctx.isNewInstance && ctx.instance) {
             var roleName = ctx.instance.name.replace(/\s/g, '');
@@ -63,6 +69,9 @@ module.exports = function (role) {
         // next();
     });
 
+    /**
+     * Operational hook to check if current role is not assigned to any user before deleting a role.
+     */
     role.observe('before delete', function (ctx, next) {
         var roleId = ctx.where.id;
         app.models.RoleMapping.find({ where: { roleId: roleId } }, function (err, _roleMapping) {
@@ -90,6 +99,9 @@ module.exports = function (role) {
     //     next();
     // });
 
+    /**
+     * Operational hook to check if current role is not assigned to any user before deleting a role.
+     */
     role.beforeRemote('deleteRecord', function (context, _role, next) {
         console.log(_role);
         var roleId = context.args.id;
