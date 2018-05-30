@@ -5,8 +5,8 @@ var ds = app.dataSources.mysql;
 module.exports = function (Student) {
 
   /**
-   * 
-   */
+  * Validate if mentioned properties exist while calling the APIs. 
+  */
   // Added by Harnish on 8th Nov 2017
   Student.validatesPresenceOf(
     'schoolId',
@@ -19,7 +19,7 @@ module.exports = function (Student) {
     'studentLastName'
   );
   /**
-   * 
+   * Validate if gender has one of these values
    */
   Student.validatesInclusionOf(
     'studentGender', {
