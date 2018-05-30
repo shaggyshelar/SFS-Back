@@ -2,6 +2,9 @@
 var dateHelper = require("../shared/dateHelper");
 
 module.exports = function(Zone) {
+  /**
+   * Operation hook to update timestamps and verified by fields before saving
+   */
     Zone.observe('before save', function updateTimestamp(ctx, next) {
         if (ctx.instance) {
           // ctx.instance.updated = new Date();

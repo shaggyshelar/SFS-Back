@@ -3,6 +3,12 @@
 var auditLogHelper = require("../shared/auditLogHelper");
 
 module.exports = function (Zonedetails) {
+    /**
+     * Remote method to update zonedetails by delete
+     * @param _zonedetails - zonedetails to be updated
+     * @param options - optionsFromRequest object to get authentication headers, etc.
+     * @param cb - Callback to be executed after this method is executed.
+     */
     Zonedetails.updateZonedetails = function (_zonedetails, options, cb) {
         if (_zonedetails && _zonedetails.length > 0) {
             var conditions = [];

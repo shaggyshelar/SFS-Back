@@ -12,6 +12,9 @@ var config = require('../../server/config' + configFilePath + '.json');
 var utilities = function() {
 };
 
+/**
+ * Method to schedule timer jobs
+ */
 utilities.init = function(app) {
   fileHelper.init();
   // var invHelper = invoiceHelper(app);

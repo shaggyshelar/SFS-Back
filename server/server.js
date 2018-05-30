@@ -1,11 +1,14 @@
 'use strict';
-
+/**
+ * Functionality to start the loopback application
+ */
 var loopback = require('loopback');
 var boot = require('loopback-boot');
 var path = require('path');
 var bodyParser = require('body-parser');
 var i18next = require('i18next');
 var Backend = require('i18next-node-fs-backend');
+
 
 var configFilePath = process.env.NODE_ENV == undefined ?
                           '' : '.' + process.env.NODE_ENV;

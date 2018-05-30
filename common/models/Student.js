@@ -4,6 +4,9 @@ var ds = app.dataSources.mysql;
 
 module.exports = function (Student) {
 
+  /**
+  * Validate if mentioned properties exist while calling the APIs. 
+  */
   // Added by Harnish on 8th Nov 2017
   Student.validatesPresenceOf(
     'schoolId',
@@ -15,11 +18,21 @@ module.exports = function (Student) {
     'studentMiddleName',
     'studentLastName'
   );
+  /**
+   * Validate if gender has one of these values
+   */
   Student.validatesInclusionOf(
     'studentGender', {
       in: ['Male', 'Female', 'Other']
     });
 
+    /**
+     * Remote method to get the student details with their fee plans
+     * @param schoolId - school Id according to which records will be filtered.
+     * @param filter - other filters
+     * @param options - optionsFromRequest object to get authentication headers, etc.
+     * @param cb - Callback to be executed after this method is executed.
+     */
     Student.getStudentDetails = function (schoolId, filter, options, cb) {
 
       if(!filter) {
@@ -79,6 +92,12 @@ module.exports = function (Student) {
       returns: { arg: '_students', type: 'Student' }
     });
 
+  /**
+   * Get student details with their fee plans
+   * @param filter - Other filters
+   * @param options - optionsFromRequest object to get authentication headers, etc.
+   * @param cb - Callback to be executed after this method is executed.
+   */
   Student.getStudentFeeplanDetails = function (filter, options, cb) {
 
     Student.find(filter, function (err, _students) {
@@ -138,6 +157,12 @@ module.exports = function (Student) {
     returns: { arg: '_students', type: 'Student' }
   });
 
+  /**
+   * 
+   * @param schoolId - - school Id according to which records will be filtered.
+   * @param todayDate - date according to which fee plan head details will be selected
+   * @param cb - Callback to be executed after this method is executed.
+   */
   Student.spCall = function (schoolId, todayDate, cb) {
 
     var sql = "CALL `SpFeeplanHeadDetails`(" + schoolId + ",'" + todayDate + "');";

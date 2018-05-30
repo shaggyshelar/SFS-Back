@@ -18,6 +18,9 @@ module.exports = function (app) {
   var InvoiceModel = app.models.Invoice;
 
   return {
+    /**
+     * Method to add a payment invoice request
+     */
     paymentInvoiceRequest: (postInvoiceForm, callback) => {
       request.post({
         url: config.payPhiServerRoot + config.payPhiPostInvoiceURL,
@@ -54,6 +57,9 @@ module.exports = function (app) {
           }
         });
     },
+    /**
+     * Method to update payment invoices
+     */
     paymentInvoiceUpdate: (updateInvoiceForm, callback) => {
       request.post({
         url: config.payPhiServerRoot + config.payPhiUpdateInvoiceURL,
@@ -90,6 +96,9 @@ module.exports = function (app) {
           }
         });
     },
+    /**
+     * Method to register or update a user
+     */
     registerOrUpdateUser: (userForm, callback) => {
       rootlogger.info('Registering User', userForm);
       request.post({
@@ -130,6 +139,9 @@ module.exports = function (app) {
           }
         });
     },
+    /**
+     * Method to sort the params needed for APIs
+     */
     getSortedParams: function (params) {
       if (!params) {
         return [];
@@ -147,6 +159,9 @@ module.exports = function (app) {
 
       return { 'sortedParams': sortedParams, 'concatenatedString': concatenatedValues };
     },
+    /**
+     * Method to get the concatenated params needed for APIs
+     */
     getConcatenatedParams: function (params) {
       if (!params) {
         return [];
@@ -164,6 +179,9 @@ module.exports = function (app) {
 
       return concatenatedValues;
     },
+    /**
+     * Method to get formdata with a secureHash
+     */
     getForm: function (params, hashedKey) {
       if (!params) {
         return [];
@@ -178,6 +196,9 @@ module.exports = function (app) {
 
       return formData;
     },
+    /**
+     * Method to get a concatenated URL for API calls
+     */
     getConcatenatedURL: function (params) {
       if (!params) {
         return [];
@@ -198,6 +219,9 @@ module.exports = function (app) {
 
       return concatenatedURL;
     },
+    /**
+     * Method to create a hash key
+     */
     getHashedKey: function (concatenatedValues) {
       const secret = config.payPhiHashKey;
       const lowerCaseHash = crypto.createHmac('sha256', secret)
@@ -206,6 +230,9 @@ module.exports = function (app) {
         .toLowerCase();
       return lowerCaseHash;
     },
+    /**
+     * Method to get a hashed key with secret
+     */
     getHashedKeyWithSecret: function (concatenatedValues, secret) {
       const lowerCaseHash = crypto.createHmac('sha256', secret)
         .update(concatenatedValues)

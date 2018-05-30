@@ -1,5 +1,10 @@
 'use strict';
 
+/**
+ * APIs for login, registering students, registering and generating invoices, 
+ * generate payment advice and payment settlements.
+ */
+
 var dsConfig = require('../datasources.json');
 var config = require('../config.json');
 var path = require('path');
@@ -20,6 +25,7 @@ var moment = require('moment');
 var dateHelper = require('../../common/shared/dateHelper');
 var validator = require('validator');
 var emailHelper = require('../../common/shared/emailHelper');
+var productionConfig = require('../config.production.json');
 
 module.exports = function (app) {
   var ds = app.dataSources.mysql;
@@ -29,6 +35,9 @@ module.exports = function (app) {
   var Invoice = app.models.Invoice;
   utilities.init(app);
 
+  /**
+   * Method called when user has verified his email address
+   */
   app.get('/verified', function (req, res) {
     var localizedMessage = i18next.t('key');
     console.log('Localized Message = ' + localizedMessage);
@@ -38,6 +47,9 @@ module.exports = function (app) {
     res.render('verified');
   });
 
+  /**
+   * Method to register students
+   */
   app.get('/registerStudents', function (req, res) {
     var invHelper = invoiceHelper(app);
     invHelper.registerStudents();
@@ -45,6 +57,9 @@ module.exports = function (app) {
     res.json({ 'Message': 'Student Registration in progress...' });
   });
 
+  /**
+   * Method to register a single student
+   */
   app.post('/registerStudent', function (req, res) {
     if (!req.body.studentId) {
       res.status(400);
@@ -71,6 +86,9 @@ module.exports = function (app) {
       });
   });
 
+  /**
+   * Method to get params needed for APIs
+   */
   app.post('/apiParamsHelper', function (req, res) {
     var keys = Object.keys(req.body);
     var params = [];
@@ -103,6 +121,9 @@ module.exports = function (app) {
 
   });
 
+  /**
+   * Method to register the invoices
+   */
   app.get('/registerInvoices', function (req, res) {
     var invHelper = invoiceHelper(app);
     invHelper.registerInvoices();
@@ -110,6 +131,9 @@ module.exports = function (app) {
     res.json({ 'Message': 'Invoice registration in progress...' });
   });
 
+  /**
+   * Method to update the invoices
+   */
   app.get('/updateInvoices', function (req, res) {
     var invHelper = invoiceHelper(app);
     invHelper.updateInvoices();
@@ -117,6 +141,9 @@ module.exports = function (app) {
     res.json({ 'Message': 'Invoice updation in progress...' });
   });
 
+  /**
+   * Method to generate current day's (today's) invoice
+   */
   app.get('/generateTodaysInvoice', function (req, res) {
     var invHelper = invoiceHelper(app);
     invHelper.generateTodaysInvoice(function (error) {
@@ -125,6 +152,9 @@ module.exports = function (app) {
     });
   });
 
+  /**
+   * Method to add payment advice and update invoices accordingly
+   */
   app.post('/api/paymentAdvice', function (req, res) {
     var apiHelper = apiHelperObject(app);
 
@@ -296,6 +326,9 @@ module.exports = function (app) {
     });
   });
 
+  /**
+   * Method to add payment settlement. i.e. mark invoice as settled.
+   */
   app.post('/api/paymentSettlement', function (req, res) {
     var apiHelper = apiHelperObject(app);
 
@@ -446,6 +479,9 @@ module.exports = function (app) {
     });
   });
 
+  /**
+   * Method to upload the new students CSV
+   */
   app.post('/api/uploadcsv', upload.single('csvdata'), function (req, res) {
     var AccessToken = app.models.AccessToken;
     AccessToken.findForRequest(req, {}, function (aux, accesstoken) {
@@ -825,6 +861,11 @@ module.exports = function (app) {
     });
   });
 
+  /**
+   * Method to login a user.
+   * If user makes 3 unsuccessfull login attempts, the user is locked.
+   * Validation to allow users how are not locked.
+   */
   app.post('/login', function (req, res) {
     User.login({
       username: req.body.username,
@@ -1061,6 +1102,9 @@ module.exports = function (app) {
     });
   });
 
+  /**
+   * Method to log out user.
+   */
   app.get('/logout', function (req, res, next) {
     if (!req.accessToken) return res.sendStatus(401); // return 401:unauthorized if accessToken is not present
     User.logout(req.accessToken.id, function (err) {
@@ -1069,7 +1113,9 @@ module.exports = function (app) {
     });
   });
 
-  // send an email with instructions to reset an existing user's password
+  /**
+   * Send an email with instructions to reset an existing user's password
+   */
   app.post('/request-password-reset', function (req, res, next) {
     User.resetPassword({
       email: req.body.email
@@ -1082,21 +1128,28 @@ module.exports = function (app) {
       res.status(200).send({
         title: i18next.t('resetpassword_response_title'),
         content: i18next.t('resetpassword_response_content'),
-        redirectTo: '/SFS/',
+        redirectTo: productionConfig.baseUrlAppend, // '/SFS/',
         redirectToLinkText: 'Log in'
       });
     });
   });
 
-  // show password reset form
+  /*
+  * Show password reset form
+  * */ 
   app.get('/reset-password', function (req, res, next) {
     if (!req.accessToken) return res.sendStatus(401);
     res.render('password-reset', {
-      redirectUrl: '/SFS/api/users/reset-password?access_token=' +
+      redirectUrl: productionConfig.baseUrlAppend + 'api/users/reset-password?access_token=' + // '/SFS/api/users/reset-password?access_token=' +
         req.accessToken.id
     });
   });
 
+  /**
+   * Method to update the token object with user's roles and permissions.
+   * @param token: token generated after login
+   * @param callBack: callback method to be executed after this function is executed.
+   */
   app.models.user.createTokenObject = function (token, callBack) {
     var RoleMapping = app.models.RoleMapping;
     var Role = app.models.Role;

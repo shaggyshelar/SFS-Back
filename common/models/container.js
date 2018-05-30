@@ -2,6 +2,9 @@
 var app = require('../../server/server');
 
 module.exports = function (Container) {
+  /**
+   * Remote hook to upload and store school logo in /api/containers/{container}/download folder.
+   */
   Container.afterRemote('upload', function (ctx, unused, next) {
     var name = ctx.result.result.files.image[0].name;
     var container = ctx.result.result.files.image[0].container;

@@ -6,6 +6,12 @@ var auditLogHelper = require("../shared/auditLogHelper");
 
 module.exports = function (Feeplanassociation) {
 
+    /**
+     * Remote method to update fee plan associations.
+     * @param feeplanassociations - Fee plan associations to be updated
+     * @param options - optionsFromRequest object to get authentication headers, etc.
+     * @param cb - Callback to be executed after this method is executed.
+     */
     Feeplanassociation.updateFeeplanAssociation = function (feeplanassociations, options, cb) {
 
         if (feeplanassociations && feeplanassociations.length > 0) {
@@ -80,6 +86,12 @@ module.exports = function (Feeplanassociation) {
         }
     }
 
+    /**
+     * 
+     * @param feePlanId - fee plan Id whose associations will be deleted.
+     * @param academicYear - academic year whose associations will be deleted
+     * @param cb - Callback to be executed after this method is executed.
+     */
     Feeplanassociation.deleteFeeplanAssociation = function (feePlanId, academicYear, cb) {
         if (academicYear && feePlanId) {
             app.models.Feeplan.find({ where: { and: [{ id: feePlanId }, { academicYear: academicYear }] } },

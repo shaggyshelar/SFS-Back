@@ -2,6 +2,15 @@
 var app = require('../../server/server');
 var ds = app.dataSources.mysql;
 module.exports = function (FeeheadPaymentReport) {
+    /**
+     * Method to generate fee head payment report.
+     * @param schoolId - schoolId to filter FeeheadPaymentReport
+     * @param fromDate - Filter FeeheadPaymentReport from this date 
+     * @param toDate - Filter FeeheadPaymentReport till this date
+     * @param feeHeadNames - feeHeadNames to filter FeeheadPaymentReport
+     * @param statuses - statuses to filter FeeheadPaymentReport
+     * @param cb - callback to be executed after this method is executed.
+     */
     FeeheadPaymentReport.getFeeheadPaymentReport = function (schoolId, fromDate, toDate, feeHeadNames, statuses, cb) {
 
         var sql = "CALL `spRptPaymentDetailsByFeeHeads`(" + schoolId + ",'" + fromDate + "','" + toDate;
@@ -29,7 +38,11 @@ module.exports = function (FeeheadPaymentReport) {
         });
     }
 
-
+    /**
+     * 
+     * @param schoolId - schoolId to filter Fee heads
+     * @param cb - callback to be executed after this method is executed.
+     */
     FeeheadPaymentReport.getFeeheadListReport = function (schoolId, cb) {
         var sql = "CALL `spSelectFeeheads`(" + schoolId + ");";
 

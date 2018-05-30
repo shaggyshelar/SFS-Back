@@ -22,6 +22,9 @@ module.exports = function (app) {
   var Schoolmerchant = app.models.Schoolmerchant;
 
   var invoiceHelper = {
+    /**
+     * Method to generate today's invoices
+     */
     generateTodaysInvoice: (methodCallback) => {
       rootlogger.info('Starting invoice generation process');
       async.series([
@@ -58,6 +61,9 @@ module.exports = function (app) {
           rootlogger.info('Completed invoice generation process.');
         });
     },
+    /**
+     * Method to register the invoices
+     */
     registerInvoice: (invoiceDetails, callback) => {
       var apiHelper = apiHelperObject(app);
       var invoiceParams = [];
@@ -123,6 +129,9 @@ module.exports = function (app) {
         apiHelper.paymentInvoiceRequest(userForm, callback);
       });
     },
+    /**
+     * Method to parse the invoice details
+     */
     parseInvoiceDetails: (invoiceDetails) => {
       var firstInvoice = invoiceDetails.values[0];
       var invoiceData = {
@@ -150,6 +159,9 @@ module.exports = function (app) {
       });
       return invoiceData;
     },
+    /**
+     * Method to update the invoices
+     */
     updateInvoices: () => {
       rootlogger.info('Starting update invoice process');
       async.series([
@@ -272,6 +284,9 @@ module.exports = function (app) {
           });
         });
     },
+    /**
+     * Method to register the invoices
+     */
     registerInvoices: () => {
       rootlogger.info('Starting invoice registration process');
       async.series([
@@ -402,6 +417,9 @@ module.exports = function (app) {
           rootlogger.info('Completed invoice generation process.');
         });
     },
+    /**
+     * Method to update a single invoice
+     */
     updateInvoice: (invoice, callback) => {
       var apiHelper = apiHelperObject(app);
       var invoiceParams = [];
@@ -438,6 +456,9 @@ module.exports = function (app) {
 
 
     },
+    /**
+     * Method to convert the gender format
+     */
     convertGender: (gender) => {
       switch (gender) {
         case 'Male':
@@ -447,21 +468,33 @@ module.exports = function (app) {
       }
       return 'N';
     },
+    /**
+     * Method to convert the DOB to appropriate format
+     */
     convertDOB: (dob) => {
       if (!dob) {
         return '2000/01/01';
       }
       return dob.getDate() + '/' + dob.getMonth() + '/' + dob.getFullYear();
     },
+    /**
+     * Method to parent name to appropriate format
+     */
     convertParentName: (name) => {
       return name != '' ? name : 'NA';
     },
+    /**
+     * Method to get a student's mobile number
+     */
     getStudentMobileNumber: (student) => {
       if (student.fatherMobile) return student.fatherMobile;
       if (student.motherMobile) return student.motherMobile;
       if (student.guardianMobile) return student.guardianMobile;
       return student.phone;
     },
+    /**
+     * Method to register a student
+     */
     registerStudent: (studentDetails, merchantId, aggregatorId, aggregatorKey, callback) => {
       var apiHelper = apiHelperObject(app);
       var userParams = [];
@@ -504,6 +537,9 @@ module.exports = function (app) {
       var userForm = apiHelper.getForm(userParams, hashedKey);
       apiHelper.registerOrUpdateUser(userForm, callback);
     },
+    /**
+     * Method to register students
+     */
     registerStudents: () => {
       async.series([
         function (callback) {
@@ -643,6 +679,9 @@ module.exports = function (app) {
           });
         });
     },
+    /**
+     * Method to generate an invoice for student
+     */
     generateInvoiceForStudent: (studentDetails, methodCallback) => {
       rootlogger.info('Starting invoice generation process for student ' + studentDetails.id);
       async.series([
@@ -667,6 +706,9 @@ module.exports = function (app) {
           }
         });
     },
+    /**
+     * Method to register a student which was newly created
+     */
     registerNewlyCreatedStudent: (studentDetails, callback) => {
       async.series([
         function (callback) {
@@ -743,6 +785,9 @@ module.exports = function (app) {
           });
         });
     },
+    /**
+     * Method to register invoice for a single student
+     */
     registerInvoicesForSingleStudent: (studentId, methodCallback) => {
       rootlogger.info('Starting invoice registration process for single student');
       async.series([

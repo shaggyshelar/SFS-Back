@@ -2,6 +2,9 @@
 var dateHelper = require("../shared/dateHelper");
 
 module.exports = function(Feeplan) {
+    /**
+     * Operational hook to update timestamps while creating and updating fee plans
+     */
     Feeplan.observe('before save', function updateTimestamp(ctx, next) {
         if (ctx.instance) {
             if(ctx.instance.isVerified && ctx.options.accessToken) {

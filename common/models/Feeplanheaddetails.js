@@ -2,6 +2,12 @@
 var auditLogHelper = require("../shared/auditLogHelper");
 
 module.exports = function (Feeplanheaddetails) {
+    /**
+     * Remote method to update fee plan head details
+     * @param feeplanheaddetails - Array of feeplanheaddetails which needs to be updated
+     * @param options - optionsFromRequest object to get authentication headers, etc.
+     * @param cb - Callback to be executed after this method is executed.
+     */
     Feeplanheaddetails.updateFeeplanheaddetails = function (feeplanheaddetails, options, cb) {
 
         if (feeplanheaddetails && feeplanheaddetails.length > 0) {

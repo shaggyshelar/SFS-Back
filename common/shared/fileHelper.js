@@ -9,6 +9,9 @@ var fileHelper = function() {
 fileHelper.init = function() {
 };
 
+/**
+ * Method to clear uploads directory
+ */
 fileHelper.clearUploadsDirectory = function() {
   var loopback = require('loopback');
   var rootlogger = loopback.log;
