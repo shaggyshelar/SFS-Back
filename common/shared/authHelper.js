@@ -27,7 +27,8 @@ authHelper.sendVerificationEmail = function (user, plainPassword, isUpdate, next
         validationUrl: '{href}',
         username: user.username,
         password: plainPassword,
-        isUpdate: isUpdate
+        isUpdate: isUpdate,
+        host: productionConfig.productionURL,
     };
     if (isUpdate) {
         options.subject = i18next.t('email_verify_subject');

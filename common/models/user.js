@@ -6,6 +6,7 @@
 'use strict';
 
 var config = require('../../server/config.json');
+// var prodcutionConfig = require('../../server/config.production.json');
 var path = require('path');
 var permissionHelper = require('../shared/permissionsHelper');
 var authHelper = require('../shared/authHelper');
@@ -66,9 +67,9 @@ module.exports = function (User) {
    * Remote hook to send password reset link when requested
    */
   User.on('resetPasswordRequest', function (info) {
-    var host = app.get("host"); //config.host
+    var host = productionConfig.productionURL; // app.get("host"); //config.host
     var port = app.get("port"); // config.port
-    var url = 'http://' + host + ':' + port + '/reset-password';
+    var url = 'https://' + host +'/reset-password';// ':' + port + 
     // var html = 'Click <a href="' + url + '?access_token=' +
     //   info.accessToken.id + '">here</a> to reset your password';
     // var subject = "SFS: Password reset";
