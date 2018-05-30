@@ -8,7 +8,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var i18next = require('i18next');
 var Backend = require('i18next-node-fs-backend');
-process.env.NODE_ENV = 'staging';
+
 
 var configFilePath = process.env.NODE_ENV == undefined ?
                           '' : '.' + process.env.NODE_ENV;
