@@ -9,7 +9,7 @@ var bodyParser = require('body-parser');
 var i18next = require('i18next');
 var Backend = require('i18next-node-fs-backend');
 
-
+process.env.NODE_ENV = 'production';
 var configFilePath = process.env.NODE_ENV == undefined ?
                           '' : '.' + process.env.NODE_ENV;
 var config = require('./config' + configFilePath + '.json');
@@ -20,7 +20,6 @@ var app = module.exports = loopback();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(bodyParser.json());
-process.env.NODE_ENV = 'production';
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(loopback.token());
