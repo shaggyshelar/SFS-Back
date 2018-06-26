@@ -6,7 +6,6 @@
 'use strict';
 
 var config = require('../../server/config.json');
-// var prodcutionConfig = require('../../server/config.production.json');
 var path = require('path');
 var permissionHelper = require('../shared/permissionsHelper');
 var authHelper = require('../shared/authHelper');
@@ -29,6 +28,8 @@ module.exports = function (User) {
       template: path.resolve(__dirname, '../../server/views/verify.ejs'),
       redirect: '/verified',
       user: user,
+      protocol: productionConfig.publicProtocol,
+      port: productionConfig.publicPort
     };
 
     /**
@@ -69,7 +70,7 @@ module.exports = function (User) {
   User.on('resetPasswordRequest', function (info) {
     var host = productionConfig.productionURL; // app.get("host"); //config.host
     var port = app.get("port"); // config.port
-    var url = 'https://' + host +'/reset-password';// ':' + port + 
+    var url = productionConfig.publicProtocol+ '://' + host +'/reset-password';// ':' + port + 
     // var html = 'Click <a href="' + url + '?access_token=' +
     //   info.accessToken.id + '">here</a> to reset your password';
     // var subject = "SFS: Password reset";
