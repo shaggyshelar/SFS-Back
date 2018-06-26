@@ -6,7 +6,6 @@
 'use strict';
 
 var config = require('../../server/config.json');
-// var prodcutionConfig = require('../../server/config.production.json');
 var path = require('path');
 var permissionHelper = require('../shared/permissionsHelper');
 var authHelper = require('../shared/authHelper');
