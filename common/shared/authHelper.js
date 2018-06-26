@@ -29,6 +29,8 @@ authHelper.sendVerificationEmail = function (user, plainPassword, isUpdate, next
         password: plainPassword,
         isUpdate: isUpdate,
         host: productionConfig.productionURL,
+        protocol: productionConfig.publicProtocol,
+        port: productionConfig.publicPort
     };
     if (isUpdate) {
         options.subject = i18next.t('email_verify_subject');
