@@ -735,6 +735,13 @@ module.exports = function (app) {
       ],
         function (err, results) {
           var students = results[0];
+          var schooldInfo = results[1];
+
+          if (schooldInfo.length == 0 || schooldInfo[0].length == 0) {
+            callback('No default Merchant ID available for school.');
+            return;
+          }
+
           var merchantId = results[1].length > 0 ? results[1][0][0].merchantId : '';
           var aggregatorId = results[1].length > 0 ? results[1][0][0].aggregatorId : '';
           var aggregatorKey = results[1].length > 0 ? results[1][0][0].aggregatoryKey : '';
